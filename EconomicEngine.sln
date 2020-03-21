@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EconomicEngine", "EconomicEngine\EconomicEngine.vcxproj", "{236CE060-3D56-4E1E-A725-BD9ED789784B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EconomicEngineDebugGUI", "EconomicEngineDebugGUI\EconomicEngineDebugGUI.vcxproj", "{69388169-1769-4987-BD39-D95AA69597DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{236CE060-3D56-4E1E-A725-BD9ED789784B} = {236CE060-3D56-4E1E-A725-BD9ED789784B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
