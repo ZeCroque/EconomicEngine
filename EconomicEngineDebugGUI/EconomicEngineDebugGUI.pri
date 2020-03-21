@@ -8,7 +8,7 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 
 HEADERS += ./EconomicEngineDebugGUI.h
-SOURCES += ./EconomicEngineDebugGUI.cpp \
-    ./main.cpp
+SOURCES += ./main.cpp \
+    ./EconomicEngineDebugGUI.cpp
 FORMS += ./EconomicEngineDebugGUI.ui
 RESOURCES += EconomicEngineDebugGUI.qrc

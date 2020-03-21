@@ -13,4 +13,3 @@ OBJECTS_DIR += debug
 UI_DIR += .
 RCC_DIR += .
 include(EconomicEngineDebugGUI.pri)
-win32:RC_FILE = EconomicEngineDebugGUI.rc
