@@ -31,9 +31,15 @@
     <ClCompile Include="EconomicEngineDebugGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EconomicEngineDebugGUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -46,8 +52,5 @@
     <QtRcc Include="EconomicEngineDebugGUI.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="EconomicEngineDebugGUI.rc" />
   </ItemGroup>
 </Project>

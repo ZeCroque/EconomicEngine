@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{69388169-1769-4987-BD39-D95AA69597DD}</ProjectGuid>
+    <ProjectGuid>{0CB49BE5-445F-4B44-8465-4ACDA2AC3FE7}</ProjectGuid>
     <Keyword>QtVS_v302</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
@@ -43,12 +43,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtInstall>QT5.1.14</QtInstall>
+    <QtModules>core;gui;printsupport;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtInstall>QT5.1.14</QtInstall>
+    <QtModules>core;gui;printsupport;widgets</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="EconomicEngineDebugGUI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="qcustomplot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EconomicEngineDebugGUI.h" />
@@ -95,7 +96,7 @@
     <QtRcc Include="EconomicEngineDebugGUI.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="EconomicEngineDebugGUI.rc" />
+    <QtMoc Include="qcustomplot.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EconomicEngine\EconomicEngine.vcxproj">
