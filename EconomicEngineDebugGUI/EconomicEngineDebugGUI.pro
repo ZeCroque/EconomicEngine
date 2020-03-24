@@ -6,10 +6,12 @@ TEMPLATE = app
 TARGET = EconomicEngineDebugGUI
 DESTDIR = ../x64/Debug
 CONFIG += debug
-LIBS += -L"."
+DEFINES += _WINDOWS _UNICODE _ENABLE_EXTENDED_ALIGNED_STORAGE WIN64
+LIBS += -L"." \
+    -lshell32
 DEPENDPATH += .
 MOC_DIR += .
 OBJECTS_DIR += debug
-UI_DIR += .
+UI_DIR += ./GeneratedFiles
 RCC_DIR += .
 include(EconomicEngineDebugGUI.pri)

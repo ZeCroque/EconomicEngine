@@ -1,5 +1,4 @@
 #include "EconomicEngineDebugGUI.h"
-#include <iostream>
 
 EconomicEngineDebugGUI::EconomicEngineDebugGUI(QWidget *parent)
 	: QMainWindow(parent)
