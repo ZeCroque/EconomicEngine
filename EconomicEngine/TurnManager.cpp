@@ -2,7 +2,7 @@
 
 TurnManager* TurnManager::_instance = nullptr;
 
-TurnManager& TurnManager::GetInstance()
+TurnManager& TurnManager::getInstance()
 {
 	if(TurnManager::_instance==nullptr)
 	{

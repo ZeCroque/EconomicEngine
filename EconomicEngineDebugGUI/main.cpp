@@ -4,10 +4,11 @@
 
 int main(int argc, char *argv[])
 {
-	TurnManager* turnManager = &TurnManager::GetInstance();
+	TurnManager* turnManager = &TurnManager::getInstance();
 	
 	QApplication a(argc, argv);
 	EconomicEngineDebugGUI w;
 	w.show();
-	return a.exec();
+	
+	return QApplication::exec();
 }

@@ -1,5 +1,5 @@
-#ifndef TURNMANAGER__H
-#define TURNMANAGER__H
+#ifndef TURN_MANAGER_H
+#define TURN_MANAGER_H
 
 class TurnManager
 {
@@ -11,9 +11,11 @@ private:
 	 
 
 public:
-	static TurnManager& GetInstance();
+	static TurnManager& getInstance();
 	TurnManager(const TurnManager&) = delete;
 	TurnManager& operator = (const TurnManager &) = delete;
+	TurnManager(const TurnManager&&) = delete;
+	TurnManager& operator = (const TurnManager&&) = delete;
 };
 
 #endif
