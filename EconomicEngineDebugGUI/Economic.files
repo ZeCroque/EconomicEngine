@@ -1,0 +1,9 @@
+EconomicEngineDebugGUI.cpp
+EconomicEngineDebugGUI.h
+main.cpp
+qcustomplot.cpp
+qcustomplot.h
+x64/Debug/moc/moc_EconomicEngineDebugGUI.cpp
+x64/Debug/moc/moc_qcustomplot.cpp
+x64/Debug/rcc/qrc_EconomicEngineDebugGUI.cpp
+x64/Debug/uic/ui_EconomicEngineDebugGUI.h
