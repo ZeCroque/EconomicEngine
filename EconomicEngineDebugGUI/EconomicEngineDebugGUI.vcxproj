@@ -92,8 +92,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="c:\users\zecroque\source\repos\economicengine\economicenginedebuggui\economicenginedebuggui.cpp" />
-    <ClCompile Include="c:\users\zecroque\source\repos\economicengine\economicenginedebuggui\main.cpp" />
+    <ClCompile Include="economicenginedebuggui.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
   </ItemGroup>
   <ItemGroup>

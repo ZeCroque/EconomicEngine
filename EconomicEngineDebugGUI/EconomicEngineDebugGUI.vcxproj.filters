@@ -47,13 +47,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="c:\users\zecroque\source\repos\economicengine\economicenginedebuggui\economicenginedebuggui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c:\users\zecroque\source\repos\economicengine\economicenginedebuggui\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="economicenginedebuggui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
