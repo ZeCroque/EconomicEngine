@@ -14,97 +14,15 @@
    <string>EconomicEngineDebugGUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCustomPlot" name="w_plot" native="true">
+   <widget class="QCustomPlot" name="w_Plot" native="true">
     <property name="geometry">
      <rect>
       <x>30</x>
       <y>20</y>
       <width>551</width>
-      <height>221</height>
+      <height>291</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>270</y>
-      <width>194</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gl_button">
-     <item row="0" column="4">
-      <widget class="QPushButton" name="btn_clear">
-       <property name="text">
-        <string>Clear</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="btn_add">
-       <property name="text">
-        <string>Add</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>280</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="hl_x">
-     <item>
-      <widget class="QLabel" name="lb_x">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>X:</string>
-       </property>
-       <property name="scaledContents">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="sb_x"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>280</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="hl_y">
-     <item>
-      <widget class="QLabel" name="lb_y">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>Y:</string>
-       </property>
-       <property name="scaledContents">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="sb_y"/>
-     </item>
-    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -139,24 +57,7 @@
  <resources>
   <include location="EconomicEngineDebugGUI.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>btn_add</sender>
-   <signal>clicked()</signal>
-   <receiver>EconomicEngineDebugGUIClass</receiver>
-   <slot>on_btn_add_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>379</x>
-     <y>342</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>358</x>
-     <y>291</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>on_btn_add_clicked()</slot>
  </slots>

@@ -3,22 +3,18 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_EconomicEngineDebugGUI.h"
 
-class EconomicEngineDebugGUI : public QMainWindow
+class EconomicEngineDebugGUI final : public QMainWindow
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
-	explicit EconomicEngineDebugGUI(QWidget *parent = Q_NULLPTR);
+	EconomicEngineDebugGUI(QWidget* parent = Q_NULLPTR);
+	~EconomicEngineDebugGUI() = default;
 
-	void addPoint(double x, double y);
-	void clearData();
-	void plot();
-	
 public slots:
-	void on_btn_add_clicked();
-	
+	void realtimeDataSlot() const;
+
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
-	QVector<double> qv_x, qv_y;
-
+	QTimer dataTimer;
 };
