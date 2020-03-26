@@ -3,6 +3,6 @@
 class IObserver
 {
 public:
+	virtual ~IObserver() = default;
 	virtual void notify() = 0;
-	virtual bool equals(IObserver& observer) = 0;
 };

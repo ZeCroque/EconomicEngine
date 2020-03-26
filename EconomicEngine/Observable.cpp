@@ -1,10 +1,10 @@
 #include "Observable.h"
 
-bool Observable::contains(IObserver* observer)
+bool Observable::contains(IObserver* const observer)
 {
-	for (auto registeredObserver : this->_registeredObservers)
+	for(auto registeredObserver : this->registeredObservers)
 	{
-		if (registeredObserver->equals(*observer))
+		if (registeredObserver == observer)
 		{
 			return true;
 		}
@@ -12,23 +12,31 @@ bool Observable::contains(IObserver* observer)
 	return false;
 }
 
-void Observable::addObserver(IObserver* observer)
+void Observable::addObserver(IObserver* const observer)
 {
 	if (!this->contains(observer))
 	{
-		this->_registeredObservers.push_back(observer);
+		this->registeredObservers.emplace_back(observer);
 	}
 }
 
-void Observable::removeObserver(IObserver* observer)
+void Observable::removeObserver(IObserver* const  observer)
 {
 	if (this->contains(observer))
 	{
-		this->_registeredObservers.remove(observer);
+		this->registeredObservers.remove(observer);
 	}
 }
 
-std::list<IObserver*> Observable::getRegisteredObservers()
+std::list<IObserver*> Observable::getRegisteredObservers() const
 {
-	return this->_registeredObservers;
+	return this->registeredObservers;
+}
+
+void Observable::notifyObservers()
+{
+	for (auto registeredObserver : this->registeredObservers)
+	{
+		registeredObserver->notify();
+	}
 }
