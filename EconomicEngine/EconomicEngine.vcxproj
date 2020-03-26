@@ -19,9 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Observable.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Observable.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
