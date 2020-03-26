@@ -1,8 +1,10 @@
 #include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
+#include "TurnManager.h"
+#include <QCloseEvent>
+#include <thread>
 
-EconomicEngineDebugGUI::EconomicEngineDebugGUI(QWidget* parent)
-	: QMainWindow(parent)
+EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent) : QMainWindow(parent)
 {
 	ui.setupUi(this);
 
@@ -22,12 +24,17 @@ EconomicEngineDebugGUI::EconomicEngineDebugGUI(QWidget* parent)
 	connect(ui.w_Plot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.w_Plot->yAxis2, SLOT(setRange(QCPRange)));
 
 	// setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
-	connect(&dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
-	dataTimer.start(0); // Interval 0 means to refresh as fast as possible
+	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
+
+	//dataTimer.start(0); // Interval 0 means to refresh as fast as possible*/
 }
 
+void EconomicEngineDebugGui::notify()
+{
+	this->nextTurn();
+}
 
-void EconomicEngineDebugGUI::realtimeDataSlot() const
+void EconomicEngineDebugGui::realtimeDataSlot() const
 {
 	static QTime time(QTime::currentTime());
 	// calculate two new data points:
@@ -62,4 +69,12 @@ void EconomicEngineDebugGUI::realtimeDataSlot() const
 		lastFpsKey = key;
 		frameCount = 0;
 	}
+}
+
+void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
+{
+	this->turnManager->stop();
+	this->economicEngineThread->join();
+
+	
 }

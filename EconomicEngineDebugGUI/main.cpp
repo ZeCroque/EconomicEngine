@@ -1,14 +1,17 @@
 #include "EconomicEngineDebugGUI.h"
 #include <QtWidgets/QApplication>
-#include "TurnManager.h"
 
 int main(int argc, char *argv[])
 {
-	TurnManager* turnManager = &TurnManager::getInstance();
-	
 	QApplication a(argc, argv);
-	EconomicEngineDebugGUI w;
+	EconomicEngineDebugGui w;
 	w.show();
+
+	TurnManager* turnManager = &TurnManager::getInstance();
+	turnManager->addObserver(&w);
+	w.turnManager = turnManager;
 	
+	std::thread economicEngineThread([](TurnManager* turnManager)->int {return turnManager->exec();}, turnManager);
+	w.economicEngineThread = &economicEngineThread;
 	return QApplication::exec();
 }

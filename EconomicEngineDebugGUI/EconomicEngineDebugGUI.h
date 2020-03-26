@@ -2,14 +2,20 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_EconomicEngineDebugGUI.h"
+#include "Observer.h"
+#include "TurnManager.h"
 
-class EconomicEngineDebugGUI final : public QMainWindow
+class EconomicEngineDebugGui final : public QMainWindow, public IObserver
 {
 Q_OBJECT
 
 public:
-	EconomicEngineDebugGUI(QWidget* parent = Q_NULLPTR);
-	~EconomicEngineDebugGUI() = default;
+	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
+	~EconomicEngineDebugGui() = default;
+	void notify() override;
+	TurnManager* turnManager;
+	std::thread* economicEngineThread;
+	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public slots:
 	void realtimeDataSlot() const;
@@ -17,4 +23,10 @@ public slots:
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
 	QTimer dataTimer;
+
+signals:
+	void nextTurn();
+
+		
+	
 };
