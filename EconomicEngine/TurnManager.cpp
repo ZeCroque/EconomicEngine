@@ -1,13 +1,30 @@
 #include "TurnManager.h"
+#include <thread>
 
-TurnManager* TurnManager::_instance = nullptr;
 
-TurnManager& TurnManager::getInstance()
+void TurnManager::init()
 {
-	if(TurnManager::_instance==nullptr)
+	//TODO
+}
+
+void TurnManager::reset()
+{
+	//TODO
+}
+
+int TurnManager::exec()
+{
+	this->bRunning = true;
+	while(bRunning)
 	{
-		TurnManager::_instance = new TurnManager();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		this->notifyObservers();		
 	}
-	return *TurnManager::_instance;
+	return 0;
+}
+
+void TurnManager::stop()
+{
+	this->bRunning = false;
 }
 

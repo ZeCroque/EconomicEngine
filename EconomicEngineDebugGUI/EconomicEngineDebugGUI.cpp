@@ -1,11 +1,22 @@
 ﻿#include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
+#include "TurnManager.h"
+#include <QCloseEvent>
+#include <thread>
 #include "GraphManager.h"
 
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
+	turnManager = TurnManager::getInstance();
+	turnManager->addObserver(this);
+	economicEngineThread = std::thread([](TurnManager* turnManager)->int
+	{
+		turnManager->init();
+		return turnManager->exec();
+	}, turnManager);
+	
 	ui.setupUi(this);
 
 	std::vector<GraphManager*> arrayCheckBox;
@@ -71,8 +82,18 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
 	// setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
-	connect(&dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
-	dataTimer.start(0); // Interval 0 means to refresh as fast as possible
+	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
+}
+
+EconomicEngineDebugGui::~EconomicEngineDebugGui()
+{
+	TurnManager::destroyInstance();
+	this->turnManager=nullptr;
+}
+
+void EconomicEngineDebugGui::notify()
+{
+	this->nextTurn();
 }
 
 void EconomicEngineDebugGui::setGraphVisibility() const
@@ -85,7 +106,6 @@ void EconomicEngineDebugGui::setZoomXAxis(int value)
 {
 	this->zoomXAxis = value;
 }
-
 
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
@@ -127,4 +147,10 @@ void EconomicEngineDebugGui::realtimeDataSlot() const
 		lastFpsKey = key;
 		frameCount = 0;
 	}
+}
+
+void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
+{
+	this->turnManager->stop();
+	this->economicEngineThread.join();
 }

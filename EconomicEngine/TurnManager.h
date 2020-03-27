@@ -1,21 +1,22 @@
 #ifndef TURN_MANAGER_H
 #define TURN_MANAGER_H
+#include "Observable.h"
+#include "Singleton.h"
 
-class TurnManager
+class TurnManager final : public Observable, public Singleton<TurnManager>
 {
+	friend class Singleton<TurnManager>;
+	private:
+		bool bRunning;
+		TurnManager() : bRunning(false){}
+		~TurnManager() = default;
 
-private:
-	static TurnManager* _instance;
-	TurnManager() = default;
-	~TurnManager() = default;
-	 
 
-public:
-	static TurnManager& getInstance();
-	TurnManager(const TurnManager&) = delete;
-	TurnManager& operator = (const TurnManager &) = delete;
-	TurnManager(const TurnManager&&) = delete;
-	TurnManager& operator = (const TurnManager&&) = delete;
+	public:	
+		void init();
+		void reset();
+		int exec();
+		void stop();
 };
 
 #endif
