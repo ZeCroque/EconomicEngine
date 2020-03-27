@@ -19,11 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ask.h" />
+    <ClInclude Include="AskFactory.h" />
+    <ClInclude Include="Behavior.h" />
+    <ClInclude Include="Countable.h" />
+    <ClInclude Include="Currency.h" />
+    <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StockExchange.h" />
+    <ClInclude Include="ToolBehavior.h" />
+    <ClInclude Include="Tradable.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Countable.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>

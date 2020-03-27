@@ -6,6 +6,14 @@
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent) : QMainWindow(parent)
 {
+	turnManager = TurnManager::getInstance();
+	turnManager->addObserver(this);
+	economicEngineThread = std::thread([](TurnManager* turnManager)->int
+	{
+		turnManager->init();
+		return turnManager->exec();
+	}, turnManager);
+	
 	ui.setupUi(this);
 
 	ui.w_Plot->addGraph(); // blue line
@@ -25,8 +33,12 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent) : QMainWindow(pa
 
 	// setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
+}
 
-	//dataTimer.start(0); // Interval 0 means to refresh as fast as possible*/
+EconomicEngineDebugGui::~EconomicEngineDebugGui()
+{
+	TurnManager::destroyInstance();
+	this->turnManager=nullptr;
 }
 
 void EconomicEngineDebugGui::notify()
@@ -74,7 +86,5 @@ void EconomicEngineDebugGui::realtimeDataSlot() const
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
 	this->turnManager->stop();
-	this->economicEngineThread->join();
-
-	
+	this->economicEngineThread.join();
 }

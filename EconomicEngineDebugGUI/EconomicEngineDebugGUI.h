@@ -11,10 +11,10 @@ Q_OBJECT
 
 public:
 	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
-	~EconomicEngineDebugGui() = default;
+	~EconomicEngineDebugGui();
 	void notify() override;
-	TurnManager* turnManager;
-	std::thread* economicEngineThread;
+	
+	std::thread economicEngineThread;
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public slots:
@@ -23,6 +23,7 @@ public slots:
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
 	QTimer dataTimer;
+	TurnManager* turnManager;
 
 signals:
 	void nextTurn();

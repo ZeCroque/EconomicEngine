@@ -1,15 +1,15 @@
 #include "TurnManager.h"
 #include <thread>
 
-TurnManager* TurnManager::_instance = nullptr;
 
-TurnManager& TurnManager::getInstance()
+void TurnManager::init()
 {
-	if(TurnManager::_instance==nullptr)
-	{
-		TurnManager::_instance = new TurnManager();
-	}
-	return *TurnManager::_instance;
+	//TODO
+}
+
+void TurnManager::reset()
+{
+	//TODO
 }
 
 int TurnManager::exec()
@@ -18,10 +18,7 @@ int TurnManager::exec()
 	while(bRunning)
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		
-		this->notifyObservers();
-
-		
+		this->notifyObservers();		
 	}
 	return 0;
 }
