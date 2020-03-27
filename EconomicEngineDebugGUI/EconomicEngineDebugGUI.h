@@ -1,20 +1,29 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+
+#include "GraphManager.h"
 #include "ui_EconomicEngineDebugGUI.h"
 
-class EconomicEngineDebugGUI final : public QMainWindow
+class EconomicEngineDebugGui final : public QMainWindow
 {
 Q_OBJECT
 
 public:
-	EconomicEngineDebugGUI(QWidget* parent = Q_NULLPTR);
-	~EconomicEngineDebugGUI() = default;
+	EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 
-public slots:
+	~EconomicEngineDebugGui() = default;
+
+
+public Q_SLOTS:
 	void realtimeDataSlot() const;
+	void setGraphVisibility() const;
+	void setZoomXAxis(int value);
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
+	std::vector<GraphManager*> arrayCheckBox;
 	QTimer dataTimer;
+
+	int zoomXAxis;
 };

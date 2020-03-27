@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 	TurnManager* turnManager = &TurnManager::getInstance();
 	
 	QApplication a(argc, argv);
-	EconomicEngineDebugGUI w;
+	EconomicEngineDebugGui w;
 	w.show();
 	
 	return QApplication::exec();
