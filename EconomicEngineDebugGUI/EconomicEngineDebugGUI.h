@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+
+#include "GraphManager.h"
 #include "ui_EconomicEngineDebugGUI.h"
 #include "Observer.h"
 #include "TurnManager.h"
@@ -10,24 +12,24 @@ class EconomicEngineDebugGui final : public QMainWindow, public IObserver
 Q_OBJECT
 
 public:
-	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
+	EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui();
 	void notify() override;
-	
-	std::thread economicEngineThread;
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
-public slots:
+public Q_SLOTS:
 	void realtimeDataSlot() const;
+	void setGraphVisibility() const;
+	void setZoomXAxis(int value);
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
+	std::vector<GraphManager*> arrayCheckBox;
 	QTimer dataTimer;
+  std::thread economicEngineThread;
 	TurnManager* turnManager;
+  	int zoomXAxis;
 
 signals:
 	void nextTurn();
-
-		
-	
 };

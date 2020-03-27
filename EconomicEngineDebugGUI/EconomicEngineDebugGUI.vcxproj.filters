@@ -47,6 +47,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GraphManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="economicenginedebuggui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -61,24 +64,20 @@
     <QtMoc Include="EconomicEngineDebugGUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="GraphManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    
-    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
-    
-    
-    
-    
-    
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="EconomicEngineDebugGUI.ui">

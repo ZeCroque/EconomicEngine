@@ -78,7 +78,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\QT\5.14.1\MSVC2017_64\include;..\..\..\QT\5.14.1\MSVC2017_64\include\QtPrintSupport;..\..\..\QT\5.14.1\MSVC2017_64\include\QtWidgets;..\..\..\QT\5.14.1\MSVC2017_64\include\QtGui;..\..\..\QT\5.14.1\MSVC2017_64\include\QtANGLE;..\..\..\QT\5.14.1\MSVC2017_64\include\QtCore;debug;/include;..\..\..\QT\5.14.1\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories);$(SolutionDir)\EconomicEngine;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\EconomicEngine;.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\QT\5.14.1\MSVC2017_64\include;..\..\..\QT\5.14.1\MSVC2017_64\include\QtPrintSupport;..\..\..\QT\5.14.1\MSVC2017_64\include\QtWidgets;..\..\..\QT\5.14.1\MSVC2017_64\include\QtGui;..\..\..\QT\5.14.1\MSVC2017_64\include\QtANGLE;..\..\..\QT\5.14.1\MSVC2017_64\include\QtCore;debug;/include;..\..\..\QT\5.14.1\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="economicenginedebuggui.cpp" />
+    <ClCompile Include="GraphManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
   </ItemGroup>
@@ -238,6 +239,9 @@
   <ItemGroup>
     <QtRcc Include="EconomicEngineDebugGUI.qrc">
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="GraphManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EconomicEngine\EconomicEngine.vcxproj">

@@ -6,23 +6,295 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>1177</width>
+    <height>689</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>EconomicEngineDebugGUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCustomPlot" name="w_Plot" native="true">
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>551</width>
-      <height>291</height>
+      <x>10</x>
+      <y>10</y>
+      <width>1151</width>
+      <height>341</height>
      </rect>
     </property>
+    <layout class="QHBoxLayout" name="layGraph">
+     <item>
+      <layout class="QVBoxLayout" name="layGraphParam">
+       <item>
+        <layout class="QHBoxLayout" name="layGraphChBx">
+         <item>
+          <layout class="QVBoxLayout" name="LayOne">
+           <item>
+            <widget class="GraphManager" name="chBxGraphWheat">
+             <property name="text">
+              <string>Wheat</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="graphIndex" stdset="0">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphMeat">
+             <property name="text">
+              <string>Meat</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphWood">
+             <property name="text">
+              <string>Wood</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphLeather">
+             <property name="text">
+              <string>Leather</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphCoal">
+             <property name="text">
+              <string>Coal</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="LayTwo">
+           <item>
+            <widget class="GraphManager" name="chBxGraphBread">
+             <property name="text">
+              <string>Bread</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphSteak">
+             <property name="text">
+              <string>Steak</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronOre">
+             <property name="text">
+              <string>Iron Ore</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronArmor">
+             <property name="text">
+              <string>Iron Armor</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphWoodPickaxe">
+             <property name="text">
+              <string>Wood Pickaxe</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="LayThree">
+           <item>
+            <widget class="GraphManager" name="chBxGraphBow">
+             <property name="text">
+              <string>Bow</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronAxe">
+             <property name="text">
+              <string>Iron Axe</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronHoe">
+             <property name="text">
+              <string>Iron Hoe</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronPickaxe">
+             <property name="text">
+              <string>Iron Pickaxe</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="GraphManager" name="chBxGraphIronSword">
+             <property name="text">
+              <string>Iron Sword</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="LaySliders">
+         <item row="1" column="0">
+          <widget class="QLabel" name="labSpeed">
+           <property name="text">
+            <string>Seed: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labZomXAxis">
+           <property name="text">
+            <string>Zoom X: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSlider" name="horSlidZoomXAxis">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="singleStep">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>true</bool>
+           </property>
+           <property name="invertedControls">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSlider" name="horSlidSpeed">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="invertedControls">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QCustomPlot" name="customPlot" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>830</width>
+         <height>300</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>830</width>
+         <height>300</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -30,7 +302,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>1177</width>
      <height>26</height>
     </rect>
    </property>
@@ -52,6 +324,11 @@
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GraphManager</class>
+   <extends>QCheckBox</extends>
+   <header location="global">GraphManager.h</header>
   </customwidget>
  </customwidgets>
  <resources>
