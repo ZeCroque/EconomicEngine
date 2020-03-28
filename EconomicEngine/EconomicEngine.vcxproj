@@ -23,7 +23,9 @@
     <ClInclude Include="AskFactory.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Countable.h" />
+    <ClInclude Include="Craft.h" />
     <ClInclude Include="Currency.h" />
+    <ClInclude Include="Job.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
@@ -31,6 +33,7 @@
     <ClInclude Include="StockExchange.h" />
     <ClInclude Include="ToolBehavior.h" />
     <ClInclude Include="Tradable.h" />
+    <ClInclude Include="Trader.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <ItemGroup>
