@@ -8,9 +8,9 @@
 class StockExchange
 {
 private:
-	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk<Tradable>>> currentBuyingAsks;
-	std::multimap<std::type_info, std::reference_wrapper<SellingAsk<Tradable>>> currentSellingAsks;
-	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk<Tradable>>> betterAsks;
+	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk>> currentBuyingAsks;
+	std::multimap<std::type_info, std::reference_wrapper<SellingAsk>> currentSellingAsks;
+	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk>> betterAsks;
 	
 public:
 	StockExchange() = default;
