@@ -1,10 +1,12 @@
 #include "TurnManager.h"
 #include <thread>
 
+#include "Trader.h"
 
 void TurnManager::init()
 {
-	//TODO
+
+	
 }
 
 void TurnManager::reset()

@@ -2,11 +2,9 @@
 #define TRADER_H
 #include <list>
 #include <map>
-
-#include "AskFactory.h"
+#include "Ask.h"
 #include "Craft.h"
 #include "Job.h"
-#include "Money.h"
 
 
 class Trader
@@ -15,11 +13,13 @@ private:
 	std::pair<int, int> priceBelief;
 	Craft* currentCraft;
 	Job* currentJob;
-	//Ask* currentAsks;
-	//std::list<std::reference_wrapper<AskFactory>> askFactories;
+	std::list<std::reference_wrapper<Tradable>> wonderList;
+	std::list<std::reference_wrapper<Tradable>> goodsList;
 	std::list<std::reference_wrapper<Tradable>> inventory;
+	std::list<std::reference_wrapper<Ask>> currentAsks;
 
 public:
+	Trader();
 	void makeAsks();
 	void craft();
 	void refresh();

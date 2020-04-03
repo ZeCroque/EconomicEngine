@@ -3,22 +3,17 @@
 #include <map>
 #include <typeinfo>
 #include "Ask.h"
-#include "Currency.h"
+#include "Tradable.h"
 
-template <class T> class StockExchange
+class StockExchange
 {
 private:
-	T* currency;
 	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk<Tradable>>> currentBuyingAsks;
 	std::multimap<std::type_info, std::reference_wrapper<SellingAsk<Tradable>>> currentSellingAsks;
 	std::multimap<std::type_info, std::reference_wrapper<BuyingAsk<Tradable>>> betterAsks;
 	
 public:
-	StockExchange()
-	{
-		static_assert(std::is_base_of<Currency, T>::value);
-		currency = T::getInstance();
-	}
+	StockExchange() = default;
 	
 	void registerBuyingAsk(BuyingAsk<Tradable>& buyingAsk);	
 	{

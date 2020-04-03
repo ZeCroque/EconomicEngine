@@ -4,8 +4,5 @@
 
 int Countable::getCount() const
 {
-
-
-
 	return count;
 }

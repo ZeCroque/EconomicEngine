@@ -20,11 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ask.h" />
-    <ClInclude Include="AskFactory.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Countable.h" />
     <ClInclude Include="Craft.h" />
-    <ClInclude Include="Currency.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
@@ -37,8 +35,10 @@
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ask.cpp" />
     <ClCompile Include="Countable.cpp" />
     <ClCompile Include="Observable.cpp" />
+    <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -99,6 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

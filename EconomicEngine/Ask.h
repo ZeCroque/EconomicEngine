@@ -1,63 +1,56 @@
 #ifndef ASK_H
 #define ASK_H
-#include <type_traits>
 
+#include <vector>
 #include "Tradable.h"
 
-template<class T> class Ask
+enum class AskStatus { Pending, Sold, Refused };
+
+class Ask
 {
-	enum class AskStatus {Pending, Sold, Refused};
+protected:
 	
-private:
-	float price;
-	int count;
+	std::vector<std::reference_wrapper<Tradable>> content;
+	int price;
 	int date;
 	AskStatus status;
-	T** result;
+	size_t typeId;
 	
-public:
-	Ask() : price(0.0f), count(0), date(0), status(AskStatus::Pending), result(nullptr)
-	{
-		static_assert(std::is_base_of<Tradable, T>::value);
-	}
+public:	
+	Ask();
+	virtual ~Ask() = default;
+	Ask(Tradable& item, const int price);
+	Ask(Ask& a) = default;
+	Ask(Ask&& a) = default;
+	Ask& operator=(const Ask& a) = default;
+	Ask& operator=(Ask&& a) = default;
 	
-	Ask(const float price, const int count, const int date) : price(price), count(count), date(date), status(AskStatus::Pending), result(nullptr)
-	{
-		static_assert(std::is_base_of<Tradable, T>::value);
-	}
-	
-	float getPrice() const
-	{
-		return price;
-	}
+	Ask(std::vector<std::reference_wrapper<Tradable>> items, const int price);
 
-	int getCount() const
-	{
-		return count;
-	}
+	[[nodiscard]] int getPrice() const;
+	[[nodiscard]] int getCount() const;
+	[[nodiscard]] int getDate() const;
+	[[nodiscard]] size_t getId() const;
+	[[nodiscard]] AskStatus getStatus() const;
+	virtual std::vector<std::reference_wrapper<Tradable>> getContent() = 0;
 
-	int getDate() const
-	{
-		return date;
-	}
-
-	AskStatus getStatus() const
-	{
-		return status;
-	}
-
-	T** getResult() const
-	{
-		if (status == AskStatus::Sold)
-		{
-			//TODO countable/uncountable
-			return result;
-		}
-		return nullptr;
-	}
 };
 
-template<class T> class BuyingAsk : public Ask<T> {};
-template<class T> class SellingAsk : public Ask<T> {};
+class BuyingAsk final : public Ask
+{
+public:
+	BuyingAsk() = delete;
+	BuyingAsk(Tradable& item, const int price);
+	BuyingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price);
+	std::vector<std::reference_wrapper<Tradable>> getContent() override;
+};
+class SellingAsk final : public Ask
+{
+public:
+	SellingAsk() = delete;
+	SellingAsk(Tradable& item, const int price);
+	SellingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price);
+	std::vector<std::reference_wrapper<Tradable>> getContent() override;
+};
 
 #endif

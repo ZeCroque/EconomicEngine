@@ -7,7 +7,8 @@ class Tradable
 private:
 	Behavior* behavior;
 public:
-	Tradable() : behavior(nullptr){}
+	Tradable() : behavior(nullptr) { }
+	virtual ~Tradable() = default;
 };
 
 #endif
