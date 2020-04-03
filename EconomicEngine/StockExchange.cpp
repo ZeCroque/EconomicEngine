@@ -1,23 +1,26 @@
 #include "StockExchange.h"
+#include <typeinfo>
+#include "Money.h"
 
-StockExchange::StockExchange()
+void StockExchange::registerBuyingAsk(BuyingAsk&  buyingAsk)
 {
-	betterAsks = new std::vector<std::reference_wrapper<BuyingAsk>>[10]; //TODO variable
+	currentBuyingAsks[typeid(buyingAsk.getContent()[0].get()).hash_code()]->emplace_back(buyingAsk);
 }
 
-StockExchange::~StockExchange()
+void StockExchange::registerSellingAsk(SellingAsk& sellingAsk)
 {
-	delete betterAsks;
+	currentSellingAsks[typeid(sellingAsk.getContent()[0].get()).hash_code()]->emplace_back(sellingAsk);
 }
 
-
-void StockExchange::registerBuyingAsk(const BuyingAsk&  buyingAsk)
+void StockExchange::resolveOffers()
 {
-	currentBuyingAsks.emplace_back(buyingAsk);
-}
-
-void StockExchange::registerSellingAsk(const SellingAsk& sellingAsk)
-{
-	currentSellingAsks.emplace_back(sellingAsk);
+	for(auto keys : this->keys)
+	{
+		for(auto& ask : (*this->currentBuyingAsks[typeid(Money).hash_code()]))
+		{
+			
+		}
+	}
+	
 }
 

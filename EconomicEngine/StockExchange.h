@@ -1,22 +1,29 @@
 #ifndef STOCK_EXCHANGE_H
 #define STOCK_EXCHANGE_H
-#include <list>
 #include "Ask.h"
-#include "Tradable.h"
+#include "VectorArray.h"
 
 class StockExchange
 {
 private:
-	std::list<std::reference_wrapper<BuyingAsk>> currentBuyingAsks;
-	std::list<std::reference_wrapper<SellingAsk>> currentSellingAsks;
-	std::vector<std::reference_wrapper<BuyingAsk>>* betterAsks;
+	VectorArray<BuyingAsk> currentBuyingAsks;
+	VectorArray<SellingAsk> currentSellingAsks;
+	VectorArray<BuyingAsk> betterAsks;
+	std::vector<size_t> keys;
 	
 public:
-	StockExchange();
-	~StockExchange();
-	
-	void registerBuyingAsk(const BuyingAsk& buyingAsk);	
-	void registerSellingAsk(const SellingAsk& sellingAsk);
+	StockExchange() = default;
+	StockExchange(const std::vector<size_t>& keys)
+	{
+		this->keys = std::vector<size_t>(keys);
+		this->currentBuyingAsks = VectorArray<BuyingAsk>(&this->keys);
+		this->currentSellingAsks = VectorArray<SellingAsk>(&this->keys);
+		this->betterAsks = VectorArray<BuyingAsk>(&this->keys);
+		
+	}
+
+	void registerBuyingAsk(BuyingAsk& buyingAsk);	
+	void registerSellingAsk(SellingAsk& sellingAsk);
 
 	void resolveOffers(); //TODO Maxence
 

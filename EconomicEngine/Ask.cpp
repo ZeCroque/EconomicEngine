@@ -1,9 +1,12 @@
 #include "Ask.h"
 
+
+#include <cassert>
 #include <typeinfo>
 
 #include "Countable.h"
 #include "Money.h"
+#include "Uncountable.h"
 
 
 Ask::Ask()
@@ -14,7 +17,7 @@ Ask::Ask()
 	price = 0;
 }
 
-Ask::Ask(Tradable& item, const int price) : Ask()
+Ask::Ask(Countable& item, const int price) : Ask()
 {
 	content.emplace_back(item);
 	typeId = typeid(item).hash_code();
@@ -23,11 +26,15 @@ Ask::Ask(Tradable& item, const int price) : Ask()
 
 Ask::Ask(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask()
 {
-	content = std::move(items);
-	if (!content.empty())
+	assert(!items.empty());
+	for(auto item : items)
 	{
-		typeId = typeid(content[0]).hash_code();
+		assert(dynamic_cast<Uncountable*>(&item.get()) != nullptr);
 	}
+	
+
+	content = std::move(items);
+	typeId = typeid(content[0]).hash_code();
 	this->price = price;
 }
 
@@ -68,24 +75,28 @@ AskStatus Ask::getStatus() const
 	return status;
 }
 
+std::vector<std::reference_wrapper<Tradable>> Ask::getContent() const
+{
+	return content;
+}
 
 
-BuyingAsk::BuyingAsk(Tradable& item, const int price) : Ask::Ask(item, price) {}
+BuyingAsk::BuyingAsk(Countable& item, const int price) : Ask::Ask(item, price) {}
 
 BuyingAsk::BuyingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask::Ask(items, price) {}
 
-std::vector<std::reference_wrapper<Tradable>> BuyingAsk::getContent()
+std::vector<std::reference_wrapper<Tradable>> BuyingAsk::getResult()
 {
 	return content;
 }
 
 
 
-SellingAsk::SellingAsk(Tradable& item, const int price) : Ask::Ask(item, price) {}
+SellingAsk::SellingAsk(Countable& item, const int price) : Ask::Ask(item, price) {}
 
 SellingAsk::SellingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask::Ask(items, price) {}
 
-std::vector<std::reference_wrapper<Tradable>> SellingAsk::getContent()
+std::vector<std::reference_wrapper<Tradable>> SellingAsk::getResult()
 {
 	std::vector<std::reference_wrapper<Tradable>> result;
 	Money m(static_cast<int>(price));

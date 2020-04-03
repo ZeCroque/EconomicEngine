@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Ask.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Countable.h" />
@@ -33,6 +34,8 @@
     <ClInclude Include="Tradable.h" />
     <ClInclude Include="Trader.h" />
     <ClInclude Include="TurnManager.h" />
+    <ClInclude Include="Uncountable.h" />
+    <ClInclude Include="VectorArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ask.cpp" />

@@ -17,8 +17,9 @@ void Trader::makeAsks()
 		//TODO weight		
 		if(uniformDist(randomEngine))
 		{
-			BuyingAsk buyingAsk(tradable.get(), 10);
-			currentAsks.emplace_back(buyingAsk);
+			
+			//BuyingAsk buyingAsk(tradable.get(), 10);
+			//currentAsks.emplace_back(buyingAsk);
 		}
 	}
 
@@ -27,8 +28,8 @@ void Trader::makeAsks()
 		//TODO weight
 		if (uniformDist(randomEngine))
 		{
-			SellingAsk buyingAsk(tradable.get(), 10);
-			currentAsks.emplace_back(buyingAsk);
+			//SellingAsk buyingAsk(tradable.get(), 10);
+			//currentAsks.emplace_back(buyingAsk);
 		}
 	}
 }
