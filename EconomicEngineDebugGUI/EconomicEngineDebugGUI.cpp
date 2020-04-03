@@ -48,9 +48,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 			const std::uniform_int_distribution<int> uniformDist(0, 255);
 
 			const auto r = uniformDist(randomEngine);
-			randomEngine.seed(1 + i * 0.33);
 			const auto g = uniformDist(randomEngine);
-			randomEngine.seed(1 + i * 0.66);
 			const auto b = uniformDist(randomEngine);
 
 			auto style = QString(

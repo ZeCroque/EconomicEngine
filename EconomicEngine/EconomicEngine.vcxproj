@@ -38,6 +38,7 @@
     <ClCompile Include="Ask.cpp" />
     <ClCompile Include="Countable.cpp" />
     <ClCompile Include="Observable.cpp" />
+    <ClCompile Include="StockExchange.cpp" />
     <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>

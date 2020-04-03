@@ -14,6 +14,8 @@ void TurnManager::reset()
 	//TODO
 }
 
+
+//TODO turncount defined by economic engine
 int TurnManager::exec()
 {
 	this->bRunning = true;
