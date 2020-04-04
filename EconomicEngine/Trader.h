@@ -8,17 +8,20 @@
 #include "Craft.h"
 #include "Job.h"
 
+class Job;
 
 class Trader
 {
 private:
 	std::pair<int, int> priceBelief;
 	Craft* currentCraft;
-	//Job* currentJob;
+	Job* currentJob;
 	std::list<size_t> wonderList;
 	std::list<size_t> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
+
+	void assignJob();
 
 public:
 	Trader();
@@ -26,7 +29,6 @@ public:
 	void craft();
 	void refresh();
 	void checkAsks();
-
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	
 	

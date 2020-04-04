@@ -16,7 +16,7 @@ public:
 		}
 	}
 
-	T* createObject(const Key& key)
+	[[nodiscard]] T* createObject(const Key& key) const
 	{
 		T* result = nullptr;
 		auto it = objectsMap.find(key);
@@ -27,8 +27,7 @@ public:
 		return result;
 	}
 
-protected:
-	std::vector<Key> getKeys()
+	[[nodiscard]] std::vector<Key> getKeys() const
 	{
 		std::vector<Key> keys;
 		for (auto item : objectsMap)
@@ -37,8 +36,9 @@ protected:
 		}
 		return keys;
 	}
-
-	T* getDefaultObject(size_t key)
+	
+protected:
+	[[nodiscard]] T* getDefaultObject(size_t key) const
 	{
 		T* defaultObject = nullptr;
 		auto it = objectsMap.find(key);

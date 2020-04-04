@@ -2,10 +2,15 @@
 #include <chrono>
 #include <random>
 
+void Trader::assignJob()
+{
+	//TODO job factory
+}
+
 Trader::Trader()
 {
-	/*currentJob = nullptr;
-	currentCraft = nullptr;*/
+	currentJob = nullptr;
+	currentCraft = nullptr;
 }
 
 void Trader::makeAsks()

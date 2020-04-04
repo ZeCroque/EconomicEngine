@@ -2,7 +2,7 @@
 
 CraftFactory::CraftFactory(Trader& owner) : owner(owner) {}
 
-bool CraftFactory::isCraftable(const size_t key)
+bool CraftFactory::isCraftable(const size_t key) const
 {
 	bool requirementsOwned = true;
 	for(const auto requirement: this->getDefaultObject(key)->getRequirement())
@@ -31,8 +31,4 @@ bool CraftFactory::isCraftable(const size_t key)
 	return requirementsOwned;
 }
 
-Craft* CraftFactory::craft(size_t key)
-{
-	//TODO
-	return nullptr;
-}
+
