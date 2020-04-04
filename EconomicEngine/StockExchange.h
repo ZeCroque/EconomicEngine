@@ -13,17 +13,10 @@ private:
 	
 public:
 	StockExchange() = default;
-	StockExchange(const std::vector<size_t>& keys)
-	{
-		this->keys = std::vector<size_t>(keys);
-		this->currentBuyingAsks = VectorArray<BuyingAsk>(&this->keys);
-		this->currentSellingAsks = VectorArray<SellingAsk>(&this->keys);
-		this->betterAsks = VectorArray<BuyingAsk>(&this->keys);
-		
-	}
+	StockExchange(const std::vector<size_t>& keys);
 
-	void registerBuyingAsk(BuyingAsk& buyingAsk);	
-	void registerSellingAsk(SellingAsk& sellingAsk);
+	void registerBuyingAsk(const std::shared_ptr<BuyingAsk>& buyingAsk);	
+	void registerSellingAsk(const std::shared_ptr<SellingAsk>& sellingAsk);
 
 	void resolveOffers(); //TODO Maxence
 

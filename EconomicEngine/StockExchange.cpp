@@ -1,24 +1,30 @@
 #include "StockExchange.h"
-#include <typeinfo>
-#include "Money.h"
 
-void StockExchange::registerBuyingAsk(BuyingAsk&  buyingAsk)
+StockExchange::StockExchange(const std::vector<size_t>& keys)
 {
-	currentBuyingAsks[typeid(buyingAsk.getContent()[0].get()).hash_code()]->emplace_back(buyingAsk);
+	this->keys = std::vector<size_t>(keys);
+	this->currentBuyingAsks = VectorArray<BuyingAsk>(&this->keys);
+	this->currentSellingAsks = VectorArray<SellingAsk>(&this->keys);
+	this->betterAsks = VectorArray<BuyingAsk>(&this->keys);
 }
 
-void StockExchange::registerSellingAsk(SellingAsk& sellingAsk)
+void StockExchange::registerBuyingAsk(const std::shared_ptr<BuyingAsk>& buyingAsk)
 {
-	currentSellingAsks[typeid(sellingAsk.getContent()[0].get()).hash_code()]->emplace_back(sellingAsk);
+	currentBuyingAsks[buyingAsk->getId()].emplace_back(buyingAsk);
+}
+
+void StockExchange::registerSellingAsk(const std::shared_ptr<SellingAsk>& sellingAsk)
+{
+	currentSellingAsks[sellingAsk->getId()].emplace_back(sellingAsk);
 }
 
 void StockExchange::resolveOffers()
 {
-	for(auto keys : this->keys)
+	for(auto key : this->keys)
 	{
-		for(auto& ask : (*this->currentBuyingAsks[typeid(Money).hash_code()]))
+		for(auto ask : (this->currentBuyingAsks[key]))
 		{
-			
+			//TODO Maxence
 		}
 	}
 	

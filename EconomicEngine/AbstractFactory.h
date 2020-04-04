@@ -3,36 +3,52 @@
 
 #include <map>
 
-template <class T> class AbstractFactory
+template <class Key, class T> class AbstractFactory
 {
-    static std::map<int, T*> m_map;
+	std::map<Key, T*> objectsMap;
 public:
 
-    static void Register(int key, T* obj);
-    T* Create(const int & key);
+	void registerObject(Key key, T* obj)
+	{
+		if (objectsMap.find(key) == objectsMap.end())
+		{
+			objectsMap[key] = obj;
+		}
+	}
+
+	T* createObject(const Key& key)
+	{
+		T* result = nullptr;
+		auto it = objectsMap.find(key);
+		if (it != objectsMap.end())
+		{
+			result = ((*it).second)->clone();
+		}
+		return result;
+	}
+
+protected:
+	std::vector<Key> getKeys()
+	{
+		std::vector<Key> keys;
+		for (auto item : objectsMap)
+		{
+			keys.emplace_back(item.first);
+		}
+		return keys;
+	}
+
+	T* getDefaultObject(size_t key)
+	{
+		T* defaultObject = nullptr;
+		auto it = objectsMap.find(key);
+		if(it!=objectsMap.end())
+		{	
+			defaultObject = it->second;
+		}
+		return  defaultObject;
+	}
+
 };
-
-template <class T> std::map<int, T*> AbstractFactory<T>::m_map = std::map<int, T*>();
-
-template <class T> void AbstractFactory<T>::Register(int key, T* obj)
-{
-    if (m_map.find(key) == m_map.end())
-    {
-        m_map[key] = obj;
-    }
-}
-
-template <class T> T* AbstractFactory<T>::Create(const int& key)
-{
-    T* tmp = nullptr;
-    typename std::map<int, T*>::iterator it = m_map.find(key);
-
-    if (it != m_map.end())
-    {
-        tmp = ((*it).second)->Clone();
-    }
-
-    return tmp;
-}
 
 #endif

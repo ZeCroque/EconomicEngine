@@ -1,29 +1,36 @@
 #include "TurnManager.h"
+
+#include <memory>
 #include <thread>
 
 #include "Trader.h"
-#include "Ask.h"
 #include "Countable.h"
+//#include "CraftFactory.h"
 #include "Money.h"
-#include "StockExchange.h"
+#include "Uncountable.h"
 
 void TurnManager::init()
 {
-	Countable i;
-	Money m;
-	BuyingAsk ask(i, 10);
-	BuyingAsk ask2(m, 20);
 
-	std::vector<size_t> keys;
-	keys.resize(2);
-	keys[0] = typeid(Countable).hash_code();
-	keys[1] = typeid(Money).hash_code();
+	std::vector<std::pair<size_t, int>> requirements;
+	requirements.emplace_back(std::pair<size_t, int>(typeid(Countable).hash_code(), 1));
+	requirements.emplace_back(std::pair<size_t, int>(typeid(Money).hash_code(), 2));
+	Craft craft(0.34f, typeid(Uncountable).hash_code(), requirements);
 
-	StockExchange bourse(keys);
-	bourse.registerBuyingAsk(ask);
-	bourse.registerBuyingAsk(ask2);
+	Trader a;
+	/*a.inventory.emplace_back(std::make_shared<Countable>(1));
+	a.inventory.emplace_back(std::make_shared<Money>(2));
+	
+	CraftFactory fact(a);
+	fact.registerObject(typeid(Uncountable).hash_code(), &craft);
+	
+	bool result = fact.isCraftable(typeid(Uncountable).hash_code());
+	
+	auto* item = dynamic_cast<Countable*>(a.inventory.back().get());
+	item->count = 1;
+	result = fact.isCraftable(typeid(Uncountable).hash_code());
 
-	bourse.resolveOffers();
+	getchar();*/
 	
 }
 

@@ -22,8 +22,10 @@
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Ask.h" />
     <ClInclude Include="Behavior.h" />
+    <ClInclude Include="Clonable.h" />
     <ClInclude Include="Countable.h" />
     <ClInclude Include="Craft.h" />
+    <ClInclude Include="CraftFactory.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
@@ -40,6 +42,9 @@
   <ItemGroup>
     <ClCompile Include="Ask.cpp" />
     <ClCompile Include="Countable.cpp" />
+    <ClCompile Include="Craft.cpp" />
+    <ClCompile Include="CraftFactory.cpp" />
+    <ClCompile Include="Job.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="StockExchange.cpp" />
     <ClCompile Include="Trader.cpp" />

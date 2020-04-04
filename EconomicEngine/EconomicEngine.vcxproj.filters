@@ -13,78 +13,117 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Utilities">
+      <UniqueIdentifier>{c5b79c1b-f3bf-4d0a-9dee-c7e8d97baa4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Tradables">
+      <UniqueIdentifier>{99dcf7dd-1281-476b-826d-04a34bd37a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Traders">
+      <UniqueIdentifier>{55f2ce26-6861-4899-a302-0f5124fd4007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Tradables">
+      <UniqueIdentifier>{e02f6063-88f5-4c34-87d9-eea25da075d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Utilities">
+      <UniqueIdentifier>{ca8d288c-9e69-414f-ae1f-c4fec1d25348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Traders">
+      <UniqueIdentifier>{f3818cf2-c44e-496c-96b1-774eeeb0aae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core">
+      <UniqueIdentifier>{fe2264d4-b789-41b0-b4fe-b1bfd9b735ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core">
+      <UniqueIdentifier>{3342d831-613e-4320-82b4-50075a96668b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TurnManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="AbstractFactory.h">
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Observable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Ask.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Behavior.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Tradable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Countable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Money.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="StockExchange.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ToolBehavior.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Trader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Craft.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Job.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractFactory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="Clonable.h">
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="VectorArray.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Countable.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
     <ClInclude Include="Uncountable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="Tradable.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="Money.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Craft.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
+    </ClInclude>
+    <ClInclude Include="Job.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
+    </ClInclude>
+    <ClInclude Include="Trader.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolBehavior.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="Behavior.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="Ask.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="StockExchange.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TurnManager.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftFactory.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TurnManager.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Countable.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
     <ClCompile Include="Observable.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Countable.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Trader.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
     <ClCompile Include="Ask.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="StockExchange.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TurnManager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Job.cpp">
+      <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftFactory.cpp">
+      <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
+    <ClCompile Include="Craft.cpp">
+      <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

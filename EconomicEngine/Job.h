@@ -1,13 +1,15 @@
 #ifndef JOB_H
 #define JOB_H
-#include <list>
 
+#include "CraftFactory.h"
 #include "Craft.h"
 
 class Job
 {
+public:
+	Craft* craft(size_t typeId);
 private:
-	std::list<Craft> craftsList;
+	//CraftFactory craftsList;
 };
 
 #endif
