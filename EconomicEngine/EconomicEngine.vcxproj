@@ -27,6 +27,7 @@
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftFactory.h" />
     <ClInclude Include="Job.h" />
+    <ClInclude Include="JobFactory.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
@@ -35,6 +36,7 @@
     <ClInclude Include="ToolBehavior.h" />
     <ClInclude Include="Tradable.h" />
     <ClInclude Include="Trader.h" />
+    <ClInclude Include="TraderManager.h" />
     <ClInclude Include="TurnManager.h" />
     <ClInclude Include="Uncountable.h" />
     <ClInclude Include="VectorArray.h" />
@@ -48,6 +50,7 @@
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="StockExchange.cpp" />
     <ClCompile Include="Trader.cpp" />
+    <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

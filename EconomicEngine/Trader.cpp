@@ -2,9 +2,12 @@
 #include <chrono>
 #include <random>
 
+#include "TraderManager.h"
+
 void Trader::assignJob()
 {
-	//TODO job factory
+	TraderManager* traderManager = TraderManager::getInstance();
+	this->currentJob = traderManager->assignJob(traderManager->getMostInterestingJob(), this);
 }
 
 Trader::Trader()
@@ -36,10 +39,25 @@ void Trader::makeAsks()
 
 void Trader::craft()
 {
-	
+	//TODO
+}
+
+void Trader::refresh()
+{
+	//TODO price belief
+	if(currentJob == nullptr)
+	{
+		this->assignJob();
+		this->a = typeid(*currentJob).hash_code(); //DEBUG
+	}
 }
 
 const std::list<std::shared_ptr<Tradable>>& Trader::getInventory() const
 {
 	return inventory;
+}
+
+const Job* Trader::getCurrentJob() const
+{
+	return this->currentJob;
 }

@@ -20,7 +20,7 @@ private:
 	std::list<size_t> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
-
+	size_t a; //DEBUG
 	void assignJob();
 
 public:
@@ -30,6 +30,7 @@ public:
 	void refresh();
 	void checkAsks();
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
+	[[nodiscard]] const Job* getCurrentJob() const;
 	
 	
 };

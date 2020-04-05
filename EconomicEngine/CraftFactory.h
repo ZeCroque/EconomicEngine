@@ -10,10 +10,11 @@ class Trader;
 class CraftFactory : public AbstractFactory<size_t, Craft>
 {
 private:
-	Trader& owner;
+	Trader* owner;
 public:
-	CraftFactory() = delete;
-	CraftFactory(Trader& owner);
+	CraftFactory();
+	CraftFactory(CraftFactory& craftFactory);
+	CraftFactory(Trader* owner);
 	[[nodiscard]] bool isCraftable(size_t key) const;
 };
 

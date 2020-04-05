@@ -3,28 +3,55 @@
 
 Job::Job() : craftFactory(nullptr){}
 
-Job::Job(Trader& owner) : craftFactory(new CraftFactory(owner)){}
+Job::Job(const Job& job) : Job()
+{
+	if(job.craftFactory!=nullptr)
+	{
+		this->craftFactory = new CraftFactory(*job.craftFactory);
+	}
+}
 
 Job::~Job()
 {
 	delete craftFactory;
 }
 
+void Job::setOwner(Trader* owner)
+{
+	this->craftFactory = new CraftFactory(owner);
+}
+
 Craft* Job::craft(const size_t typeId) const
 {
-	return this->craftFactory->createObject(typeId);
+	Craft* craft = nullptr;
+	if(craftFactory != nullptr)
+	{
+		craft = this->craftFactory->createObject(typeId);
+	}
+	return craft;
 }
 
 std::vector<size_t> Job::getCraftableList() const
 {
 	std::vector<size_t> craftableList;
-	for(auto key : craftFactory->getKeys())
+
+	if(craftFactory!=nullptr)
 	{
-		if(craftFactory->isCraftable(key))
+		for (auto key : craftFactory->getKeys())
 		{
-			craftableList.emplace_back(key);
+			if (craftFactory->isCraftable(key))
+			{
+				craftableList.emplace_back(key);
+			}
 		}
 	}
 
 	return craftableList;
 }
+
+Job* Job::clone()
+{
+	return new Job(*this);
+}
+
+void Job::init() {}

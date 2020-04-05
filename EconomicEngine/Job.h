@@ -8,17 +8,19 @@
 class Trader;
 class CraftFactory;
 
-class Job
+class Job : public Clonable<Job>
 {
 private:
 	CraftFactory* craftFactory;
 public:
 	Job();
-	Job(Trader& owner);
+	Job(const Job& job);
 	~Job();
+	void setOwner(Trader* owner);
 	[[nodiscard]] Craft* craft(size_t typeId) const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
-	virtual void init() = 0;
+	Job* clone() override;
+	virtual void init();
 };
 
 #endif

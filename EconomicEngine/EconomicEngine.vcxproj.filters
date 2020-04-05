@@ -96,6 +96,12 @@
     <ClInclude Include="CraftFactory.h">
       <Filter>Fichiers d%27en-tête\Traders</Filter>
     </ClInclude>
+    <ClInclude Include="JobFactory.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
+    </ClInclude>
+    <ClInclude Include="TraderManager.h">
+      <Filter>Fichiers d%27en-tête\Traders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countable.cpp">
@@ -123,6 +129,9 @@
       <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
     <ClCompile Include="Craft.cpp">
+      <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
+    <ClCompile Include="TraderManager.cpp">
       <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
   </ItemGroup>

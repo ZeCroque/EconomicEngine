@@ -1,11 +1,14 @@
 #ifndef ABSTRACT_FACTORY_H
 #define ABSTRACT_FACTORY_H
 
+#include<vector>
 #include <map>
 
 template <class Key, class T> class AbstractFactory
 {
+protected:
 	std::map<Key, T*> objectsMap;
+	
 public:
 
 	void registerObject(Key key, T* obj)
@@ -27,7 +30,7 @@ public:
 		return result;
 	}
 
-	[[nodiscard]] std::vector<Key> getKeys() const
+	std::vector<Key> getKeys() const
 	{
 		std::vector<Key> keys;
 		for (auto item : objectsMap)
