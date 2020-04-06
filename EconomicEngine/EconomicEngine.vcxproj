@@ -35,6 +35,8 @@
     <ClInclude Include="StockExchange.h" />
     <ClInclude Include="ToolBehavior.h" />
     <ClInclude Include="Tradable.h" />
+    <ClInclude Include="TradableFactory.h" />
+    <ClInclude Include="TradableManager.h" />
     <ClInclude Include="Trader.h" />
     <ClInclude Include="TraderManager.h" />
     <ClInclude Include="TurnManager.h" />
@@ -47,8 +49,11 @@
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftFactory.cpp" />
     <ClCompile Include="Job.cpp" />
+    <ClCompile Include="Money.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="StockExchange.cpp" />
+    <ClCompile Include="Tradable.cpp" />
+    <ClCompile Include="TradableManager.cpp" />
     <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />

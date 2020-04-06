@@ -1,14 +1,21 @@
 #ifndef TRADABLE_H
 #define TRADABLE_H
-#include "Behavior.h"
+#include <string>
 
-class Tradable
+#include "Behavior.h"
+#include "Clonable.h"
+
+class Tradable : public Clonable<Tradable>
 {
 private:
+	std::string name;
 	Behavior* behavior;
 public:
-	Tradable() : behavior(nullptr) { }
+	Tradable();
+	Tradable(const Tradable& tradable);
 	virtual ~Tradable() = default;
+
+	[[nodiscard]] std::string getName() const;
 };
 
 #endif

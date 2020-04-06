@@ -24,7 +24,8 @@ public:
 	Craft* clone() override;
 
 	[[nodiscard]] std::vector<std::pair<size_t, int>> getRequirement() const;
-	Tradable advanceCraft();
+	[[nodiscard]] size_t getResult() const;
+	Tradable* advanceCraft();
 
 };
 

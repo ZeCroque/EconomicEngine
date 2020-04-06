@@ -102,6 +102,12 @@
     <ClInclude Include="TraderManager.h">
       <Filter>Fichiers d%27en-tête\Traders</Filter>
     </ClInclude>
+    <ClInclude Include="TradableFactory.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="TradableManager.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countable.cpp">
@@ -133,6 +139,15 @@
     </ClCompile>
     <ClCompile Include="TraderManager.cpp">
       <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
+    <ClCompile Include="Money.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
+    </ClCompile>
+    <ClCompile Include="TradableManager.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
+    </ClCompile>
+    <ClCompile Include="Tradable.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

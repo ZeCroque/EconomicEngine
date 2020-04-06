@@ -1,8 +1,10 @@
 #ifndef TRADER_H
 #define TRADER_H
+#include <cassert>
 #include <list>
-#include <map>
 #include <memory>
+#include <random>
+
 
 #include "Ask.h"
 #include "Craft.h"
@@ -20,7 +22,7 @@ private:
 	std::list<size_t> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
-	size_t a; //DEBUG
+	std::mt19937 randomEngine;
 	void assignJob();
 
 public:
@@ -31,6 +33,29 @@ public:
 	void checkAsks();
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] const Job* getCurrentJob() const;
+	template <class T> void addToInventory(T* tradable)
+	{	
+		if (dynamic_cast<Tradable*>(tradable) == nullptr)
+		{
+			exit(-1);
+		}
+		//TODO DEBUG
+		if (dynamic_cast<Countable*>(tradable) != nullptr)
+		{
+			for (auto& item : inventory)
+			{
+				auto* castedItem = dynamic_cast<T*>(item.get());
+
+				if (castedItem != nullptr)
+				{
+					dynamic_cast<Countable*>(item.get())->incrementCountBy(1); //TODO multiitemcraft
+					return;
+				}
+			}
+		}
+
+		inventory.emplace_back(tradable);
+	}
 	
 	
 };

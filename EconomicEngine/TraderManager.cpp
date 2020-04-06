@@ -55,3 +55,11 @@ void TraderManager::refreshTraders()
 		trader.refresh();
 	}
 }
+
+void TraderManager::doTradersCrafting()
+{
+	for (auto& trader : traders)
+	{
+		trader.craft();
+	}
+}

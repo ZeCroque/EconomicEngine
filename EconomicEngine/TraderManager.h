@@ -15,6 +15,7 @@ public:
 	[[nodiscard]] Job* assignJob(size_t key, Trader* trader) const;
 	size_t getMostInterestingJob();
 	void refreshTraders();
+	void doTradersCrafting();
 };
 
 #endif

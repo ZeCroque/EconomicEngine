@@ -5,13 +5,26 @@
 
 class Countable : public Tradable
 {
-private:
+protected:
 	int count;
 
 public:
-	Countable() : Tradable(), count(0){}
-	Countable(const int count) : Tradable(), count(count){}
-	int getCount() const;
+	Countable();
+	Countable(const Countable& countable);
+	Countable(int count);
+	void incrementCountBy(int count);
+	[[nodiscard]] int getCount() const;
+};
+
+//DEBUG
+class Wheat : public Countable
+{
+	Wheat* clone() override;
+};
+
+class Bread : public Countable
+{
+	Bread* clone() override;
 };
 
 #endif

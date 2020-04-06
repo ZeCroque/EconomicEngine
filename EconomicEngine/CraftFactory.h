@@ -7,15 +7,19 @@
 
 class Trader;
 
-class CraftFactory : public AbstractFactory<size_t, Craft>
+class CraftFactory : public AbstractFactory<size_t, Craft>, public Clonable<CraftFactory>
 {
+	friend class Job;
+	
 private:
 	Trader* owner;
 public:
 	CraftFactory();
 	CraftFactory(CraftFactory& craftFactory);
-	CraftFactory(Trader* owner);
+	void setOwner(Trader* owner);
 	[[nodiscard]] bool isCraftable(size_t key) const;
+	void registerCraft(Craft* craft);
+	CraftFactory* clone() override;
 };
 
 

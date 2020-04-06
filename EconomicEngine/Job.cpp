@@ -1,14 +1,12 @@
 #include "Job.h"
 
+#include "Countable.h" //DEBUG
 
-Job::Job() : craftFactory(nullptr){}
+Job::Job() : craftFactory(new CraftFactory()){}
 
 Job::Job(const Job& job) : Job()
 {
-	if(job.craftFactory!=nullptr)
-	{
-		this->craftFactory = new CraftFactory(*job.craftFactory);
-	}
+	this->craftFactory = job.craftFactory->clone();
 }
 
 Job::~Job()
@@ -16,26 +14,21 @@ Job::~Job()
 	delete craftFactory;
 }
 
-void Job::setOwner(Trader* owner)
+void Job::setOwner(Trader* owner) const
 {
-	this->craftFactory = new CraftFactory(owner);
+	this->craftFactory->setOwner(owner);
 }
 
 Craft* Job::craft(const size_t typeId) const
 {
-	Craft* craft = nullptr;
-	if(craftFactory != nullptr)
-	{
-		craft = this->craftFactory->createObject(typeId);
-	}
-	return craft;
+	return this->craftFactory->createObject(typeId);
 }
 
 std::vector<size_t> Job::getCraftableList() const
 {
 	std::vector<size_t> craftableList;
 
-	if(craftFactory!=nullptr)
+	if(craftFactory->owner!=nullptr)
 	{
 		for (auto key : craftFactory->getKeys())
 		{
@@ -45,13 +38,18 @@ std::vector<size_t> Job::getCraftableList() const
 			}
 		}
 	}
-
 	return craftableList;
 }
 
-Job* Job::clone()
+//DEBUG
+Farmer::Farmer() : Job()
 {
-	return new Job(*this);
-}
+	
+	//Wheat : no requirement
+	this->craftFactory->registerCraft(new Craft(0.5f, typeid(Wheat).hash_code(), std::vector<std::pair<size_t, int>>()));
 
-void Job::init() {}
+	//Bread : require one wheat
+	std::vector<std::pair<size_t, int>> requirements;
+	requirements.emplace_back(std::pair<size_t, int>(typeid(Wheat).hash_code(), 1));
+	this->craftFactory->registerCraft(new Craft(0.33f, typeid(Bread).hash_code(), requirements));
+}

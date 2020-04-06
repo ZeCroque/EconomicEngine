@@ -2,15 +2,16 @@
 
 #include <thread>
 
-TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()) {}
+TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()) {}
 
-void TurnManager::init()
+void TurnManager::init() const
 {
 	traderManager->addTrader(10);
-	traderManager->registerJob(new Job());
-	traderManager->refreshTraders();
+	traderManager->registerJob(new Farmer());
 
-	int i = 42;
+	tradableManager->registerTradable(new Bread());
+	tradableManager->registerTradable(new Wheat());
+	
 }
 
 void TurnManager::reset()
@@ -25,8 +26,10 @@ int TurnManager::exec()
 	this->bRunning = true;
 	while(bRunning)
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		this->notifyObservers();		
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		this->notifyObservers();
+		traderManager->doTradersCrafting();
+		traderManager->refreshTraders();
 	}
 	return 0;
 }

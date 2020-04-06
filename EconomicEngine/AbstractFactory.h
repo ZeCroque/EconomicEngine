@@ -7,33 +7,41 @@
 template <class Key, class T> class AbstractFactory
 {
 protected:
-	std::map<Key, T*> objectsMap;
+	std::map<Key, T*> defaultObjects;
 	
 public:
 
+	virtual ~AbstractFactory()
+	{
+		for(auto defaultObject : defaultObjects)
+		{
+			delete defaultObject.second;
+		}
+	}
+	
 	void registerObject(Key key, T* obj)
 	{
-		if (objectsMap.find(key) == objectsMap.end())
+		if (defaultObjects.find(key) == defaultObjects.end())
 		{
-			objectsMap[key] = obj;
+			defaultObjects[key] = obj;
 		}
 	}
 
 	[[nodiscard]] T* createObject(const Key& key) const
 	{
 		T* result = nullptr;
-		auto it = objectsMap.find(key);
-		if (it != objectsMap.end())
+		auto it = defaultObjects.find(key);
+		if (it != defaultObjects.end())
 		{
 			result = ((*it).second)->clone();
 		}
 		return result;
 	}
 
-	std::vector<Key> getKeys() const
+	[[nodiscard]] std::vector<Key> getKeys() const
 	{
 		std::vector<Key> keys;
-		for (auto item : objectsMap)
+		for (auto item : defaultObjects)
 		{
 			keys.emplace_back(item.first);
 		}
@@ -44,14 +52,13 @@ protected:
 	[[nodiscard]] T* getDefaultObject(size_t key) const
 	{
 		T* defaultObject = nullptr;
-		auto it = objectsMap.find(key);
-		if(it!=objectsMap.end())
+		auto it = defaultObjects.find(key);
+		if(it!=defaultObjects.end())
 		{	
 			defaultObject = it->second;
 		}
 		return  defaultObject;
 	}
-
 };
 
 #endif

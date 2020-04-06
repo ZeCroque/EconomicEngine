@@ -4,11 +4,13 @@ CraftFactory::CraftFactory() : owner(nullptr){}
 
 CraftFactory::CraftFactory(CraftFactory& craftFactory) : CraftFactory()
 {
-	this->objectsMap = std::map<size_t, Craft*>(craftFactory.objectsMap);
+	this->defaultObjects = std::map<size_t, Craft*>(craftFactory.defaultObjects);
 }
 
-CraftFactory::CraftFactory(Trader* owner) : owner(owner){}
-
+void CraftFactory::setOwner(Trader* owner)
+{
+	this->owner = owner;
+}
 
 bool CraftFactory::isCraftable(const size_t key) const
 {
@@ -43,4 +45,13 @@ bool CraftFactory::isCraftable(const size_t key) const
 	return false;
 }
 
+void CraftFactory::registerCraft(Craft* craft)
+{
+	registerObject(craft->getResult(), craft);
+}
+
+CraftFactory* CraftFactory::clone()
+{
+	return new CraftFactory(*this);
+}
 

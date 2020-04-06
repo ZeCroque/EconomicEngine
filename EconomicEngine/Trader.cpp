@@ -1,24 +1,20 @@
 #include "Trader.h"
 #include <chrono>
+#include <memory>
 #include <random>
 
 #include "TraderManager.h"
-
-void Trader::assignJob()
-{
-	TraderManager* traderManager = TraderManager::getInstance();
-	this->currentJob = traderManager->assignJob(traderManager->getMostInterestingJob(), this);
-}
 
 Trader::Trader()
 {
 	currentJob = nullptr;
 	currentCraft = nullptr;
+	randomEngine = std::mt19937(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 }
 
 void Trader::makeAsks()
 {
-	std::mt19937 randomEngine(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+	
 	const std::uniform_int_distribution<int> uniformDist(0, 1);
 	for(auto tradable : wonderList)
 	{	
@@ -39,17 +35,43 @@ void Trader::makeAsks()
 
 void Trader::craft()
 {
-	//TODO
+	//TODO use wonderlist
+	if(currentJob!=nullptr && currentCraft==nullptr)
+	{
+		const auto craftableList = this->currentJob->getCraftableList();
+		if(!craftableList.empty())
+		{
+			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size()-1));
+			this->currentCraft = this->currentJob->craft(this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
+		}
+			
+	}
+	else if(currentCraft!=nullptr)
+	{
+		Tradable* result = currentCraft->advanceCraft();
+		if(result != nullptr)
+		{
+			delete currentCraft;
+			currentCraft = nullptr;
+			addToInventory(result);
+		}
+	}
+	
 }
 
 void Trader::refresh()
 {
-	//TODO price belief
+	//TODO price belief, wonderlist, goodslist, jobRanking
 	if(currentJob == nullptr)
 	{
 		this->assignJob();
-		this->a = typeid(*currentJob).hash_code(); //DEBUG
 	}
+}
+
+void Trader::assignJob()
+{
+	TraderManager* traderManager = TraderManager::getInstance();
+	this->currentJob = traderManager->assignJob(traderManager->getMostInterestingJob(), this);
 }
 
 const std::list<std::shared_ptr<Tradable>>& Trader::getInventory() const

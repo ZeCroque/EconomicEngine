@@ -3,24 +3,28 @@
 
 #include "CraftFactory.h"
 #include "Craft.h"
-#include "Trader.h"
 
 class Trader;
 class CraftFactory;
 
 class Job : public Clonable<Job>
 {
-private:
+protected:
 	CraftFactory* craftFactory;
 public:
 	Job();
 	Job(const Job& job);
-	~Job();
-	void setOwner(Trader* owner);
+	virtual ~Job();
+	void setOwner(Trader* owner) const;
 	[[nodiscard]] Craft* craft(size_t typeId) const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
-	Job* clone() override;
-	virtual void init();
+};
+
+class Farmer : public Job
+{
+public:
+	Farmer();
+	Farmer* clone() override { return new Farmer(*this); }
 };
 
 #endif
