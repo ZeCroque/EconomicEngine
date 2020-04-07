@@ -108,41 +108,8 @@
     <ClInclude Include="TradableManager.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
-    <ClInclude Include="Observable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="AskFactory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Ask.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Behavior.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Tradable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Countable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Currency.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Money.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="StockExchange.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ToolBehavior.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="Food.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,11 +152,8 @@
     <ClCompile Include="Tradable.cpp">
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
-    <ClCompile Include="Observable.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Countable.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Food.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

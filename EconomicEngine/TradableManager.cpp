@@ -21,3 +21,8 @@ std::vector<std::string> TradableManager::getTradablesName() const
 	}
 	return names;
 }
+
+std::vector<size_t> TradableManager::getKeys() const
+{
+	return tradableFactory.getKeys();
+}

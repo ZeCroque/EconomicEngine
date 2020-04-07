@@ -32,11 +32,6 @@ public:
 	Bread();
 	Bread(const Bread& bread);
 	Bread* clone() override;
-
-public:
-	Countable() : Tradable(), count(0){}
-	Countable(const int count) : Tradable(), count(count){}
-	int getCount() const;
 };
 
 #endif
