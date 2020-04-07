@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Ask.h" />
-    <ClInclude Include="AskFactory.h" />
     <ClInclude Include="Behavior.h" />
+    <ClInclude Include="Clonable.h" />
     <ClInclude Include="Countable.h" />
-    <ClInclude Include="Currency.h" />
+    <ClInclude Include="Craft.h" />
+    <ClInclude Include="CraftFactory.h" />
+    <ClInclude Include="Job.h" />
+    <ClInclude Include="JobFactory.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
@@ -31,11 +35,22 @@
     <ClInclude Include="StockExchange.h" />
     <ClInclude Include="ToolBehavior.h" />
     <ClInclude Include="Tradable.h" />
-    <ClInclude Include="TurnManager.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="TradableFactory.h" />
+    <ClInclude Include="TradableManager.h" />
+    <ClInclude Include="Trader.h" />
+    <ClInclude Include="TraderManager.h" />
+    <ClCompile Include="Ask.cpp" />
     <ClCompile Include="Countable.cpp" />
+    <ClCompile Include="Craft.cpp" />
+    <ClCompile Include="CraftFactory.cpp" />
+    <ClCompile Include="Job.cpp" />
+    <ClCompile Include="Money.cpp" />
     <ClCompile Include="Observable.cpp" />
+    <ClCompile Include="StockExchange.cpp" />
+    <ClCompile Include="Tradable.cpp" />
+    <ClCompile Include="TradableManager.cpp" />
+    <ClCompile Include="Trader.cpp" />
+    <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -96,6 +111,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
