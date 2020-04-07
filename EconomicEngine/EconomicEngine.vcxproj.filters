@@ -108,6 +108,9 @@
     <ClInclude Include="TradableManager.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countable.cpp">
@@ -147,6 +150,9 @@
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
     <ClCompile Include="Tradable.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
+    </ClCompile>
+    <ClCompile Include="Food.cpp">
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
   </ItemGroup>

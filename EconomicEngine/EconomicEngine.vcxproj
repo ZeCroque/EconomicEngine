@@ -26,6 +26,7 @@
     <ClInclude Include="Countable.h" />
     <ClInclude Include="Craft.h" />
     <ClInclude Include="CraftFactory.h" />
+    <ClInclude Include="Food.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobFactory.h" />
     <ClInclude Include="Money.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Countable.cpp" />
     <ClCompile Include="Craft.cpp" />
     <ClCompile Include="CraftFactory.cpp" />
+    <ClCompile Include="Food.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="Money.cpp" />
     <ClCompile Include="Observable.cpp" />

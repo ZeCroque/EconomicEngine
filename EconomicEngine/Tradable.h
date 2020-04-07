@@ -7,12 +7,10 @@
 
 class Tradable : public Clonable<Tradable>
 {
-private:
-	std::string name;
-	Behavior* behavior;
-
 protected:
 	size_t id;
+	std::string name;
+	Behavior* behavior;
 	
 public:
 	Tradable();
