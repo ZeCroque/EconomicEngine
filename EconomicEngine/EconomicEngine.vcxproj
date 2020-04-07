@@ -39,11 +39,6 @@
     <ClInclude Include="TradableManager.h" />
     <ClInclude Include="Trader.h" />
     <ClInclude Include="TraderManager.h" />
-    <ClInclude Include="TurnManager.h" />
-    <ClInclude Include="Uncountable.h" />
-    <ClInclude Include="VectorArray.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Ask.cpp" />
     <ClCompile Include="Countable.cpp" />
     <ClCompile Include="Craft.cpp" />

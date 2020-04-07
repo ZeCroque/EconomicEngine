@@ -9,7 +9,6 @@ public:
 	Money();
 	Money(int count);
 	Money* clone() override;
-	
 };
 
 #endif

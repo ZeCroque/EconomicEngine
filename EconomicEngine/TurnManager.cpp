@@ -1,5 +1,5 @@
 #include "TurnManager.h"
-
+#include <thread>
 #include <thread>
 
 TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()) {}
