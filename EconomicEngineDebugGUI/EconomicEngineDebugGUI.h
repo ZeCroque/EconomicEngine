@@ -21,14 +21,15 @@ public Q_SLOTS:
 	void realtimeDataSlot() const;
 	void setGraphVisibility() const;
 	void setZoomXAxis(int value);
+	void setSpeed(int value) const;
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
 	std::vector<GraphManager*> arrayCheckBox;
 	QTimer dataTimer;
-  std::thread economicEngineThread;
+	std::thread economicEngineThread;
 	TurnManager* turnManager;
-  	int zoomXAxis;
+	int zoomXAxis;
 
 signals:
 	void nextTurn();

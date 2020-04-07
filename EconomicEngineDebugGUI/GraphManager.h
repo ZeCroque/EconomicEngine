@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QMainWindow>
 #include <utility>
 
@@ -14,10 +14,13 @@ public:
 
 	int getGraphIndex() const;
 	void setGraphIndex(int graphIndex);
+	size_t getItemId() const;
+    void setItemId(size_t itemId);
 
 	Q_PROPERTY(int gIndex MEMBER graphIndex READ getGraphIndex WRITE setGraphIndex)
 	
 private:
 	int graphIndex;
+	size_t itemId;
 
 };

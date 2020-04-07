@@ -4,7 +4,14 @@
 
 //#include "StockExchange.h"
 
+<<<<<<< HEAD
 TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()) {}
+=======
+TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()),
+                             tradableManager(TradableManager::getInstance())
+{
+}
+>>>>>>> origin
 
 void TurnManager::init() const
 {
@@ -15,7 +22,10 @@ void TurnManager::init() const
 	tradableManager->registerTradable(new Wheat());
 
 	//StockExchange stockExchange(tradableManager->getKeys());
+<<<<<<< HEAD
 	
+=======
+>>>>>>> origin
 }
 
 void TurnManager::reset()
@@ -28,9 +38,10 @@ void TurnManager::reset()
 int TurnManager::exec()
 {
 	this->bRunning = true;
-	while(bRunning)
+	while (bRunning)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		++turnNumber;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 		this->notifyObservers();
 		traderManager->doTradersCrafting();
 		traderManager->refreshTraders();
@@ -43,3 +54,17 @@ void TurnManager::stop()
 	this->bRunning = false;
 }
 
+void TurnManager::setTurnSecond(const int turnSecond)
+{
+	this->turnSecond = turnSecond;
+}
+
+int TurnManager::getTurnNumber() const
+{
+	return this->turnNumber;
+}
+
+void TurnManager::setTurnNumber(const int turnNumber)
+{
+	this->turnNumber = turnNumber;
+}
