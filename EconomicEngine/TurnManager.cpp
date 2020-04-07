@@ -1,5 +1,5 @@
 #include "TurnManager.h"
-
+#include <thread>
 #include <thread>
 
 #include "StockExchange.h"

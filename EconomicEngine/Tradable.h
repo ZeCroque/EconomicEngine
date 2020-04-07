@@ -19,6 +19,5 @@ public:
 
 	[[nodiscard]] std::string getName() const;
 	[[nodiscard]] size_t getId() const;
-};
 
 #endif
