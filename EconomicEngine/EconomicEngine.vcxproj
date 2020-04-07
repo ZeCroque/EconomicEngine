@@ -54,6 +54,7 @@
     <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />
+    <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

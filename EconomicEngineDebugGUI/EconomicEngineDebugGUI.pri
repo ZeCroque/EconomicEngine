@@ -9,10 +9,18 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 HEADERS += ./EconomicEngineDebugGUI.h \
     ./qcustomplot.h \
-	./GraphManager.h
+    ./GraphManager.h \
+    ./Bread.h \
+    ./Coal.h \
+    ./IronOre.h \
+    ./Leather.h \
+    ./Meat.h \
+    ./Steak.h \
+    ./Wheat.h \
+    ./Wood.h
 SOURCES += ./economicenginedebuggui.cpp \
+    ./GraphManager.cpp \
     ./main.cpp \
-    ./qcustomplot.cpp \
-	./GraphManager.cpp
+    ./qcustomplot.cpp
 FORMS += ./EconomicEngineDebugGUI.ui
 RESOURCES += EconomicEngineDebugGUI.qrc

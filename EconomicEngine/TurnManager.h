@@ -8,20 +8,26 @@
 class TurnManager final : public Observable, public Singleton<TurnManager>
 {
 	friend class Singleton<TurnManager>;
-	private:
-		bool bRunning;
-		TraderManager* traderManager;
-		TradableManager* tradableManager;
-	
-		TurnManager(); 
-		~TurnManager() = default;
+private:
+	bool bRunning;
+	int turnSecond;
+	int turnNumber;
+	TraderManager* traderManager;
+	TradableManager* tradableManager;
+
+	TurnManager();
+	~TurnManager() = default;
 
 
-	public:	
-		void init() const;
-		void reset();
-		int exec();
-		void stop();
+public:
+	void init() const;
+	void reset();
+	int exec();
+	void stop();
+
+	void setTurnSecond(int turnSecond);
+	int getTurnNumber() const;
+	void setTurnNumber(int turnNumber);
 };
 
 #endif
