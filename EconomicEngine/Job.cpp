@@ -51,5 +51,5 @@ Farmer::Farmer() : Job()
 	//Bread : require one wheat
 	std::vector<std::pair<size_t, int>> requirements;
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Wheat).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(0.33f, typeid(Bread).hash_code(), requirements));
+	this->craftFactory->registerCraft(new Craft(0.34f, typeid(Bread).hash_code(), requirements));
 }

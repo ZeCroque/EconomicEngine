@@ -33,31 +33,8 @@ public:
 	void checkAsks();
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] const Job* getCurrentJob() const;
-	template <class T> void addToInventory(T* tradable)
-	{	
-		if (dynamic_cast<Tradable*>(tradable) == nullptr)
-		{
-			exit(-1);
-		}
-		//TODO DEBUG
-		if (dynamic_cast<Countable*>(tradable) != nullptr)
-		{
-			for (auto& item : inventory)
-			{
-				auto* castedItem = dynamic_cast<T*>(item.get());
-
-				if (castedItem != nullptr)
-				{
-					dynamic_cast<Countable*>(item.get())->incrementCountBy(1); //TODO multiitemcraft
-					return;
-				}
-			}
-		}
-
-		inventory.emplace_back(tradable);
-	}
-	
-	
+	void addToInventory(Tradable* tradable);
+	void removeFromInventory(size_t key);
 };
 
 #endif
