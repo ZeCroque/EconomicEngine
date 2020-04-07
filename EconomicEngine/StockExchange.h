@@ -18,7 +18,7 @@ public:
 	void registerAsk(std::shared_ptr<BuyingAsk>& buyingAsk);	
 	void registerAsk(const std::shared_ptr<SellingAsk>& sellingAsk);
 	void resolveOffers(); //TODO Maxence
-	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
+	/*template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
 		for (int i = 1; i < vector.size(); i++)
 		{
@@ -31,7 +31,7 @@ public:
 			}
 			vector[j + 1] = temp;
 		}
-	}
+	}*/
 
 
 

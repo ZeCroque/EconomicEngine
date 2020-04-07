@@ -2,7 +2,7 @@
 #include <thread>
 #include <thread>
 
-#include "StockExchange.h"
+//#include "StockExchange.h"
 
 TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()) {}
 
@@ -14,7 +14,7 @@ void TurnManager::init() const
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Wheat());
 
-	StockExchange stockExchange(tradableManager->getKeys());
+	//StockExchange stockExchange(tradableManager->getKeys());
 	
 }
 
