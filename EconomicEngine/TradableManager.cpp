@@ -22,6 +22,11 @@ std::vector<std::string> TradableManager::getTradablesName() const
 	return names;
 }
 
+Tradable* TradableManager::getTradable(const size_t key) const
+{
+	return tradableFactory.getDefaultObject(key);
+}
+
 std::vector<size_t> TradableManager::getKeys() const
 {
 	return tradableFactory.getKeys();

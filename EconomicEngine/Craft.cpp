@@ -26,6 +26,11 @@ size_t Craft::getResult() const
 	return craftResult;
 }
 
+float Craft::getRate() const
+{
+	return currentRate;
+}
+
 Tradable* Craft::advanceCraft()
 {
 	Tradable* result = nullptr;

@@ -10,6 +10,7 @@ class Tradable : public Clonable<Tradable>
 protected:
 	size_t id;
 	std::string name;
+	std::pair<float, float> defaultPriceBelief;
 	Behavior* behavior;
 
 public:
@@ -19,5 +20,6 @@ public:
 
 	[[nodiscard]] std::string getName() const;
 	[[nodiscard]] size_t getId() const;
+	[[nodiscard]] std::pair<float, float> getDefaultPriceBelief() const;
 };
 #endif

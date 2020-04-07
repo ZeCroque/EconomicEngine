@@ -13,6 +13,7 @@ public:
 	void registerTradable(Tradable* tradable);
 	[[nodiscard]] Tradable* createTradable(size_t key) const;
 	[[nodiscard]] std::vector<std::string> getTradablesName() const;
+	[[nodiscard]] Tradable* getTradable(size_t key) const;
 	[[nodiscard]] std::vector<size_t> getKeys() const;
 
 };

@@ -7,7 +7,7 @@ class Money : public Countable
 {
 public:
 	Money();
-	Money(int count);
+	Money(float count);
 	Money* clone() override;
 };
 

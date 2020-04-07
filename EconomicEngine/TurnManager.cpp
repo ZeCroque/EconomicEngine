@@ -1,31 +1,26 @@
 #include "TurnManager.h"
-#include <thread>
+#include "Countable.h"
 #include <thread>
 
-//#include "StockExchange.h"
+TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()){}
 
-<<<<<<< HEAD
-TurnManager::TurnManager() : bRunning(false), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()) {}
-=======
-TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()),
-                             tradableManager(TradableManager::getInstance())
-{
-}
->>>>>>> origin
 
 void TurnManager::init() const
 {
-	traderManager->addTrader(10);
+	//Init jobs
 	traderManager->registerJob(new Farmer());
 
+	//Init tradables
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Wheat());
+	tradableManager->registerTradable(new Gold());
+	tradableManager->registerTradable(new GoldenBread());
 
-	//StockExchange stockExchange(tradableManager->getKeys());
-<<<<<<< HEAD
+	//Init StockExchange
+	stockExchange->setKeys(tradableManager->getKeys());
 	
-=======
->>>>>>> origin
+	//Create traders
+	traderManager->addTrader(10);
 }
 
 void TurnManager::reset()
@@ -40,11 +35,15 @@ int TurnManager::exec()
 	this->bRunning = true;
 	while (bRunning)
 	{
-		++turnNumber;
+		auto a = stockExchange->currentBuyingAsks[typeid(Gold).hash_code()];
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
-		this->notifyObservers();
+		++turnNumber;
 		traderManager->doTradersCrafting();
+		traderManager->doTradersAsking();
+		
+		//stockExchange->resolveOffers();
 		traderManager->refreshTraders();
+		this->notifyObservers();
 	}
 	return 0;
 }
