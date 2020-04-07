@@ -1,9 +1,10 @@
-﻿#include "EconomicEngineDebugGUI.h"
+#include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
 #include "TurnManager.h"
 #include <QCloseEvent>
 #include <thread>
 #include "GraphManager.h"
+#include "TraderManager.h"
 
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
@@ -11,12 +12,12 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 {
 	turnManager = TurnManager::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread = std::thread([](TurnManager* turnManager)->int
+	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
 	{
 		turnManager->init();
 		return turnManager->exec();
 	}, turnManager);
-	
+
 	ui.setupUi(this);
 
 	std::vector<GraphManager*> arrayCheckBox;
@@ -39,8 +40,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	arrayCheckBox.push_back(ui.chBxGraphIronPickaxe);
 	arrayCheckBox.push_back(ui.chBxGraphIronSword);
 
-
-	for (auto i = 0; i < arrayCheckBox.size(); ++i)
+	for (auto i = 0; arrayCheckBox.size() > i; ++i)
 	{
 		if (arrayCheckBox[i] != nullptr)
 		{
@@ -67,26 +67,27 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	this->zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 
+	turnManager->setTurnSecond(ui.horSlidSpeed->value());
+	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
 
-	QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
-	timeTicker->setTimeFormat("%h:%m:%s");
-	ui.customPlot->xAxis->setTicker(timeTicker);
-	auto test = QCPRange(1.0, 1000);
-	ui.customPlot->axisRect()->setupFullAxesBox();
-	ui.customPlot->yAxis->setRange(0, 5);
+
+	//QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
+	//timeTicker->setTimeFormat("%h:%m:%s");
+	//ui.customPlot->xAxis->setTicker(timeTicker);
+	//ui.customPlot->axisRect()->setupFullAxesBox();
+	//ui.customPlot->yAxis->setRange(0, 5);
 
 	// make left and bottom axes transfer their ranges to right and top axes:
 	connect(ui.customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->xAxis2, SLOT(setRange(QCPRange)));
 	connect(ui.customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
-	// setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
 	TurnManager::destroyInstance();
-	this->turnManager=nullptr;
+	this->turnManager = nullptr;
 }
 
 void EconomicEngineDebugGui::notify()
@@ -100,51 +101,45 @@ void EconomicEngineDebugGui::setGraphVisibility() const
 	ui.customPlot->graph(checkBox->getGraphIndex())->setVisible(checkBox->isChecked());
 }
 
-void EconomicEngineDebugGui::setZoomXAxis(int value)
+void EconomicEngineDebugGui::setZoomXAxis(const int value)
 {
 	this->zoomXAxis = value;
+	const auto key = turnManager->getTurnNumber();
+	ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
+	ui.customPlot->replot();
+}
+
+void EconomicEngineDebugGui::setSpeed(const int value) const
+{
+	turnManager->setTurnSecond(value);
 }
 
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
-	static auto time(QTime::currentTime());
+	static auto time(QTime::currentTime().elapsed() / 1000.0);
 	// calculate two new data points:
-	const auto key = time.elapsed() / 1000.0; // time elapsed since start of demo, in seconds
-	static double lastPointKey = 0;
-	//if (key - lastPointKey > 0.002) // at most add point every 2 ms
-
+	const auto key = turnManager->getTurnNumber();
+	auto totalData = 0;
 	for (auto checkBox : this->arrayCheckBox)
 	{
 		// add data to lines:
 		ui.customPlot->graph(checkBox->getGraphIndex())->addData(
-			key, qSin(key) + qrand() / static_cast<double>(RAND_MAX) * 1 * qSin(
-				checkBox->getGraphIndex() + key / 0.3843));
-		//ui.customPlot->graph(1)->addData(key, qCos(key) + qrand() / static_cast<double>(RAND_MAX) * 0.5 * qSin(key / 0.4364));
+			key, qSin(10000000 + key) + qrand() / static_cast<double>(RAND_MAX) * 1 * qSin(
+				checkBox->getGraphIndex() + (10000000 + key) / 0.3843));
+
 		// rescale value (vertical) axis to fit the current data:
 		ui.customPlot->graph(checkBox->getGraphIndex())->rescaleValueAxis(false);
-		//ui.customPlot->graph(1)->rescaleValueAxis(false);
+		totalData += ui.customPlot->graph(checkBox->getGraphIndex())->data()->size();
 	}
 
-	lastPointKey = key;
-
-	// make key axis range scroll with the data (at a constant range size of 8):
 	ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
 	ui.customPlot->replot();
 
 	// calculate frames per second:
-	static double lastFpsKey;
-	static int frameCount;
-	++frameCount;
-	if (key - lastFpsKey > 2) // average fps over 2 seconds
-	{
-		ui.statusBar->showMessage(
-			QString("%1 FPS, Total Data points: %2")
-			.arg(frameCount / (key - lastFpsKey), 0, 'f', 0)
-			.arg(ui.customPlot->graph(0)->data()->size() * (this->arrayCheckBox.size()))
-			, 0);
-		lastFpsKey = key;
-		frameCount = 0;
-	}
+
+
+	ui.statusBar->showMessage(
+		QString("Total Data points: %1").arg(totalData), 0);
 }
 
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)

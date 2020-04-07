@@ -16,11 +16,9 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "qcustomplot.h"
@@ -54,26 +52,28 @@ public:
     GraphManager *chBxGraphIronPickaxe;
     GraphManager *chBxGraphIronSword;
     QGridLayout *LaySliders;
+    QLabel *labSpeed;
     QLabel *labZomXAxis;
     QSlider *horSlidZoomXAxis;
-    QLabel *labSpeed;
     QSlider *horSlidSpeed;
     QSpacerItem *verticalSpacer;
     QCustomPlot *customPlot;
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
     {
         if (EconomicEngineDebugGUIClass->objectName().isEmpty())
             EconomicEngineDebugGUIClass->setObjectName(QString::fromUtf8("EconomicEngineDebugGUIClass"));
-        EconomicEngineDebugGUIClass->resize(1177, 689);
+        EconomicEngineDebugGUIClass->resize(1180, 680);
+        EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 680));
+        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1180, 680));
+        EconomicEngineDebugGUIClass->setAutoFillBackground(false);
+        EconomicEngineDebugGUIClass->setAnimated(true);
         centralWidget = new QWidget(EconomicEngineDebugGUIClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayoutWidget_3 = new QWidget(centralWidget);
         horizontalLayoutWidget_3->setObjectName(QString::fromUtf8("horizontalLayoutWidget_3"));
-        horizontalLayoutWidget_3->setGeometry(QRect(10, 10, 1151, 341));
+        horizontalLayoutWidget_3->setGeometry(QRect(10, 10, 1159, 341));
         layGraph = new QHBoxLayout(horizontalLayoutWidget_3);
         layGraph->setSpacing(6);
         layGraph->setContentsMargins(11, 11, 11, 11);
@@ -90,6 +90,7 @@ public:
         LayOne->setObjectName(QString::fromUtf8("LayOne"));
         chBxGraphWheat = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphWheat->setObjectName(QString::fromUtf8("chBxGraphWheat"));
+        chBxGraphWheat->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphWheat->setChecked(true);
         chBxGraphWheat->setProperty("graphIndex", QVariant(0));
 
@@ -97,24 +98,28 @@ public:
 
         chBxGraphMeat = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphMeat->setObjectName(QString::fromUtf8("chBxGraphMeat"));
+        chBxGraphMeat->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphMeat->setChecked(true);
 
         LayOne->addWidget(chBxGraphMeat);
 
         chBxGraphWood = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphWood->setObjectName(QString::fromUtf8("chBxGraphWood"));
+        chBxGraphWood->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphWood->setChecked(true);
 
         LayOne->addWidget(chBxGraphWood);
 
         chBxGraphLeather = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphLeather->setObjectName(QString::fromUtf8("chBxGraphLeather"));
+        chBxGraphLeather->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphLeather->setChecked(true);
 
         LayOne->addWidget(chBxGraphLeather);
 
         chBxGraphCoal = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphCoal->setObjectName(QString::fromUtf8("chBxGraphCoal"));
+        chBxGraphCoal->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphCoal->setChecked(true);
 
         LayOne->addWidget(chBxGraphCoal);
@@ -127,30 +132,35 @@ public:
         LayTwo->setObjectName(QString::fromUtf8("LayTwo"));
         chBxGraphBread = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphBread->setObjectName(QString::fromUtf8("chBxGraphBread"));
+        chBxGraphBread->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphBread->setChecked(true);
 
         LayTwo->addWidget(chBxGraphBread);
 
         chBxGraphSteak = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphSteak->setObjectName(QString::fromUtf8("chBxGraphSteak"));
+        chBxGraphSteak->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphSteak->setChecked(true);
 
         LayTwo->addWidget(chBxGraphSteak);
 
         chBxGraphIronOre = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronOre->setObjectName(QString::fromUtf8("chBxGraphIronOre"));
+        chBxGraphIronOre->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronOre->setChecked(true);
 
         LayTwo->addWidget(chBxGraphIronOre);
 
         chBxGraphIronArmor = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronArmor->setObjectName(QString::fromUtf8("chBxGraphIronArmor"));
+        chBxGraphIronArmor->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronArmor->setChecked(true);
 
         LayTwo->addWidget(chBxGraphIronArmor);
 
         chBxGraphWoodPickaxe = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphWoodPickaxe->setObjectName(QString::fromUtf8("chBxGraphWoodPickaxe"));
+        chBxGraphWoodPickaxe->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphWoodPickaxe->setChecked(true);
 
         LayTwo->addWidget(chBxGraphWoodPickaxe);
@@ -163,30 +173,35 @@ public:
         LayThree->setObjectName(QString::fromUtf8("LayThree"));
         chBxGraphBow = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphBow->setObjectName(QString::fromUtf8("chBxGraphBow"));
+        chBxGraphBow->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphBow->setChecked(true);
 
         LayThree->addWidget(chBxGraphBow);
 
         chBxGraphIronAxe = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronAxe->setObjectName(QString::fromUtf8("chBxGraphIronAxe"));
+        chBxGraphIronAxe->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronAxe->setChecked(true);
 
         LayThree->addWidget(chBxGraphIronAxe);
 
         chBxGraphIronHoe = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronHoe->setObjectName(QString::fromUtf8("chBxGraphIronHoe"));
+        chBxGraphIronHoe->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronHoe->setChecked(true);
 
         LayThree->addWidget(chBxGraphIronHoe);
 
         chBxGraphIronPickaxe = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronPickaxe->setObjectName(QString::fromUtf8("chBxGraphIronPickaxe"));
+        chBxGraphIronPickaxe->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronPickaxe->setChecked(true);
 
         LayThree->addWidget(chBxGraphIronPickaxe);
 
         chBxGraphIronSword = new GraphManager(horizontalLayoutWidget_3);
         chBxGraphIronSword->setObjectName(QString::fromUtf8("chBxGraphIronSword"));
+        chBxGraphIronSword->setCursor(QCursor(Qt::PointingHandCursor));
         chBxGraphIronSword->setChecked(true);
 
         LayThree->addWidget(chBxGraphIronSword);
@@ -200,6 +215,11 @@ public:
         LaySliders = new QGridLayout();
         LaySliders->setSpacing(6);
         LaySliders->setObjectName(QString::fromUtf8("LaySliders"));
+        labSpeed = new QLabel(horizontalLayoutWidget_3);
+        labSpeed->setObjectName(QString::fromUtf8("labSpeed"));
+
+        LaySliders->addWidget(labSpeed, 1, 0, 1, 1);
+
         labZomXAxis = new QLabel(horizontalLayoutWidget_3);
         labZomXAxis->setObjectName(QString::fromUtf8("labZomXAxis"));
 
@@ -207,26 +227,23 @@ public:
 
         horSlidZoomXAxis = new QSlider(horizontalLayoutWidget_3);
         horSlidZoomXAxis->setObjectName(QString::fromUtf8("horSlidZoomXAxis"));
-        horSlidZoomXAxis->setMinimum(1);
+        horSlidZoomXAxis->setCursor(QCursor(Qt::PointingHandCursor));
+        horSlidZoomXAxis->setMinimum(4);
         horSlidZoomXAxis->setMaximum(100);
         horSlidZoomXAxis->setSingleStep(1);
-        horSlidZoomXAxis->setValue(10);
+        horSlidZoomXAxis->setValue(20);
         horSlidZoomXAxis->setOrientation(Qt::Horizontal);
         horSlidZoomXAxis->setInvertedAppearance(true);
-        horSlidZoomXAxis->setInvertedControls(false);
+        horSlidZoomXAxis->setInvertedControls(true);
 
         LaySliders->addWidget(horSlidZoomXAxis, 0, 1, 1, 1);
 
-        labSpeed = new QLabel(horizontalLayoutWidget_3);
-        labSpeed->setObjectName(QString::fromUtf8("labSpeed"));
-
-        LaySliders->addWidget(labSpeed, 1, 0, 1, 1);
-
         horSlidSpeed = new QSlider(horizontalLayoutWidget_3);
         horSlidSpeed->setObjectName(QString::fromUtf8("horSlidSpeed"));
+        horSlidSpeed->setCursor(QCursor(Qt::PointingHandCursor));
         horSlidSpeed->setMinimum(1);
-        horSlidSpeed->setMaximum(100);
-        horSlidSpeed->setValue(10);
+        horSlidSpeed->setMaximum(50);
+        horSlidSpeed->setValue(5);
         horSlidSpeed->setOrientation(Qt::Horizontal);
         horSlidSpeed->setInvertedAppearance(false);
         horSlidSpeed->setInvertedControls(false);
@@ -251,15 +268,9 @@ public:
         layGraph->addWidget(customPlot);
 
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(EconomicEngineDebugGUIClass);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1177, 26));
-        EconomicEngineDebugGUIClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(EconomicEngineDebugGUIClass);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        EconomicEngineDebugGUIClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
+        statusBar->setEnabled(true);
         EconomicEngineDebugGUIClass->setStatusBar(statusBar);
 
         retranslateUi(EconomicEngineDebugGUIClass);
@@ -285,8 +296,8 @@ public:
         chBxGraphIronHoe->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Iron Hoe", nullptr));
         chBxGraphIronPickaxe->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Iron Pickaxe", nullptr));
         chBxGraphIronSword->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Iron Sword", nullptr));
-        labZomXAxis->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Zoom X: ", nullptr));
-        labSpeed->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Seed: ", nullptr));
+        labSpeed->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Speed: ", nullptr));
+        labZomXAxis->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Zoom: ", nullptr));
     } // retranslateUi
 
 };
