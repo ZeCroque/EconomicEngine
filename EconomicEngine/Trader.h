@@ -9,21 +9,28 @@
 #include "Ask.h"
 #include "Craft.h"
 #include "Job.h"
+#include "VectorArray.h"
 
 class Job;
 
 class Trader
 {
 private:
-	std::pair<int, int> priceBelief;
+	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
 	Job* currentJob;
-	std::list<size_t> wonderList;
-	std::list<size_t> goodsList;
+	std::list<std::pair<size_t, int>> wonderList;
+	std::list<std::pair<size_t, int>> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
 	std::mt19937 randomEngine;
+	float money;
 	void assignJob();
+	void fillWonderList();
+	void fillGoodsList();
+	float calculatePriceBeliefMean(size_t key);
+	float evaluatePrice(size_t key);
+	float calculateEarnings(Craft* craft);
 
 public:
 	Trader();

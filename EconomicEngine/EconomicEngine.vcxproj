@@ -29,7 +29,6 @@
     <ClInclude Include="Food.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobFactory.h" />
-    <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Singleton.h" />
@@ -55,6 +54,7 @@
     <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />
     <ClInclude Include="TurnManager.h" />
+    <ClInclude Include="VectorArray.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

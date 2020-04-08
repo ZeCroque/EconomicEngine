@@ -45,9 +45,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files\Countables">
-      <UniqueIdentifier>{5dae9111-cd5f-476e-9542-3c7f4612cb84}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphManager.cpp">
@@ -64,23 +61,56 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="EconomicEngineDebugGUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="GraphManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="IronOre.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Leather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Steak.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wheat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wood.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    
+    
+    
+    
+    
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="EconomicEngineDebugGUI.ui">
@@ -91,31 +121,5 @@
     <QtRcc Include="EconomicEngineDebugGUI.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Wheat.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Meat.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Wood.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Leather.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Coal.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="IronOre.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Bread.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Steak.h">
-      <Filter>Header Files\Countables</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

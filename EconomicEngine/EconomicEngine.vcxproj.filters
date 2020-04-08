@@ -51,19 +51,10 @@
     <ClInclude Include="Clonable.h">
       <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="VectorArray.h">
-      <Filter>Fichiers d%27en-tête\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Countable.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
-    <ClInclude Include="Uncountable.h">
-      <Filter>Fichiers d%27en-tête\Tradables</Filter>
-    </ClInclude>
     <ClInclude Include="Tradable.h">
-      <Filter>Fichiers d%27en-tête\Tradables</Filter>
-    </ClInclude>
-    <ClInclude Include="Money.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
@@ -110,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Food.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorArray.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

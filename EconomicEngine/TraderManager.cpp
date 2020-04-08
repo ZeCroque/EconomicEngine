@@ -63,3 +63,11 @@ void TraderManager::doTradersCrafting()
 		trader.craft();
 	}
 }
+
+void TraderManager::doTradersAsking()
+{
+	for (auto& trader : traders)
+	{
+		trader.makeAsks();
+	}
+}

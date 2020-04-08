@@ -25,6 +25,7 @@ public:
 
 	[[nodiscard]] std::vector<std::pair<size_t, int>> getRequirement() const;
 	[[nodiscard]] size_t getResult() const;
+	[[nodiscard]] float getRate() const;
 	Tradable* advanceCraft();
 
 };

@@ -8,7 +8,7 @@ protected:
 	int foodValue;
 public:
 	Food();
-	Food(int foodValue, int count);
+	Food(int foodValue, float count);
 };
 
 #endif

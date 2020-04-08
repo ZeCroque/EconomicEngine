@@ -1,63 +1,17 @@
 #include "Ask.h"
+#include "TurnManager.h"
 
 
-#include <cassert>
-#include <typeinfo>
+Ask::Ask(const size_t id, const float count, const float price) : count(count), price(price), date(TurnManager::getInstance()->getTurnNumber()), status(AskStatus::Pending), typeId(id) {}
 
-#include "Countable.h"
-#include "Money.h"
-#include "Uncountable.h"
-
-
-Ask::Ask()
-{
-	status = AskStatus::Pending;
-	date = 0; //TODO turnCount
-	typeId = 0;
-	price = 0;
-}
-
-Ask::Ask(Countable& item, const int price) : Ask()
-{
-	content.emplace_back(item);
-	typeId = typeid(item).hash_code();
-	this->price = price;
-}
-
-Ask::Ask(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask()
-{
-	assert(!items.empty());
-	for(auto item : items)
-	{
-		assert(dynamic_cast<Uncountable*>(&item.get()) != nullptr);
-	}
-	
-
-	content = std::move(items);
-	typeId = typeid(content[0]).hash_code();
-	this->price = price;
-}
-
-int Ask::getPrice() const
+float  Ask::getPrice() const
 {
 	return price;
 }
 
-int Ask::getCount() const
+float Ask::getCount() const
 {
-	if (content.empty())
-	{
-		auto* countable = dynamic_cast<Countable*>(&content[0].get());
-		if (countable != nullptr)
-		{
-			return countable->getCount();
-		}
-		else
-		{
-			return static_cast<int>(content.size());
-		}
-	}
-	return 0;
+	return count;
 }
 
 int Ask::getDate() const
@@ -75,31 +29,26 @@ AskStatus Ask::getStatus() const
 	return status;
 }
 
-std::vector<std::reference_wrapper<Tradable>> Ask::getContent() const
+void Ask::setPrice(const float price)
 {
-	return content;
+	this->price = price;
 }
 
-
-BuyingAsk::BuyingAsk(Countable& item, const int price) : Ask::Ask(item, price) {}
-
-BuyingAsk::BuyingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask::Ask(items, price) {}
-
-std::vector<std::reference_wrapper<Tradable>> BuyingAsk::getResult()
+void Ask::setStatus(const AskStatus status)
 {
-	return content;
+	this->status = status;
 }
 
+BuyingAsk::BuyingAsk(const size_t id, const float count, const float price) : Ask(id, count, price){}
 
-
-SellingAsk::SellingAsk(Countable& item, const int price) : Ask::Ask(item, price) {}
-
-SellingAsk::SellingAsk(std::vector<std::reference_wrapper<Tradable>> items, const int price) : Ask::Ask(items, price) {}
-
-std::vector<std::reference_wrapper<Tradable>> SellingAsk::getResult()
+std::pair<size_t, float> BuyingAsk::getResult()
 {
-	std::vector<std::reference_wrapper<Tradable>> result;
-	Money m(static_cast<int>(price));
-	result.emplace_back(m);
-	return result;
+	return std::pair<size_t, float>(typeId, count);
+}
+
+SellingAsk::SellingAsk(const size_t id, const float count, const float price) : Ask(id, count, price){}
+
+std::pair<size_t, float> SellingAsk::getResult()
+{
+	return std::pair<size_t, float>(0, price);
 }

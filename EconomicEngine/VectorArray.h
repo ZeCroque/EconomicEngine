@@ -3,26 +3,25 @@
 
 #include <cassert>
 #include <memory>
+#include <utility>
 #include <vector>
 
 template <class T> class VectorArray
 {
 private:
+	std::vector<size_t> keys;
 	std::vector<std::shared_ptr<T>>* vectors;
-	std::vector<size_t>* keys;
 public:
-	VectorArray() : vectors(nullptr), keys(nullptr){}
-	VectorArray(std::vector<size_t>* keys)
-	{
-		this->keys = keys;
-		this->vectors = new std::vector<std::shared_ptr<T>>[this->keys->size()];
-	}
+	VectorArray() : vectors(nullptr){}
+	VectorArray(std::vector<size_t> keys) : keys(std::move(keys)), vectors(new std::vector<std::shared_ptr<T>>[this->keys.size()]) {}
+	
+
 	std::vector<std::shared_ptr<T>>& operator[](size_t key)
 	{
 		std::vector<std::shared_ptr<T>>* result = nullptr;
-		for(unsigned int i=0; i<this->keys->size(); ++i)
+		for(unsigned int i=0; i<this->keys.size(); ++i)
 		{
-			if(this->keys->operator[](i) == key)
+			if(this->keys[i] == key)
 			{
 				result = &vectors[i];
 			}

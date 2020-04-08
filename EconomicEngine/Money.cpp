@@ -2,7 +2,7 @@
 
 Money::Money() : Countable() {}
 
-Money::Money(int count) : Countable(count) {}
+Money::Money(float count) : Countable(count) {}
 
 Money* Money::clone()
 {

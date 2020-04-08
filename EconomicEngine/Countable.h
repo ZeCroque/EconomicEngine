@@ -6,15 +6,15 @@
 class Countable : public Tradable
 {
 protected:
-	int count;
+	float count;
 
 public:
 	Countable();
 	Countable(const Countable& countable);
-	Countable(int count);
-	void incrementCountBy(int count);
-	void decrementCountBy(int count);
-	[[nodiscard]] int getCount() const;
+	Countable(float count);
+	void incrementCountBy(float count);
+	void decrementCountBy(float count);
+	[[nodiscard]] float getCount() const;
 };
 
 //DEBUG
@@ -22,7 +22,7 @@ class Wheat : public Countable
 {
 public:
 	Wheat();
-	Wheat(const Wheat& wheat);
+	Wheat(const Wheat& wheat) = default;
 	Wheat* clone() override;
 };
 
@@ -30,8 +30,24 @@ class Bread : public Countable
 {
 public:
 	Bread();
-	Bread(const Bread& bread);
+	Bread(const Bread& bread) = default;
 	Bread* clone() override;
+};
+
+class Gold : public Countable
+{
+public:
+	Gold();
+	Gold(const Gold& gold) = default;
+	Gold* clone() override;
+};
+
+class GoldenBread : public Countable
+{
+public:
+	GoldenBread();
+	GoldenBread(const GoldenBread& goldenBread) = default;
+	GoldenBread* clone() override;
 };
 
 #endif

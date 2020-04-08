@@ -1,5 +1,7 @@
 #include "CraftFactory.h"
 
+#include "Countable.h"
+
 CraftFactory::CraftFactory() : owner(nullptr){}
 
 CraftFactory::CraftFactory(CraftFactory& craftFactory) : CraftFactory()

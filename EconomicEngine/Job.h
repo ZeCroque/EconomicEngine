@@ -18,6 +18,8 @@ public:
 	void setOwner(Trader* owner) const;
 	[[nodiscard]] Craft* craft(size_t typeId) const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
+	[[nodiscard]] std::vector<size_t> getUncraftableList() const;
+	[[nodiscard]] Craft* getCraft(size_t key) const;
 };
 
 class Farmer : public Job
@@ -25,6 +27,13 @@ class Farmer : public Job
 public:
 	Farmer();
 	Farmer* clone() override { return new Farmer(*this); }
+};
+
+class Miner : public Job
+{
+public:
+	Miner();
+	Miner* clone() override;
 };
 
 #endif

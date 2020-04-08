@@ -16,6 +16,7 @@ public:
 	size_t getMostInterestingJob();
 	void refreshTraders();
 	void doTradersCrafting();
+	void doTradersAsking();
 };
 
 #endif
