@@ -2,7 +2,6 @@
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QMainWindow>
-#include <utility>
 
 class GraphManager final : public QCheckBox
 {
@@ -15,12 +14,11 @@ public:
 	int getGraphIndex() const;
 	void setGraphIndex(int graphIndex);
 	size_t getItemId() const;
-    void setItemId(size_t itemId);
+	void setItemId(size_t itemId);
 
 	Q_PROPERTY(int gIndex MEMBER graphIndex READ getGraphIndex WRITE setGraphIndex)
-	
+
 private:
 	int graphIndex;
 	size_t itemId;
-
 };

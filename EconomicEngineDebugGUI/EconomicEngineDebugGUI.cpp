@@ -21,15 +21,17 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	ui.setupUi(this);
 
-	auto tradableManager = TradableManager::getInstance();
+	const auto tradableManager = TradableManager::getInstance();
 	auto itemsName = tradableManager->getTradablesName();
 	auto itemsKeys = tradableManager->getKeys();
 
+	auto row = 0;
+	auto column = 0;
 	for (auto i = 0; i < itemsName.size(); ++i)
 	{
 		if (itemsName.size() > i)
 		{
-			auto checkBox = dynamic_cast<GraphManager*>(ui.layChBx->itemAt(i)->widget());
+			auto checkBox = new GraphManager(this);
 			checkBox->setText(QString::fromStdString(itemsName[i]));
 			checkBox->setItemId(typeid(itemsKeys[i]).hash_code());
 			checkBox->setEnabled(true);
@@ -46,16 +48,29 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 			auto style = QString(
 				"color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
 				");");
+
 			checkBox->setStyleSheet(style);
 			checkBox->setGraphIndex(i);
 			ui.customPlot->addGraph();
 			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
 			connect(checkBox, SIGNAL(clicked()), this,
 			        SLOT(setGraphVisibility()));
+
 			this->arrayCheckBox.push_back(checkBox);
+
+			ui.layChBx->addWidget(checkBox, row, column);
+			if (column == 2)
+			{
+				++row;
+				column = 0;
+			}
+			else
+			{
+				++column;
+			}
 		}
 	}
-	
+
 	this->zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 

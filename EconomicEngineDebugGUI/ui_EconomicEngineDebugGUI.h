@@ -9,7 +9,6 @@
 #ifndef UI_ECONOMICENGINEDEBUGGUI_H
 #define UI_ECONOMICENGINEDEBUGGUI_H
 
-#include <GraphManager.h>
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
@@ -33,18 +32,6 @@ public:
     QHBoxLayout *layGraph;
     QVBoxLayout *layGraphParam;
     QGridLayout *layChBx;
-    GraphManager *chBxGraph;
-    GraphManager *chBxGraph_2;
-    GraphManager *chBxGraph_3;
-    GraphManager *chBxGraph_4;
-    GraphManager *chBxGraph_5;
-    GraphManager *chBxGraph_6;
-    GraphManager *chBxGraph_7;
-    GraphManager *chBxGraph_8;
-    GraphManager *chBxGraph_9;
-    GraphManager *chBxGraph_10;
-    GraphManager *chBxGraph_11;
-    GraphManager *chBxGraph_12;
     QGridLayout *LaySliders;
     QLabel *labSpeed;
     QSlider *horSlidZoomXAxis;
@@ -79,126 +66,6 @@ public:
         layChBx = new QGridLayout();
         layChBx->setSpacing(6);
         layChBx->setObjectName(QString::fromUtf8("layChBx"));
-        chBxGraph = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph->setObjectName(QString::fromUtf8("chBxGraph"));
-        chBxGraph->setEnabled(false);
-        chBxGraph->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph->setCheckable(false);
-        chBxGraph->setChecked(false);
-        chBxGraph->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph, 0, 0, 1, 1);
-
-        chBxGraph_2 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_2->setObjectName(QString::fromUtf8("chBxGraph_2"));
-        chBxGraph_2->setEnabled(false);
-        chBxGraph_2->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_2->setCheckable(false);
-        chBxGraph_2->setChecked(false);
-        chBxGraph_2->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_2, 0, 1, 1, 1);
-
-        chBxGraph_3 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_3->setObjectName(QString::fromUtf8("chBxGraph_3"));
-        chBxGraph_3->setEnabled(false);
-        chBxGraph_3->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_3->setCheckable(false);
-        chBxGraph_3->setChecked(false);
-        chBxGraph_3->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_3, 0, 2, 1, 1);
-
-        chBxGraph_4 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_4->setObjectName(QString::fromUtf8("chBxGraph_4"));
-        chBxGraph_4->setEnabled(false);
-        chBxGraph_4->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_4->setCheckable(false);
-        chBxGraph_4->setChecked(false);
-        chBxGraph_4->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_4, 1, 0, 1, 1);
-
-        chBxGraph_5 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_5->setObjectName(QString::fromUtf8("chBxGraph_5"));
-        chBxGraph_5->setEnabled(false);
-        chBxGraph_5->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_5->setCheckable(false);
-        chBxGraph_5->setChecked(false);
-        chBxGraph_5->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_5, 1, 1, 1, 1);
-
-        chBxGraph_6 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_6->setObjectName(QString::fromUtf8("chBxGraph_6"));
-        chBxGraph_6->setEnabled(false);
-        chBxGraph_6->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_6->setCheckable(false);
-        chBxGraph_6->setChecked(false);
-        chBxGraph_6->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_6, 1, 2, 1, 1);
-
-        chBxGraph_7 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_7->setObjectName(QString::fromUtf8("chBxGraph_7"));
-        chBxGraph_7->setEnabled(false);
-        chBxGraph_7->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_7->setCheckable(false);
-        chBxGraph_7->setChecked(false);
-        chBxGraph_7->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_7, 2, 0, 1, 1);
-
-        chBxGraph_8 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_8->setObjectName(QString::fromUtf8("chBxGraph_8"));
-        chBxGraph_8->setEnabled(false);
-        chBxGraph_8->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_8->setCheckable(false);
-        chBxGraph_8->setChecked(false);
-        chBxGraph_8->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_8, 2, 1, 1, 1);
-
-        chBxGraph_9 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_9->setObjectName(QString::fromUtf8("chBxGraph_9"));
-        chBxGraph_9->setEnabled(false);
-        chBxGraph_9->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_9->setCheckable(false);
-        chBxGraph_9->setChecked(false);
-        chBxGraph_9->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_9, 2, 2, 1, 1);
-
-        chBxGraph_10 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_10->setObjectName(QString::fromUtf8("chBxGraph_10"));
-        chBxGraph_10->setEnabled(false);
-        chBxGraph_10->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_10->setCheckable(false);
-        chBxGraph_10->setChecked(false);
-        chBxGraph_10->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_10, 3, 0, 1, 1);
-
-        chBxGraph_11 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_11->setObjectName(QString::fromUtf8("chBxGraph_11"));
-        chBxGraph_11->setEnabled(false);
-        chBxGraph_11->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_11->setCheckable(false);
-        chBxGraph_11->setChecked(false);
-        chBxGraph_11->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_11, 3, 1, 1, 1);
-
-        chBxGraph_12 = new GraphManager(horizontalLayoutWidget_3);
-        chBxGraph_12->setObjectName(QString::fromUtf8("chBxGraph_12"));
-        chBxGraph_12->setEnabled(false);
-        chBxGraph_12->setCursor(QCursor(Qt::PointingHandCursor));
-        chBxGraph_12->setCheckable(false);
-        chBxGraph_12->setChecked(false);
-        chBxGraph_12->setProperty("graphIndex", QVariant(0));
-
-        layChBx->addWidget(chBxGraph_12, 3, 2, 1, 1);
-
 
         layGraphParam->addLayout(layChBx);
 
@@ -243,7 +110,7 @@ public:
 
         layGraphParam->addLayout(LaySliders);
 
-        verticalSpacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Minimum);
+        verticalSpacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
 
         layGraphParam->addItem(verticalSpacer);
 
@@ -271,18 +138,6 @@ public:
     void retranslateUi(QMainWindow *EconomicEngineDebugGUIClass)
     {
         EconomicEngineDebugGUIClass->setWindowTitle(QCoreApplication::translate("EconomicEngineDebugGUIClass", "EconomicEngineDebugGUI", nullptr));
-        chBxGraph->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_2->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_3->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_4->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_5->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_6->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_7->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_8->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_9->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_10->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_11->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
-        chBxGraph_12->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Empty", nullptr));
         labSpeed->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Speed: ", nullptr));
         labZomXAxis->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Zoom: ", nullptr));
     } // retranslateUi
