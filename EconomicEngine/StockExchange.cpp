@@ -68,6 +68,11 @@ void StockExchange::resolveOffers()
 
 float StockExchange::getStockExchangePrice(const size_t key)
 {
-	return betterAsks[key].back()->getPrice();
+	float result = 0.0f;
+	if(!betterAsks[key].empty())
+	{
+		result = betterAsks[key].back()->getPrice();
+	}
+	return result;
 }
 
