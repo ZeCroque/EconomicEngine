@@ -46,6 +46,7 @@ void StockExchange::resolveOffers()
 			buyingAsks[buyingAsks.size() - 1].reset();
 			buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
 			
+<<<<<<< HEAD
 		}
 		
 		for (auto& sellingAsk : sellingAsks)
@@ -59,11 +60,34 @@ void StockExchange::resolveOffers()
 			buyingAsk->setStatus(AskStatus::Refused);
 			buyingAsk.reset();
 		}
+=======
+		}
+		
+		for (auto& sellingAsk : sellingAsks)
+		{
+			sellingAsk->setStatus(AskStatus::Refused);
+			sellingAsk.reset();
+		}
+
+		for(auto& buyingAsk : buyingAsks)
+		{
+			buyingAsk->setStatus(AskStatus::Refused);
+			buyingAsk.reset();
+		}
+>>>>>>> master
 
 		buyingAsks.clear();
 		sellingAsks.clear();
 	}
 
 
+<<<<<<< HEAD
+}
+
+float StockExchange::getStockExchangePrice(const size_t key)
+{
+	return betterAsks[key].back()->getPrice();
+=======
+>>>>>>> master
 }
 

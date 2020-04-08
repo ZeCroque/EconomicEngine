@@ -45,7 +45,6 @@
     <ClCompile Include="CraftFactory.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="Job.cpp" />
-    <ClCompile Include="Money.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="StockExchange.cpp" />
     <ClCompile Include="Tradable.cpp" />

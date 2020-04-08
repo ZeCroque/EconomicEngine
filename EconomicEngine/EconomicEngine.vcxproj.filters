@@ -137,9 +137,6 @@
     <ClCompile Include="TraderManager.cpp">
       <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
-    <ClCompile Include="Money.cpp">
-      <Filter>Fichiers sources\Tradables</Filter>
-    </ClCompile>
     <ClCompile Include="TradableManager.cpp">
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
