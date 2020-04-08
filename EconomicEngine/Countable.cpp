@@ -25,36 +25,6 @@ float Countable::getCount() const
 	return count;
 }
 
-Wheat::Wheat(): Countable()
-{
-	this->id = typeid(Wheat).hash_code();
-	this->count = 1;
-	this->behavior = nullptr;
-	this->name = "Blé";
-	this->defaultPriceBelief = std::pair<float, float>(0.1f, 0.5f);
-}
-
-
-Wheat* Wheat::clone()
-{
-	return new Wheat(*this);
-}
-
-Bread::Bread() : Countable()
-{
-	this->id = typeid(Bread).hash_code();
-	this->count = 1;
-	this->behavior = nullptr;
-	this->name = "Pain";
-	this->defaultPriceBelief = std::pair<float, float>(0.5f, 1.0f);
-}
-
-
-Bread* Bread::clone()
-{
-	return new Bread(*this);
-}
-
 Gold::Gold() : Countable()
 {
 	this->id = typeid(Gold).hash_code();

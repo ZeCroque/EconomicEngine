@@ -55,11 +55,11 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
+    <QtInstall>QT5.1.14</QtInstall>
     <QtModules>core;gui;widgets;printsupport</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
+    <QtInstall>QT5.1.14</QtInstall>
     <QtModules>core;gui;widgets;printsupport</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
@@ -199,10 +199,19 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bread.cpp" />
+    <ClCompile Include="Coal.cpp" />
     <ClCompile Include="economicenginedebuggui.cpp" />
+    <ClCompile Include="Farmer.cpp" />
     <ClCompile Include="GraphManager.cpp" />
+    <ClCompile Include="IronOre.cpp" />
+    <ClCompile Include="Leather.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Meat.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
+    <ClCompile Include="Steak.cpp" />
+    <ClCompile Include="Wheat.cpp" />
+    <ClCompile Include="Wood.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EconomicEngineDebugGUI.h">
@@ -251,6 +260,7 @@
   <ItemGroup>
     <ClInclude Include="Bread.h" />
     <ClInclude Include="Coal.h" />
+    <ClInclude Include="Farmer.h" />
     <ClInclude Include="IronOre.h" />
     <ClInclude Include="Leather.h" />
     <ClInclude Include="Meat.h" />

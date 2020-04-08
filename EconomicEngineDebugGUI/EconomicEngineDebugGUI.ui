@@ -37,7 +37,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>1159</width>
+      <width>1179</width>
       <height>341</height>
      </rect>
     </property>
@@ -45,218 +45,7 @@
      <item>
       <layout class="QVBoxLayout" name="layGraphParam">
        <item>
-        <layout class="QHBoxLayout" name="layGraphChBx">
-         <item>
-          <layout class="QVBoxLayout" name="LayOne">
-           <item>
-            <widget class="GraphManager" name="chBxGraphWheat">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Wheat</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <property name="graphIndex" stdset="0">
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphMeat">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Meat</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphWood">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Wood</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphLeather">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Leather</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphCoal">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Coal</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="LayTwo">
-           <item>
-            <widget class="GraphManager" name="chBxGraphBread">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Bread</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphSteak">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Steak</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronOre">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Ore</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronArmor">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Armor</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphWoodPickaxe">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Wood Pickaxe</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="LayThree">
-           <item>
-            <widget class="GraphManager" name="chBxGraphBow">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Bow</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronAxe">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Axe</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronHoe">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Hoe</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronPickaxe">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Pickaxe</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="GraphManager" name="chBxGraphIronSword">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>Iron Sword</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <layout class="QGridLayout" name="layChBx"/>
        </item>
        <item>
         <layout class="QGridLayout" name="LaySliders">
@@ -264,13 +53,6 @@
           <widget class="QLabel" name="labSpeed">
            <property name="text">
             <string>Speed: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="labZomXAxis">
-           <property name="text">
-            <string>Zoom: </string>
            </property>
           </widget>
          </item>
@@ -299,6 +81,13 @@
            </property>
            <property name="invertedControls">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labZomXAxis">
+           <property name="text">
+            <string>Zoom: </string>
            </property>
           </widget>
          </item>
@@ -335,7 +124,7 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -379,11 +168,6 @@
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>GraphManager</class>
-   <extends>QCheckBox</extends>
-   <header location="global">GraphManager.h</header>
   </customwidget>
  </customwidgets>
  <resources>

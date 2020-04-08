@@ -18,21 +18,6 @@ public:
 };
 
 //DEBUG
-class Wheat : public Countable
-{
-public:
-	Wheat();
-	Wheat(const Wheat& wheat) = default;
-	Wheat* clone() override;
-};
-
-class Bread : public Countable
-{
-public:
-	Bread();
-	Bread(const Bread& bread) = default;
-	Bread* clone() override;
-};
 
 class Gold : public Countable
 {

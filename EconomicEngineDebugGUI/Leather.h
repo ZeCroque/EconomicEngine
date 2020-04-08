@@ -3,13 +3,12 @@
 
 #include "Countable.h"
 
-class Leather : public Countable
+class Leather final : public Countable
 {
 public:
-	Leather() : Countable()
-	{
-		name = "Leather";
-	}
+	Leather();
+	Leather(const Leather& leather);
+	Leather* clone() override;
 };
 
 #endif

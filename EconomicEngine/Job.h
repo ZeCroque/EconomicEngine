@@ -22,13 +22,6 @@ public:
 	[[nodiscard]] Craft* getCraft(size_t key) const;
 };
 
-class Farmer : public Job
-{
-public:
-	Farmer();
-	Farmer* clone() override { return new Farmer(*this); }
-};
-
 class Miner : public Job
 {
 public:
