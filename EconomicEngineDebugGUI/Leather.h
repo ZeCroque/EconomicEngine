@@ -7,7 +7,7 @@ class Leather final : public Countable
 {
 public:
 	Leather();
-	Leather(const Leather& leather);
+	Leather(const Leather&) = default;
 	Leather* clone() override;
 };
 
