@@ -29,6 +29,8 @@ public:
 	[[nodiscard]] int getDate() const;
 	[[nodiscard]] size_t getId() const;
 	[[nodiscard]] AskStatus getStatus() const;
+	void setPrice(float price);
+	void setStatus(AskStatus status);
 	virtual std::pair<size_t, float> getResult() = 0;
 
 };

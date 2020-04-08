@@ -29,7 +29,6 @@
     <ClInclude Include="Food.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobFactory.h" />
-    <ClInclude Include="Money.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Singleton.h" />

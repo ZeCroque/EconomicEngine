@@ -24,8 +24,12 @@ private:
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
 	std::mt19937 randomEngine;
+	float money;
 	void assignJob();
 	void fillWonderList();
+	void fillGoodsList();
+	float calculatePriceBeliefMean(size_t key);
+	float evaluatePrice(size_t key);
 	float calculateEarnings(Craft* craft);
 
 public:

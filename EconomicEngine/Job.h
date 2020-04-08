@@ -29,4 +29,11 @@ public:
 	Farmer* clone() override { return new Farmer(*this); }
 };
 
+class Miner : public Job
+{
+public:
+	Miner();
+	Miner* clone() override;
+};
+
 #endif

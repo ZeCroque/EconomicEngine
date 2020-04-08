@@ -9,6 +9,7 @@ void TurnManager::init() const
 {
 	//Init jobs
 	traderManager->registerJob(new Farmer());
+	traderManager->registerJob(new Miner());
 
 	//Init tradables
 	tradableManager->registerTradable(new Bread());
@@ -28,20 +29,19 @@ void TurnManager::reset()
 	//TODO
 }
 
-
-//TODO turncount defined by economic engine
 int TurnManager::exec()
 {
 	this->bRunning = true;
 	while (bRunning)
 	{
-		auto a = stockExchange->currentBuyingAsks[typeid(Gold).hash_code()];
+
+		auto a = stockExchange->betterAsks[typeid(Gold).hash_code()];
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 		++turnNumber;
 		traderManager->doTradersCrafting();
 		traderManager->doTradersAsking();
-		
-		//stockExchange->resolveOffers();
+
+		stockExchange->resolveOffers();
 		traderManager->refreshTraders();
 		this->notifyObservers();
 	}

@@ -83,3 +83,14 @@ Farmer::Farmer() : Job()
 	this->craftFactory->registerCraft(new Craft(1.0f, typeid(GoldenBread).hash_code(), requirements));
 	
 }
+
+Miner::Miner()
+{
+	//Gold : no requirement
+	this->craftFactory->registerCraft(new Craft(0.1f, typeid(Gold).hash_code(), std::vector<std::pair<size_t, int>>()));
+}
+
+Miner* Miner::clone()
+{
+	return new Miner(*this);
+}

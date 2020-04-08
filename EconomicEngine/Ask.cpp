@@ -1,5 +1,4 @@
 #include "Ask.h"
-#include "Money.h"
 #include "TurnManager.h"
 
 
@@ -30,6 +29,16 @@ AskStatus Ask::getStatus() const
 	return status;
 }
 
+void Ask::setPrice(const float price)
+{
+	this->price = price;
+}
+
+void Ask::setStatus(const AskStatus status)
+{
+	this->status = status;
+}
+
 BuyingAsk::BuyingAsk(const size_t id, const float count, const float price) : Ask(id, count, price){}
 
 std::pair<size_t, float> BuyingAsk::getResult()
@@ -41,5 +50,5 @@ SellingAsk::SellingAsk(const size_t id, const float count, const float price) : 
 
 std::pair<size_t, float> SellingAsk::getResult()
 {
-	return std::pair<size_t, float>(typeid(Money).hash_code(), price);
+	return std::pair<size_t, float>(0, price);
 }
