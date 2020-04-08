@@ -22,10 +22,8 @@ public:
 	void registerAsk(std::shared_ptr<BuyingAsk> buyingAsk);	
 	void registerAsk(std::shared_ptr<SellingAsk> sellingAsk);
 	void resolveOffers(); //TODO Maxence
-<<<<<<< HEAD
 	float getStockExchangePrice(size_t key);
-=======
->>>>>>> master
+
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
 		for (size_t i = 1; i < vector.size(); ++i)
