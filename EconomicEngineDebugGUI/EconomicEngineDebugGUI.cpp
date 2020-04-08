@@ -123,28 +123,27 @@ void EconomicEngineDebugGui::setSpeed(const int value) const
 
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
-	static auto time(QTime::currentTime().elapsed() / 1000.0);
-	// calculate two new data points:
 	const auto key = turnManager->getTurnNumber();
+	auto stockExchange = StockExchange::getInstance();
+	
 	auto totalData = 0;
 	for (auto checkBox : this->arrayCheckBox)
 	{
+		auto const graphIndex = checkBox->getGraphIndex();
 		// add data to lines:
-		ui.customPlot->graph(checkBox->getGraphIndex())->addData(
-			key, qSin(10000000 + key) + qrand() / static_cast<double>(RAND_MAX) * 1 * qSin(
-				checkBox->getGraphIndex() + (10000000 + key) / 0.3843));
+		
+		ui.customPlot->graph(graphIndex)->addData(
+			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
 
 		// rescale value (vertical) axis to fit the current data:
-		ui.customPlot->graph(checkBox->getGraphIndex())->rescaleValueAxis(false);
-		totalData += ui.customPlot->graph(checkBox->getGraphIndex())->data()->size();
+		ui.customPlot->graph(graphIndex)->rescaleValueAxis(false);
+		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 	}
 
 	ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
 	ui.customPlot->replot();
 
-	// calculate frames per second:
-
-
+	
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);
 }
