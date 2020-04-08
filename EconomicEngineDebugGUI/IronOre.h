@@ -3,13 +3,12 @@
 
 #include "Countable.h"
 
-class IronOre : public Countable
+class IronOre final : public Countable
 {
 public:
-	IronOre() : Countable()
-	{
-		name = "Iron Ore";
-	}
+	IronOre();
+	IronOre(const IronOre& ironOre);
+	IronOre* clone() override;
 };
 
 #endif

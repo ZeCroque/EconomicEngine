@@ -2,6 +2,11 @@
 #include "Countable.h"
 #include <thread>
 
+
+#include "../EconomicEngineDebugGUI/Bread.h"
+#include "../EconomicEngineDebugGUI/Farmer.h"
+#include "../EconomicEngineDebugGUI/Wheat.h"
+
 TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()){}
 
 

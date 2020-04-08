@@ -5,6 +5,7 @@
 #include <thread>
 #include "GraphManager.h"
 #include "TraderManager.h"
+#include "TradableManager.h"
 
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
@@ -20,30 +21,21 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	ui.setupUi(this);
 
-	std::vector<GraphManager*> arrayCheckBox;
-	arrayCheckBox.reserve(20);
+	auto tradableManager = TradableManager::getInstance();
+	auto itemsName = tradableManager->getTradablesName();
+	auto itemsKeys = tradableManager->getKeys();
 
-	arrayCheckBox.push_back(ui.chBxGraphWheat);
-
-	arrayCheckBox.push_back(ui.chBxGraphMeat);
-	arrayCheckBox.push_back(ui.chBxGraphWood);
-	arrayCheckBox.push_back(ui.chBxGraphLeather);
-	arrayCheckBox.push_back(ui.chBxGraphCoal);
-	arrayCheckBox.push_back(ui.chBxGraphBread);
-	arrayCheckBox.push_back(ui.chBxGraphSteak);
-	arrayCheckBox.push_back(ui.chBxGraphIronOre);
-	arrayCheckBox.push_back(ui.chBxGraphIronArmor);
-	arrayCheckBox.push_back(ui.chBxGraphWoodPickaxe);
-	arrayCheckBox.push_back(ui.chBxGraphBow);
-	arrayCheckBox.push_back(ui.chBxGraphIronAxe);
-	arrayCheckBox.push_back(ui.chBxGraphIronHoe);
-	arrayCheckBox.push_back(ui.chBxGraphIronPickaxe);
-	arrayCheckBox.push_back(ui.chBxGraphIronSword);
-
-	for (auto i = 0; arrayCheckBox.size() > i; ++i)
+	for (auto i = 0; i < itemsName.size(); ++i)
 	{
-		if (arrayCheckBox[i] != nullptr)
+		if (itemsName.size() > i)
 		{
+			auto checkBox = dynamic_cast<GraphManager*>(ui.layChBx->itemAt(i)->widget());
+			checkBox->setText(QString::fromStdString(itemsName[i]));
+			checkBox->setItemId(typeid(itemsKeys[i]).hash_code());
+			checkBox->setEnabled(true);
+			checkBox->setCheckable(true);
+			checkBox->setChecked(true);
+
 			std::mt19937 randomEngine(i);
 			const std::uniform_int_distribution<int> uniformDist(0, 255);
 
@@ -54,16 +46,16 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 			auto style = QString(
 				"color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
 				");");
-			arrayCheckBox[i]->setStyleSheet(style);
-			arrayCheckBox[i]->setGraphIndex(i);
+			checkBox->setStyleSheet(style);
+			checkBox->setGraphIndex(i);
 			ui.customPlot->addGraph();
 			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
-			connect(arrayCheckBox[i], SIGNAL(clicked()), this,
+			connect(checkBox, SIGNAL(clicked()), this,
 			        SLOT(setGraphVisibility()));
+			this->arrayCheckBox.push_back(checkBox);
 		}
 	}
-	this->arrayCheckBox = arrayCheckBox;
-
+	
 	this->zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 
