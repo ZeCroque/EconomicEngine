@@ -17,22 +17,4 @@ public:
 	[[nodiscard]] int getCount() const;
 };
 
-//DEBUG
-class Wheat : public Countable
-{
-public:
-	Wheat();
-	Wheat(const Wheat& wheat);
-	Wheat* clone() override;
-};
-
-class Bread : public Countable
-{
-public:
-	Bread();
-	Bread(const Bread& bread);
-	Bread* clone() override;
-};
-
 #endif
-

@@ -1,19 +1,14 @@
 #ifndef BREAD_H
 #define BREAD_H
 
-#include <string>
-
 #include "Food.h"
 
-
-class Bread : public Food
+class Bread final : public Food
 {
 public:
-	Bread() : Food()
-	{
-		foodValue = 2;
-		name = "Bread";
-	}
+	Bread();
+	Bread(const Bread& bread);
+	Bread* clone() override;
 };
 
 #endif

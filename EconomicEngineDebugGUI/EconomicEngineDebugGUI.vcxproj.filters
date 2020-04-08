@@ -48,6 +48,9 @@
     <Filter Include="Header Files\Countables">
       <UniqueIdentifier>{5dae9111-cd5f-476e-9542-3c7f4612cb84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Countables">
+      <UniqueIdentifier>{daf4bf61-7cd7-4cd9-80fd-b05664deabd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphManager.cpp">
@@ -61,6 +64,30 @@
     </ClCompile>
     <ClCompile Include="qcustomplot.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wheat.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Bread.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Coal.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="IronOre.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Leather.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Meat.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Steak.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Wood.cpp">
+      <Filter>Source Files\Countables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
