@@ -33,7 +33,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 		{
 			auto checkBox = new GraphManager(this);
 			checkBox->setText(QString::fromStdString(itemsName[i]));
-			checkBox->setItemId(typeid(itemsKeys[i]).hash_code());
+			checkBox->setItemId(itemsKeys[i]);
 			checkBox->setEnabled(true);
 			checkBox->setCheckable(true);
 			checkBox->setChecked(true);
@@ -134,9 +134,9 @@ void EconomicEngineDebugGui::realtimeDataSlot() const
 		
 		ui.customPlot->graph(graphIndex)->addData(
 			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
-
+		auto test =  stockExchange->getStockExchangePrice(checkBox->getItemId());
 		// rescale value (vertical) axis to fit the current data:
-		ui.customPlot->graph(graphIndex)->rescaleValueAxis(false);
+		ui.customPlot->graph(graphIndex)->rescaleValueAxis(true);
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 	}
 

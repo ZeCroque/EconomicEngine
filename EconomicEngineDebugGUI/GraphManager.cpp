@@ -12,7 +12,7 @@ void GraphManager::setGraphIndex(const int graphIndex)
 
 size_t GraphManager::getItemId() const
 {
-	return this->graphIndex;
+	return this->itemId;
 }
 
 void GraphManager::setItemId(const size_t itemId)

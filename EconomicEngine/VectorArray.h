@@ -26,7 +26,10 @@ public:
 				result = &vectors[i];
 			}
 		}
-		assert(result != nullptr);
+		if(result == nullptr)
+		{
+			result = new std::vector<std::shared_ptr<T>>();
+		};
 		return *result;
 	}
 };
