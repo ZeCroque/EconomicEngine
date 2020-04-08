@@ -17,6 +17,7 @@ private:
 	TradableManager* tradableManager;
 	StockExchange* stockExchange;
 
+
 	TurnManager();
 	~TurnManager() = default;
 

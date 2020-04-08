@@ -3,13 +3,12 @@
 
 #include "Countable.h"
 
-class Meat : public Countable
+class Meat final : public Countable
 {
 public:
-	Meat() : Countable()
-	{
-		name = "Meat";
-	}
+	Meat();
+	Meat(const Meat& meat);
+	Meat* clone() override;
 };
 
 #endif

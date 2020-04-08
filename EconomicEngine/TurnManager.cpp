@@ -2,7 +2,11 @@
 #include "Countable.h"
 #include <thread>
 
-TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()){}
+
+TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()),
+                             tradableManager(TradableManager::getInstance())
+{
+}
 
 
 void TurnManager::init() const
@@ -21,6 +25,7 @@ void TurnManager::init() const
 	
 	//Create traders
 	traderManager->addTrader(10);
+
 }
 
 void TurnManager::reset()
@@ -38,6 +43,7 @@ int TurnManager::exec()
 		auto a = stockExchange->currentBuyingAsks[typeid(Gold).hash_code()];
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 		++turnNumber;
+
 		traderManager->doTradersCrafting();
 		traderManager->doTradersAsking();
 		
