@@ -14,7 +14,10 @@ Tradable* TradableManager::createTradable(const size_t key) const
 std::vector<std::string> TradableManager::getTradablesName() const
 {
 	auto keys = tradableFactory.getKeys();
-	std::vector<std::string> names(keys.size());
+	std::vector<std::string> names;
+	names.reserve(keys.size());
+
+	
 	for(auto key : keys)
 	{
 		names.emplace_back(tradableFactory.getDefaultObject(key)->getName());

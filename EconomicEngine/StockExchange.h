@@ -24,22 +24,20 @@ public:
 	void resolveOffers(); //TODO Maxence
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
-		for (size_t i = 1; i < vector.size(); i++)
+		for (size_t i = 1; i < vector.size(); ++i)
 		{
-			auto& temp = vector[i];
-			size_t j = i;
-			while (j > 0 && vector[j - 1]->getPrice() > temp->getPrice() )
+			auto temp = vector[i];
+			vector[i].reset();
+			int j = static_cast<int>(i)-1;
+			while (j >= 0 && vector[j]->getPrice() > temp->getPrice())
 			{
-				auto& temp2 = vector[j-1];
-				vector.erase(vector.begin()+j);
-				vector.emplace(vector.begin() + std::max<int>(0, j - 2), temp2);
-				//vector[j+1] = vector[j];
+				auto temp2 = vector[j];
+				vector[j].reset();
+				vector[j + 1] = temp2;
 				--j;
 			}
-			vector.erase(vector.begin() + j);
-			vector.emplace(vector.begin() + std::max<int>(0,j - 2), temp);
+			vector[j + 1] = temp;
 		}
-		int i = 42;
 	}
 
 

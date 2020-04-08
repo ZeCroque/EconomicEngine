@@ -53,7 +53,7 @@ void Trader::makeAsks()
 				uniformFloatDist = std::uniform_real_distribution<float>(mean, *priceBeliefs[wonderItem.first][1]);
 			}
 
-			auto buyingAsk = std::make_shared<BuyingAsk>(wonderItem.first, wonderItem.second, uniformFloatDist(randomEngine));
+			auto buyingAsk = std::make_shared<BuyingAsk>(wonderItem.first, wonderItem.second, static_cast<float>(uniformFloatDist(randomEngine)));
 			StockExchange::getInstance()->registerAsk(buyingAsk);
 			this->currentAsks.emplace_back(buyingAsk);
 		}
