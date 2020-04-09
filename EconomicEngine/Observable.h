@@ -19,9 +19,11 @@ public:
 	
 	void addObserver(IObserver* observer);
 	void removeObserver(IObserver* observer);
-	std::list<IObserver*> getRegisteredObservers() const;
+	[[nodiscard]] std::list<IObserver*> getRegisteredObservers() const;
 	virtual void notifyObservers();
 
 private:
+	bool markForDelete;
+	
 	bool contains(IObserver* observer);
 };

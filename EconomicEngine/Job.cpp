@@ -1,12 +1,14 @@
 #include "Job.h"
 
 #include "Countable.h" //DEBUG
+#include "Uncountable.h"
 
 Job::Job() : craftFactory(new CraftFactory()){}
 
 Job::Job(const Job& job) : Job()
 {
 	this->craftFactory = job.craftFactory->clone();
+	this->usableToolsList = std::list<size_t>(job.usableToolsList);
 }
 
 Job::~Job()
@@ -58,20 +60,14 @@ std::vector<size_t> Job::getUncraftableList() const
 	return uncraftableList;
 }
 
+std::list<size_t> Job::getUsableTools() const
+{
+	return usableToolsList;
+}
+
 Craft* Job::getCraft(const size_t key) const
 {
 	return craftFactory->getDefaultObject(key);
 }
 
 //DEBUG
-
-Miner::Miner()
-{
-	//Gold : no requirement
-	this->craftFactory->registerCraft(new Craft(0.1f, typeid(Gold).hash_code(), std::vector<std::pair<size_t, int>>()));
-}
-
-Miner* Miner::clone()
-{
-	return new Miner(*this);
-}

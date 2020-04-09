@@ -7,6 +7,7 @@ class Wood final : public Countable
 {
 public:
 	Wood();
+	Wood(const Wood&) = default;
 	Wood* clone() override;
 };
 

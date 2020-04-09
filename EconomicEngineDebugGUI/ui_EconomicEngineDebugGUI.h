@@ -11,12 +11,14 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -32,12 +34,20 @@ public:
     QHBoxLayout *layGraph;
     QVBoxLayout *layGraphParam;
     QGridLayout *layChBx;
+    QFrame *line;
     QGridLayout *LaySliders;
     QLabel *labSpeed;
+    QSlider *horSlidSpeed;
     QSlider *horSlidZoomXAxis;
     QLabel *labZomXAxis;
-    QSlider *horSlidSpeed;
-    QSpacerItem *verticalSpacer;
+    QLabel *labStep;
+    QSlider *horSlidStep;
+    QFrame *line_2;
+    QHBoxLayout *horizontalLayout;
+    QVBoxLayout *verticalLayout;
+    QRadioButton *radBRealTime;
+    QRadioButton *radStepByStep;
+    QPushButton *pBStart;
     QCustomPlot *customPlot;
     QStatusBar *statusBar;
 
@@ -45,9 +55,9 @@ public:
     {
         if (EconomicEngineDebugGUIClass->objectName().isEmpty())
             EconomicEngineDebugGUIClass->setObjectName(QString::fromUtf8("EconomicEngineDebugGUIClass"));
-        EconomicEngineDebugGUIClass->resize(1180, 680);
+        EconomicEngineDebugGUIClass->resize(1200, 680);
         EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 680));
-        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1180, 680));
+        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1200, 680));
         EconomicEngineDebugGUIClass->setAutoFillBackground(false);
         EconomicEngineDebugGUIClass->setAnimated(true);
         centralWidget = new QWidget(EconomicEngineDebugGUIClass);
@@ -69,6 +79,13 @@ public:
 
         layGraphParam->addLayout(layChBx);
 
+        line = new QFrame(horizontalLayoutWidget_3);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        layGraphParam->addWidget(line);
+
         LaySliders = new QGridLayout();
         LaySliders->setSpacing(6);
         LaySliders->setObjectName(QString::fromUtf8("LaySliders"));
@@ -76,6 +93,18 @@ public:
         labSpeed->setObjectName(QString::fromUtf8("labSpeed"));
 
         LaySliders->addWidget(labSpeed, 1, 0, 1, 1);
+
+        horSlidSpeed = new QSlider(horizontalLayoutWidget_3);
+        horSlidSpeed->setObjectName(QString::fromUtf8("horSlidSpeed"));
+        horSlidSpeed->setCursor(QCursor(Qt::PointingHandCursor));
+        horSlidSpeed->setMinimum(1);
+        horSlidSpeed->setMaximum(50);
+        horSlidSpeed->setValue(5);
+        horSlidSpeed->setOrientation(Qt::Horizontal);
+        horSlidSpeed->setInvertedAppearance(false);
+        horSlidSpeed->setInvertedControls(false);
+
+        LaySliders->addWidget(horSlidSpeed, 1, 1, 1, 1);
 
         horSlidZoomXAxis = new QSlider(horizontalLayoutWidget_3);
         horSlidZoomXAxis->setObjectName(QString::fromUtf8("horSlidZoomXAxis"));
@@ -95,24 +124,62 @@ public:
 
         LaySliders->addWidget(labZomXAxis, 0, 0, 1, 1);
 
-        horSlidSpeed = new QSlider(horizontalLayoutWidget_3);
-        horSlidSpeed->setObjectName(QString::fromUtf8("horSlidSpeed"));
-        horSlidSpeed->setCursor(QCursor(Qt::PointingHandCursor));
-        horSlidSpeed->setMinimum(1);
-        horSlidSpeed->setMaximum(50);
-        horSlidSpeed->setValue(5);
-        horSlidSpeed->setOrientation(Qt::Horizontal);
-        horSlidSpeed->setInvertedAppearance(false);
-        horSlidSpeed->setInvertedControls(false);
+        labStep = new QLabel(horizontalLayoutWidget_3);
+        labStep->setObjectName(QString::fromUtf8("labStep"));
 
-        LaySliders->addWidget(horSlidSpeed, 1, 1, 1, 1);
+        LaySliders->addWidget(labStep, 2, 0, 1, 1);
+
+        horSlidStep = new QSlider(horizontalLayoutWidget_3);
+        horSlidStep->setObjectName(QString::fromUtf8("horSlidStep"));
+        horSlidStep->setCursor(QCursor(Qt::PointingHandCursor));
+        horSlidStep->setMinimum(1);
+        horSlidStep->setMaximum(1000);
+        horSlidStep->setValue(1);
+        horSlidStep->setOrientation(Qt::Horizontal);
+        horSlidStep->setInvertedAppearance(false);
+        horSlidStep->setInvertedControls(false);
+
+        LaySliders->addWidget(horSlidStep, 2, 1, 1, 1);
 
 
         layGraphParam->addLayout(LaySliders);
 
-        verticalSpacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
+        line_2 = new QFrame(horizontalLayoutWidget_3);
+        line_2->setObjectName(QString::fromUtf8("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
 
-        layGraphParam->addItem(verticalSpacer);
+        layGraphParam->addWidget(line_2);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(6);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
+        radBRealTime = new QRadioButton(horizontalLayoutWidget_3);
+        radBRealTime->setObjectName(QString::fromUtf8("radBRealTime"));
+        radBRealTime->setChecked(true);
+
+        verticalLayout->addWidget(radBRealTime);
+
+        radStepByStep = new QRadioButton(horizontalLayoutWidget_3);
+        radStepByStep->setObjectName(QString::fromUtf8("radStepByStep"));
+
+        verticalLayout->addWidget(radStepByStep);
+
+
+        horizontalLayout->addLayout(verticalLayout);
+
+        pBStart = new QPushButton(horizontalLayoutWidget_3);
+        pBStart->setObjectName(QString::fromUtf8("pBStart"));
+        pBStart->setCheckable(true);
+
+        horizontalLayout->addWidget(pBStart);
+
+
+        layGraphParam->addLayout(horizontalLayout);
 
 
         layGraph->addLayout(layGraphParam);
@@ -140,6 +207,10 @@ public:
         EconomicEngineDebugGUIClass->setWindowTitle(QCoreApplication::translate("EconomicEngineDebugGUIClass", "EconomicEngineDebugGUI", nullptr));
         labSpeed->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Speed: ", nullptr));
         labZomXAxis->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Zoom: ", nullptr));
+        labStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step: ", nullptr));
+        radBRealTime->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Real Time", nullptr));
+        radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
+        pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
     } // retranslateUi
 
 };

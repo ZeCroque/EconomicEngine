@@ -19,6 +19,8 @@ bool CraftFactory::isCraftable(const size_t key) const
 	if(owner!=nullptr)
 	{
 		bool requirementsOwned = true;
+
+		//Items required
 		for (const auto requirement : this->getDefaultObject(key)->getRequirement())
 		{
 			auto it = owner->getInventory().begin();
@@ -42,6 +44,24 @@ bool CraftFactory::isCraftable(const size_t key) const
 			}
 		}
 
+		//ToolsRequired
+		auto toolsRequired = this->getDefaultObject(key)->getToolsRequired();
+		if(!toolsRequired.empty())
+		{
+			auto it2 = toolsRequired.begin();
+			for (; it2 != toolsRequired.end(); ++it2)
+			{
+				if (owner->isInInventory(*it2))
+				{
+					break;
+				}
+			}
+			if (it2 == toolsRequired.end())
+			{
+				requirementsOwned = false;
+			}
+		}
+		
 		return requirementsOwned;
 	}
 	return false;

@@ -36,7 +36,7 @@ void StockExchange::resolveOffers()
 			if (doOnce)
 			{
 				doOnce = false;
-				betterAsks[key].emplace_back(sellingAsks[buyingAsks.size() - 1]);
+				betterAsks[key].emplace_back(sellingAsks[sellingAsks.size() - 1]);
 			}
 			sellingAsks[0]->setPrice(buyingAsks[buyingAsks.size() - 1]->getPrice());
 			sellingAsks[0]->setStatus(AskStatus::Sold);

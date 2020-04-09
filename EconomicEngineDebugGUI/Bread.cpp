@@ -2,10 +2,11 @@
 
 #include <vcruntime_typeinfo.h>
 
-Bread::Bread() :Countable()
+Bread::Bread() : Food()
 {
 	this->id = typeid(Bread).hash_code();
 	this->name = "Bread";
+	this->foodValue = 3;
 	this->defaultPriceBelief = std::pair<float, float>(0.5f, 1.0f);
 }
 

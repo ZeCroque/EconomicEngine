@@ -14,7 +14,7 @@ Q_OBJECT
 public:
 	EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui();
-	void notify() override;
+	void notify(Observable* sender) override;
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
@@ -22,6 +22,8 @@ public Q_SLOTS:
 	void setGraphVisibility() const;
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
+	void setStep(int value) const;
+	void toggleStart() const;
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;

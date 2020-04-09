@@ -53,8 +53,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 			checkBox->setGraphIndex(i);
 			ui.customPlot->addGraph();
 			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
-			connect(checkBox, SIGNAL(clicked()), this,
-			        SLOT(setGraphVisibility()));
+			connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
 
 			this->arrayCheckBox.push_back(checkBox);
 
@@ -77,6 +76,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	turnManager->setTurnSecond(ui.horSlidSpeed->value());
 	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
 
+	turnManager->setStep(ui.horSlidStep->value());
+	connect(ui.horSlidStep, SIGNAL(valueChanged(int)), this, SLOT(setStep(int)));
+
 
 	//QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
 	//timeTicker->setTimeFormat("%h:%m:%s");
@@ -89,6 +91,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
+
+	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
@@ -97,7 +101,7 @@ EconomicEngineDebugGui::~EconomicEngineDebugGui()
 	this->turnManager = nullptr;
 }
 
-void EconomicEngineDebugGui::notify()
+void EconomicEngineDebugGui::notify(Observable* sender)
 {
 	this->nextTurn();
 }
@@ -121,29 +125,81 @@ void EconomicEngineDebugGui::setSpeed(const int value) const
 	turnManager->setTurnSecond(value);
 }
 
+void EconomicEngineDebugGui::setStep(const int value) const
+{
+	turnManager->setStep(value);
+}
+
+void EconomicEngineDebugGui::toggleStart() const
+{
+	if (ui.pBStart->isChecked())
+	{
+		ui.pBStart->setText("Stop");
+	}
+	else
+	{
+		ui.pBStart->setText("Start");
+	}
+	turnManager->setIsStarted(ui.pBStart->isChecked());
+}
+
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
-	const auto key = turnManager->getTurnNumber();
+	auto key = turnManager->getTurnNumber();
 	auto stockExchange = StockExchange::getInstance();
-	
+
 	auto totalData = 0;
+	double valueHigh = 0;
+	double valueLow = 999999;
+	auto haveData = false;
 	for (auto checkBox : this->arrayCheckBox)
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
 		// add data to lines:
-		
+
 		ui.customPlot->graph(graphIndex)->addData(
 			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
-		auto test =  stockExchange->getStockExchangePrice(checkBox->getItemId());
 		// rescale value (vertical) axis to fit the current data:
-		ui.customPlot->graph(graphIndex)->rescaleValueAxis(true);
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
+
+
+		if (checkBox->isChecked())
+		{
+			const auto data = ui.customPlot->graph(graphIndex)->data().get();
+			auto start = key - this->zoomXAxis;
+			if (start < 0)
+			{
+				start = 0;
+			}
+			for (auto i = start; i <= key; i++)
+			{
+				const auto value = data->at(i)->value;
+				if (value > 0)
+				{
+					haveData = true;
+					if (value < valueLow)
+					{
+						valueLow = value;
+					}
+					if (value > valueHigh)
+					{
+						valueHigh = value;
+					}
+				}
+			}
+		}
+	}
+
+	ui.customPlot->rescaleAxes(true);
+	if (haveData)
+	{
+		ui.customPlot->yAxis->setRange(valueLow - valueLow * 0.05, valueHigh + valueHigh * 0.05);
 	}
 
 	ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
 	ui.customPlot->replot();
 
-	
+
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);
 }

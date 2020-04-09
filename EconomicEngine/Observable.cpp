@@ -2,7 +2,7 @@
 
 bool Observable::contains(IObserver* const observer)
 {
-	for(auto registeredObserver : this->registeredObservers)
+	for(auto* registeredObserver : this->registeredObservers)
 	{
 		if (registeredObserver == observer)
 		{
@@ -22,10 +22,7 @@ void Observable::addObserver(IObserver* const observer)
 
 void Observable::removeObserver(IObserver* const  observer)
 {
-	if (this->contains(observer))
-	{
-		this->registeredObservers.remove(observer);
-	}
+	this->registeredObservers.remove(observer);
 }
 
 std::list<IObserver*> Observable::getRegisteredObservers() const
@@ -37,6 +34,10 @@ void Observable::notifyObservers()
 {
 	for (auto registeredObserver : this->registeredObservers)
 	{
-		registeredObserver->notify();
+		if(registeredObserver!=nullptr)
+		{
+			registeredObserver->notify(this);
+		}
+		
 	}
 }
