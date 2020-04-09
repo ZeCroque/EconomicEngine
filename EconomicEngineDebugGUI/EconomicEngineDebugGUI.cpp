@@ -53,8 +53,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 			checkBox->setGraphIndex(i);
 			ui.customPlot->addGraph();
 			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
-			connect(checkBox, SIGNAL(clicked()), this,
-			        SLOT(setGraphVisibility()));
+			connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
 
 			this->arrayCheckBox.push_back(checkBox);
 
@@ -77,6 +76,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	turnManager->setTurnSecond(ui.horSlidSpeed->value());
 	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
 
+	turnManager->setStep(ui.horSlidStep->value());
+	connect(ui.horSlidStep, SIGNAL(valueChanged(int)), this, SLOT(setStep(int)));
+
 
 	//QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
 	//timeTicker->setTimeFormat("%h:%m:%s");
@@ -90,8 +92,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
 
-	connect(ui.pBStart, SIGNAL(clicked()), this,
-	        SLOT(toggleStart()));
+	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
@@ -122,6 +123,11 @@ void EconomicEngineDebugGui::setZoomXAxis(const int value)
 void EconomicEngineDebugGui::setSpeed(const int value) const
 {
 	turnManager->setTurnSecond(value);
+}
+
+void EconomicEngineDebugGui::setStep(const int value) const
+{
+	turnManager->setStep(value);
 }
 
 void EconomicEngineDebugGui::toggleStart() const

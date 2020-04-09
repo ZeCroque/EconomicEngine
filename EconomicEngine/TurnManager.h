@@ -14,6 +14,7 @@ private:
 	bool isStarted;
 	int turnSecond;
 	int turnNumber;
+	int step;
 	TraderManager* traderManager;
 	TradableManager* tradableManager;
 	StockExchange* stockExchange;
@@ -32,6 +33,7 @@ public:
 	void setTurnSecond(int turnSecond);
 	[[nodiscard]] int getTurnNumber() const;
 	void setTurnNumber(int turnNumber);
+	void setStep(int step);
 };
 
 #endif
