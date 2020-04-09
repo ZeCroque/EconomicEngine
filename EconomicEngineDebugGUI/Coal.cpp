@@ -6,7 +6,7 @@ Coal::Coal() : Countable()
 {
 	this->id = typeid(Coal).hash_code();
 	this->name = "Coal";
-	this->defaultPriceBelief = std::pair<float, float>(0.1f, 0.5f);
+	this->defaultPriceBelief = std::pair<float, float>(0.25f, 0.5f);
 }
 
 Coal* Coal::clone()

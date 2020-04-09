@@ -6,8 +6,8 @@ Steak::Steak() : Food()
 {
 	this->id = typeid(Steak).hash_code();
 	this->name = "Steak";
-	this->foodValue = 3;
-	this->defaultPriceBelief = std::pair<float, float>(0.5f, 1.0f);
+	this->foodValue = 6;
+	this->defaultPriceBelief = std::pair<float, float>(1.0f, 2.0f);
 }
 
 Steak* Steak::clone()
