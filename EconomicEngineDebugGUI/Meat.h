@@ -7,7 +7,7 @@ class Meat final : public Countable
 {
 public:
 	Meat();
-	Meat(const Meat& meat);
+	Meat(const Meat&) = default;
 	Meat* clone() override;
 };
 

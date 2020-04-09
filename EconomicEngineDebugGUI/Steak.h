@@ -7,7 +7,7 @@ class Steak final : public Food
 {
 public:
 	Steak();
-	Steak(const Steak& steak);
+	Steak(const Steak&) = default;
 	Steak* clone() override;
 };
 

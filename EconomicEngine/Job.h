@@ -24,11 +24,4 @@ public:
 	[[nodiscard]] Craft* getCraft(size_t key) const;
 };
 
-class Miner : public Job
-{
-public:
-	Miner();
-	Miner* clone() override;
-};
-
 #endif

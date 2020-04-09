@@ -6,7 +6,7 @@ Wheat::Wheat() : Countable()
 {
 	this->id = typeid(Wheat).hash_code();
 	this->name = "Wheat";
-	this->defaultPriceBelief = std::pair<float, float>(0.1f, 0.5f);
+	this->defaultPriceBelief = std::pair<float, float>(0.25f, 0.5f);
 }
 
 Wheat* Wheat::clone()

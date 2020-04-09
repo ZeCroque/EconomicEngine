@@ -7,7 +7,7 @@ class Coal final : public Countable
 {
 public:
 	Coal();
-	Coal(const Coal& coal);
+	Coal(const Coal&) = default;
 	Coal* clone() override;
 };
 

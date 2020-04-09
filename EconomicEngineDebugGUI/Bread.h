@@ -3,7 +3,7 @@
 
 #include "Food.h"
 
-class Bread final : public Countable
+class Bread final : public Food
 {
 public:
 	Bread();
