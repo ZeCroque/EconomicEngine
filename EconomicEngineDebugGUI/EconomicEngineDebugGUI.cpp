@@ -123,27 +123,63 @@ void EconomicEngineDebugGui::setSpeed(const int value) const
 
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
-	const auto key = turnManager->getTurnNumber();
+	auto key = turnManager->getTurnNumber();
 	auto stockExchange = StockExchange::getInstance();
-	
+
 	auto totalData = 0;
+	double valueHigh = 0;
+	double valueLow = 999999;
+	auto haveData = false;
 	for (auto checkBox : this->arrayCheckBox)
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
 		// add data to lines:
-		
+
 		ui.customPlot->graph(graphIndex)->addData(
 			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
 		auto test =  stockExchange->getStockExchangePrice(checkBox->getItemId());
 		// rescale value (vertical) axis to fit the current data:
 		ui.customPlot->graph(graphIndex)->rescaleValueAxis(true);
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
+
+
+		if (checkBox->isChecked())
+		{
+			const auto data = ui.customPlot->graph(graphIndex)->data().get();
+			auto start = key - this->zoomXAxis;
+			if (start < 0)
+			{
+				start = 0;
+			}
+			for (auto i = start; i <= key; i++)
+			{
+				const auto value = data->at(i)->value;
+				if (value > 0)
+				{
+					haveData = true;
+					if (value < valueLow)
+					{
+						valueLow = value;
+					}
+					if (value > valueHigh)
+					{
+						valueHigh = value;
+					}
+				}
+			}
+		}
+	}
+
+	ui.customPlot->rescaleAxes(true);
+	if (haveData)
+	{
+		ui.customPlot->yAxis->setRange(valueLow - valueLow * 0.05, valueHigh + valueHigh * 0.05);
 	}
 
 	ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
 	ui.customPlot->replot();
 
-	
+
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);
 }
