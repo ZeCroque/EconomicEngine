@@ -15,6 +15,7 @@
 
 
 #include "../EconomicEngineDebugGUI/Miner.h"
+#include "Uncountable.h"
 
 
 TurnManager::TurnManager() : bRunning(false), isStarted(false), turnSecond(1), turnNumber(0),step(1),
@@ -41,6 +42,9 @@ void TurnManager::init() const
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Steak());
 
+	//Init tools
+	tradableManager->registerTradable(new Hoe());
+	
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
 
