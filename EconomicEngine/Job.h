@@ -11,6 +11,7 @@ class Job : public Clonable<Job>
 {
 protected:
 	CraftFactory* craftFactory;
+	std::list<size_t> usableToolsList;
 public:
 	Job();
 	Job(const Job& job);
@@ -19,6 +20,7 @@ public:
 	[[nodiscard]] Craft* craft(size_t typeId) const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
 	[[nodiscard]] std::vector<size_t> getUncraftableList() const;
+	[[nodiscard]] std::list<size_t> getUsableTools() const;
 	[[nodiscard]] Craft* getCraft(size_t key) const;
 };
 

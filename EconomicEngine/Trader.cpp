@@ -9,6 +9,7 @@
 #include "StockExchange.h"
 #include "TradableManager.h"
 #include "TraderManager.h"
+#include "Uncountable.h"
 
 Trader::Trader()
 {
@@ -66,6 +67,7 @@ void Trader::craft()
 		{
 			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size()-1));
 			this->currentCraft = this->currentJob->craft(this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
+			notifyObservers();
 			for(const auto requirement : currentCraft->getRequirement())
 			{
 				removeFromInventory(requirement.first);
@@ -73,7 +75,7 @@ void Trader::craft()
 		}
 			
 	}
-	else if(currentCraft!=nullptr)
+	if(currentCraft!=nullptr)
 	{
 		Tradable* result = currentCraft->advanceCraft();
 		if(result != nullptr)
@@ -116,6 +118,14 @@ void Trader::fillWonderList()
 			}
 		}
 	}
+
+	for(auto usableTool : this->currentJob->getUsableTools())
+	{
+		if(!isInInventory(usableTool))
+		{
+			wonderList.emplace_back(std::pair<size_t, int>(usableTool, 1));
+		}
+	}
 }
 
 void Trader::fillGoodsList()
@@ -132,6 +142,11 @@ void Trader::fillGoodsList()
 		}
 	}
 
+	for (auto usableTool : getCurrentJob()->getUsableTools())
+	{
+		requiredItemsId.push_back(usableTool);
+	}
+	
 	for(const auto& item : inventory)
 	{
 		for(auto requiredItemId : requiredItemsId)
@@ -142,6 +157,8 @@ void Trader::fillGoodsList()
 			}
 		}		
 	}
+
+
 }
 
 float Trader::calculatePriceBeliefMean(const size_t key)
@@ -190,6 +207,7 @@ float Trader::calculateEarnings(Craft* craft)
 
 void Trader::checkAsks()
 {
+	//TODO Re-evaluate
 	for(auto& ask : currentAsks)
 	{
 		if(ask->getStatus()==AskStatus::Sold)
@@ -203,17 +221,15 @@ void Trader::checkAsks()
 			else
 			{
 				money += ask->getPrice()*ask->getCount();
-				int z = 8;
 			}
 		}
 	}
-
-	int i = 42;
+	currentAsks.clear();
 }
 
 void Trader::refresh()
 {
-	//TODO price belief, wonderlist, goodslist, jobRanking
+	//TODO price belief, jobRanking
 	if(currentJob == nullptr)
 	{
 		this->assignJob();
@@ -227,9 +243,26 @@ const std::list<std::shared_ptr<Tradable>>& Trader::getInventory() const
 	return inventory;
 }
 
-const Job* Trader::getCurrentJob() const
+Job* Trader::getCurrentJob() const
 {
 	return this->currentJob;
+}
+
+Craft* Trader::getCurrentCraft() const
+{
+	return this->currentCraft;
+}
+
+bool Trader::isInInventory(const size_t key)
+{
+	for(auto& item : inventory)
+	{
+		if(item->getId() == key)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void Trader::addToInventory(Tradable* tradable)
@@ -241,11 +274,20 @@ void Trader::addToInventory(Tradable* tradable)
 		{
 			if (item->getId() == tradable->getId())
 			{
-				dynamic_cast<Countable*>(item.get())->incrementCountBy(1);
+				dynamic_cast<Countable*>(item.get())->incrementCountBy(countable->getCount());
 				return;
 			}
 		}
 	}
+	else
+	{
+		auto* uncountable = dynamic_cast<Uncountable*>(tradable);
+		if (uncountable->getBehavior() != nullptr)
+		{
+			uncountable->getBehavior()->init(this, tradable);
+		}
+	}
+	
 	inventory.emplace_back(tradable);
 }
 
@@ -269,6 +311,19 @@ void Trader::removeFromInventory(const size_t key)
 			item.reset();
 			inventory.remove(item);
 			return;
+		}
+	}
+}
+
+void Trader::removeFromInventory(Tradable* tradable)
+{
+	for (auto& item : inventory)
+	{
+		if (item.get() == tradable)
+		{
+			item.reset();
+			inventory.remove(item);
+			break;
 		}
 	}
 }

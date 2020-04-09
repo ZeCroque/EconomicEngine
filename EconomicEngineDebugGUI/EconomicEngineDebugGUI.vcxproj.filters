@@ -144,7 +144,7 @@
   <ItemGroup>
     <QtUic Include="EconomicEngineDebugGUI.ui">
       <Filter>Form Files</Filter>
-    </QtUic>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coal.h">

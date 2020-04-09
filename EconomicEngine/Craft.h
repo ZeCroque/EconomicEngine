@@ -1,31 +1,31 @@
 #ifndef CRAFT_H
 #define CRAFT_H
-#include <map>
+
 #include <vector>
-
-
 #include "Clonable.h"
+#include "Observable.h"
 #include "Tradable.h"
 
-//TODO reuse abstract factory
-
-class Craft : public Clonable<Craft>
+class Craft : public Clonable<Craft>, public Observable
 {
 private:
 	float advancement;
-	float baseRate;
-	float currentRate;
-	size_t craftResult;
+	float rate;
+	size_t result;
 	std::vector<std::pair<size_t, int>> requirements;
+	std::vector<size_t> toolsRequired;
 public:
 	Craft();
-	Craft(float baseRate, size_t craftResult, std::vector<std::pair<size_t, int>> requirements);
+	Craft(float baseRate, size_t craftResult, std::vector<std::pair<size_t, int>> requirements = std::vector<std::pair<size_t, int>>(), std::vector<size_t> toolsRequired = std::vector<size_t>());
 	Craft(Craft& craft);
 	Craft* clone() override;
 
 	[[nodiscard]] std::vector<std::pair<size_t, int>> getRequirement() const;
+	[[nodiscard]] std::vector<size_t> getToolsRequired() const;
 	[[nodiscard]] size_t getResult() const;
 	[[nodiscard]] float getRate() const;
+	void incrementRate(float i);
+	void decrementRate(float i);
 	Tradable* advanceCraft();
 
 };

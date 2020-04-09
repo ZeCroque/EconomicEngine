@@ -101,7 +101,7 @@ EconomicEngineDebugGui::~EconomicEngineDebugGui()
 	this->turnManager = nullptr;
 }
 
-void EconomicEngineDebugGui::notify()
+void EconomicEngineDebugGui::notify(Observable* sender)
 {
 	this->nextTurn();
 }

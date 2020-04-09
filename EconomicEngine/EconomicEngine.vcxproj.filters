@@ -105,6 +105,9 @@
     <ClInclude Include="VectorArray.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Uncountable.h">
+      <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countable.cpp">
@@ -144,6 +147,12 @@
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
     <ClCompile Include="Food.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolBehavior.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
+    </ClCompile>
+    <ClCompile Include="Uncountable.cpp">
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
   </ItemGroup>

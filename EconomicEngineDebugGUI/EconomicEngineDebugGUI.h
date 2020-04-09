@@ -14,7 +14,7 @@ Q_OBJECT
 public:
 	EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui();
-	void notify() override;
+	void notify(Observable* sender) override;
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
