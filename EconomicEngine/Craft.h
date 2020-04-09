@@ -26,7 +26,7 @@ public:
 	[[nodiscard]] float getRate() const;
 	void incrementRate(float i);
 	void decrementRate(float i);
-	Tradable* advanceCraft();
+	size_t advanceCraft();
 
 };
 
