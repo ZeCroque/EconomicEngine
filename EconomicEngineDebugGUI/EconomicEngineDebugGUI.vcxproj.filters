@@ -98,6 +98,21 @@
     <ClCompile Include="Farmer.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
+    <ClCompile Include="Iron.cpp">
+      <Filter>Source Files\Countables</Filter>
+    </ClCompile>
+    <ClCompile Include="Miner.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Baker.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Hunter.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Butcher.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EconomicEngineDebugGUI.h">
@@ -154,6 +169,21 @@
       <Filter>Header Files\Countables</Filter>
     </ClInclude>
     <ClInclude Include="Farmer.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Iron.h">
+      <Filter>Header Files\Countables</Filter>
+    </ClInclude>
+    <ClInclude Include="Miner.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Baker.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Hunter.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Butcher.h">
       <Filter>Header Files\Jobs</Filter>
     </ClInclude>
   </ItemGroup>
