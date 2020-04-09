@@ -22,6 +22,8 @@ public Q_SLOTS:
 	void setGraphVisibility() const;
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
+	void setStep(int value) const;
+	void toggleStart() const;
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;

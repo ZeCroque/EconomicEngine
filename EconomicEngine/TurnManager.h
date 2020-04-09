@@ -11,8 +11,10 @@ class TurnManager final : public Observable, public Singleton<TurnManager>
 	friend class Singleton<TurnManager>;
 private:
 	bool bRunning;
+	bool isStarted;
 	int turnSecond;
 	int turnNumber;
+	int step;
 	TraderManager* traderManager;
 	TradableManager* tradableManager;
 	StockExchange* stockExchange;
@@ -26,10 +28,12 @@ public:
 	void reset();
 	int exec();
 	void stop();
-
+	
+	void setIsStarted(bool isStarted);
 	void setTurnSecond(int turnSecond);
-	int getTurnNumber() const;
+	[[nodiscard]] int getTurnNumber() const;
 	void setTurnNumber(int turnNumber);
+	void setStep(int step);
 };
 
 #endif
