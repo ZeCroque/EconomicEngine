@@ -44,7 +44,7 @@ void TurnManager::init() const
 
 	//Init tools
 	tradableManager->registerTradable(new Hoe());
-	
+
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
 
@@ -54,7 +54,7 @@ void TurnManager::init() const
 
 void TurnManager::reset()
 {
-	//TODO 
+	//TODO
 }
 
 int TurnManager::exec()
