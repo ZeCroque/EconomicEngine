@@ -3,6 +3,7 @@
 
 #include "Wheat.h"
 #include "Bread.h"
+#include "Uncountable.h"
 
 Farmer::Farmer() : Job()
 {
@@ -21,5 +22,11 @@ Farmer::Farmer() : Job()
 	requirements.clear();
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Bread).hash_code(), 1));
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Gold).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(GoldenBread).hash_code(), requirements));
+
+	std::vector<size_t> toolsRequired;
+	toolsRequired.emplace_back(typeid(Hoe).hash_code());
+	
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(GoldenBread).hash_code(), requirements, toolsRequired));
+
+	usableToolsList.emplace_back(typeid(Hoe).hash_code());
 }

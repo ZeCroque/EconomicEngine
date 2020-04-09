@@ -6,6 +6,7 @@
 #include "../EconomicEngineDebugGUI/Bread.h"
 #include "../EconomicEngineDebugGUI/Farmer.h"
 #include "../EconomicEngineDebugGUI/Wheat.h"
+#include "Uncountable.h"
 
 TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()){}
 
@@ -21,6 +22,7 @@ void TurnManager::init() const
 	tradableManager->registerTradable(new Wheat());
 	tradableManager->registerTradable(new Gold());
 	tradableManager->registerTradable(new GoldenBread());
+	tradableManager->registerTradable(new Hoe());
 
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
@@ -39,8 +41,6 @@ int TurnManager::exec()
 	this->bRunning = true;
 	while (bRunning)
 	{
-
-		auto a = stockExchange->betterAsks[typeid(Gold).hash_code()];
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 		++turnNumber;
 		traderManager->doTradersCrafting();

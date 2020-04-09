@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Uncountable.cpp" />
     <ClInclude Include="AbstractFactory.h" />
     <ClInclude Include="Ask.h" />
     <ClInclude Include="Behavior.h" />
@@ -47,12 +48,14 @@
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="StockExchange.cpp" />
+    <ClCompile Include="ToolBehavior.cpp" />
     <ClCompile Include="Tradable.cpp" />
     <ClCompile Include="TradableManager.cpp" />
     <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TraderManager.cpp" />
     <ClCompile Include="TurnManager.cpp" />
     <ClInclude Include="TurnManager.h" />
+    <ClInclude Include="Uncountable.h" />
     <ClInclude Include="VectorArray.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -29,7 +29,6 @@ Gold::Gold() : Countable()
 {
 	this->id = typeid(Gold).hash_code();
 	this->count = 1;
-	this->behavior = nullptr;
 	this->name = "Or";
 	this->defaultPriceBelief = std::pair<float, float>(10.0f, 50.0f);
 }
@@ -43,7 +42,6 @@ GoldenBread::GoldenBread() : Countable()
 {
 	this->id = typeid(GoldenBread).hash_code();
 	this->count = 1;
-	this->behavior = nullptr;
 	this->name = "Pain goldé";
 	this->defaultPriceBelief = std::pair<float, float>(100.0f, 150.0f);
 }

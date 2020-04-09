@@ -9,11 +9,12 @@
 #include "Ask.h"
 #include "Craft.h"
 #include "Job.h"
+#include "Observable.h"
 #include "VectorArray.h"
 
 class Job;
 
-class Trader
+class Trader : public Observable
 {
 private:
 	VectorArray<float> priceBeliefs;
@@ -39,9 +40,12 @@ public:
 	void refresh();
 	void checkAsks();
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
-	[[nodiscard]] const Job* getCurrentJob() const;
+	[[nodiscard]] Job* getCurrentJob() const;
+	[[nodiscard]] Craft* getCurrentCraft() const;
+	[[nodiscard]] bool isInInventory(size_t key);
 	void addToInventory(Tradable* tradable);
 	void removeFromInventory(size_t key);
+	void removeFromInventory(Tradable* tradable);
 };
 
 #endif
