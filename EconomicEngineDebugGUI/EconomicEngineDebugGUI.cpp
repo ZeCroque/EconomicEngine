@@ -89,6 +89,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
+
+	connect(ui.pBStart, SIGNAL(clicked()), this,
+	        SLOT(toggleStart()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
@@ -121,6 +124,18 @@ void EconomicEngineDebugGui::setSpeed(const int value) const
 	turnManager->setTurnSecond(value);
 }
 
+void EconomicEngineDebugGui::toggleStart() const
+{
+	if (ui.pBStart->isChecked())
+	{
+		ui.pBStart->setText("Stop");
+	}
+	else
+	{
+		ui.pBStart->setText("Start");
+	}
+}
+
 void EconomicEngineDebugGui::realtimeDataSlot() const
 {
 	auto key = turnManager->getTurnNumber();
@@ -137,9 +152,7 @@ void EconomicEngineDebugGui::realtimeDataSlot() const
 
 		ui.customPlot->graph(graphIndex)->addData(
 			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
-		auto test =  stockExchange->getStockExchangePrice(checkBox->getItemId());
 		// rescale value (vertical) axis to fit the current data:
-		ui.customPlot->graph(graphIndex)->rescaleValueAxis(true);
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 
 

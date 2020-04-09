@@ -15,6 +15,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
@@ -38,6 +39,8 @@ public:
     QLabel *labZomXAxis;
     QSlider *horSlidSpeed;
     QSpacerItem *verticalSpacer;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *pBStart;
     QCustomPlot *customPlot;
     QStatusBar *statusBar;
 
@@ -114,6 +117,18 @@ public:
 
         layGraphParam->addItem(verticalSpacer);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        pBStart = new QPushButton(horizontalLayoutWidget_3);
+        pBStart->setObjectName(QString::fromUtf8("pBStart"));
+        pBStart->setCheckable(true);
+
+        horizontalLayout->addWidget(pBStart);
+
+
+        layGraphParam->addLayout(horizontalLayout);
+
 
         layGraph->addLayout(layGraphParam);
 
@@ -140,6 +155,7 @@ public:
         EconomicEngineDebugGUIClass->setWindowTitle(QCoreApplication::translate("EconomicEngineDebugGUIClass", "EconomicEngineDebugGUI", nullptr));
         labSpeed->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Speed: ", nullptr));
         labZomXAxis->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Zoom: ", nullptr));
+        pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
     } // retranslateUi
 
 };
