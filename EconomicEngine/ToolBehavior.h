@@ -5,12 +5,16 @@
 
 class ToolBehavior : public Behavior
 {
-private:
+protected:
 	float craftRateBoost;
+	float degradationRate;
 	float durability;
-
-	
-	
+	ToolBehavior();
+public:
+	ToolBehavior(float craftRateBoost, float degradationRate);
+	void init(Trader* owner, Tradable* item) override;
+	void notify(Observable* sender) override;
+	ToolBehavior* clone() override;
 };
 
 #endif
