@@ -134,6 +134,7 @@ void EconomicEngineDebugGui::toggleStart() const
 	{
 		ui.pBStart->setText("Start");
 	}
+	turnManager->setIsStarted(ui.pBStart->isChecked());
 }
 
 void EconomicEngineDebugGui::realtimeDataSlot() const

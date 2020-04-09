@@ -39,7 +39,7 @@ public:
     QLabel *labZomXAxis;
     QSlider *horSlidSpeed;
     QSpacerItem *verticalSpacer;
-    QHBoxLayout *horizontalLayout;
+    QHBoxLayout *LayButton;
     QPushButton *pBStart;
     QCustomPlot *customPlot;
     QStatusBar *statusBar;
@@ -117,17 +117,17 @@ public:
 
         layGraphParam->addItem(verticalSpacer);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        LayButton = new QHBoxLayout();
+        LayButton->setSpacing(6);
+        LayButton->setObjectName(QString::fromUtf8("LayButton"));
         pBStart = new QPushButton(horizontalLayoutWidget_3);
         pBStart->setObjectName(QString::fromUtf8("pBStart"));
         pBStart->setCheckable(true);
 
-        horizontalLayout->addWidget(pBStart);
+        LayButton->addWidget(pBStart);
 
 
-        layGraphParam->addLayout(horizontalLayout);
+        layGraphParam->addLayout(LayButton);
 
 
         layGraph->addLayout(layGraphParam);

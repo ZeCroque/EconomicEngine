@@ -17,7 +17,8 @@
 #include "../EconomicEngineDebugGUI/Miner.h"
 
 
-TurnManager::TurnManager() : bRunning(false), turnSecond(1), turnNumber(0), traderManager(TraderManager::getInstance()),
+TurnManager::TurnManager() : bRunning(false), isStarted(false), turnSecond(1), turnNumber(0),
+                             traderManager(TraderManager::getInstance()),
                              tradableManager(TradableManager::getInstance()),
                              stockExchange(StockExchange::getInstance())
 {
@@ -55,17 +56,26 @@ void TurnManager::reset()
 int TurnManager::exec()
 {
 	this->bRunning = true;
+	auto pauseTime = 1000;
 	while (bRunning)
 	{
-		auto a = stockExchange->betterAsks[typeid(Gold).hash_code()];
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
-		++turnNumber;
-		traderManager->doTradersCrafting();
-		traderManager->doTradersAsking();
+		if (this->isStarted)
+		{
+			auto a = stockExchange->betterAsks[typeid(Gold).hash_code()];
+			++turnNumber;
+			traderManager->doTradersCrafting();
+			traderManager->doTradersAsking();
 
-		stockExchange->resolveOffers();
-		traderManager->refreshTraders();
-		this->notifyObservers();
+			stockExchange->resolveOffers();
+			traderManager->refreshTraders();
+			this->notifyObservers();
+			pauseTime = 1000 / turnSecond;
+		}
+		else
+		{
+			pauseTime = 1000;
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(pauseTime));
 	}
 	return 0;
 }
@@ -73,6 +83,11 @@ int TurnManager::exec()
 void TurnManager::stop()
 {
 	this->bRunning = false;
+}
+
+void TurnManager::setIsStarted(const bool isStarted)
+{
+	this->isStarted = isStarted;
 }
 
 void TurnManager::setTurnSecond(const int turnSecond)
