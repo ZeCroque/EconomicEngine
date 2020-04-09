@@ -15,7 +15,7 @@ Trader::Trader()
 {
 	currentJob = nullptr;
 	currentCraft = nullptr;
-	money = 0;
+	money = 10;
 	randomEngine = std::mt19937(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	TradableManager* tradableManager = TradableManager::getInstance();
 	auto keys = tradableManager->getKeys();
@@ -40,9 +40,13 @@ void Trader::makeAsks()
 			
 		for(const auto wonderItem : wonderList)
 		{
-			auto buyingAsk = std::make_shared<BuyingAsk>(wonderItem.first, wonderItem.second, evaluatePrice(wonderItem.first));
-			StockExchange::getInstance()->registerAsk(buyingAsk);
-			this->currentAsks.emplace_back(buyingAsk);
+			float price = evaluatePrice(wonderItem.first);
+			if(price <= money)
+			{
+				auto buyingAsk = std::make_shared<BuyingAsk>(wonderItem.first, wonderItem.second, price);
+				StockExchange::getInstance()->registerAsk(buyingAsk);
+				this->currentAsks.emplace_back(buyingAsk);
+			}
 		}
 		
 		//SellingAsks
@@ -70,19 +74,19 @@ void Trader::craft()
 			notifyObservers();
 			for(const auto requirement : currentCraft->getRequirement())
 			{
-				removeFromInventory(requirement.first);
+				removeFromInventory(requirement.first, requirement.second);
 			}
 		}
 			
 	}
 	if(currentCraft!=nullptr)
 	{
-		Tradable* result = currentCraft->advanceCraft();
-		if(result != nullptr)
+		size_t result = currentCraft->advanceCraft();
+		if(result != 0)
 		{
 			delete currentCraft;
 			currentCraft = nullptr;
-			addToInventory(result);
+			addToInventory(result, 1); //TODO multicraft
 		}
 	}
 	
@@ -153,12 +157,16 @@ void Trader::fillGoodsList()
 		{
 			if (item->getId() != requiredItemId)
 			{
-				goodsList.emplace_back(item->getId(),1);
+				auto* countable = dynamic_cast<Countable*>(item.get());
+				if(countable != nullptr)
+				{
+					goodsList.emplace_back(countable->getId(), countable->getCount());
+					return;
+				}
+				goodsList.emplace_back(item->getId(), 1);
 			}
 		}		
 	}
-
-
 }
 
 float Trader::calculatePriceBeliefMean(const size_t key)
@@ -215,11 +223,12 @@ void Trader::checkAsks()
 			auto* buyingAsk = dynamic_cast<BuyingAsk*>(ask.get());
 			if(buyingAsk != nullptr)
 			{
-				//TODO remove money
-				addToInventory(TradableManager::getInstance()->createTradable(buyingAsk->getResult().first)); //TODO count
+				addToInventory(buyingAsk->getId(), buyingAsk->getCount());
+				money -= ask->getPrice() * ask->getCount();
 			}
 			else
 			{
+				removeFromInventory(ask->getId(), ask->getCount());
 				money += ask->getPrice()*ask->getCount();
 			}
 		}
@@ -265,33 +274,53 @@ bool Trader::isInInventory(const size_t key)
 	return false;
 }
 
-void Trader::addToInventory(Tradable* tradable)
+void Trader::addToInventory(const size_t key, const int count)
 {
-	auto* countable = dynamic_cast<Countable*>(tradable);
-	if (countable != nullptr)
+	auto* tradableManager = TradableManager::getInstance();
+
+	auto* item = tradableManager->createTradable(key);
+	auto* countable = dynamic_cast<Countable*>(item);
+	if(countable!=nullptr)
 	{
-		for (auto& item : inventory)
-		{
-			if (item->getId() == tradable->getId())
-			{
-				dynamic_cast<Countable*>(item.get())->incrementCountBy(countable->getCount());
-				return;
-			}
-		}
+		countable->setCount(count);
+		addToInventory(countable);
 	}
 	else
 	{
-		auto* uncountable = dynamic_cast<Uncountable*>(tradable);
-		if (uncountable->getBehavior() != nullptr)
+		auto* uncountable = dynamic_cast<Uncountable*>(item);
+		addToInventory(uncountable);
+		for(auto i=0; i<count-1; ++i)
 		{
-			uncountable->getBehavior()->init(this, tradable);
+			uncountable = dynamic_cast<Uncountable*>(tradableManager->createTradable(key));
+			addToInventory(uncountable);
 		}
 	}
 	
-	inventory.emplace_back(tradable);
 }
 
-void Trader::removeFromInventory(const size_t key)
+void Trader::addToInventory(Countable* countable)
+{
+	for (auto& item : inventory)
+	{
+		if (item->getId() == countable->getId())
+		{
+			dynamic_cast<Countable*>(item.get())->incrementCountBy(countable->getCount());
+			return;
+		}
+	}
+	inventory.emplace_back(countable);
+}
+
+void Trader::addToInventory(Uncountable* uncountable)
+{
+	if (uncountable->getBehavior() != nullptr)
+	{
+		uncountable->getBehavior()->init(this, uncountable);
+	}
+	inventory.emplace_back(uncountable);
+}
+
+void Trader::removeFromInventory(const size_t key, const int count = 1)
 {
 	for (auto& item : inventory)
 	{
@@ -300,7 +329,7 @@ void Trader::removeFromInventory(const size_t key)
 			auto* countable = dynamic_cast<Countable*>(item.get());
 			if (countable != nullptr)
 			{
-				countable->decrementCountBy(1);
+				countable->decrementCountBy(count);
 				if (countable->getCount() == 0)
 				{
 					item.reset();

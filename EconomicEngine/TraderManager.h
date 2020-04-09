@@ -5,7 +5,7 @@
 #include "Trader.h"
 
 class TraderManager final : public Singleton<TraderManager>
-{
+{	
 private:
 	std::list<Trader> traders;
 	JobFactory jobFactory;
