@@ -25,6 +25,7 @@ public:
 	float getStockExchangePrice(size_t key);
 	std::list<BuyingAsk> getStockExchangePrice(size_t key, int count);
 
+
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
 		for (size_t i = 1; i < vector.size(); ++i)

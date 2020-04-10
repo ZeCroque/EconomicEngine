@@ -97,6 +97,7 @@ std::list<BuyingAsk> StockExchange::getStockExchangePrice(size_t key, int count)
 	for(auto it = betterAsks[key].rbegin(); it!= betterAsks[key].rend() && i < count; ++it, ++i)
 	{
 		result.emplace_front(*it->get());
+
 	}
 	return result;
 }
