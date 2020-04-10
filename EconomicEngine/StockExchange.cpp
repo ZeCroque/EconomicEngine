@@ -90,3 +90,18 @@ float StockExchange::getStockExchangePrice(const size_t key)
 	return result;
 }
 
+std::list<float> StockExchange::getStockExchangePrice(size_t key, int count)
+{
+	std::list<float> result;
+	int i = 0;
+	for(auto it = betterAsks[key].rbegin(); it!= betterAsks[key].rend() && i < count; ++it, ++i)
+	{
+		result.emplace_front(it->get()->getPrice());
+	}
+	if(result.empty())
+	{
+		result.emplace_front(0.0f);
+	}
+	return result;
+}
+
