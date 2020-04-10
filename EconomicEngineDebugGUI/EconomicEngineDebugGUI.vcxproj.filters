@@ -16,9 +16,6 @@
     <ClCompile Include="Iron.cpp">
       <Filter>Fichiers sources\Countables</Filter>
     </ClCompile>
-    <ClCompile Include="IronOre.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
     <ClCompile Include="Leather.cpp">
       <Filter>Fichiers sources\Countables</Filter>
     </ClCompile>
@@ -67,6 +64,18 @@
     <ClCompile Include="Lumberjack.cpp">
       <Filter>Fichiers sources\Jobs</Filter>
     </ClCompile>
+    <ClCompile Include="Axe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Sword.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Bow.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bread.h">
@@ -76,9 +85,6 @@
       <Filter>Fichiers d%27en-tête\Countables</Filter>
     </ClInclude>
     <ClInclude Include="Iron.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="IronOre.h">
       <Filter>Fichiers d%27en-tête\Countables</Filter>
     </ClInclude>
     <ClInclude Include="Leather.h">
@@ -122,6 +128,18 @@
     </ClInclude>
     <ClInclude Include="Lumberjack.h">
       <Filter>Fichiers d%27en-tête\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Axe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickaxe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Bow.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

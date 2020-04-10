@@ -199,7 +199,9 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Axe.cpp" />
     <ClCompile Include="Baker.cpp" />
+    <ClCompile Include="Bow.cpp" />
     <ClCompile Include="Bread.cpp" />
     <ClCompile Include="Butcher.cpp" />
     <ClCompile Include="Coal.cpp" />
@@ -209,14 +211,15 @@
     <ClCompile Include="Hoe.cpp" />
     <ClCompile Include="Hunter.cpp" />
     <ClCompile Include="Iron.cpp" />
-    <ClCompile Include="IronOre.cpp" />
     <ClCompile Include="Leather.cpp" />
     <ClCompile Include="Lumberjack.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Meat.cpp" />
     <ClCompile Include="Miner.cpp" />
+    <ClCompile Include="Pickaxe.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
     <ClCompile Include="Steak.cpp" />
+    <ClCompile Include="Sword.cpp" />
     <ClCompile Include="ToolMaker.cpp" />
     <ClCompile Include="Wheat.cpp" />
     <ClCompile Include="Wood.cpp" />
@@ -267,7 +270,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Axe.h" />
     <ClInclude Include="Baker.h" />
+    <ClInclude Include="Bow.h" />
     <ClInclude Include="Bread.h" />
     <ClInclude Include="Butcher.h" />
     <ClInclude Include="Coal.h" />
@@ -275,12 +280,13 @@
     <ClInclude Include="Hoe.h" />
     <ClInclude Include="Hunter.h" />
     <ClInclude Include="Iron.h" />
-    <ClInclude Include="IronOre.h" />
     <ClInclude Include="Leather.h" />
     <ClInclude Include="Lumberjack.h" />
     <ClInclude Include="Meat.h" />
     <ClInclude Include="Miner.h" />
+    <ClInclude Include="Pickaxe.h" />
     <ClInclude Include="Steak.h" />
+    <ClInclude Include="Sword.h" />
     <ClInclude Include="ToolMaker.h" />
     <ClInclude Include="Wheat.h" />
     <ClInclude Include="Wood.h" />

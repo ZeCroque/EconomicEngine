@@ -1,6 +1,7 @@
 #include "TurnManager.h"
 #include <thread>
 
+
 #include "../EconomicEngineDebugGUI/Wheat.h"
 #include "../EconomicEngineDebugGUI/Meat.h"
 #include "../EconomicEngineDebugGUI/Wood.h"
@@ -8,6 +9,7 @@
 #include "../EconomicEngineDebugGUI/Bread.h"
 #include "../EconomicEngineDebugGUI/Steak.h"
 #include "../EconomicEngineDebugGUI/Iron.h"
+#include "../EconomicEngineDebugGUI/Leather.h"
 
 #include "../EconomicEngineDebugGUI/Farmer.h"
 #include "../EconomicEngineDebugGUI/Hunter.h"
@@ -15,9 +17,13 @@
 #include "../EconomicEngineDebugGUI/Lumberjack.h"
 #include "../EconomicEngineDebugGUI/Butcher.h"
 #include "../EconomicEngineDebugGUI/Baker.h"
+#include "../EconomicEngineDebugGUI/Bow.h"
 #include "../EconomicEngineDebugGUI/ToolMaker.h"
 
+#include "../EconomicEngineDebugGUI/Axe.h"
 #include "../EconomicEngineDebugGUI/Hoe.h"
+#include "../EconomicEngineDebugGUI/Pickaxe.h"
+#include "../EconomicEngineDebugGUI/Sword.h"
 #include "../EconomicEngineDebugGUI/WoodPickaxe.h"
 
 
@@ -51,16 +57,22 @@ void TurnManager::init() const
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Steak());
 	tradableManager->registerTradable(new Iron());
+	tradableManager->registerTradable(new Leather());
 
 	//Init tools
-	tradableManager->registerTradable(new Hoe());
 	tradableManager->registerTradable(new WoodPickaxe());
+	tradableManager->registerTradable(new Hoe());
+	tradableManager->registerTradable(new Bow());
+	tradableManager->registerTradable(new Axe());
+	tradableManager->registerTradable(new Pickaxe());
+	tradableManager->registerTradable(new Sword());
+	
 	
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
 
 	//Create traders
-	traderManager->addTrader(20);
+	traderManager->addTrader(10);
 }
 
 void TurnManager::reset()

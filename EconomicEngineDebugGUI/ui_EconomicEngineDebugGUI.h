@@ -43,12 +43,19 @@ public:
     QLabel *labStep;
     QSlider *horSlidStep;
     QFrame *line_2;
-    QHBoxLayout *horizontalLayout;
-    QVBoxLayout *verticalLayout;
+    QHBoxLayout *layButton;
+    QVBoxLayout *layRadButton;
     QRadioButton *radBRealTime;
     QRadioButton *radStepByStep;
+    QVBoxLayout *LayPushButton;
     QPushButton *pBStart;
+    QPushButton *pBReset;
     QCustomPlot *customPlot;
+    QWidget *gridLayoutWidget;
+    QGridLayout *layStats;
+    QLabel *labelNumber;
+    QLabel *labelJobs;
+    QLabel *labelMoney;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
@@ -151,35 +158,49 @@ public:
 
         layGraphParam->addWidget(line_2);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
+        layButton = new QHBoxLayout();
+        layButton->setSpacing(6);
+        layButton->setObjectName(QString::fromUtf8("layButton"));
+        layRadButton = new QVBoxLayout();
+        layRadButton->setSpacing(4);
+        layRadButton->setObjectName(QString::fromUtf8("layRadButton"));
+        layRadButton->setSizeConstraint(QLayout::SetNoConstraint);
         radBRealTime = new QRadioButton(horizontalLayoutWidget_3);
         radBRealTime->setObjectName(QString::fromUtf8("radBRealTime"));
+        radBRealTime->setLayoutDirection(Qt::LeftToRight);
+        radBRealTime->setAutoFillBackground(false);
         radBRealTime->setChecked(true);
 
-        verticalLayout->addWidget(radBRealTime);
+        layRadButton->addWidget(radBRealTime);
 
         radStepByStep = new QRadioButton(horizontalLayoutWidget_3);
         radStepByStep->setObjectName(QString::fromUtf8("radStepByStep"));
 
-        verticalLayout->addWidget(radStepByStep);
+        layRadButton->addWidget(radStepByStep);
 
 
-        horizontalLayout->addLayout(verticalLayout);
+        layButton->addLayout(layRadButton);
 
+        LayPushButton = new QVBoxLayout();
+        LayPushButton->setSpacing(6);
+        LayPushButton->setObjectName(QString::fromUtf8("LayPushButton"));
         pBStart = new QPushButton(horizontalLayoutWidget_3);
         pBStart->setObjectName(QString::fromUtf8("pBStart"));
         pBStart->setCheckable(true);
 
-        horizontalLayout->addWidget(pBStart);
+        LayPushButton->addWidget(pBStart);
+
+        pBReset = new QPushButton(horizontalLayoutWidget_3);
+        pBReset->setObjectName(QString::fromUtf8("pBReset"));
+        pBReset->setCheckable(true);
+
+        LayPushButton->addWidget(pBReset);
 
 
-        layGraphParam->addLayout(horizontalLayout);
+        layButton->addLayout(LayPushButton);
+
+
+        layGraphParam->addLayout(layButton);
 
 
         layGraph->addLayout(layGraphParam);
@@ -190,6 +211,33 @@ public:
         customPlot->setMaximumSize(QSize(830, 300));
 
         layGraph->addWidget(customPlot);
+
+        gridLayoutWidget = new QWidget(centralWidget);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(10, 360, 341, 291));
+        layStats = new QGridLayout(gridLayoutWidget);
+        layStats->setSpacing(6);
+        layStats->setContentsMargins(11, 11, 11, 11);
+        layStats->setObjectName(QString::fromUtf8("layStats"));
+        layStats->setContentsMargins(0, 0, 0, 0);
+        labelNumber = new QLabel(gridLayoutWidget);
+        labelNumber->setObjectName(QString::fromUtf8("labelNumber"));
+        labelNumber->setAlignment(Qt::AlignCenter);
+
+        layStats->addWidget(labelNumber, 0, 1, 1, 1);
+
+        labelJobs = new QLabel(gridLayoutWidget);
+        labelJobs->setObjectName(QString::fromUtf8("labelJobs"));
+        labelJobs->setScaledContents(false);
+        labelJobs->setAlignment(Qt::AlignCenter);
+
+        layStats->addWidget(labelJobs, 0, 0, 1, 1);
+
+        labelMoney = new QLabel(gridLayoutWidget);
+        labelMoney->setObjectName(QString::fromUtf8("labelMoney"));
+        labelMoney->setAlignment(Qt::AlignCenter);
+
+        layStats->addWidget(labelMoney, 0, 2, 1, 1);
 
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
@@ -211,6 +259,10 @@ public:
         radBRealTime->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Real Time", nullptr));
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
+        pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
+        labelNumber->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Number", nullptr));
+        labelJobs->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Jobs", nullptr));
+        labelMoney->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Average Money", nullptr));
     } // retranslateUi
 
 };
