@@ -23,7 +23,7 @@ public:
 	void resolveOffers(); //TODO Maxence
 	void reset();
 	float getStockExchangePrice(size_t key);
-	std::list<float> getStockExchangePrice(size_t key, int count);
+	std::list<BuyingAsk> getStockExchangePrice(size_t key, int count);
 
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{

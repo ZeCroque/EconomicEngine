@@ -92,8 +92,6 @@ int TurnManager::exec()
 				traderManager->doTradersAsking();
 				stockExchange->resolveOffers();
 				traderManager->refreshTraders();
-				auto a = typeid(Farmer).hash_code();
-				traderManager->kill(typeid(Farmer).hash_code(), 10);
 			}
 
 			this->notifyObservers();
