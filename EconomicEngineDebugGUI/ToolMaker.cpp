@@ -13,6 +13,7 @@
 
 ToolMaker::ToolMaker()
 {
+	this->id = typeid(ToolMaker).hash_code();
 	std::vector<std::pair<size_t, int>> requirements;
 
 	//WoodPickaxe : Need wood
