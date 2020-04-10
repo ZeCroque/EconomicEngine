@@ -1,6 +1,5 @@
 #ifndef STOCK_EXCHANGE_H
 #define STOCK_EXCHANGE_H
-#include <algorithm>
 
 #include "Ask.h"
 #include "Singleton.h"
@@ -8,8 +7,6 @@
 
 class StockExchange : public Singleton<StockExchange>
 {
-	friend class TurnManager; //DEBUG
-	
 private:
 	VectorArray<BuyingAsk> currentBuyingAsks;
 	VectorArray<SellingAsk> currentSellingAsks;

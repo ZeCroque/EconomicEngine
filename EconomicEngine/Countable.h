@@ -6,33 +6,16 @@
 class Countable : public Tradable
 {
 protected:
-	float count;
+	int count;
 
 public:
 	Countable();
 	Countable(const Countable& countable);
-	Countable(float count);
-	void incrementCountBy(float count);
-	void decrementCountBy(float count);
-	[[nodiscard]] float getCount() const;
-};
-
-//DEBUG
-
-class Gold : public Countable
-{
-public:
-	Gold();
-	Gold(const Gold& gold) = default;
-	Gold* clone() override;
-};
-
-class GoldenBread : public Countable
-{
-public:
-	GoldenBread();
-	GoldenBread(const GoldenBread& goldenBread) = default;
-	GoldenBread* clone() override;
+	Countable(int count);
+	void setCount(int count);
+	void incrementCountBy(int count);
+	void decrementCountBy(int count);
+	[[nodiscard]] int getCount() const;
 };
 
 #endif

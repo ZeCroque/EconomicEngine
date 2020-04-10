@@ -1,8 +1,7 @@
 #ifndef TRADER_H
 #define TRADER_H
-#include <cassert>
+
 #include <list>
-#include <memory>
 #include <random>
 
 
@@ -12,6 +11,8 @@
 #include "Observable.h"
 #include "VectorArray.h"
 
+class Countable;
+class Uncountable;
 class Job;
 
 class Trader : public Observable
@@ -43,8 +44,10 @@ public:
 	[[nodiscard]] Job* getCurrentJob() const;
 	[[nodiscard]] Craft* getCurrentCraft() const;
 	[[nodiscard]] bool isInInventory(size_t key);
-	void addToInventory(Tradable* tradable);
-	void removeFromInventory(size_t key);
+	void addToInventory(size_t key, int count);
+	void addToInventory(Countable* countable);
+	void addToInventory(Uncountable* uncountable);
+	void removeFromInventory(size_t key, int count);
 	void removeFromInventory(Tradable* tradable);
 };
 

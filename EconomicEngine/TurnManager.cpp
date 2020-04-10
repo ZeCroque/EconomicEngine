@@ -69,10 +69,8 @@ int TurnManager::exec()
 			for (auto i = 0; i < this->step; i++)
 			{
 				++turnNumber;
-				auto a = stockExchange->betterAsks[typeid(Gold).hash_code()];
 				traderManager->doTradersCrafting();
 				traderManager->doTradersAsking();
-
 				stockExchange->resolveOffers();
 				traderManager->refreshTraders();
 			}

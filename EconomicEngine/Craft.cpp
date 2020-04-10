@@ -46,13 +46,13 @@ void Craft::decrementRate(const float i)
 	rate-=i;
 }
 
-Tradable* Craft::advanceCraft()
+size_t Craft::advanceCraft()
 {
-	Tradable* result = nullptr;
+	size_t result = 0;
 	advancement += rate;
 	if(advancement >= 1.0f)
 	{
-		result = TradableManager::getInstance()->createTradable(this->result);
+		result = this->result;
 		notifyObservers();
 	}
 	return result;
