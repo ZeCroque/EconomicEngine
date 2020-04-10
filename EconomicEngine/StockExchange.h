@@ -1,6 +1,8 @@
 #ifndef STOCK_EXCHANGE_H
 #define STOCK_EXCHANGE_H
 
+#include <list>
+
 #include "Ask.h"
 #include "Singleton.h"
 #include "VectorArray.h"
@@ -21,6 +23,7 @@ public:
 	void resolveOffers(); //TODO Maxence
 	void reset();
 	float getStockExchangePrice(size_t key);
+	std::list<float> getStockExchangePrice(size_t key, int count);
 
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
