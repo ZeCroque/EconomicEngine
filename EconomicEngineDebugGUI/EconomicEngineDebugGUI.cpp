@@ -20,54 +20,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	}, turnManager);
 
 	ui.setupUi(this);
-	const auto tradableManager = TradableManager::getInstance();
-	auto itemsName = tradableManager->getTradablesName();
-	auto itemsKeys = tradableManager->getKeys();
 
-	auto row = 0;
-	auto column = 0;
-	for (auto i = 0; i < itemsName.size(); ++i)
-	{
-		if (itemsName.size() > i)
-		{
-			auto checkBox = new GraphManager(this);
-			checkBox->setText(QString::fromStdString(itemsName[i]));
-			checkBox->setItemId(itemsKeys[i]);
-			checkBox->setEnabled(true);
-			checkBox->setCheckable(true);
-			checkBox->setChecked(true);
-
-			std::mt19937 randomEngine(i);
-			const std::uniform_int_distribution<int> uniformDist(0, 255);
-
-			const auto r = uniformDist(randomEngine);
-			const auto g = uniformDist(randomEngine);
-			const auto b = uniformDist(randomEngine);
-
-			auto style = QString(
-				"color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
-				");");
-
-			checkBox->setStyleSheet(style);
-			checkBox->setGraphIndex(i);
-			ui.customPlot->addGraph();
-			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
-			connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
-
-			this->arrayCheckBox.push_back(checkBox);
-
-			ui.layChBx->addWidget(checkBox, row, column);
-			if (column == 2)
-			{
-				++row;
-				column = 0;
-			}
-			else
-			{
-				++column;
-			}
-		}
-	}
+	doInit();
 
 	this->zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
@@ -78,23 +32,13 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	turnManager->setStep(ui.horSlidStep->value());
 	connect(ui.horSlidStep, SIGNAL(valueChanged(int)), this, SLOT(setStep(int)));
 
-
-	//QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
-	//timeTicker->setTimeFormat("%h:%m:%s");
-	//ui.customPlot->xAxis->setTicker(timeTicker);
-	//ui.customPlot->axisRect()->setupFullAxesBox();
-	//ui.customPlot->yAxis->setRange(0, 5);
-
-	// make left and bottom axes transfer their ranges to right and top axes:
-	connect(ui.customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->xAxis2, SLOT(setRange(QCPRange)));
-	connect(ui.customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui.customPlot->yAxis2, SLOT(setRange(QCPRange)));
-
-	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
-
 	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
+	connect(ui.pBReset, SIGNAL(clicked()), this, SLOT(doReset()));
 
 	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
 	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
+
+	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
@@ -154,7 +98,78 @@ void EconomicEngineDebugGui::setMode() const
 	toggleStart();
 }
 
-void EconomicEngineDebugGui::realtimeDataSlot()
+void EconomicEngineDebugGui::doReset()
+{
+	for (auto graphManager : arrayCheckBox)
+	{
+		ui.customPlot->removeGraph(graphManager->getGraphIndex());
+	}
+	arrayCheckBox.clear();
+
+	ui.customPlot->clearGraphs();
+	ui.customPlot->xAxis->setRange(0, 5);
+	ui.customPlot->replot();
+	
+	ui.pBStart->setChecked(false);
+	setMode();
+
+	turnManager->reset();
+	doInit();
+}
+
+void EconomicEngineDebugGui::doInit()
+{
+	const auto tradableManager = TradableManager::getInstance();
+	auto itemsName = tradableManager->getTradablesName();
+	auto itemsKeys = tradableManager->getKeys();
+
+	auto row = 0;
+	auto column = 0;
+	for (auto i = 0; i < itemsName.size(); ++i)
+	{
+		if (itemsName.size() > i)
+		{
+			auto checkBox = new GraphManager(this);
+			checkBox->setText(QString::fromStdString(itemsName[i]));
+			checkBox->setItemId(itemsKeys[i]);
+			checkBox->setEnabled(true);
+			checkBox->setCheckable(true);
+			checkBox->setChecked(true);
+
+			std::mt19937 randomEngine(i);
+			const std::uniform_int_distribution<int> uniformDist(0, 255);
+
+			const auto r = uniformDist(randomEngine);
+			const auto g = uniformDist(randomEngine);
+			const auto b = uniformDist(randomEngine);
+
+			auto style = QString(
+				"color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
+				");");
+
+			checkBox->setStyleSheet(style);
+			checkBox->setGraphIndex(i);
+			ui.customPlot->addGraph();
+			ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
+			connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
+
+			this->arrayCheckBox.push_back(checkBox);
+
+			ui.layChBx->addWidget(checkBox, row, column);
+			if (column == 2)
+			{
+				++row;
+				column = 0;
+			}
+			else
+			{
+				++column;
+			}
+		}
+	}
+}
+
+void EconomicEngineDebugGui::updateUiSlot()
 {
 	const auto key = turnManager->getTurnNumber();
 	auto stockExchange = StockExchange::getInstance();

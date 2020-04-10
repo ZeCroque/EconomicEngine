@@ -18,13 +18,15 @@ public:
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
-	void realtimeDataSlot();
+	void updateUiSlot();
 	void setGraphVisibility() const;
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
 	void setStep(int value) const;
 	void toggleStart() const;
 	void setMode() const;
+	void doReset();
+	void doInit();
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;

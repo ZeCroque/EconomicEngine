@@ -51,11 +51,6 @@ public:
     QPushButton *pBStart;
     QPushButton *pBReset;
     QCustomPlot *customPlot;
-    QWidget *gridLayoutWidget;
-    QGridLayout *layStats;
-    QLabel *labelNumber;
-    QLabel *labelJobs;
-    QLabel *labelMoney;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
@@ -212,33 +207,6 @@ public:
 
         layGraph->addWidget(customPlot);
 
-        gridLayoutWidget = new QWidget(centralWidget);
-        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(10, 360, 341, 291));
-        layStats = new QGridLayout(gridLayoutWidget);
-        layStats->setSpacing(6);
-        layStats->setContentsMargins(11, 11, 11, 11);
-        layStats->setObjectName(QString::fromUtf8("layStats"));
-        layStats->setContentsMargins(0, 0, 0, 0);
-        labelNumber = new QLabel(gridLayoutWidget);
-        labelNumber->setObjectName(QString::fromUtf8("labelNumber"));
-        labelNumber->setAlignment(Qt::AlignCenter);
-
-        layStats->addWidget(labelNumber, 0, 1, 1, 1);
-
-        labelJobs = new QLabel(gridLayoutWidget);
-        labelJobs->setObjectName(QString::fromUtf8("labelJobs"));
-        labelJobs->setScaledContents(false);
-        labelJobs->setAlignment(Qt::AlignCenter);
-
-        layStats->addWidget(labelJobs, 0, 0, 1, 1);
-
-        labelMoney = new QLabel(gridLayoutWidget);
-        labelMoney->setObjectName(QString::fromUtf8("labelMoney"));
-        labelMoney->setAlignment(Qt::AlignCenter);
-
-        layStats->addWidget(labelMoney, 0, 2, 1, 1);
-
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -260,9 +228,6 @@ public:
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
         pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
-        labelNumber->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Number", nullptr));
-        labelJobs->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Jobs", nullptr));
-        labelMoney->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Average Money", nullptr));
     } // retranslateUi
 
 };
