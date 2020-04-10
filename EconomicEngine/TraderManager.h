@@ -18,6 +18,7 @@ public:
 	void doTradersCrafting();
 	void doTradersAsking();
 	void reset();
+	void kill(size_t key, int count);
 };
 
 #endif

@@ -7,6 +7,7 @@
 
 Farmer::Farmer() : Job()
 {
+	this->id = typeid(Farmer).hash_code();
 	//Wheat : no requirement
 	this->craftFactory->
 	      registerCraft(new Craft(0.5f, typeid(Wheat).hash_code()));

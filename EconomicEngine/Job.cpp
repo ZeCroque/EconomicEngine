@@ -9,6 +9,7 @@ Job::Job(const Job& job) : Job()
 {
 	this->craftFactory = job.craftFactory->clone();
 	this->usableToolsList = std::list<size_t>(job.usableToolsList);
+	this->id = job.id;
 }
 
 Job::~Job()
@@ -70,4 +71,7 @@ Craft* Job::getCraft(const size_t key) const
 	return craftFactory->getDefaultObject(key);
 }
 
-//DEBUG
+size_t Job::getId() const
+{
+	return id;
+}
