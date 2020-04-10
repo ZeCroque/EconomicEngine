@@ -30,12 +30,7 @@
 #include "Uncountable.h"
 
 
-TurnManager::TurnManager() : bRunning(false), isStarted(false), turnSecond(1), turnNumber(0),step(1),
-                             traderManager(TraderManager::getInstance()),
-                             tradableManager(TradableManager::getInstance()),
-                             stockExchange(StockExchange::getInstance())
-{
-}
+TurnManager::TurnManager() : bRunning(false), isStarted(false), turnSecond(1), turnNumber(0),step(1),traderManager(TraderManager::getInstance()),tradableManager(TradableManager::getInstance()),stockExchange(StockExchange::getInstance()){}
 
 
 void TurnManager::init() const
@@ -75,9 +70,10 @@ void TurnManager::init() const
 	traderManager->addTrader(10);
 }
 
-void TurnManager::reset()
+void TurnManager::reset() const
 {
-	//TODO 
+	traderManager->reset();
+	stockExchange->reset();
 }
 
 int TurnManager::exec()

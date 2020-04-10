@@ -1,203 +1,258 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Jobs">
+      <UniqueIdentifier>{37f790b4-876a-4afd-a47d-088be679b750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tradables">
+      <UniqueIdentifier>{aab7c2f3-7cd7-47e7-b73d-a0cc94bfdc60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tradables\Food">
+      <UniqueIdentifier>{70840791-0809-4301-8d13-d29e71ece7be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tradables\Ressources">
+      <UniqueIdentifier>{c4578dd6-7319-4ec8-a2aa-c0c70662e9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tradables">
+      <UniqueIdentifier>{52f88e4c-e921-4e4b-9d67-6ff1c91d0c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tradables\Food">
+      <UniqueIdentifier>{c05ec988-0424-4d23-b237-63524f72e14d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tradables\Ressources">
+      <UniqueIdentifier>{da2c779e-4ca5-4f4f-b40a-b5ca1c003319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{f23643de-34ca-4e6b-8a47-1952f54b9766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{16f5694a-6556-4e83-8552-35b00b3fa9eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tradables\Tools">
+      <UniqueIdentifier>{df974ffd-d21e-46ed-8ca7-b0d8d5a5c7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tradables\Tools">
+      <UniqueIdentifier>{ef222202-1fbc-43f5-9947-d03ec0bbcb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Jobs">
+      <UniqueIdentifier>{97f153c1-15fd-4d05-ad93-e19615a49fa0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="qcustomplot.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Bread.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Coal.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Iron.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Leather.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Meat.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Steak.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Wheat.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Wood.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
-    <ClCompile Include="Baker.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Butcher.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Farmer.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Hunter.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Miner.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="economicenginedebuggui.cpp">
-      <Filter>Fichiers sources\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphManager.cpp">
-      <Filter>Fichiers sources\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Hoe.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
-    </ClCompile>
-    <ClCompile Include="WoodPickaxe.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ToolMaker.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Miner.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="Lumberjack.cpp">
-      <Filter>Fichiers sources\Jobs</Filter>
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Hunter.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Farmer.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Butcher.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Baker.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Bread.cpp">
+      <Filter>Source Files\Tradables\Food</Filter>
     </ClCompile>
     <ClCompile Include="Axe.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
-    </ClCompile>
-    <ClCompile Include="Sword.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
-    </ClCompile>
-    <ClCompile Include="Pickaxe.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
+      <Filter>Source Files\Tradables\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Bow.cpp">
-      <Filter>Fichiers sources\Uncountables</Filter>
+      <Filter>Source Files\Tradables\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Source Files\Tradables\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Source Files\Tradables\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="WoodPickaxe.cpp">
+      <Filter>Source Files\Tradables\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Wheat.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Wood.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Leather.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Iron.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Coal.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Meat.cpp">
+      <Filter>Source Files\Tradables\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Steak.cpp">
+      <Filter>Source Files\Tradables\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="Sword.cpp">
+      <Filter>Source Files\Tradables\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="economicenginedebuggui.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphManager.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bread.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Coal.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Iron.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Leather.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Meat.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
+      <Filter>Header Files\Tradables\Food</Filter>
     </ClInclude>
     <ClInclude Include="Steak.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
+      <Filter>Header Files\Tradables\Food</Filter>
     </ClInclude>
-    <ClInclude Include="Wheat.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Wood.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="Baker.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Butcher.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Farmer.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Hunter.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Miner.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Hoe.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-    <ClInclude Include="WoodPickaxe.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-    <ClInclude Include="ToolMaker.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Lumberjack.h">
-      <Filter>Fichiers d%27en-tête\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Axe.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-    <ClInclude Include="Sword.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-    <ClInclude Include="Pickaxe.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-    <ClInclude Include="Bow.h">
-      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="debug\moc_predefs.h.cbt" />
-    <CustomBuild Include="release\moc_predefs.h.cbt" />
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="qcustomplot.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Header Files\UI</Filter>
     </QtMoc>
     <QtMoc Include="GraphManager.h">
-      <Filter>Fichiers d%27en-tête\GUI</Filter>
+      <Filter>Header Files\UI</Filter>
     </QtMoc>
-    <QtMoc Include="EconomicEngineDebugGUI.h">
-      <Filter>Fichiers d%27en-tête\GUI</Filter>
-    </QtMoc>
+    <ClInclude Include="Axe.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Bow.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Hoe.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickaxe.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodPickaxe.h">
+      <Filter>Header Files\Tradables\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Baker.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Butcher.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Farmer.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Hunter.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Lumberjack.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Miner.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolMaker.h">
+      <Filter>Header Files\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Iron.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="EconomicEngineDebugGUI.qrc" />
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{bc953b9f-5ee0-49eb-b992-fd285d046abd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Forms">
-      <UniqueIdentifier>{fd2aabcb-4ff5-4513-ab81-7eb26370e78a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{5d8195bb-4a36-4688-ae57-153638309317}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Countables">
-      <UniqueIdentifier>{c8501cf7-83d7-4133-a720-27a66bba8ec2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Jobs">
-      <UniqueIdentifier>{8e34b864-f464-4c46-a5d5-dbf1b326aa93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Countables">
-      <UniqueIdentifier>{c8cc8819-9626-4128-978a-011fff16e870}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Jobs">
-      <UniqueIdentifier>{8e9c98db-8ca0-4615-8186-83d2e056cd58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\GUI">
-      <UniqueIdentifier>{47d9a2a2-60e5-40e4-92fc-a338a6fd358a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\GUI">
-      <UniqueIdentifier>{f9ba7cf6-5e37-4f75-9bb9-aaaee5ba7927}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Uncountables">
-      <UniqueIdentifier>{82f15b8f-7d48-4c90-9e01-f6dc78fdbc6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Uncountables">
-      <UniqueIdentifier>{2acaacf1-075e-4936-82b4-8e08f2085fc4}</UniqueIdentifier>
-    </Filter>
+    <QtRcc Include="EconomicEngineDebugGUI.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="EconomicEngineDebugGUI.ui">
-      <Filter>Forms</Filter>
+      <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Coal.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="Leather.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="Meat.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="Wheat.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="Wood.h">
+      <Filter>Header Files\Tradables\Ressources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="EconomicEngineDebugGUI.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

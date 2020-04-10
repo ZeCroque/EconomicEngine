@@ -18,5 +18,5 @@ Farmer::Farmer() : Job()
 	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Wheat).hash_code(), std::vector<std::pair<size_t, int>>(),
 	                                            toolsRequired));
 
-	//usableToolsList.emplace_back(typeid(Hoe).hash_code());
+	usableToolsList.emplace_back(typeid(Hoe).hash_code());
 }

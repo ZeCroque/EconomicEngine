@@ -12,6 +12,7 @@ protected:
 	Tradable* item;
 	Trader* owner;
 public:
+	Behavior() = default;
 	virtual void init(Trader* owner, Tradable* item) = 0;
 };
 
