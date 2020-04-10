@@ -16,9 +16,6 @@
     <ClCompile Include="Iron.cpp">
       <Filter>Fichiers sources\Countables</Filter>
     </ClCompile>
-    <ClCompile Include="IronOre.cpp">
-      <Filter>Fichiers sources\Countables</Filter>
-    </ClCompile>
     <ClCompile Include="Leather.cpp">
       <Filter>Fichiers sources\Countables</Filter>
     </ClCompile>
@@ -55,6 +52,30 @@
     <ClCompile Include="GraphManager.cpp">
       <Filter>Fichiers sources\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="WoodPickaxe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolMaker.cpp">
+      <Filter>Fichiers sources\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Lumberjack.cpp">
+      <Filter>Fichiers sources\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Axe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Sword.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
+    <ClCompile Include="Bow.cpp">
+      <Filter>Fichiers sources\Uncountables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bread.h">
@@ -64,9 +85,6 @@
       <Filter>Fichiers d%27en-tête\Countables</Filter>
     </ClInclude>
     <ClInclude Include="Iron.h">
-      <Filter>Fichiers d%27en-tête\Countables</Filter>
-    </ClInclude>
-    <ClInclude Include="IronOre.h">
       <Filter>Fichiers d%27en-tête\Countables</Filter>
     </ClInclude>
     <ClInclude Include="Leather.h">
@@ -98,6 +116,30 @@
     </ClInclude>
     <ClInclude Include="Miner.h">
       <Filter>Fichiers d%27en-tête\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Hoe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodPickaxe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolMaker.h">
+      <Filter>Fichiers d%27en-tête\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Lumberjack.h">
+      <Filter>Fichiers d%27en-tête\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Axe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickaxe.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
+    </ClInclude>
+    <ClInclude Include="Bow.h">
+      <Filter>Fichiers d%27en-tête\Uncountables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +187,12 @@
     </Filter>
     <Filter Include="Fichiers d%27en-tête\GUI">
       <UniqueIdentifier>{f9ba7cf6-5e37-4f75-9bb9-aaaee5ba7927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Uncountables">
+      <UniqueIdentifier>{82f15b8f-7d48-4c90-9e01-f6dc78fdbc6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Uncountables">
+      <UniqueIdentifier>{2acaacf1-075e-4936-82b4-8e08f2085fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

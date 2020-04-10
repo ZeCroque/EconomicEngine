@@ -1,20 +1,32 @@
 #include "TurnManager.h"
-#include "Countable.h"
 #include <thread>
+
 
 #include "../EconomicEngineDebugGUI/Wheat.h"
 #include "../EconomicEngineDebugGUI/Meat.h"
+#include "../EconomicEngineDebugGUI/Wood.h"
 #include "../EconomicEngineDebugGUI/Coal.h"
 #include "../EconomicEngineDebugGUI/Bread.h"
 #include "../EconomicEngineDebugGUI/Steak.h"
+#include "../EconomicEngineDebugGUI/Iron.h"
+#include "../EconomicEngineDebugGUI/Leather.h"
 
 #include "../EconomicEngineDebugGUI/Farmer.h"
 #include "../EconomicEngineDebugGUI/Hunter.h"
+#include "../EconomicEngineDebugGUI/Miner.h"
+#include "../EconomicEngineDebugGUI/Lumberjack.h"
 #include "../EconomicEngineDebugGUI/Butcher.h"
 #include "../EconomicEngineDebugGUI/Baker.h"
+#include "../EconomicEngineDebugGUI/Bow.h"
+#include "../EconomicEngineDebugGUI/ToolMaker.h"
+
+#include "../EconomicEngineDebugGUI/Axe.h"
+#include "../EconomicEngineDebugGUI/Hoe.h"
+#include "../EconomicEngineDebugGUI/Pickaxe.h"
+#include "../EconomicEngineDebugGUI/Sword.h"
+#include "../EconomicEngineDebugGUI/WoodPickaxe.h"
 
 
-#include "../EconomicEngineDebugGUI/Miner.h"
 #include "Uncountable.h"
 
 
@@ -34,17 +46,28 @@ void TurnManager::init() const
 	traderManager->registerJob(new Miner());
 	traderManager->registerJob(new Baker());
 	traderManager->registerJob(new Butcher());
+	traderManager->registerJob(new ToolMaker());
+	traderManager->registerJob(new Lumberjack());
 
 	//Init tradables
 	tradableManager->registerTradable(new Wheat());
 	tradableManager->registerTradable(new Meat());
+	tradableManager->registerTradable(new Wood());
 	tradableManager->registerTradable(new Coal());
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Steak());
+	tradableManager->registerTradable(new Iron());
+	tradableManager->registerTradable(new Leather());
 
 	//Init tools
+	tradableManager->registerTradable(new WoodPickaxe());
 	tradableManager->registerTradable(new Hoe());
-
+	tradableManager->registerTradable(new Bow());
+	tradableManager->registerTradable(new Axe());
+	tradableManager->registerTradable(new Pickaxe());
+	tradableManager->registerTradable(new Sword());
+	
+	
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
 
@@ -54,7 +77,7 @@ void TurnManager::init() const
 
 void TurnManager::reset()
 {
-	//TODO
+	//TODO 
 }
 
 int TurnManager::exec()

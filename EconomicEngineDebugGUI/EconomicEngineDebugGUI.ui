@@ -165,14 +165,23 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="layButton">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout">
+          <layout class="QVBoxLayout" name="layRadButton">
+           <property name="spacing">
+            <number>4</number>
+           </property>
            <property name="sizeConstraint">
-            <enum>QLayout::SetMaximumSize</enum>
+            <enum>QLayout::SetNoConstraint</enum>
            </property>
            <item>
             <widget class="QRadioButton" name="radBRealTime">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Real Time</string>
              </property>
@@ -191,14 +200,28 @@
           </layout>
          </item>
          <item>
-          <widget class="QPushButton" name="pBStart">
-           <property name="text">
-            <string>Start</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="LayPushButton">
+           <item>
+            <widget class="QPushButton" name="pBStart">
+             <property name="text">
+              <string>Start</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pBReset">
+             <property name="text">
+              <string>Reset</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
