@@ -76,3 +76,24 @@ void TraderManager::reset()
 {
 	traders.clear();
 }
+
+void TraderManager::kill(const size_t key, int count)
+{
+	std::vector<std::list<Trader>::iterator> iterators;
+	iterators.reserve(traders.size());
+
+	int i = 0;
+	for(auto  it = traders.begin(); it!=traders.end() && i<count; ++it)
+	{
+		if(it->getCurrentJob()->getId() == key)
+		{
+			iterators.emplace_back(it);
+			++i;
+		}
+	}
+
+	for(auto& it : iterators)
+	{
+		traders.erase(it);
+	}
+}

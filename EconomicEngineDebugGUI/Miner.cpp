@@ -8,6 +8,7 @@
 
 Miner::Miner()
 {
+	this->id = typeid(Miner).hash_code();
 	//Coal : no requirement
 	this->craftFactory->registerCraft(new Craft(0.5f, typeid(Coal).hash_code(), std::vector<std::pair<size_t, int>>()));
 

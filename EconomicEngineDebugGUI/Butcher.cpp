@@ -7,6 +7,7 @@
 
 Butcher::Butcher() : Job()
 {
+	this->id = typeid(Butcher).hash_code();
 	std::vector<std::pair<size_t, int>> requirements;
 
 	//Bread : require meat and coal
