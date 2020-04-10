@@ -18,12 +18,13 @@ public:
 	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
-	void realtimeDataSlot() const;
+	void realtimeDataSlot();
 	void setGraphVisibility() const;
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
 	void setStep(int value) const;
 	void toggleStart() const;
+	void setMode() const;
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
@@ -32,7 +33,8 @@ private:
 	std::thread economicEngineThread;
 	TurnManager* turnManager;
 	int zoomXAxis;
+    bool realTime;
 
 signals:
-	void nextTurn();
+void nextTurn();
 };

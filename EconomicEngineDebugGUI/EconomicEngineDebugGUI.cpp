@@ -93,6 +93,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(this, SIGNAL(nextTurn()), this, SLOT(realtimeDataSlot()));
 
 	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
+
+	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
+	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
 }
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
@@ -143,9 +146,18 @@ void EconomicEngineDebugGui::toggleStart() const
 	turnManager->setIsStarted(ui.pBStart->isChecked());
 }
 
-void EconomicEngineDebugGui::realtimeDataSlot() const
+void EconomicEngineDebugGui::setMode() const
 {
-	auto key = turnManager->getTurnNumber();
+	if (!ui.radBRealTime->isChecked())
+	{
+		ui.pBStart->setChecked(false);
+	}
+	toggleStart();
+}
+
+void EconomicEngineDebugGui::realtimeDataSlot()
+{
+	const auto key = turnManager->getTurnNumber();
 	auto stockExchange = StockExchange::getInstance();
 
 	auto totalData = 0;
@@ -202,6 +214,8 @@ void EconomicEngineDebugGui::realtimeDataSlot() const
 
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);
+
+	setMode();
 }
 
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
