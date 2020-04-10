@@ -83,12 +83,13 @@ void EconomicEngineDebugGui::setYRange()
 		if (checkBox->isChecked())
 		{
 			const auto data = ui.customPlot->graph(graphIndex)->data().get();
-			auto start = key - this->zoomXAxis;
+			auto start = ui.customPlot->xAxis->range().lower;
+			auto end = ui.customPlot->xAxis->range().upper;
 			if (start < 0)
 			{
 				start = 0;
 			}
-			for (auto i = start; i <= key; i++)
+			for (auto i = start; i <= end; i++)
 			{
 				const auto value = data->at(i)->value;
 				if (value > 0)
@@ -251,12 +252,52 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 	auto totalData = 0;
 
+	auto const step = ui.horSlidStep->value();
+
 	for (auto checkBox : this->arrayCheckBox)
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
 
-		ui.customPlot->graph(graphIndex)->addData(
-			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
+		/*
+		auto const start = key - step;
+		for (auto i = start; i < key; i++)
+		{
+			auto const index = ui.customPlot->graph(graphIndex)->dataCount();
+			auto value = ui.customPlot->graph(graphIndex)->data()->at(index - 1)->value;
+
+			for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
+			{
+				if (i == data.getDate())
+				{
+					value = data.getPrice();
+					break;
+				}
+			}
+			ui.customPlot->graph(graphIndex)->addData(key, value);
+		}*/
+
+
+		auto list = stockExchange->getStockExchangePrice(checkBox->getItemId(), step);
+		if (!list.empty())
+		{
+			auto it = list.begin();
+			while (true)
+			{
+				auto nextIt = it;
+				++nextIt;
+				if (nextIt == list.end())
+				{
+					break;
+				}
+				for (int i = 0; i < nextIt->getDate() - it->getDate(); ++i)
+				{
+					ui.customPlot->graph(graphIndex)->addData(static_cast<double>(it->getDate() + i),
+					                                          static_cast<double>(it->getPrice()));
+				}
+				++it;
+			}
+		}
+
 
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 	}
