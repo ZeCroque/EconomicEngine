@@ -24,6 +24,6 @@ Hunter::Hunter() : Job()
 	      registerCraft(new Craft(1.0f, typeid(Meat).hash_code(), std::vector<std::pair<size_t, int>>(),
 	                              toolsRequired));
 
-	//usableToolsList.emplace_back(typeid(Bow).hash_code());
-	//usableToolsList.emplace_back(typeid(Sword).hash_code());
+	usableToolsList.emplace_back(typeid(Bow).hash_code());
+	usableToolsList.emplace_back(typeid(Sword).hash_code());
 }

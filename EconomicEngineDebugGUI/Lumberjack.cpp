@@ -14,5 +14,5 @@ Lumberjack::Lumberjack()
 	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Wood).hash_code(), std::vector<std::pair<size_t, int>>(),
 	                                            toolsRequired));
 
-	//usableToolsList.emplace_back(typeid(Axe).hash_code());
+	usableToolsList.emplace_back(typeid(Axe).hash_code());
 }
