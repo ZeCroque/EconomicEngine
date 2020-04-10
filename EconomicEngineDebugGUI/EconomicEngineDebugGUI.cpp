@@ -20,7 +20,6 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	}, turnManager);
 
 	ui.setupUi(this);
-
 	const auto tradableManager = TradableManager::getInstance();
 	auto itemsName = tradableManager->getTradablesName();
 	auto itemsKeys = tradableManager->getKeys();

@@ -1,20 +1,26 @@
 #include "TurnManager.h"
-#include "Countable.h"
 #include <thread>
 
 #include "../EconomicEngineDebugGUI/Wheat.h"
 #include "../EconomicEngineDebugGUI/Meat.h"
+#include "../EconomicEngineDebugGUI/Wood.h"
 #include "../EconomicEngineDebugGUI/Coal.h"
 #include "../EconomicEngineDebugGUI/Bread.h"
 #include "../EconomicEngineDebugGUI/Steak.h"
+#include "../EconomicEngineDebugGUI/Iron.h"
 
 #include "../EconomicEngineDebugGUI/Farmer.h"
 #include "../EconomicEngineDebugGUI/Hunter.h"
+#include "../EconomicEngineDebugGUI/Miner.h"
+#include "../EconomicEngineDebugGUI/Lumberjack.h"
 #include "../EconomicEngineDebugGUI/Butcher.h"
 #include "../EconomicEngineDebugGUI/Baker.h"
+#include "../EconomicEngineDebugGUI/ToolMaker.h"
+
+#include "../EconomicEngineDebugGUI/Hoe.h"
+#include "../EconomicEngineDebugGUI/WoodPickaxe.h"
 
 
-#include "../EconomicEngineDebugGUI/Miner.h"
 #include "Uncountable.h"
 
 
@@ -34,22 +40,27 @@ void TurnManager::init() const
 	traderManager->registerJob(new Miner());
 	traderManager->registerJob(new Baker());
 	traderManager->registerJob(new Butcher());
+	traderManager->registerJob(new ToolMaker());
+	traderManager->registerJob(new Lumberjack());
 
 	//Init tradables
 	tradableManager->registerTradable(new Wheat());
 	tradableManager->registerTradable(new Meat());
+	tradableManager->registerTradable(new Wood());
 	tradableManager->registerTradable(new Coal());
 	tradableManager->registerTradable(new Bread());
 	tradableManager->registerTradable(new Steak());
+	tradableManager->registerTradable(new Iron());
 
 	//Init tools
 	tradableManager->registerTradable(new Hoe());
+	tradableManager->registerTradable(new WoodPickaxe());
 	
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
 
 	//Create traders
-	traderManager->addTrader(10);
+	traderManager->addTrader(20);
 }
 
 void TurnManager::reset()

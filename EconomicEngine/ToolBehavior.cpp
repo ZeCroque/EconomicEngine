@@ -28,6 +28,7 @@ void ToolBehavior::notify(Observable* sender)
 		durability -= degradationRate;
 		if(durability <= 0.0f)
 		{
+			owner->getCurrentCraft()->removeObserver(this);
 			owner->removeObserver(this);
 			owner->removeFromInventory(item);
 		}
