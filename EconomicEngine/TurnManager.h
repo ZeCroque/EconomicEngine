@@ -25,7 +25,7 @@ private:
 
 public:
 	void init() const;
-	void reset();
+	void reset() const;
 	int exec();
 	void stop();
 	

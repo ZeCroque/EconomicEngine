@@ -3,6 +3,8 @@
 
 #include "Behavior.h"
 
+class Craft;
+
 class ToolBehavior : public Behavior
 {
 protected:

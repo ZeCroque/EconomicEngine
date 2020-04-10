@@ -15,8 +15,7 @@ Trader::Trader()
 	currentJob = nullptr;
 	currentCraft = nullptr;
 	money = 100;
-	randomEngine = std::mt19937(
-		static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+	randomEngine = std::mt19937(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	TradableManager* tradableManager = TradableManager::getInstance();
 	auto keys = tradableManager->getKeys();
 	priceBeliefs = VectorArray<float>(keys);
@@ -54,8 +53,7 @@ void Trader::makeAsks()
 
 		for (const auto goodItem : goodsList)
 		{
-			auto sellingAsk = std::make_shared<SellingAsk>(goodItem.first, goodItem.second,
-			                                               evaluatePrice(goodItem.first));
+			auto sellingAsk = std::make_shared<SellingAsk>(goodItem.first, goodItem.second, evaluatePrice(goodItem.first));
 			StockExchange::getInstance()->registerAsk(sellingAsk);
 			this->currentAsks.emplace_back(sellingAsk);
 		}
@@ -70,9 +68,23 @@ void Trader::craft()
 		if (!craftableList.empty())
 		{
 			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size() - 1));
-			this->currentCraft = this->currentJob->craft(
-				this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
-			notifyObservers();
+			this->currentCraft = this->currentJob->craft(this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
+
+			for (auto& item : inventory)
+			{
+				auto* uncountable = dynamic_cast<Uncountable*>(item.get());
+				if (uncountable != nullptr && uncountable->getBehavior() != nullptr)
+				{
+					for (auto usableTool : currentJob->getUsableTools())
+					{
+						if (usableTool == uncountable->getId())
+						{
+							uncountable->getBehavior()->init(this, uncountable);
+							break;
+						}
+					}
+				}
+			}
 			for (const auto requirement : currentCraft->getRequirement())
 			{
 				removeFromInventory(requirement.first, requirement.second);
@@ -81,7 +93,7 @@ void Trader::craft()
 	}
 	if (currentCraft != nullptr)
 	{
-		size_t result = currentCraft->advanceCraft();
+		const size_t result = currentCraft->advanceCraft();
 		if (result != 0)
 		{
 			delete currentCraft;
@@ -309,17 +321,6 @@ void Trader::addToInventory(Countable* countable)
 
 void Trader::addToInventory(Uncountable* uncountable)
 {
-	if (uncountable->getBehavior() != nullptr)
-	{
-		for (auto requiredTool : currentJob->getUsableTools())
-		{
-			if (requiredTool == uncountable->getId())
-			{
-				uncountable->getBehavior()->init(this, uncountable);
-				break;
-			}
-		}
-	}
 	inventory.emplace_back(uncountable);
 }
 
