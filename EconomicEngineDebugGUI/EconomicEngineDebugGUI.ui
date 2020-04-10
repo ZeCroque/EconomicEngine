@@ -228,35 +228,36 @@
       </layout>
      </item>
      <item>
-      <widget class="QCustomPlot" name="customPlot" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>830</width>
-         <height>300</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>830</width>
-         <height>300</height>
-        </size>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="layPlot">
+       <item>
+        <widget class="QCustomPlot" name="customPlot" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>830</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>830</width>
+           <height>300</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="horSlidXNav">
+         <property name="value">
+          <number>99</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QSlider" name="horizontalXSlider">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>360</y>
-      <width>841</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar">

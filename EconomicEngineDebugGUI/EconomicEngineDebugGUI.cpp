@@ -32,9 +32,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	turnManager->setStep(ui.horSlidStep->value());
 	connect(ui.horSlidStep, SIGNAL(valueChanged(int)), this, SLOT(setStep(int)));
 
-	ui.horizontalXSlider->setMaximum(ui.horSlidZoomXAxis->value());
-	ui.horizontalXSlider->setValue(ui.horSlidZoomXAxis->value());
-	connect(ui.horizontalXSlider, SIGNAL(valueChanged(int)), this, SLOT(useXSlider(int)));
+	ui.horSlidXNav->setMaximum(ui.horSlidZoomXAxis->value());
+	ui.horSlidXNav->setValue(ui.horSlidZoomXAxis->value());
+	connect(ui.horSlidXNav, SIGNAL(valueChanged(int)), this, SLOT(useXSlider(int)));
 
 	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
 	connect(ui.pBReset, SIGNAL(clicked()), this, SLOT(doReset()));
@@ -73,7 +73,7 @@ void EconomicEngineDebugGui::setZoomXAxis(const int value)
 void EconomicEngineDebugGui::setYRange()
 {
 	auto haveData = false;
-	const auto key = ui.horizontalXSlider->value();
+	const auto key = ui.horSlidXNav->value();
 	double valueHigh = 0;
 	double valueLow = 999999;
 	for (auto checkBox : this->arrayCheckBox)
@@ -117,15 +117,15 @@ void EconomicEngineDebugGui::setYRange()
 void EconomicEngineDebugGui::setXRange() const
 {
 	const auto key = turnManager->getTurnNumber();
-	ui.horizontalXSlider->setMaximum(key);
+	ui.horSlidXNav->setMaximum(key);
 	if (key > this->zoomXAxis)
 	{
-		ui.horizontalXSlider->setMinimum(this->zoomXAxis);
+		ui.horSlidXNav->setMinimum(this->zoomXAxis);
 	}
 
-	if (ui.horizontalXSlider->value() >= key - ui.horSlidStep->value())
+	if (ui.horSlidXNav->value() >= key - ui.horSlidStep->value())
 	{
-		ui.horizontalXSlider->setValue(key);
+		ui.horSlidXNav->setValue(key);
 		ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
 	}
 	else
@@ -149,7 +149,7 @@ void EconomicEngineDebugGui::setStep(const int value) const
 
 void EconomicEngineDebugGui::useXSlider(int value)
 {
-	ui.customPlot->xAxis->setRange(ui.horizontalXSlider->value(), this->zoomXAxis, Qt::AlignRight);
+	ui.customPlot->xAxis->setRange(ui.horSlidXNav->value(), this->zoomXAxis, Qt::AlignRight);
 	setYRange();
 	ui.customPlot->replot();
 }
@@ -254,11 +254,10 @@ void EconomicEngineDebugGui::updateUiSlot()
 	for (auto checkBox : this->arrayCheckBox)
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
-		// add data to lines:
 
 		ui.customPlot->graph(graphIndex)->addData(
 			key, stockExchange->getStockExchangePrice(checkBox->getItemId()));
-		// rescale value (vertical) axis to fit the current data:
+
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 	}
 

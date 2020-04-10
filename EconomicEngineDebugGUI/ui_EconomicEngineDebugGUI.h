@@ -50,8 +50,9 @@ public:
     QVBoxLayout *LayPushButton;
     QPushButton *pBStart;
     QPushButton *pBReset;
+    QVBoxLayout *layPlot;
     QCustomPlot *customPlot;
-    QSlider *horizontalXSlider;
+    QSlider *horSlidXNav;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
@@ -201,17 +202,26 @@ public:
 
         layGraph->addLayout(layGraphParam);
 
+        layPlot = new QVBoxLayout();
+        layPlot->setSpacing(6);
+        layPlot->setObjectName(QString::fromUtf8("layPlot"));
         customPlot = new QCustomPlot(horizontalLayoutWidget_3);
         customPlot->setObjectName(QString::fromUtf8("customPlot"));
         customPlot->setMinimumSize(QSize(830, 300));
         customPlot->setMaximumSize(QSize(830, 300));
 
-        layGraph->addWidget(customPlot);
+        layPlot->addWidget(customPlot);
 
-        horizontalXSlider = new QSlider(centralWidget);
-        horizontalXSlider->setObjectName(QString::fromUtf8("horizontalXSlider"));
-        horizontalXSlider->setGeometry(QRect(350, 360, 841, 22));
-        horizontalXSlider->setOrientation(Qt::Horizontal);
+        horSlidXNav = new QSlider(horizontalLayoutWidget_3);
+        horSlidXNav->setObjectName(QString::fromUtf8("horSlidXNav"));
+        horSlidXNav->setValue(99);
+        horSlidXNav->setOrientation(Qt::Horizontal);
+
+        layPlot->addWidget(horSlidXNav);
+
+
+        layGraph->addLayout(layPlot);
+
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
