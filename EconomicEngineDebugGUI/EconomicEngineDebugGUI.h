@@ -41,5 +41,5 @@ private:
 	bool realTime;
 
 signals:
-	void nextTurn();
+void nextTurn();
 };
