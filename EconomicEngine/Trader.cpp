@@ -4,7 +4,6 @@
 #include <random>
 
 
-
 #include "Countable.h"
 #include "StockExchange.h"
 #include "TradableManager.h"
@@ -15,47 +14,48 @@ Trader::Trader()
 {
 	currentJob = nullptr;
 	currentCraft = nullptr;
-	money = 10;
-	randomEngine = std::mt19937(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+	money = 100;
+	randomEngine = std::mt19937(
+		static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	TradableManager* tradableManager = TradableManager::getInstance();
 	auto keys = tradableManager->getKeys();
 	priceBeliefs = VectorArray<float>(keys);
-	for(auto key : keys)
+	for (auto key : keys)
 	{
 		auto tradableDefaultPriceBelief = tradableManager->getTradable(key)->getDefaultPriceBelief();
 		priceBeliefs[key].resize(2);
 		priceBeliefs[key][0] = std::make_shared<float>(tradableDefaultPriceBelief.first);
 		priceBeliefs[key][1] = std::make_shared<float>(tradableDefaultPriceBelief.second);
 	}
-	
 }
 
 void Trader::makeAsks()
 {
-	if(currentJob != nullptr)
-	{	
+	if (currentJob != nullptr)
+	{
 		//BuyingAsks
 		wonderList.clear();
 		fillWonderList();
-			
-		for(const auto wonderItem : wonderList)
+
+		for (const auto wonderItem : wonderList)
 		{
 			float price = evaluatePrice(wonderItem.first);
-			if(price <= money)
+			if (price <= money)
 			{
 				auto buyingAsk = std::make_shared<BuyingAsk>(wonderItem.first, wonderItem.second, price);
 				StockExchange::getInstance()->registerAsk(buyingAsk);
 				this->currentAsks.emplace_back(buyingAsk);
 			}
 		}
-		
+
 		//SellingAsks
 		goodsList.clear();
 		fillGoodsList();
-		
+
 		for (const auto goodItem : goodsList)
 		{
-			auto sellingAsk = std::make_shared<SellingAsk>(goodItem.first, goodItem.second, evaluatePrice(goodItem.first));
+			auto sellingAsk = std::make_shared<SellingAsk>(goodItem.first, goodItem.second,
+			                                               evaluatePrice(goodItem.first));
 			StockExchange::getInstance()->registerAsk(sellingAsk);
 			this->currentAsks.emplace_back(sellingAsk);
 		}
@@ -64,32 +64,31 @@ void Trader::makeAsks()
 
 void Trader::craft()
 {
-	if(currentJob!=nullptr && currentCraft==nullptr)
+	if (currentJob != nullptr && currentCraft == nullptr)
 	{
 		const auto craftableList = this->currentJob->getCraftableList();
-		if(!craftableList.empty())
+		if (!craftableList.empty())
 		{
-			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size()-1));
-			this->currentCraft = this->currentJob->craft(this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
+			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size() - 1));
+			this->currentCraft = this->currentJob->craft(
+				this->currentJob->getCraftableList()[uniformDist(randomEngine)]);
 			notifyObservers();
-			for(const auto requirement : currentCraft->getRequirement())
+			for (const auto requirement : currentCraft->getRequirement())
 			{
 				removeFromInventory(requirement.first, requirement.second);
 			}
 		}
-			
 	}
-	if(currentCraft!=nullptr)
+	if (currentCraft != nullptr)
 	{
 		size_t result = currentCraft->advanceCraft();
-		if(result != 0)
+		if (result != 0)
 		{
 			delete currentCraft;
 			currentCraft = nullptr;
 			addToInventory(result, 1); //TODO multicraft
 		}
 	}
-	
 }
 
 void Trader::assignJob()
@@ -123,9 +122,9 @@ void Trader::fillWonderList()
 		}
 	}
 
-	for(auto usableTool : this->currentJob->getUsableTools())
+	for (auto usableTool : this->currentJob->getUsableTools())
 	{
-		if(!isInInventory(usableTool))
+		if (!isInInventory(usableTool))
 		{
 			wonderList.emplace_back(std::pair<size_t, int>(usableTool, 1));
 		}
@@ -134,13 +133,12 @@ void Trader::fillWonderList()
 
 void Trader::fillGoodsList()
 {
-
 	std::list<size_t> requiredItemsId(1);
 	auto craftableList = currentJob->getCraftableList();
 	for (auto key : craftableList)
 	{
 		auto* craftable = currentJob->getCraft(key);
-		for(auto requirement : craftable->getRequirement())
+		for (auto requirement : craftable->getRequirement())
 		{
 			requiredItemsId.push_back(requirement.first);
 		}
@@ -150,22 +148,22 @@ void Trader::fillGoodsList()
 	{
 		requiredItemsId.push_back(usableTool);
 	}
-	
-	for(const auto& item : inventory)
+
+	for (const auto& item : inventory)
 	{
-		for(auto requiredItemId : requiredItemsId)
+		for (auto requiredItemId : requiredItemsId)
 		{
 			if (item->getId() != requiredItemId)
 			{
 				auto* countable = dynamic_cast<Countable*>(item.get());
-				if(countable != nullptr)
+				if (countable != nullptr)
 				{
 					goodsList.emplace_back(countable->getId(), countable->getCount());
 					return;
 				}
 				goodsList.emplace_back(item->getId(), 1);
 			}
-		}		
+		}
 	}
 }
 
@@ -189,7 +187,6 @@ float Trader::evaluatePrice(const size_t key)
 		uniformFloatDist = std::uniform_real_distribution<float>(mean, *priceBeliefs[key].back());
 	}
 	return uniformFloatDist(randomEngine);
-	
 }
 
 float Trader::calculateEarnings(Craft* craft)
@@ -197,14 +194,14 @@ float Trader::calculateEarnings(Craft* craft)
 	const float resultPrice = calculatePriceBeliefMean(craft->getResult());
 
 	float requirementsPrice = 0;
-	for(const auto requirement : craft->getRequirement())
+	for (const auto requirement : craft->getRequirement())
 	{
 		requirementsPrice += calculatePriceBeliefMean(requirement.first) * requirement.second;
 	}
 
 	float advancement = 0.0f;
 	int turnNumber = 0;
-	while(advancement < 1.0f)
+	while (advancement < 1.0f)
 	{
 		advancement += craft->getRate();
 		++turnNumber;
@@ -216,12 +213,12 @@ float Trader::calculateEarnings(Craft* craft)
 void Trader::checkAsks()
 {
 	//TODO Re-evaluate
-	for(auto& ask : currentAsks)
+	for (auto& ask : currentAsks)
 	{
-		if(ask->getStatus()==AskStatus::Sold)
+		if (ask->getStatus() == AskStatus::Sold)
 		{
 			auto* buyingAsk = dynamic_cast<BuyingAsk*>(ask.get());
-			if(buyingAsk != nullptr)
+			if (buyingAsk != nullptr)
 			{
 				addToInventory(buyingAsk->getId(), buyingAsk->getCount());
 				money -= ask->getPrice() * ask->getCount();
@@ -229,7 +226,7 @@ void Trader::checkAsks()
 			else
 			{
 				removeFromInventory(ask->getId(), ask->getCount());
-				money += ask->getPrice()*ask->getCount();
+				money += ask->getPrice() * ask->getCount();
 			}
 		}
 	}
@@ -239,7 +236,7 @@ void Trader::checkAsks()
 void Trader::refresh()
 {
 	//TODO price belief, jobRanking
-	if(currentJob == nullptr)
+	if (currentJob == nullptr)
 	{
 		this->assignJob();
 	}
@@ -264,9 +261,9 @@ Craft* Trader::getCurrentCraft() const
 
 bool Trader::isInInventory(const size_t key)
 {
-	for(auto& item : inventory)
+	for (auto& item : inventory)
 	{
-		if(item->getId() == key)
+		if (item->getId() == key)
 		{
 			return true;
 		}
@@ -280,7 +277,7 @@ void Trader::addToInventory(const size_t key, const int count)
 
 	auto* item = tradableManager->createTradable(key);
 	auto* countable = dynamic_cast<Countable*>(item);
-	if(countable!=nullptr)
+	if (countable != nullptr)
 	{
 		countable->setCount(count);
 		addToInventory(countable);
@@ -289,13 +286,12 @@ void Trader::addToInventory(const size_t key, const int count)
 	{
 		auto* uncountable = dynamic_cast<Uncountable*>(item);
 		addToInventory(uncountable);
-		for(auto i=0; i<count-1; ++i)
+		for (auto i = 0; i < count - 1; ++i)
 		{
 			uncountable = dynamic_cast<Uncountable*>(tradableManager->createTradable(key));
 			addToInventory(uncountable);
 		}
 	}
-	
 }
 
 void Trader::addToInventory(Countable* countable)
@@ -315,7 +311,14 @@ void Trader::addToInventory(Uncountable* uncountable)
 {
 	if (uncountable->getBehavior() != nullptr)
 	{
-		uncountable->getBehavior()->init(this, uncountable);
+		for (auto requiredTool : currentJob->getUsableTools())
+		{
+			if (requiredTool == uncountable->getId())
+			{
+				uncountable->getBehavior()->init(this, uncountable);
+				break;
+			}
+		}
 	}
 	inventory.emplace_back(uncountable);
 }

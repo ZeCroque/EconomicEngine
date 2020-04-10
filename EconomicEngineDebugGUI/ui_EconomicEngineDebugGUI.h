@@ -43,11 +43,13 @@ public:
     QLabel *labStep;
     QSlider *horSlidStep;
     QFrame *line_2;
-    QHBoxLayout *horizontalLayout;
-    QVBoxLayout *verticalLayout;
+    QHBoxLayout *layButton;
+    QVBoxLayout *layRadButton;
     QRadioButton *radBRealTime;
     QRadioButton *radStepByStep;
+    QVBoxLayout *LayPushButton;
     QPushButton *pBStart;
+    QPushButton *pBReset;
     QCustomPlot *customPlot;
     QStatusBar *statusBar;
 
@@ -151,35 +153,49 @@ public:
 
         layGraphParam->addWidget(line_2);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setSizeConstraint(QLayout::SetMaximumSize);
+        layButton = new QHBoxLayout();
+        layButton->setSpacing(6);
+        layButton->setObjectName(QString::fromUtf8("layButton"));
+        layRadButton = new QVBoxLayout();
+        layRadButton->setSpacing(4);
+        layRadButton->setObjectName(QString::fromUtf8("layRadButton"));
+        layRadButton->setSizeConstraint(QLayout::SetNoConstraint);
         radBRealTime = new QRadioButton(horizontalLayoutWidget_3);
         radBRealTime->setObjectName(QString::fromUtf8("radBRealTime"));
+        radBRealTime->setLayoutDirection(Qt::LeftToRight);
+        radBRealTime->setAutoFillBackground(false);
         radBRealTime->setChecked(true);
 
-        verticalLayout->addWidget(radBRealTime);
+        layRadButton->addWidget(radBRealTime);
 
         radStepByStep = new QRadioButton(horizontalLayoutWidget_3);
         radStepByStep->setObjectName(QString::fromUtf8("radStepByStep"));
 
-        verticalLayout->addWidget(radStepByStep);
+        layRadButton->addWidget(radStepByStep);
 
 
-        horizontalLayout->addLayout(verticalLayout);
+        layButton->addLayout(layRadButton);
 
+        LayPushButton = new QVBoxLayout();
+        LayPushButton->setSpacing(6);
+        LayPushButton->setObjectName(QString::fromUtf8("LayPushButton"));
         pBStart = new QPushButton(horizontalLayoutWidget_3);
         pBStart->setObjectName(QString::fromUtf8("pBStart"));
         pBStart->setCheckable(true);
 
-        horizontalLayout->addWidget(pBStart);
+        LayPushButton->addWidget(pBStart);
+
+        pBReset = new QPushButton(horizontalLayoutWidget_3);
+        pBReset->setObjectName(QString::fromUtf8("pBReset"));
+        pBReset->setCheckable(true);
+
+        LayPushButton->addWidget(pBReset);
 
 
-        layGraphParam->addLayout(horizontalLayout);
+        layButton->addLayout(LayPushButton);
+
+
+        layGraphParam->addLayout(layButton);
 
 
         layGraph->addLayout(layGraphParam);
@@ -211,6 +227,7 @@ public:
         radBRealTime->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Real Time", nullptr));
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
+        pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
     } // retranslateUi
 
 };

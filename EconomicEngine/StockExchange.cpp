@@ -2,9 +2,6 @@
 
 #include <memory>
 
-
-#include "../EconomicEngineDebugGUI/Meat.h"
-
 void StockExchange::setKeys(const std::vector<size_t>& keys)
 {
 	this->keys = std::vector<size_t>(keys);
@@ -35,7 +32,7 @@ void StockExchange::resolveOffers()
 		auto& sellingAsks = currentSellingAsks[key];
 		bool doOnce = true;
 		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks[buyingAsks.size() - 1]->getPrice() > sellingAsks[0]->getPrice()) //TODO revert sort selling to avoid reallocating
-		{	
+		{
 			if (doOnce)
 			{
 				doOnce = false;
