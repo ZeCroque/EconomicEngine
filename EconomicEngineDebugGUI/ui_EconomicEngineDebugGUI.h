@@ -51,6 +51,7 @@ public:
     QPushButton *pBStart;
     QPushButton *pBReset;
     QCustomPlot *customPlot;
+    QSlider *horizontalXSlider;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
@@ -207,6 +208,10 @@ public:
 
         layGraph->addWidget(customPlot);
 
+        horizontalXSlider = new QSlider(centralWidget);
+        horizontalXSlider->setObjectName(QString::fromUtf8("horizontalXSlider"));
+        horizontalXSlider->setGeometry(QRect(350, 360, 841, 22));
+        horizontalXSlider->setOrientation(Qt::Horizontal);
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
