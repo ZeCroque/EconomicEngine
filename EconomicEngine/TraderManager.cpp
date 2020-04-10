@@ -71,3 +71,8 @@ void TraderManager::doTradersAsking()
 		trader.makeAsks();
 	}
 }
+
+void TraderManager::reset()
+{
+	traders.clear();
+}

@@ -10,7 +10,7 @@ class StockExchange : public Singleton<StockExchange>
 private:
 	VectorArray<BuyingAsk> currentBuyingAsks;
 	VectorArray<SellingAsk> currentSellingAsks;
-	VectorArray<SellingAsk> betterAsks;
+	VectorArray<BuyingAsk> betterAsks;
 	std::vector<size_t> keys;
 	
 public:
@@ -19,6 +19,7 @@ public:
 	void registerAsk(std::shared_ptr<BuyingAsk> buyingAsk);	
 	void registerAsk(std::shared_ptr<SellingAsk> sellingAsk);
 	void resolveOffers(); //TODO Maxence
+	void reset();
 	float getStockExchangePrice(size_t key);
 
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)

@@ -17,6 +17,7 @@ public:
 	void refreshTraders();
 	void doTradersCrafting();
 	void doTradersAsking();
+	void reset();
 };
 
 #endif
