@@ -19,6 +19,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 		return turnManager->exec(100);
 	}, turnManager);
 
+	traderManager = TraderManager::getInstance();
 	ui.setupUi(this);
 
 	doInit();
@@ -41,6 +42,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
 	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
+
+	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
 }
@@ -177,12 +180,19 @@ void EconomicEngineDebugGui::setMode() const
 	toggleStart();
 }
 
+void EconomicEngineDebugGui::doKill()
+{
+	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	traderManager->kill(job->getJobId(), ui.sBKill->value());
+	updateUiJobs();
+}
+
 void EconomicEngineDebugGui::doReset()
 {
 	ui.pBStart->setChecked(false);
 	setMode();
 	turnManager->reset(10);
-	
+
 	for (auto graphManager : arrayCheckBox)
 	{
 		ui.customPlot->removeGraph(graphManager->getGraphIndex());
@@ -244,6 +254,22 @@ void EconomicEngineDebugGui::doInit()
 			++column;
 		}
 	}
+
+	for (const auto job : traderManager->getJobList())
+	{
+		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
+
+		ui.cBKill->addItem(jobManager->getJobName());
+		this->arrayJobs.push_back(jobManager);
+	}
+	updateUiJobs();
+}
+
+void EconomicEngineDebugGui::updateUiJobs()
+{
+	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto traderCount = traderManager->getJobCount(job->getJobId());
+	ui.sBKill->setMaximum(traderCount);
 }
 
 void EconomicEngineDebugGui::updateUiSlot()
@@ -271,6 +297,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 	setYRange();
 	setXRange();
+	updateUiJobs();
 
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);

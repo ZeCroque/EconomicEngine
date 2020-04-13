@@ -262,50 +262,25 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>840</x>
+      <x>870</x>
       <y>360</y>
-      <width>351</width>
+      <width>321</width>
       <height>51</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QComboBox" name="cBKill"/>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="sBKill"/>
      </item>
      <item row="0" column="3">
       <widget class="QPushButton" name="pBKill">
        <property name="text">
-        <string>PushButton</string>
+        <string>Kill</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="lbKill">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Kill :</string>
-       </property>
-       <property name="scaledContents">
-        <bool>false</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-       <property name="margin">
-        <number>10</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="sBKill"/>
+      <widget class="QComboBox" name="cBKill"/>
      </item>
     </layout>
    </widget>

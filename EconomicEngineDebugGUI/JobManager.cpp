@@ -2,22 +2,18 @@
 
 #include <utility>
 
-std::string JobManager::getJobName() const
+JobManager::JobManager(const size_t jobId, const QString jobName)
 {
-	return this->jobName;
+	this->jobId = jobId;
+	this->jobName = jobName;
 }
 
-void JobManager::setJobName(const std::string jobName)
+QString JobManager::getJobName() const
 {
-	this->jobName = jobName;
+	return this->jobName;
 }
 
 size_t JobManager::getJobId() const
 {
 	return this->jobId;
-}
-
-void JobManager::setJobId(const size_t jobId)
-{
-	this->jobId = jobId;
 }

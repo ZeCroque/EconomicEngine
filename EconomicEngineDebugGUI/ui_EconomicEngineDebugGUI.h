@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -19,6 +20,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -53,6 +55,11 @@ public:
     QVBoxLayout *layPlot;
     QCustomPlot *customPlot;
     QSlider *horSlidXNav;
+    QWidget *gridLayoutWidget;
+    QGridLayout *gridLayout;
+    QSpinBox *sBKill;
+    QPushButton *pBKill;
+    QComboBox *cBKill;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
@@ -222,6 +229,29 @@ public:
 
         layGraph->addLayout(layPlot);
 
+        gridLayoutWidget = new QWidget(centralWidget);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(870, 360, 321, 51));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        sBKill = new QSpinBox(gridLayoutWidget);
+        sBKill->setObjectName(QString::fromUtf8("sBKill"));
+
+        gridLayout->addWidget(sBKill, 0, 1, 1, 1);
+
+        pBKill = new QPushButton(gridLayoutWidget);
+        pBKill->setObjectName(QString::fromUtf8("pBKill"));
+
+        gridLayout->addWidget(pBKill, 0, 3, 1, 1);
+
+        cBKill = new QComboBox(gridLayoutWidget);
+        cBKill->setObjectName(QString::fromUtf8("cBKill"));
+
+        gridLayout->addWidget(cBKill, 0, 0, 1, 1);
+
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -243,6 +273,7 @@ public:
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
         pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
+        pBKill->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Kill", nullptr));
     } // retranslateUi
 
 };
