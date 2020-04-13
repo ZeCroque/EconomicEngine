@@ -9,24 +9,31 @@
 
 class StockExchange : public Singleton<StockExchange>
 {
-	friend class TurnManager; //DEBUG
+	friend class Singleton<StockExchange>;
 private:
+	int turnCount;
 	VectorArray<BuyingAsk> currentBuyingAsks;
 	VectorArray<SellingAsk> currentSellingAsks;
 	VectorArray<BuyingAsk> betterAsks;
 	std::vector<size_t> keys;
+
+	StockExchange();
 	
 public:
-	void setKeys(const std::vector<size_t>& keys);
-
+	void init();
 	void registerAsk(std::shared_ptr<BuyingAsk> buyingAsk);	
 	void registerAsk(std::shared_ptr<SellingAsk> sellingAsk);
-	void resolveOffers(); //TODO Maxence
+	void resolveOffers();
 	void reset();
-	float getStockExchangePrice(size_t key);
-	std::list<BuyingAsk> getStockExchangePrice(size_t key, int count);
+	void incrementTurnCount();
+	[[nodiscard]] float getStockExchangePrice(size_t key);
+	[[nodiscard]] std::list<BuyingAsk> getStockExchangePrice(size_t key, int count);
+	[[nodiscard]] int getTurnCount() const;
 
 
+
+	
+	
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
 		for (size_t i = 1; i < vector.size(); ++i)
@@ -48,5 +55,7 @@ public:
 
 
 };
+
+
 
 #endif

@@ -1,8 +1,8 @@
 #include "Ask.h"
-#include "TurnManager.h"
 
+#include "EconomicEngine.h"
 
-Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(TurnManager::getInstance()->getTurnNumber()), status(AskStatus::Pending), typeId(id) {}
+Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(StockExchange::getInstance()->getTurnCount()), status(AskStatus::Pending), typeId(id) {}
 
 float Ask::getPrice() const
 {
@@ -44,6 +44,11 @@ BuyingAsk::BuyingAsk(const size_t id, const int count, const float price) : Ask(
 SellingAsk::SellingAsk(const size_t id, const int count, const float price) : Ask(id, count, price)
 {
 	this->soldCount = 0;
+}
+
+int SellingAsk::getSoldCount() const
+{
+	return soldCount;
 }
 
 void SellingAsk::incrementSoldCountBy(const int count)
