@@ -160,12 +160,13 @@ void EconomicEngineDebugGui::toggleStart() const
 	if (ui.pBStart->isChecked())
 	{
 		ui.pBStart->setText("Stop");
+		turnManager->resume();
 	}
 	else
 	{
 		ui.pBStart->setText("Start");
+		turnManager->pause();
 	}
-	turnManager->setIsStarted(ui.pBStart->isChecked());
 }
 
 void EconomicEngineDebugGui::setMode() const

@@ -1,4 +1,6 @@
 #include "TurnManager.h"
+
+#include <mutex>
 #include <thread>
 
 
@@ -30,8 +32,10 @@
 #include "Uncountable.h"
 
 
-TurnManager::TurnManager() : bRunning(false), isStarted(false), turnSecond(1), turnNumber(0),step(1),traderManager(TraderManager::getInstance()),tradableManager(TradableManager::getInstance()),stockExchange(StockExchange::getInstance()){}
+TurnManager::TurnManager() : bRunning(false), bPaused(true), turnSecond(1), turnNumber(0),step(1),traderManager(TraderManager::getInstance()),tradableManager(TradableManager::getInstance()),stockExchange(StockExchange::getInstance()){}
 
+std::condition_variable cv;
+std::mutex m;
 
 void TurnManager::init() const
 {
@@ -67,7 +71,7 @@ void TurnManager::init() const
 	stockExchange->setKeys(tradableManager->getKeys());
 }
 
-void TurnManager::reset(int count)
+void TurnManager::reset(const int count)
 {
 	traderManager->reset();
 	stockExchange->reset();
@@ -75,7 +79,7 @@ void TurnManager::reset(int count)
 	traderManager->addTrader(count);
 }
 
-int TurnManager::exec(int count)
+int TurnManager::exec(const int count)
 {
 	this->bRunning = true;
 	auto pauseTime = 250;
@@ -85,24 +89,23 @@ int TurnManager::exec(int count)
 	
 	while (bRunning)
 	{
-		if (this->isStarted)
+		while (bPaused)
 		{
-			for (auto i = 0; i < this->step; i++)
-			{
-				++turnNumber;
-				traderManager->doTradersCrafting();
-				traderManager->doTradersAsking();
-				stockExchange->resolveOffers();
-				traderManager->refreshTraders();
-			}
+			std::unique_lock<std::mutex> lk(m);
+			cv.wait(lk);
+			lk.unlock();
+		}
+		for (auto i = 0; i < this->step; i++)
+		{
+			++turnNumber;
+			traderManager->doTradersCrafting();
+			traderManager->doTradersAsking();
+			stockExchange->resolveOffers();
+			traderManager->refreshTraders();
+		}
 
-			this->notifyObservers();
-			pauseTime = 1000 / turnSecond;
-		}
-		else
-		{
-			pauseTime = 250;
-		}
+		this->notifyObservers();
+		pauseTime = 1000 / turnSecond;
 		std::this_thread::sleep_for(std::chrono::milliseconds(pauseTime));
 	}
 	return 0;
@@ -113,9 +116,17 @@ void TurnManager::stop()
 	this->bRunning = false;
 }
 
-void TurnManager::setIsStarted(const bool isStarted)
+void TurnManager::pause()
 {
-	this->isStarted = isStarted;
+	std::lock_guard<std::mutex> lk(m);
+	this->bPaused = true;
+}
+
+void TurnManager::resume()
+{
+	std::lock_guard<std::mutex> lk(m);
+	bPaused = false;
+	cv.notify_one();
 }
 
 void TurnManager::setTurnSecond(const int turnSecond)

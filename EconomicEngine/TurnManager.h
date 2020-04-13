@@ -11,7 +11,7 @@ class TurnManager final : public Observable, public Singleton<TurnManager>
 	friend class Singleton<TurnManager>;
 private:
 	bool bRunning;
-	bool isStarted;
+	bool bPaused;
 	int turnSecond;
 	int turnNumber;
 	int step;
@@ -29,7 +29,8 @@ public:
 	int exec(int count);
 	void stop();
 	
-	void setIsStarted(bool isStarted);
+	void pause();
+	void resume();
 	void setTurnSecond(int turnSecond);
 	[[nodiscard]] int getTurnNumber() const;
 	void setTurnNumber(int turnNumber);
