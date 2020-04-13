@@ -65,22 +65,24 @@ void TurnManager::init() const
 	
 	//Init StockExchange
 	stockExchange->setKeys(tradableManager->getKeys());
-
-	//Create traders
-	traderManager->addTrader(10);
 }
 
-void TurnManager::reset() const
+void TurnManager::reset(int count)
 {
 	traderManager->reset();
 	stockExchange->reset();
+	turnNumber = 0;
+	traderManager->addTrader(count);
 }
 
-int TurnManager::exec()
+int TurnManager::exec(int count)
 {
 	this->bRunning = true;
 	auto pauseTime = 250;
 
+	//Create traders
+	traderManager->addTrader(count);
+	
 	while (bRunning)
 	{
 		if (this->isStarted)

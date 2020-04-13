@@ -16,7 +16,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec();
+		return turnManager->exec(10);
 	}, turnManager);
 
 	ui.setupUi(this);
@@ -192,7 +192,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.pBStart->setChecked(false);
 	setMode();
 
-	turnManager->reset();
+	turnManager->reset(10);
 	doInit();
 }
 
@@ -258,54 +258,12 @@ void EconomicEngineDebugGui::updateUiSlot()
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
 
-		/*
-		auto const start = key - step;
-		for (auto i = start; i < key; i++)
-		{
-			auto const index = ui.customPlot->graph(graphIndex)->dataCount();
-			auto value = ui.customPlot->graph(graphIndex)->data()->at(index - 1)->value;
-
-			for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
-			{
-				if (i == data.getDate())
-				{
-					value = data.getPrice();
-					break;
-				}
-			}
-			ui.customPlot->graph(graphIndex)->addData(key, value);
-		}*/
-
-		/*std::vector<std::pair<float, float>> a;
-		auto list = stockExchange->getStockExchangePrice(checkBox->getItemId(), step);
-		if (!list.empty())
-		{
-			auto it = list.begin();
-			while (true)
-			{
-				auto nextIt = it;
-				++nextIt;
-				if (nextIt == list.end())
-				{
-					break;
-				}
-				for (int i = 0; i < nextIt->getDate() - it->getDate(); ++i)
-				{
-					a.emplace_back(std::pair<float,float>(it->getDate() + i, it->getPrice()));
-					ui.customPlot->graph(graphIndex)->addData(static_cast<double>(it->getDate() + i),
-					                                          static_cast<double>(it->getPrice()));
-				}
-				++it;
-			}
-		}*/
-
-			auto i = key - step;
+		auto i = key - step;
 		for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;
 		}
-
 
 		totalData += ui.customPlot->graph(graphIndex)->data()->size();
 	}

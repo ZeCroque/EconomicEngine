@@ -25,8 +25,8 @@ private:
 
 public:
 	void init() const;
-	void reset() const;
-	int exec();
+	void reset(int count);
+	int exec(int count);
 	void stop();
 	
 	void setIsStarted(bool isStarted);
