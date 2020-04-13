@@ -78,6 +78,10 @@ public:
 
 	void stop()
 	{
+		if(bPaused)
+		{
+			resume();
+		}
 		this->bRunning = false;
 	}
 
