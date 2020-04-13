@@ -155,5 +155,8 @@
     <ClCompile Include="Uncountable.cpp">
       <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
+    <ClCompile Include="JobFactory.cpp">
+      <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

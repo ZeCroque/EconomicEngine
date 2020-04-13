@@ -13,7 +13,9 @@ public:
 	void registerJob(Job* job);
 	void addTrader(int count);
 	[[nodiscard]] Job* assignJob(size_t key, Trader* trader) const;
-	size_t getMostInterestingJob();
+	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
+	[[nodiscard]] int getJobCount(size_t key);
+	[[nodiscard]] size_t getMostInterestingJob();
 	void refreshTraders();
 	void doTradersCrafting();
 	void doTradersAsking();

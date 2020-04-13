@@ -13,6 +13,7 @@ protected:
 	CraftFactory* craftFactory;
 	std::list<size_t> usableToolsList;
 	size_t id;
+	std::string name;
 public:
 	Job();
 	Job(const Job& job);
@@ -24,6 +25,7 @@ public:
 	[[nodiscard]] std::list<size_t> getUsableTools() const;
 	[[nodiscard]] Craft* getCraft(size_t key) const;
 	[[nodiscard]] size_t getId() const;
+	[[nodiscard]] std::string getName() const;
 };
 
 #endif
