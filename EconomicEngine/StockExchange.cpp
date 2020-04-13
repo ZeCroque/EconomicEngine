@@ -35,8 +35,7 @@ void StockExchange::resolveOffers()
 		auto& buyingAsks = currentBuyingAsks[key];
 		auto& sellingAsks = currentSellingAsks[key];
 		bool doOnce = true;
-		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks[buyingAsks.size() - 1]->getPrice() >
-			sellingAsks[0]->getPrice()) //TODO revert sort selling to avoid reallocating
+		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks[buyingAsks.size() - 1]->getPrice() > sellingAsks[0]->getPrice() && buyingAsks[buyingAsks.size() - 1]->getCount() < sellingAsks[0]->getCount())
 		{
 			if (doOnce)
 			{
@@ -44,11 +43,11 @@ void StockExchange::resolveOffers()
 				betterAsks[key].emplace_back(buyingAsks[buyingAsks.size() - 1]);
 			}
 			sellingAsks[0]->setPrice(buyingAsks[buyingAsks.size() - 1]->getPrice());
+			sellingAsks[0]->incrementSoldCountBy(buyingAsks[buyingAsks.size() - 1]->getCount());
 			sellingAsks[0]->setStatus(AskStatus::Sold);
-			sellingAsks[0].reset();
 			sellingAsks.erase(sellingAsks.begin());
+			
 			buyingAsks[buyingAsks.size() - 1]->setStatus(AskStatus::Sold);
-			buyingAsks[buyingAsks.size() - 1].reset();
 			buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
 		}
 		if (doOnce)
@@ -59,13 +58,11 @@ void StockExchange::resolveOffers()
 		for (auto& sellingAsk : sellingAsks)
 		{
 			sellingAsk->setStatus(AskStatus::Refused);
-			sellingAsk.reset();
 		}
 
 		for (auto& buyingAsk : buyingAsks)
 		{
 			buyingAsk->setStatus(AskStatus::Refused);
-			buyingAsk.reset();
 		}
 
 		buyingAsks.clear();

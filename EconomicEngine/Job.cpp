@@ -75,3 +75,8 @@ size_t Job::getId() const
 {
 	return id;
 }
+
+std::string Job::getName() const
+{
+	return name;
+}

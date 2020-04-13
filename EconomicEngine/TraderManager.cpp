@@ -20,20 +20,38 @@ Job* TraderManager::assignJob(const size_t key, Trader* trader) const
 	return job;
 }
 
+std::list<std::pair<size_t, std::string>> TraderManager::getJobList() const
+{
+	std::list<std::pair<size_t, std::string>> result;
+	for(const auto& job : jobFactory.getJobs())
+	{
+		result.emplace_back(std::pair<size_t, std::string>(job->getId(), job->getName()));
+	}
+	return result;
+}
+
+int TraderManager::getJobCount(const size_t key)
+{
+	int count = 0;
+	for (const auto& trader : this->traders)
+	{
+		if (trader.getCurrentJob() != nullptr)
+		{
+			if(trader.getCurrentJob()->getId() == key)
+			{
+				++count;
+			}
+		}
+	}
+	return count;
+}
+
 size_t TraderManager::getMostInterestingJob()
 {
-	std::map<size_t, int> jobCounts;
-	for(auto key : this->jobFactory.getKeys())
+	std::list<std::pair<size_t, int>> jobCounts;
+	for(auto key : jobFactory.getKeys())
 	{
-		jobCounts.emplace(std::pair<size_t, int>(key, 0));
-	}
-	
-	for(const auto& trader : this->traders)
-	{
-		if(trader.getCurrentJob() != nullptr)
-		{
-			++jobCounts.find(typeid(*trader.getCurrentJob()).hash_code())->second;
-		}
+		jobCounts.emplace_back(std::pair<size_t, int>(key, getJobCount(key)));
 	}
 
 	std::pair<size_t, int> minCount(0,INT_MAX);

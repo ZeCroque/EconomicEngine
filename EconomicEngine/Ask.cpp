@@ -41,5 +41,13 @@ void Ask::setStatus(const AskStatus status)
 
 BuyingAsk::BuyingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
 
-SellingAsk::SellingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
+SellingAsk::SellingAsk(const size_t id, const int count, const float price) : Ask(id, count, price)
+{
+	this->soldCount = 0;
+}
+
+void SellingAsk::incrementSoldCountBy(const int count)
+{
+	soldCount += count;
+}
 
