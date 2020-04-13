@@ -8,6 +8,10 @@ void StockExchange::setKeys(const std::vector<size_t>& keys)
 	this->currentBuyingAsks = VectorArray<BuyingAsk>(this->keys);
 	this->currentSellingAsks = VectorArray<SellingAsk>(this->keys);
 	this->betterAsks = VectorArray<BuyingAsk>(this->keys);
+	for(auto key : keys)
+	{
+		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
+	}
 }
 
 void StockExchange::registerAsk(std::shared_ptr<BuyingAsk> buyingAsk)
@@ -44,8 +48,11 @@ void StockExchange::resolveOffers()
 			sellingAsks.erase(sellingAsks.begin());
 			buyingAsks[buyingAsks.size() - 1]->setStatus(AskStatus::Sold);
 			buyingAsks[buyingAsks.size() - 1].reset();
-			buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
-			
+			buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);			
+		}
+		if(doOnce)
+		{
+			betterAsks[key].emplace_back(betterAsks[key][betterAsks[key].size()-1]);
 		}
 		
 		for (auto& sellingAsk : sellingAsks)

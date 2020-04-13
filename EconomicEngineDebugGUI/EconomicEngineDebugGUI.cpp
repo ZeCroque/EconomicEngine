@@ -276,7 +276,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 			ui.customPlot->graph(graphIndex)->addData(key, value);
 		}*/
 
-
+		/*std::vector<std::pair<float, float>> a;
 		auto list = stockExchange->getStockExchangePrice(checkBox->getItemId(), step);
 		if (!list.empty())
 		{
@@ -291,11 +291,19 @@ void EconomicEngineDebugGui::updateUiSlot()
 				}
 				for (int i = 0; i < nextIt->getDate() - it->getDate(); ++i)
 				{
+					a.emplace_back(std::pair<float,float>(it->getDate() + i, it->getPrice()));
 					ui.customPlot->graph(graphIndex)->addData(static_cast<double>(it->getDate() + i),
 					                                          static_cast<double>(it->getPrice()));
 				}
 				++it;
 			}
+		}*/
+
+			auto i = key - step;
+		for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
+		{
+			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
+			i++;
 		}
 
 

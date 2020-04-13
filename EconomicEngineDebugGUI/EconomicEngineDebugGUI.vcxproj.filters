@@ -45,27 +45,72 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files\Jobs">
-      <UniqueIdentifier>{8aed822a-750c-4615-9a0a-045eec426ad4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Countable">
-      <UniqueIdentifier>{db5a8a37-ed74-462e-af3f-96b16fb4de53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Uncountable">
-      <UniqueIdentifier>{8c4fa64c-1e4c-4b68-afc2-7aeb902f9dc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Jobs">
-      <UniqueIdentifier>{0a4f7809-d299-4b5f-ac91-4eb7e082bf39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Countable">
-      <UniqueIdentifier>{a23a1655-2b01-4714-879e-31672f376cea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Uncountable">
-      <UniqueIdentifier>{7b276d79-b9d6-43cd-9a47-fcc7afb0aa68}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Axe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Baker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Butcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Farmer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="GraphManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hoe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hunter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Iron.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Leather.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lumberjack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Meat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Miner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Steak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sword.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolMaker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wheat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wood.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WoodPickaxe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="economicenginedebuggui.cpp">
@@ -77,162 +122,105 @@
     <ClCompile Include="qcustomplot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Baker.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Butcher.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Farmer.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Hunter.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Lumberjack.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Miner.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="ToolMaker.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
-    <ClCompile Include="Bread.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Coal.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Iron.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Leather.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Meat.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Steak.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Wheat.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Wood.cpp">
-      <Filter>Source Files\Countable</Filter>
-    </ClCompile>
-    <ClCompile Include="Axe.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
-    <ClCompile Include="Bow.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
-    <ClCompile Include="Hoe.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
-    <ClCompile Include="Pickaxe.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
-    <ClCompile Include="Sword.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
-    <ClCompile Include="WoodPickaxe.cpp">
-      <Filter>Source Files\Uncountable</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Axe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Baker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Butcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="EconomicEngineDebugGUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="Farmer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="GraphManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="Hoe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hunter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Iron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Leather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lumberjack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Miner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickaxe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Steak.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolMaker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wheat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wood.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodPickaxe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClInclude Include="Baker.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Butcher.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Farmer.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Hunter.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Lumberjack.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="ToolMaker.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="Bread.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Coal.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Iron.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Leather.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Meat.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Steak.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Wheat.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Wood.h">
-      <Filter>Header Files\Countable</Filter>
-    </ClInclude>
-    <ClInclude Include="Axe.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    
+    
+    
+    
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="EconomicEngineDebugGUI.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="EconomicEngineDebugGUI.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="EconomicEngineDebugGUI.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Bow.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
-    <ClInclude Include="Hoe.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
-    <ClInclude Include="Pickaxe.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
-    <ClInclude Include="Sword.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
-    <ClInclude Include="WoodPickaxe.h">
-      <Filter>Header Files\Uncountable</Filter>
-    </ClInclude>
-    <ClInclude Include="Miner.h">
-      <Filter>Header Files\Jobs</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
