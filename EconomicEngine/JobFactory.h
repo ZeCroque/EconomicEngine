@@ -3,7 +3,11 @@
 #include "AbstractFactory.h"
 #include "Job.h"
 
-class JobFactory : public AbstractFactory<size_t, Job>{};
+class JobFactory : public AbstractFactory<size_t, Job>
+{
+public:
+	[[nodiscard]] std::list<Job*> getJobs() const;
+};
 
 #endif
 

@@ -41,8 +41,11 @@ public:
 };
 class SellingAsk final : public Ask
 {
+private:
+	int soldCount;
 public:
 	SellingAsk(size_t id, int count, float price);
+	void incrementSoldCountBy(int count);
 };
 
 #endif
