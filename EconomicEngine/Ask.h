@@ -45,6 +45,7 @@ private:
 	int soldCount;
 public:
 	SellingAsk(size_t id, int count, float price);
+	[[nodiscard]] int getSoldCount() const;
 	void incrementSoldCountBy(int count);
 };
 

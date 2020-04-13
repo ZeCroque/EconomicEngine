@@ -46,6 +46,11 @@ SellingAsk::SellingAsk(const size_t id, const int count, const float price) : As
 	this->soldCount = 0;
 }
 
+int SellingAsk::getSoldCount() const
+{
+	return soldCount;
+}
+
 void SellingAsk::incrementSoldCountBy(const int count)
 {
 	soldCount += count;
