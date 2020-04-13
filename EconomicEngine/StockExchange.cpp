@@ -2,13 +2,17 @@
 
 #include <memory>
 
-void StockExchange::setKeys(const std::vector<size_t>& keys)
+#include "TradableManager.h"
+
+StockExchange::StockExchange() : turnCount(0) {}
+
+void StockExchange::init()
 {
-	this->keys = std::vector<size_t>(keys);
+	this->keys = std::vector<size_t>(TradableManager::getInstance()->getKeys());
 	this->currentBuyingAsks = VectorArray<BuyingAsk>(this->keys);
 	this->currentSellingAsks = VectorArray<SellingAsk>(this->keys);
 	this->betterAsks = VectorArray<BuyingAsk>(this->keys);
-	for(auto key : keys)
+	for (auto key : keys)
 	{
 		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
 	}
@@ -83,6 +87,13 @@ void StockExchange::reset()
 	{
 		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
 	}
+
+	turnCount = 0;
+}
+
+void StockExchange::incrementTurnCount()
+{
+	++this->turnCount;
 }
 
 float StockExchange::getStockExchangePrice(const size_t key)
@@ -105,3 +116,9 @@ std::list<BuyingAsk> StockExchange::getStockExchangePrice(size_t key, int count)
 	}
 	return result;
 }
+
+int StockExchange::getTurnCount() const
+{
+	return turnCount;
+}
+

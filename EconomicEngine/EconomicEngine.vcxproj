@@ -54,8 +54,7 @@
     <ClCompile Include="TradableManager.cpp" />
     <ClCompile Include="Trader.cpp" />
     <ClCompile Include="TraderManager.cpp" />
-    <ClCompile Include="TurnManager.cpp" />
-    <ClInclude Include="TurnManager.h" />
+    <ClInclude Include="EconomicEngine.h" />
     <ClInclude Include="Uncountable.h" />
     <ClInclude Include="VectorArray.h" />
   </ItemGroup>

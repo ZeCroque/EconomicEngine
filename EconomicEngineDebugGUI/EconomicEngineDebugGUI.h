@@ -2,11 +2,12 @@
 
 #include <QtWidgets/QMainWindow>
 
+
+#include "DebugEconomicEngine.h"
 #include "GraphManager.h"
 #include "JobManager.h"
 #include "ui_EconomicEngineDebugGUI.h"
 #include "Observer.h"
-#include "TurnManager.h"
 
 class EconomicEngineDebugGui final : public QMainWindow, public IObserver
 {

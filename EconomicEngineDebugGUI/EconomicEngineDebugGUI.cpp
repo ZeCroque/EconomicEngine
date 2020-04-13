@@ -1,6 +1,6 @@
 #include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
-#include "TurnManager.h"
+#include "EconomicEngine.h"
 #include <QCloseEvent>
 #include <thread>
 #include "GraphManager.h"
@@ -11,9 +11,9 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
-	turnManager = TurnManager::getInstance();
+	turnManager = DebugEconomicEngine::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
+	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
 	{
 		turnManager->init();
 		return turnManager->exec(100);
@@ -50,7 +50,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
-	TurnManager::destroyInstance();
+	DebugEconomicEngine::destroyInstance();
 	this->turnManager = nullptr;
 }
 
@@ -120,7 +120,7 @@ void EconomicEngineDebugGui::setYRange()
 
 void EconomicEngineDebugGui::setXRange() const
 {
-	const auto key = turnManager->getTurnNumber();
+	const auto key = turnManager->getTurnCount();
 	ui.horSlidXNav->setMaximum(key);
 	if (key > this->zoomXAxis)
 	{
@@ -163,12 +163,13 @@ void EconomicEngineDebugGui::toggleStart() const
 	if (ui.pBStart->isChecked())
 	{
 		ui.pBStart->setText("Stop");
+		turnManager->resume();
 	}
 	else
 	{
 		ui.pBStart->setText("Start");
+		turnManager->pause();
 	}
-	turnManager->setIsStarted(ui.pBStart->isChecked());
 }
 
 void EconomicEngineDebugGui::setMode() const
@@ -274,7 +275,7 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
-	const auto key = turnManager->getTurnNumber();
+	const auto key = turnManager->getTurnCount();
 	auto stockExchange = StockExchange::getInstance();
 
 	auto totalData = 0;

@@ -81,9 +81,6 @@
     <ClInclude Include="StockExchange.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="TurnManager.h">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="CraftFactory.h">
       <Filter>Fichiers d%27en-tête\Traders</Filter>
     </ClInclude>
@@ -108,6 +105,9 @@
     <ClInclude Include="Uncountable.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
+    <ClInclude Include="EconomicEngine.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countable.cpp">
@@ -123,9 +123,6 @@
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="StockExchange.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="TurnManager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="Job.cpp">
