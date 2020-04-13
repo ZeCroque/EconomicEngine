@@ -145,7 +145,7 @@ void Trader::fillWonderList()
 
 void Trader::fillGoodsList()
 {
-	std::list<size_t> requiredItemsId(1);
+	std::list<size_t> requiredItemsId;
 	auto craftableList = currentJob->getCraftableList();
 	for (auto key : craftableList)
 	{
@@ -161,20 +161,48 @@ void Trader::fillGoodsList()
 		requiredItemsId.push_back(usableTool);
 	}
 
+	if (requiredItemsId.empty())
+	{
+		requiredItemsId.emplace_back(0);
+	}
+
 	for (const auto& item : inventory)
 	{
+		bool isRequired = false;
 		for (auto requiredItemId : requiredItemsId)
 		{
-			if (item->getId() != requiredItemId)
+			if (item->getId() == requiredItemId)
 			{
-				auto* countable = dynamic_cast<Countable*>(item.get());
-				if (countable != nullptr)
-				{
-					goodsList.emplace_back(countable->getId(), countable->getCount());
-					return;
-				}
-				goodsList.emplace_back(item->getId(), 1);
+				isRequired = true;
+				break;
 			}
+		}
+		if (!isRequired)
+		{
+			auto* countable = dynamic_cast<Countable*>(item.get());
+			if (countable != nullptr)
+			{
+				goodsList.emplace_back(countable->getId(), countable->getCount());
+			}
+			else
+			{
+				bool yetAdded = false;
+				for(auto& good : goodsList)
+				{
+					if(good.first == item->getId())
+					{
+						++good.second;
+						yetAdded = true;
+						break;
+					}			
+				}
+				if (!yetAdded)
+				{
+					goodsList.emplace_back(item->getId(), 1);
+				}
+
+			}
+
 		}
 	}
 }

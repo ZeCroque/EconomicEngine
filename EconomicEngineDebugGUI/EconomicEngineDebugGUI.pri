@@ -7,20 +7,54 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./EconomicEngineDebugGUI.h \
-    ./qcustomplot.h \
-    ./GraphManager.h \
-    ./Bread.h \
+HEADERS += ./Bread.h \
+    ./Steak.h \
     ./Coal.h \
-    ./IronOre.h \
+    ./Iron.h \
     ./Leather.h \
     ./Meat.h \
-    ./Steak.h \
     ./Wheat.h \
-    ./Wood.h
-SOURCES += ./economicenginedebuggui.cpp \
+    ./Wood.h \
+    ./Axe.h \
+    ./Bow.h \
+    ./Hoe.h \
+    ./Pickaxe.h \
+    ./Sword.h \
+    ./WoodPickaxe.h \
+    ./EconomicEngineDebugGUI.h \
+    ./qcustomplot.h \
+    ./GraphManager.h \
+    ./Baker.h \
+    ./Butcher.h \
+    ./Farmer.h \
+    ./Hunter.h \
+    ./Lumberjack.h \
+    ./Miner.h \
+    ./ToolMaker.h
+SOURCES += ./main.cpp \
+    ./Baker.cpp \
+    ./Butcher.cpp \
+    ./Farmer.cpp \
+    ./Hunter.cpp \
+    ./Lumberjack.cpp \
+    ./Miner.cpp \
+    ./ToolMaker.cpp \
+    ./Bread.cpp \
+    ./Steak.cpp \
+    ./Coal.cpp \
+    ./Iron.cpp \
+    ./Leather.cpp \
+    ./Meat.cpp \
+    ./Wheat.cpp \
+    ./Wood.cpp \
+    ./Axe.cpp \
+    ./Bow.cpp \
+    ./Hoe.cpp \
+    ./Pickaxe.cpp \
+    ./Sword.cpp \
+    ./WoodPickaxe.cpp \
+    ./economicenginedebuggui.cpp \
     ./GraphManager.cpp \
-    ./main.cpp \
     ./qcustomplot.cpp
 FORMS += ./EconomicEngineDebugGUI.ui
 RESOURCES += EconomicEngineDebugGUI.qrc

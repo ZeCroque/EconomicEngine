@@ -92,6 +92,8 @@ int TurnManager::exec(int count)
 				++turnNumber;
 				traderManager->doTradersCrafting();
 				traderManager->doTradersAsking();
+				auto a = stockExchange->currentBuyingAsks[typeid(Coal).hash_code()];
+				auto b = stockExchange->currentSellingAsks[typeid(Coal).hash_code()];
 				stockExchange->resolveOffers();
 				traderManager->refreshTraders();
 			}

@@ -19,10 +19,13 @@ public:
 
 public Q_SLOTS:
 	void updateUiSlot();
-	void setGraphVisibility() const;
+	void setGraphVisibility();
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
 	void setStep(int value) const;
+	void setYRange();
+	void setXRange() const;
+	void useXSlider(int value);
 	void toggleStart() const;
 	void setMode() const;
 	void doReset();
@@ -35,7 +38,7 @@ private:
 	std::thread economicEngineThread;
 	TurnManager* turnManager;
 	int zoomXAxis;
-    bool realTime;
+	bool realTime;
 
 signals:
 void nextTurn();
