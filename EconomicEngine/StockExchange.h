@@ -9,6 +9,7 @@
 
 class StockExchange : public Singleton<StockExchange>
 {
+	friend class TurnManager; //DEBUG
 private:
 	VectorArray<BuyingAsk> currentBuyingAsks;
 	VectorArray<SellingAsk> currentSellingAsks;
