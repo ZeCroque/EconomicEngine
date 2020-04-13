@@ -77,9 +77,6 @@
     <ClCompile Include="Meat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Miner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Steak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -119,14 +116,17 @@
     <ClCompile Include="Lumberjack.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="Pickaxe.cpp">
-      <Filter>Source Files\Jobs</Filter>
-    </ClCompile>
     <ClCompile Include="ToolMaker.cpp">
       <Filter>Source Files\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="JobManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Miner.cpp">
+      <Filter>Source Files\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,26 +202,16 @@
     <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="JobManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    
-    
-    
-    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
-    </CustomBuild>
-    
-    
-    
-    
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="EconomicEngineDebugGUI.ui">
-      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -233,10 +223,5 @@
     <QtUic Include="EconomicEngineDebugGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="JobManager.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
   </ItemGroup>
 </Project>

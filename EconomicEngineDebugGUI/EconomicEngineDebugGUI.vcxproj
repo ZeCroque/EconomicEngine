@@ -281,7 +281,7 @@
     <ClInclude Include="Hoe.h" />
     <ClInclude Include="Hunter.h" />
     <ClInclude Include="Iron.h" />
-    <QtMoc Include="JobManager.h" />
+    <ClInclude Include="JobManager.h" />
     <ClInclude Include="Leather.h" />
     <ClInclude Include="Lumberjack.h" />
     <ClInclude Include="Meat.h" />
