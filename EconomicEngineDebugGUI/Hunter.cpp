@@ -8,6 +8,8 @@
 Hunter::Hunter() : Job()
 {
 	this->id = typeid(Hunter).hash_code();
+	this->name = "Hunter";
+	
 	//Steak : no requirement
 	this->craftFactory->
 	      registerCraft(new Craft(0.5f, typeid(Meat).hash_code(), std::vector<std::pair<size_t, int>>()));

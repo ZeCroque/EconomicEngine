@@ -7,6 +7,8 @@
 Lumberjack::Lumberjack()
 {
 	this->id = typeid(Lumberjack).hash_code();
+	this->name = "Lumberjack";
+	
 	//Wood : no requirement
 	this->craftFactory->registerCraft(new Craft(0.5f, typeid(Wood).hash_code(), std::vector<std::pair<size_t, int>>()));
 
