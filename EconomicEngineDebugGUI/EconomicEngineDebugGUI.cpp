@@ -16,7 +16,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec();
+		return turnManager->exec(10);
 	}, turnManager);
 
 	ui.setupUi(this);
@@ -192,7 +192,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.pBStart->setChecked(false);
 	setMode();
 
-	turnManager->reset();
+	turnManager->reset(10);
 	doInit();
 }
 
