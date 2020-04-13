@@ -41,7 +41,7 @@ private:
 	std::vector<JobManager*> arrayJobs;
 	QTimer dataTimer;
 	std::thread economicEngineThread;
-	TurnManager* turnManager;
+	DebugEconomicEngine* turnManager;
 	TraderManager* traderManager;
 	int zoomXAxis;
 	bool realTime;

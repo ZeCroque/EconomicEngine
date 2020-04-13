@@ -45,6 +45,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
 
+	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
+
 	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
 }
 
@@ -192,19 +194,21 @@ void EconomicEngineDebugGui::doReset()
 {
 	ui.pBStart->setChecked(false);
 	setMode();
-	turnManager->reset(10);
+
 
 	for (auto graphManager : arrayCheckBox)
 	{
 		ui.customPlot->removeGraph(graphManager->getGraphIndex());
 	}
 	arrayCheckBox.clear();
+	arrayJobs.clear();
+	ui.cBKill->clear();
 
 	ui.customPlot->clearGraphs();
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-
+	turnManager->reset(10);
 	doInit();
 }
 

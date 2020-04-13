@@ -239,6 +239,7 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         sBKill = new QSpinBox(gridLayoutWidget);
         sBKill->setObjectName(QString::fromUtf8("sBKill"));
+        sBKill->setMinimum(1);
 
         gridLayout->addWidget(sBKill, 0, 1, 1, 1);
 
