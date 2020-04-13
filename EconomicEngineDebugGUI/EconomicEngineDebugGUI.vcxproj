@@ -211,6 +211,7 @@
     <ClCompile Include="Hoe.cpp" />
     <ClCompile Include="Hunter.cpp" />
     <ClCompile Include="Iron.cpp" />
+    <ClCompile Include="JobManager.cpp" />
     <ClCompile Include="Leather.cpp" />
     <ClCompile Include="Lumberjack.cpp" />
     <ClCompile Include="main.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="Hoe.h" />
     <ClInclude Include="Hunter.h" />
     <ClInclude Include="Iron.h" />
+    <QtMoc Include="JobManager.h" />
     <ClInclude Include="Leather.h" />
     <ClInclude Include="Lumberjack.h" />
     <ClInclude Include="Meat.h" />

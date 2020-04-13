@@ -16,7 +16,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec(10);
+		return turnManager->exec(100);
 	}, turnManager);
 
 	ui.setupUi(this);
@@ -179,6 +179,10 @@ void EconomicEngineDebugGui::setMode() const
 
 void EconomicEngineDebugGui::doReset()
 {
+	ui.pBStart->setChecked(false);
+	setMode();
+	turnManager->reset(10);
+	
 	for (auto graphManager : arrayCheckBox)
 	{
 		ui.customPlot->removeGraph(graphManager->getGraphIndex());
@@ -189,10 +193,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-	ui.pBStart->setChecked(false);
-	setMode();
 
-	turnManager->reset(10);
 	doInit();
 }
 

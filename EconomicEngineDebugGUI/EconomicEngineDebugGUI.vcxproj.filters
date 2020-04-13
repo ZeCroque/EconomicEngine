@@ -45,12 +45,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source Files\Jobs">
+      <UniqueIdentifier>{315a1a9c-6bae-42d7-86bb-4342afcbe4e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Axe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Baker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Bow.cpp">
@@ -59,13 +59,7 @@
     <ClCompile Include="Bread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Butcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Coal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Farmer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GraphManager.cpp">
@@ -74,16 +68,10 @@
     <ClCompile Include="Hoe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Hunter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Iron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Leather.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Lumberjack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Meat.cpp">
@@ -92,16 +80,10 @@
     <ClCompile Include="Miner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pickaxe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Steak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sword.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ToolMaker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Wheat.cpp">
@@ -120,6 +102,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Baker.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Butcher.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Farmer.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Hunter.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Lumberjack.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickaxe.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolMaker.cpp">
+      <Filter>Source Files\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="JobManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -214,5 +220,10 @@
     <QtUic Include="EconomicEngineDebugGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="JobManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
