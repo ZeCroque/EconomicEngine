@@ -8,15 +8,15 @@
 #include <mutex>
 #include <thread>
 
-template <class T> class TurnManager : public Observable, public Singleton<T>
+template <class T> class EconomicEngine : public Observable, public Singleton<T>
 {
 protected:
 	TraderManager* traderManager;
 	TradableManager* tradableManager;
 	StockExchange* stockExchange;
 
-	TurnManager() : traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1) {}
-	virtual ~TurnManager() = default;
+	EconomicEngine() : traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1) {}
+	virtual ~EconomicEngine() = default;
 private:
 	bool bRunning;
 	bool bPaused;
@@ -30,7 +30,7 @@ public:
 	virtual void initTraders() const = 0;
 	virtual void initTradables() const = 0;
 	
-	void init()
+	void init() const
 	{
 		initTraders();
 		initTradables();

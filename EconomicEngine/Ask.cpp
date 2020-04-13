@@ -1,6 +1,6 @@
 #include "Ask.h"
 
-#include "TurnManager.h"
+#include "EconomicEngine.h"
 
 //TODO find manager in a proper way
 Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(StockExchange::getInstance()->getTurnCount()), status(AskStatus::Pending), typeId(id) {}

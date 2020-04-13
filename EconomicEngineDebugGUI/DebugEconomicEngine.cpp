@@ -1,4 +1,4 @@
-#include "DebugTurnManager.h"
+#include "DebugEconomicEngine.h"
 
 #include "Axe.h"
 #include "Baker.h"
@@ -22,9 +22,9 @@
 #include "Wood.h"
 #include "WoodPickaxe.h"
 
-DebugTurnManager::DebugTurnManager() : TurnManager<DebugTurnManager>(){}
+DebugEconomicEngine::DebugEconomicEngine() : EconomicEngine<DebugEconomicEngine>(){}
 
-void DebugTurnManager::initTraders() const
+void DebugEconomicEngine::initTraders() const
 {
 	//Init jobs
 	traderManager->registerJob(new Farmer());
@@ -36,7 +36,7 @@ void DebugTurnManager::initTraders() const
 	traderManager->registerJob(new Lumberjack());	
 }
 
-void DebugTurnManager::initTradables() const
+void DebugEconomicEngine::initTradables() const
 {
 	//Init tradables
 	tradableManager->registerTradable(new Wheat());

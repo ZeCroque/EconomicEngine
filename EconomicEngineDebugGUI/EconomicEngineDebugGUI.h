@@ -3,7 +3,7 @@
 #include <QtWidgets/QMainWindow>
 
 
-#include "DebugTurnManager.h"
+#include "DebugEconomicEngine.h"
 #include "GraphManager.h"
 #include "ui_EconomicEngineDebugGUI.h"
 #include "Observer.h"
@@ -37,7 +37,7 @@ private:
 	std::vector<GraphManager*> arrayCheckBox;
 	QTimer dataTimer;
 	std::thread economicEngineThread;
-	DebugTurnManager* turnManager;
+	DebugEconomicEngine* turnManager;
 	int zoomXAxis;
 	bool realTime;
 

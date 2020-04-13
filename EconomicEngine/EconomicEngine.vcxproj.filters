@@ -81,9 +81,6 @@
     <ClInclude Include="StockExchange.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="TurnManager.h">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="CraftFactory.h">
       <Filter>Fichiers d%27en-tête\Traders</Filter>
     </ClInclude>
@@ -107,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="Uncountable.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
+    </ClInclude>
+    <ClInclude Include="EconomicEngine.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

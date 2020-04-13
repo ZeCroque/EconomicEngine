@@ -1,6 +1,6 @@
 #include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
-#include "TurnManager.h"
+#include "EconomicEngine.h"
 #include <QCloseEvent>
 #include <thread>
 #include "GraphManager.h"
@@ -11,9 +11,9 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
-	turnManager = DebugTurnManager::getInstance();
+	turnManager = DebugEconomicEngine::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread = std::thread([](DebugTurnManager* turnManager)-> int
+	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
 	{
 		turnManager->init();
 		return turnManager->exec(10);
@@ -47,7 +47,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
-	DebugTurnManager::destroyInstance();
+	DebugEconomicEngine::destroyInstance();
 	this->turnManager = nullptr;
 }
 

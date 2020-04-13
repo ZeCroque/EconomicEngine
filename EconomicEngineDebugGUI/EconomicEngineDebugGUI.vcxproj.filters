@@ -122,7 +122,7 @@
     <ClCompile Include="qcustomplot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugTurnManager.cpp">
+    <ClCompile Include="DebugEconomicEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,7 +199,7 @@
     <QtMoc Include="qcustomplot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClInclude Include="DebugTurnManager.h">
+    <ClInclude Include="DebugEconomicEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
