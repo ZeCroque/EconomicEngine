@@ -11,9 +11,9 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
-	turnManager = TurnManager::getInstance();
+	turnManager = DebugTurnManager::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread = std::thread([](TurnManager* turnManager)-> int
+	economicEngineThread = std::thread([](DebugTurnManager* turnManager)-> int
 	{
 		turnManager->init();
 		return turnManager->exec(10);
@@ -47,7 +47,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
-	TurnManager::destroyInstance();
+	DebugTurnManager::destroyInstance();
 	this->turnManager = nullptr;
 }
 
@@ -117,7 +117,7 @@ void EconomicEngineDebugGui::setYRange()
 
 void EconomicEngineDebugGui::setXRange() const
 {
-	const auto key = turnManager->getTurnNumber();
+	const auto key = turnManager->getTurnCount();
 	ui.horSlidXNav->setMaximum(key);
 	if (key > this->zoomXAxis)
 	{
@@ -248,7 +248,7 @@ void EconomicEngineDebugGui::doInit()
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
-	const auto key = turnManager->getTurnNumber();
+	const auto key = turnManager->getTurnCount();
 	auto stockExchange = StockExchange::getInstance();
 
 	auto totalData = 0;

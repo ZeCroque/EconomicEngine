@@ -205,6 +205,7 @@
     <ClCompile Include="Bread.cpp" />
     <ClCompile Include="Butcher.cpp" />
     <ClCompile Include="Coal.cpp" />
+    <ClCompile Include="DebugTurnManager.cpp" />
     <ClCompile Include="economicenginedebuggui.cpp" />
     <ClCompile Include="Farmer.cpp" />
     <ClCompile Include="GraphManager.cpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="Bread.h" />
     <ClInclude Include="Butcher.h" />
     <ClInclude Include="Coal.h" />
+    <ClInclude Include="DebugTurnManager.h" />
     <ClInclude Include="Farmer.h" />
     <ClInclude Include="Hoe.h" />
     <ClInclude Include="Hunter.h" />

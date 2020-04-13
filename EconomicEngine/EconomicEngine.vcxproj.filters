@@ -125,9 +125,6 @@
     <ClCompile Include="StockExchange.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="TurnManager.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Job.cpp">
       <Filter>Fichiers sources\Traders</Filter>
     </ClCompile>
