@@ -74,6 +74,25 @@ void TraderManager::refreshTraders()
 	}
 }
 
+void TraderManager::killTraders()
+{
+	std::vector<std::list<Trader>::iterator> iterators;
+	iterators.reserve(traders.size());
+
+	for (auto it = traders.begin(); it != traders.end(); ++it)
+	{
+		if (it->getFoodLevel() <= 0)
+		{
+			iterators.emplace_back(it);
+		}
+	}
+
+	for (auto& it : iterators)
+	{
+		traders.erase(it);
+	}
+}
+
 void TraderManager::doTradersCrafting()
 {
 	for (auto& trader : traders)
@@ -95,7 +114,7 @@ void TraderManager::reset()
 	traders.clear();
 }
 
-void TraderManager::kill(const size_t key, int count)
+void TraderManager::kill(const size_t key, const int count)
 {
 	std::vector<std::list<Trader>::iterator> iterators;
 	iterators.reserve(traders.size());

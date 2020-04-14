@@ -17,6 +17,7 @@ public:
 	[[nodiscard]] int getJobCount(size_t key);
 	[[nodiscard]] size_t getMostInterestingJob();
 	void refreshTraders();
+	void killTraders();
 	void doTradersCrafting();
 	void doTradersAsking();
 	void reset();

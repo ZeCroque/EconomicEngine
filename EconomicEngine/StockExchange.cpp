@@ -1,6 +1,5 @@
 #include "StockExchange.h"
 
-
 #include <algorithm>
 #include <memory>
 

@@ -67,6 +67,7 @@ public:
 				traderManager->doTradersAsking();
 				stockExchange->resolveOffers();
 				traderManager->refreshTraders();
+				traderManager->killTraders();
 			}
 
 			this->notifyObservers();
