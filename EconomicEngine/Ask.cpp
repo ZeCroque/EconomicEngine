@@ -2,7 +2,6 @@
 
 #include "EconomicEngine.h"
 
-//TODO find manager in a proper way
 Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(StockExchange::getInstance()->getTurnCount()), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
 
 float Ask::getPrice() const
@@ -54,5 +53,3 @@ void Ask::incrementTradedCountBy(const int count)
 BuyingAsk::BuyingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
 
 SellingAsk::SellingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
-
-
