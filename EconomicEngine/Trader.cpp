@@ -266,8 +266,8 @@ void Trader::checkAsks()
 			else
 			{
 				auto* sellingAsk = dynamic_cast<SellingAsk*>(ask.get());
-				removeFromInventory(ask->getId(), sellingAsk->getSoldCount());
-				money += ask->getPrice() * static_cast<float>(sellingAsk->getSoldCount());
+				removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
+				money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
 			}
 		}
 	}

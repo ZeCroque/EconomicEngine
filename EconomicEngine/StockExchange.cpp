@@ -1,5 +1,7 @@
 #include "StockExchange.h"
 
+
+#include <algorithm>
 #include <memory>
 
 #include "TradableManager.h"
@@ -46,13 +48,23 @@ void StockExchange::resolveOffers()
 				doOnce = false;
 				betterAsks[key].emplace_back(buyingAsks[buyingAsks.size() - 1]);
 			}
-			sellingAsks[0]->setPrice(buyingAsks[buyingAsks.size() - 1]->getPrice());
-			sellingAsks[0]->incrementSoldCountBy(buyingAsks[buyingAsks.size() - 1]->getCount());
-			sellingAsks[0]->setStatus(AskStatus::Sold);
-			sellingAsks.erase(sellingAsks.begin());
 			
+			const int tradedCount = std::min<int>(buyingAsks[buyingAsks.size() - 1]->getCount() - buyingAsks[buyingAsks.size() - 1]->getTradedCount(), sellingAsks[0]->getCount() - sellingAsks[0]->getTradedCount());
+			
+			sellingAsks[0]->setPrice(buyingAsks[buyingAsks.size() - 1]->getPrice());
+			sellingAsks[0]->incrementTradedCountBy(tradedCount);
+			sellingAsks[0]->setStatus(AskStatus::Sold);
+			if (sellingAsks[0]->getCount() == sellingAsks[0]->getTradedCount())
+			{
+				sellingAsks.erase(sellingAsks.begin());
+			}
+
+			buyingAsks[buyingAsks.size() - 1]->incrementTradedCountBy(tradedCount);
 			buyingAsks[buyingAsks.size() - 1]->setStatus(AskStatus::Sold);
-			buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
+			if(buyingAsks[buyingAsks.size() - 1]->getCount() == buyingAsks[buyingAsks.size() - 1]->getTradedCount())
+			{
+				buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
+			}
 		}
 		if (doOnce)
 		{
@@ -61,12 +73,18 @@ void StockExchange::resolveOffers()
 
 		for (auto& sellingAsk : sellingAsks)
 		{
-			sellingAsk->setStatus(AskStatus::Refused);
+			if(sellingAsk->getStatus()==AskStatus::Pending)
+			{
+				sellingAsk->setStatus(AskStatus::Refused);
+			}
 		}
 
 		for (auto& buyingAsk : buyingAsks)
 		{
-			buyingAsk->setStatus(AskStatus::Refused);
+			if (buyingAsk->getStatus() == AskStatus::Pending)
+			{
+				buyingAsk->setStatus(AskStatus::Refused);
+			}
 		}
 
 		buyingAsks.clear();
