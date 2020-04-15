@@ -5,6 +5,7 @@
 
 
 #include "Countable.h"
+#include "Food.h"
 #include "StockExchange.h"
 #include "TradableManager.h"
 #include "TraderManager.h"
@@ -15,6 +16,7 @@ Trader::Trader()
 	currentJob = nullptr;
 	currentCraft = nullptr;
 	money = 100;
+	foodLevel = 20.0f;
 	randomEngine = std::mt19937(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	TradableManager* tradableManager = TradableManager::getInstance();
 	auto keys = tradableManager->getKeys();
@@ -111,8 +113,8 @@ void Trader::assignJob()
 
 void Trader::fillWonderList()
 {
+	//Craft Requirements
 	Craft* mostBeneficialCraft = nullptr;
-
 	auto uncraftableList = currentJob->getUncraftableList();
 	for (auto key : uncraftableList)
 	{
@@ -134,12 +136,34 @@ void Trader::fillWonderList()
 		}
 	}
 
+	//Tools
 	for (auto usableTool : this->currentJob->getUsableTools())
 	{
 		if (!isInInventory(usableTool))
 		{
 			wonderList.emplace_back(std::pair<size_t, int>(usableTool, 1));
 		}
+	}
+
+	//Food
+	if(calculateFoodStock()<=5.0f)
+	{
+		TradableManager* tradableManager = TradableManager::getInstance();
+		std::vector < std::pair < size_t, std::pair< float, int> >> foodInfos;
+		foodInfos.reserve(tradableManager->getKeys().size());
+		
+		for(auto key : tradableManager->getKeys())
+		{
+			auto* foodItem = dynamic_cast<Food*>(tradableManager->getTradable(key));
+			if(foodItem!=nullptr)
+			{
+				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(key, std::pair<float, int>(foodItem->getFoodValue(), INT_MAX)));
+			}
+		}
+
+		const std::uniform_real_distribution<float> uniformFloatDist(1.0f, 10.0f);
+		const float foodGoal = uniformFloatDist(randomEngine);
+		wonderList.splice(wonderList.end(),getRandomFoodCombination(foodInfos, foodGoal));
 	}
 }
 
@@ -159,6 +183,26 @@ void Trader::fillGoodsList()
 	for (auto usableTool : getCurrentJob()->getUsableTools())
 	{
 		requiredItemsId.push_back(usableTool);
+	}
+
+	const float foodStock = calculateFoodStock();
+	if(foodStock >= 10)
+	{
+		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
+		foodInfos.reserve(inventory.size());
+		for (auto& item : inventory)
+		{
+			auto* foodItem = dynamic_cast<Food*>(item.get());
+			if (foodItem != nullptr)
+			{
+				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(foodItem->getId(), std::pair<float, int>(foodItem->getFoodValue(), foodItem->getCount())));
+			}
+		}
+
+		for (const auto& food : getRandomFoodCombination(foodInfos, foodLevel-10.0f))
+		{
+			goodsList.emplace_back(std::pair<size_t, int>(food.first, food.second));
+		}
 	}
 
 	if (requiredItemsId.empty())
@@ -205,6 +249,40 @@ void Trader::fillGoodsList()
 
 		}
 	}
+}
+
+std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(const std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, const float foodGoal)
+{
+	std::list<std::pair<size_t, int>> foodCombination;
+	if(!foodInfos.empty())
+	{
+		float foodCount = 0.0f;
+		while (foodCount < foodGoal)
+		{
+			std::uniform_int_distribution<int> uniformIntDist(0, static_cast<int>(foodInfos.size() - 1));
+			const int index = uniformIntDist(randomEngine);
+			uniformIntDist = std::uniform_int_distribution<int>(1, std::max<int>(1, std::min<int>(foodInfos[index].second.second, static_cast<int>(foodGoal / foodInfos[index].second.first))));
+			const int count = uniformIntDist(randomEngine);
+			foodCount += foodInfos[index].second.first * static_cast<float>(count);
+			foodCombination.emplace_back(foodInfos[index].first, count);
+		}
+	}
+
+	return foodCombination;
+}
+
+float Trader::calculateFoodStock()
+{
+	float foodStock = 0.0f;
+	for(const auto& item : inventory)
+	{
+		auto* foodItem = dynamic_cast<Food*>(item.get());
+		if(foodItem!=nullptr)
+		{
+			foodStock += foodItem->getFoodValue();
+		}
+	}
+	return foodStock;
 }
 
 float Trader::calculatePriceBeliefMean(const size_t key)
@@ -266,8 +344,8 @@ void Trader::checkAsks()
 			else
 			{
 				auto* sellingAsk = dynamic_cast<SellingAsk*>(ask.get());
-				removeFromInventory(ask->getId(), sellingAsk->getSoldCount());
-				money += ask->getPrice() * static_cast<float>(sellingAsk->getSoldCount());
+				removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
+				money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
 			}
 		}
 	}
@@ -281,8 +359,29 @@ void Trader::refresh()
 	{
 		this->assignJob();
 	}
-
 	checkAsks();
+
+	foodLevel -= 0.34f; //TODO make it a setting
+	
+	if(foodLevel > 0.0 && foodLevel<=10.0f)
+	{
+		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
+		foodInfos.reserve(inventory.size());
+		for (auto& item : inventory)
+		{
+			auto* foodItem = dynamic_cast<Food*>(item.get());
+			if (foodItem != nullptr)
+			{
+				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(foodItem->getId(), std::pair<float, int>(foodItem->getFoodValue(), foodItem->getCount())));
+			}
+		}
+
+		for(const auto& food : getRandomFoodCombination(foodInfos, 10.0f-foodLevel))
+		{
+			foodLevel += dynamic_cast<Food*>(TradableManager::getInstance()->getTradable(food.first))->getFoodValue() * static_cast<float>(food.second);
+			removeFromInventory(food.first, food.second);
+		}
+	}
 }
 
 const std::list<std::shared_ptr<Tradable>>& Trader::getInventory() const
@@ -310,6 +409,11 @@ bool Trader::isInInventory(const size_t key)
 		}
 	}
 	return false;
+}
+
+float Trader::getFoodLevel() const
+{
+	return foodLevel;
 }
 
 void Trader::addToInventory(const size_t key, const int count)
