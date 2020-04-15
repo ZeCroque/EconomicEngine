@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QLabel>
 #include <QString>
 
 class JobManager final
@@ -9,6 +10,9 @@ public:
 
 	QString getJobName() const;
 	size_t getJobId() const;
+
+	QLabel* lbName;
+	QLabel* lbNumber;
 
 private:
 	QString jobName;

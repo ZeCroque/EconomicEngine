@@ -209,6 +209,14 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->replot();
 
 	turnManager->reset(10);
+	
+	arrayJobs.clear();
+	while (ui.gridLayJobs->count() > 0)
+	{
+		QLayoutItem* item = ui.gridLayJobs->takeAt(0);
+		QWidget* widget = item->widget();
+		delete widget;
+	}
 	doInit();
 }
 
@@ -260,9 +268,20 @@ void EconomicEngineDebugGui::doInit()
 		}
 	}
 
-	for (const auto job : traderManager->getJobList())
+
+	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
+	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
+	for (const auto& job : traderManager->getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
+
+		jobManager->lbName = new QLabel(jobManager->getJobName());
+
+		auto number = QString::number(traderManager->getJobCount(jobManager->getJobId()));
+		jobManager->lbNumber = new QLabel(number);
+
+		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -272,9 +291,15 @@ void EconomicEngineDebugGui::doInit()
 
 void EconomicEngineDebugGui::updateUiJobs()
 {
-	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
-	const auto traderCount = traderManager->getJobCount(job->getJobId());
+	const auto cbJob = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto traderCount = traderManager->getJobCount(cbJob->getJobId());
 	ui.sBKill->setMaximum(traderCount);
+
+	for(auto job : arrayJobs)
+	{
+		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
+		job->lbNumber->setText(number);
+	}
 }
 
 void EconomicEngineDebugGui::updateUiSlot()
