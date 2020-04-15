@@ -22,8 +22,6 @@ public:
 	[[nodiscard]] std::list<IObserver*> getRegisteredObservers() const;
 	virtual void notifyObservers();
 
-private:
-	bool markForDelete;
-	
+private:	
 	bool contains(IObserver* observer);
 };

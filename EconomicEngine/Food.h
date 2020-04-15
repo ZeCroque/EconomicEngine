@@ -5,10 +5,11 @@
 class Food : public Countable
 {
 protected:
-	int foodValue;
+	float foodValue;
 public:
 	Food();
-	Food(int foodValue, int count);
+	Food(float foodValue, int count);
+	[[nodiscard]] float getFoodValue() const;
 };
 
 #endif

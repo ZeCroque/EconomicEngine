@@ -27,9 +27,12 @@ private:
 	std::list<std::shared_ptr<Ask>> currentAsks;
 	std::mt19937 randomEngine;
 	float money;
+	float foodLevel;
 	void assignJob();
 	void fillWonderList();
 	void fillGoodsList();
+	std::list<std::pair<size_t, int>> getRandomFoodCombination(const std::vector<std::pair<size_t, std::pair<float,int>>>& foodInfos, float foodGoal);
+	float calculateFoodStock();
 	float calculatePriceBeliefMean(size_t key);
 	float evaluatePrice(size_t key);
 	float calculateEarnings(Craft* craft);
@@ -44,6 +47,7 @@ public:
 	[[nodiscard]] Job* getCurrentJob() const;
 	[[nodiscard]] Craft* getCurrentCraft() const;
 	[[nodiscard]] bool isInInventory(size_t key);
+	[[nodiscard]] float getFoodLevel() const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(Countable* countable);
 	void addToInventory(Uncountable* uncountable);

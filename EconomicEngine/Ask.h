@@ -14,6 +14,7 @@ protected:
 	int date;
 	AskStatus status;
 	size_t typeId;
+	int tradedCount;
 	
 public:	
 	Ask() = delete;
@@ -31,6 +32,8 @@ public:
 	[[nodiscard]] AskStatus getStatus() const;
 	void setPrice(float price);
 	void setStatus(AskStatus status);
+	[[nodiscard]] int getTradedCount() const;
+	void incrementTradedCountBy(int count);
 
 };
 
@@ -41,12 +44,8 @@ public:
 };
 class SellingAsk final : public Ask
 {
-private:
-	int soldCount;
 public:
 	SellingAsk(size_t id, int count, float price);
-	[[nodiscard]] int getSoldCount() const;
-	void incrementSoldCountBy(int count);
 };
 
 #endif
