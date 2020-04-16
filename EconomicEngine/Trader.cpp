@@ -163,6 +163,8 @@ void Trader::fillWonderList()
 		wonderList.splice(wonderList.end(), getRandomFoodCombination(foodInfos, foodGoal));
 	}
 
+void Trader::fillWonderList()
+{
 	//Find the most beneficial unavailable craft
 	Craft* mostBeneficialCraft = nullptr;
 	auto uncraftableList = currentJob->getUncraftableList();
@@ -194,6 +196,27 @@ void Trader::fillWonderList()
 		{
 			wonderList.emplace_back(std::pair<size_t, int>(usableTool, 1));
 		}
+	}
+
+	//Food
+	if(calculateFoodStock()<=5.0f)
+	{
+		TradableManager* tradableManager = TradableManager::getInstance();
+		std::vector < std::pair < size_t, std::pair< float, int> >> foodInfos;
+		foodInfos.reserve(tradableManager->getKeys().size());
+		
+		for(auto key : tradableManager->getKeys())
+		{
+			auto* foodItem = dynamic_cast<Food*>(tradableManager->getTradable(key));
+			if(foodItem!=nullptr)
+			{
+				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(key, std::pair<float, int>(foodItem->getFoodValue(), INT_MAX)));
+			}
+		}
+
+		const std::uniform_real_distribution<float> uniformFloatDist(1.0f, 10.0f);
+		const float foodGoal = uniformFloatDist(randomEngine);
+		wonderList.splice(wonderList.end(),getRandomFoodCombination(foodInfos, foodGoal));
 	}
 }
 
@@ -451,9 +474,8 @@ void Trader::refresh()
 		this->assignJob();
 	}
 	checkAsks();
-	
-	foodLevel -= 0.34f; //TODO make it a setting
-	
+  
+	foodLevel -= 0.34f; //TODO make it a setting	
 	if(foodLevel > 0.0 && foodLevel<=10.0f)
 	{
 		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
@@ -486,6 +508,11 @@ bool Trader::isInInventory(const size_t key)
 		}
 	}
 	return false;
+}
+
+float Trader::getFoodLevel() const
+{
+	return foodLevel;
 }
 
 void Trader::addToInventory(const size_t key, const int count)
