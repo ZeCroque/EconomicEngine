@@ -99,14 +99,14 @@
     <ClInclude Include="Food.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
-    <ClInclude Include="VectorArray.h">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Uncountable.h">
       <Filter>Fichiers d%27en-tête\Tradables</Filter>
     </ClInclude>
     <ClInclude Include="EconomicEngine.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorArray.h">
+      <Filter>Fichiers d%27en-tête\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="JobFactory.cpp">
       <Filter>Fichiers sources\Traders</Filter>
+    </ClCompile>
+    <ClCompile Include="Behavior.cpp">
+      <Filter>Fichiers sources\Tradables</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

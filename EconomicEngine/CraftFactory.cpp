@@ -51,7 +51,17 @@ bool CraftFactory::isCraftable(const size_t key) const
 			auto it2 = toolsRequired.begin();
 			for (; it2 != toolsRequired.end(); ++it2)
 			{
-				if (owner->isInInventory(*it2))
+				bool hasBehavior = false;
+				for(const auto& item : owner->getInventory())
+				{
+					auto* tool = dynamic_cast<Uncountable*>(item.get());
+					if(tool != nullptr && tool->getBehavior()!=nullptr && tool->getBehavior()->getId() == *it2)
+					{
+						hasBehavior = true;
+						break;
+					}
+				}
+				if(hasBehavior)
 				{
 					break;
 				}

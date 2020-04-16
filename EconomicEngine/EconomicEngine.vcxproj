@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="JobFactory.cpp" />
     <ClCompile Include="Uncountable.cpp" />
     <ClInclude Include="AbstractFactory.h" />

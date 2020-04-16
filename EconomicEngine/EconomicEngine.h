@@ -47,7 +47,6 @@ public:
 	int exec(const int count)
 	{
 		this->bRunning = true;
-		auto pauseTime = 250;
 
 		//Create traders
 		traderManager->addTrader(count);
@@ -71,8 +70,7 @@ public:
 			}
 
 			this->notifyObservers();
-			pauseTime = 1000 / turnSecond;
-			std::this_thread::sleep_for(std::chrono::milliseconds(pauseTime));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 		}
 		return 0;
 	}
