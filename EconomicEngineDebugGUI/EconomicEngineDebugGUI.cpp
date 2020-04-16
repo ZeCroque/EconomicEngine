@@ -43,7 +43,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
 	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
 
-	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
+	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doAdd()));
+	connect(ui.pBAdd, SIGNAL(clicked()), this, SLOT(doKill()));
 
 	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
 
@@ -190,6 +191,13 @@ void EconomicEngineDebugGui::doKill()
 	updateUiJobs();
 }
 
+void EconomicEngineDebugGui::doAdd()
+{
+	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	traderManager->addTrader(ui.sBKill->value(), job->getJobId());
+	updateUiJobs();
+}
+
 void EconomicEngineDebugGui::doReset()
 {
 	ui.pBStart->setChecked(false);
@@ -209,7 +217,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->replot();
 
 	turnManager->reset(10);
-	
+
 	arrayJobs.clear();
 	while (ui.gridLayJobs->count() > 0)
 	{
@@ -271,6 +279,7 @@ void EconomicEngineDebugGui::doInit()
 
 	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
 	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. money"), 0, 2);
 	for (const auto& job : traderManager->getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
@@ -279,6 +288,8 @@ void EconomicEngineDebugGui::doInit()
 
 		auto number = QString::number(traderManager->getJobCount(jobManager->getJobId()));
 		jobManager->lbNumber = new QLabel(number);
+
+		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
 
 		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
 		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
@@ -295,7 +306,7 @@ void EconomicEngineDebugGui::updateUiJobs()
 	const auto traderCount = traderManager->getJobCount(cbJob->getJobId());
 	ui.sBKill->setMaximum(traderCount);
 
-	for(auto job : arrayJobs)
+	for (auto job : arrayJobs)
 	{
 		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
 		job->lbNumber->setText(number);

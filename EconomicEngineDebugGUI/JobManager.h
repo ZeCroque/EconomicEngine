@@ -13,6 +13,7 @@ public:
 
 	QLabel* lbName;
 	QLabel* lbNumber;
+	QLabel* lbMoneyAverage;
 
 private:
 	QString jobName;

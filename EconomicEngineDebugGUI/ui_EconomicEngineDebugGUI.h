@@ -57,10 +57,11 @@ public:
     QSlider *horSlidXNav;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
-    QPushButton *pBKill;
     QSpinBox *sBKill;
     QComboBox *cBKill;
-    QFrame *line_3;
+    QVBoxLayout *verticalLayout;
+    QPushButton *pBAdd;
+    QPushButton *pBKill;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayJobs;
     QStatusBar *statusBar;
@@ -240,28 +241,32 @@ public:
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        pBKill = new QPushButton(gridLayoutWidget);
-        pBKill->setObjectName(QString::fromUtf8("pBKill"));
-
-        gridLayout->addWidget(pBKill, 0, 4, 1, 1);
-
         sBKill = new QSpinBox(gridLayoutWidget);
         sBKill->setObjectName(QString::fromUtf8("sBKill"));
         sBKill->setMinimum(1);
 
-        gridLayout->addWidget(sBKill, 0, 2, 1, 1);
+        gridLayout->addWidget(sBKill, 0, 1, 1, 1);
 
         cBKill = new QComboBox(gridLayoutWidget);
         cBKill->setObjectName(QString::fromUtf8("cBKill"));
 
-        gridLayout->addWidget(cBKill, 0, 1, 1, 1);
+        gridLayout->addWidget(cBKill, 0, 0, 1, 1);
 
-        line_3 = new QFrame(gridLayoutWidget);
-        line_3->setObjectName(QString::fromUtf8("line_3"));
-        line_3->setFrameShape(QFrame::VLine);
-        line_3->setFrameShadow(QFrame::Sunken);
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(6);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        pBAdd = new QPushButton(gridLayoutWidget);
+        pBAdd->setObjectName(QString::fromUtf8("pBAdd"));
 
-        gridLayout->addWidget(line_3, 0, 0, 1, 1);
+        verticalLayout->addWidget(pBAdd);
+
+        pBKill = new QPushButton(gridLayoutWidget);
+        pBKill->setObjectName(QString::fromUtf8("pBKill"));
+
+        verticalLayout->addWidget(pBKill);
+
+
+        gridLayout->addLayout(verticalLayout, 0, 2, 1, 1);
 
         gridLayoutWidget_2 = new QWidget(centralWidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
@@ -285,8 +290,7 @@ public:
         QWidget::setTabOrder(pBStart, pBReset);
         QWidget::setTabOrder(pBReset, horSlidXNav);
         QWidget::setTabOrder(horSlidXNav, sBKill);
-        QWidget::setTabOrder(sBKill, pBKill);
-        QWidget::setTabOrder(pBKill, cBKill);
+        QWidget::setTabOrder(sBKill, cBKill);
 
         retranslateUi(EconomicEngineDebugGUIClass);
 
@@ -303,6 +307,7 @@ public:
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
         pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
+        pBAdd->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Add", nullptr));
         pBKill->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Kill", nullptr));
     } // retranslateUi
 
