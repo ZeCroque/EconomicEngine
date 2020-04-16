@@ -14,6 +14,7 @@ public:
 	QLabel* lbName;
 	QLabel* lbNumber;
 	QLabel* lbMoneyAverage;
+	QLabel* lbFoodAverage;
 
 private:
 	QString jobName;

@@ -216,7 +216,6 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-	
 
 	arrayJobs.clear();
 	while (ui.gridLayJobs->count() > 0)
@@ -281,6 +280,7 @@ void EconomicEngineDebugGui::doInit()
 	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
 	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
 	ui.gridLayJobs->addWidget(new QLabel("Avg. money"), 0, 2);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. food"), 0, 3);
 	for (const auto& job : traderManager->getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
@@ -292,9 +292,12 @@ void EconomicEngineDebugGui::doInit()
 
 		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
 
+		jobManager->lbFoodAverage = new QLabel(QString::number(0));
+
 		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
 		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
 		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, arrayJobs.size() + 1, 2);
+		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, arrayJobs.size() + 1, 3);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -312,8 +315,10 @@ void EconomicEngineDebugGui::updateUiJobs()
 	{
 		auto average = QString::number(traderManager->getMoneyMeanByJob(job->getJobId()));
 		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
+		auto food = QString::number(traderManager->getFoodMeanByJob(job->getJobId()));
 		job->lbNumber->setText(number);
 		job->lbMoneyAverage->setText(average);
+		job->lbFoodAverage->setText(food);
 	}
 }
 
