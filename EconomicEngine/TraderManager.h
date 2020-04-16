@@ -17,6 +17,7 @@ public:
 	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
 	[[nodiscard]] std::list<Trader*> getTraderByJobId(size_t key);
 	[[nodiscard]] float getMoneyMeanByJob(size_t key);
+	[[nodiscard]] float getFoodLevelMeanByJob(size_t key);
 	[[nodiscard]] int getJobCount(size_t key);
 	[[nodiscard]] size_t getMostInterestingJob();
 	void refreshTraders();
