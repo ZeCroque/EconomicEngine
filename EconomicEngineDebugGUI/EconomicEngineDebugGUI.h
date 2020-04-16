@@ -31,6 +31,7 @@ public Q_SLOTS:
 	void toggleStart() const;
 	void setMode() const;
 	void doKill();
+	void doAdd();
 	void doReset();
 	void doInit();
 	void updateUiJobs();
