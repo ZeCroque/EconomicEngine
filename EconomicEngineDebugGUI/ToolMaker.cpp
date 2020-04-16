@@ -18,15 +18,15 @@ ToolMaker::ToolMaker()
 
 	//WoodPickaxe : Need wood
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Wood).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(WoodPickaxe).hash_code(), requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(WoodPickaxe).hash_code(), 1, requirements));
 
 
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Iron).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Hoe).hash_code(), requirements));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Pickaxe).hash_code(), requirements));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Axe).hash_code(), requirements));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Bow).hash_code(), requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Hoe).hash_code(), 1, requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Pickaxe).hash_code(), 1,requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Axe).hash_code(), 1, requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Bow).hash_code(), 1,requirements));
 
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Leather).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Sword).hash_code(), requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Sword).hash_code(), 1,requirements));
 }

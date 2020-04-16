@@ -22,9 +22,23 @@ void Job::setOwner(Trader* owner) const
 	this->craftFactory->setOwner(owner);
 }
 
-Craft* Job::craft(const size_t typeId) const
+Craft* Job::createCraft(const size_t typeId) const
 {
 	return this->craftFactory->createObject(typeId);
+}
+
+std::vector<size_t> Job::getCraftList() const
+{
+	std::vector<size_t> craftableList;
+
+	if (craftFactory->owner != nullptr)
+	{
+		for (auto key : craftFactory->getKeys())
+		{
+			craftableList.emplace_back(key);
+		}
+	}
+	return craftableList;
 }
 
 std::vector<size_t> Job::getCraftableList() const

@@ -13,5 +13,5 @@ Baker::Baker() : Job()
 	//Bread : require wheat and coal
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Wheat).hash_code(), 1));
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Coal).hash_code(), 1));
-	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Bread).hash_code(), requirements));
+	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Bread).hash_code(), 2, requirements));
 }

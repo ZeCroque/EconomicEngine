@@ -19,7 +19,8 @@ public:
 	Job(const Job& job);
 	virtual ~Job();
 	void setOwner(Trader* owner) const;
-	[[nodiscard]] Craft* craft(size_t typeId) const;
+	[[nodiscard]] Craft* createCraft(size_t typeId) const;
+	[[nodiscard]] std::vector<size_t> getCraftList() const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
 	[[nodiscard]] std::vector<size_t> getUncraftableList() const;
 	[[nodiscard]] std::list<size_t> getUsableTools() const;

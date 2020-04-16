@@ -200,8 +200,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Axe.cpp" />
+    <ClCompile Include="AxeBehavior.cpp" />
     <ClCompile Include="Baker.cpp" />
     <ClCompile Include="Bow.cpp" />
+    <ClCompile Include="BowBehavior.cpp" />
     <ClCompile Include="Bread.cpp" />
     <ClCompile Include="Butcher.cpp" />
     <ClCompile Include="Coal.cpp" />
@@ -210,6 +212,7 @@
     <ClCompile Include="Farmer.cpp" />
     <ClCompile Include="GraphManager.cpp" />
     <ClCompile Include="Hoe.cpp" />
+    <ClCompile Include="HoeBehavior.cpp" />
     <ClCompile Include="Hunter.cpp" />
     <ClCompile Include="Iron.cpp" />
     <ClCompile Include="Leather.cpp" />
@@ -218,9 +221,11 @@
     <ClCompile Include="Meat.cpp" />
     <ClCompile Include="Miner.cpp" />
     <ClCompile Include="Pickaxe.cpp" />
+    <ClCompile Include="PickaxeBehavior.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
     <ClCompile Include="Steak.cpp" />
     <ClCompile Include="Sword.cpp" />
+    <ClCompile Include="SwordBehavior.cpp" />
     <ClCompile Include="ToolMaker.cpp" />
     <ClCompile Include="Wheat.cpp" />
     <ClCompile Include="Wood.cpp" />
@@ -272,14 +277,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Axe.h" />
+    <ClInclude Include="AxeBehavior.h" />
     <ClInclude Include="Baker.h" />
     <ClInclude Include="Bow.h" />
+    <ClInclude Include="BowBehavior.h" />
     <ClInclude Include="Bread.h" />
     <ClInclude Include="Butcher.h" />
     <ClInclude Include="Coal.h" />
     <ClInclude Include="DebugEconomicEngine.h" />
     <ClInclude Include="Farmer.h" />
     <ClInclude Include="Hoe.h" />
+    <ClInclude Include="HoeBehavior.h" />
     <ClInclude Include="Hunter.h" />
     <ClInclude Include="Iron.h" />
     <ClInclude Include="Leather.h" />
@@ -287,8 +295,10 @@
     <ClInclude Include="Meat.h" />
     <ClInclude Include="Miner.h" />
     <ClInclude Include="Pickaxe.h" />
+    <ClInclude Include="PickaxeBehavior.h" />
     <ClInclude Include="Steak.h" />
     <ClInclude Include="Sword.h" />
+    <ClInclude Include="SwordBehavior.h" />
     <ClInclude Include="ToolMaker.h" />
     <ClInclude Include="Wheat.h" />
     <ClInclude Include="Wood.h" />
