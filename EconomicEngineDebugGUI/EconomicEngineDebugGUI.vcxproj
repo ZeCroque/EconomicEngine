@@ -55,11 +55,11 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
+    <QtInstall>QT5.1.14</QtInstall>
     <QtModules>core;gui;widgets;printsupport</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtInstall>QT5.14.1</QtInstall>
+    <QtInstall>QT5.1.14</QtInstall>
     <QtModules>core;gui;widgets;printsupport</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
@@ -215,6 +215,7 @@
     <ClCompile Include="HoeBehavior.cpp" />
     <ClCompile Include="Hunter.cpp" />
     <ClCompile Include="Iron.cpp" />
+    <ClCompile Include="JobManager.cpp" />
     <ClCompile Include="Leather.cpp" />
     <ClCompile Include="Lumberjack.cpp" />
     <ClCompile Include="main.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="HoeBehavior.h" />
     <ClInclude Include="Hunter.h" />
     <ClInclude Include="Iron.h" />
+    <ClInclude Include="JobManager.h" />
     <ClInclude Include="Leather.h" />
     <ClInclude Include="Lumberjack.h" />
     <ClInclude Include="Meat.h" />

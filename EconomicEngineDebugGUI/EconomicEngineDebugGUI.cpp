@@ -16,9 +16,10 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec(10);
+		return turnManager->exec(100);
 	}, turnManager);
 
+	traderManager = TraderManager::getInstance();
 	ui.setupUi(this);
 
 	doInit();
@@ -41,6 +42,10 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
 	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
+
+	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
+
+	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
 }
@@ -178,22 +183,40 @@ void EconomicEngineDebugGui::setMode() const
 	toggleStart();
 }
 
+void EconomicEngineDebugGui::doKill()
+{
+	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	traderManager->kill(job->getJobId(), ui.sBKill->value());
+	updateUiJobs();
+}
+
 void EconomicEngineDebugGui::doReset()
 {
+	ui.pBStart->setChecked(false);
+	setMode();
+
+
 	for (auto graphManager : arrayCheckBox)
 	{
 		ui.customPlot->removeGraph(graphManager->getGraphIndex());
 	}
 	arrayCheckBox.clear();
+	arrayJobs.clear();
+	ui.cBKill->clear();
 
 	ui.customPlot->clearGraphs();
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-	ui.pBStart->setChecked(false);
-	setMode();
-
 	turnManager->reset(10);
+	
+	arrayJobs.clear();
+	while (ui.gridLayJobs->count() > 0)
+	{
+		QLayoutItem* item = ui.gridLayJobs->takeAt(0);
+		QWidget* widget = item->widget();
+		delete widget;
+	}
 	doInit();
 }
 
@@ -244,6 +267,39 @@ void EconomicEngineDebugGui::doInit()
 			++column;
 		}
 	}
+
+
+	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
+	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
+	for (const auto& job : traderManager->getJobList())
+	{
+		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
+
+		jobManager->lbName = new QLabel(jobManager->getJobName());
+
+		auto number = QString::number(traderManager->getJobCount(jobManager->getJobId()));
+		jobManager->lbNumber = new QLabel(number);
+
+		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
+
+		ui.cBKill->addItem(jobManager->getJobName());
+		this->arrayJobs.push_back(jobManager);
+	}
+	updateUiJobs();
+}
+
+void EconomicEngineDebugGui::updateUiJobs()
+{
+	const auto cbJob = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto traderCount = traderManager->getJobCount(cbJob->getJobId());
+	ui.sBKill->setMaximum(traderCount);
+
+	for(auto job : arrayJobs)
+	{
+		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
+		job->lbNumber->setText(number);
+	}
 }
 
 void EconomicEngineDebugGui::updateUiSlot()
@@ -271,6 +327,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 	setYRange();
 	setXRange();
+	updateUiJobs();
 
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);

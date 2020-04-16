@@ -5,6 +5,7 @@
 
 #include "DebugEconomicEngine.h"
 #include "GraphManager.h"
+#include "JobManager.h"
 #include "ui_EconomicEngineDebugGUI.h"
 #include "Observer.h"
 
@@ -29,18 +30,22 @@ public Q_SLOTS:
 	void useXSlider(int value);
 	void toggleStart() const;
 	void setMode() const;
+	void doKill();
 	void doReset();
 	void doInit();
+	void updateUiJobs();
 
 private:
 	Ui::EconomicEngineDebugGUIClass ui;
 	std::vector<GraphManager*> arrayCheckBox;
+	std::vector<JobManager*> arrayJobs;
 	QTimer dataTimer;
 	std::thread economicEngineThread;
 	DebugEconomicEngine* turnManager;
+	TraderManager* traderManager;
 	int zoomXAxis;
 	bool realTime;
 
 signals:
-void nextTurn();
+	void nextTurn();
 };

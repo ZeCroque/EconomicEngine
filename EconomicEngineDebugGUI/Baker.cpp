@@ -8,6 +8,8 @@
 Baker::Baker() : Job()
 {
 	this->id = typeid(Baker).hash_code();
+	this->name = "Baker";
+	
 	std::vector<std::pair<size_t, int>> requirements;
 
 	//Bread : require wheat and coal
