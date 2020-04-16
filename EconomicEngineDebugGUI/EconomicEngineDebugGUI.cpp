@@ -315,7 +315,7 @@ void EconomicEngineDebugGui::updateUiJobs()
 	{
 		auto average = QString::number(traderManager->getMoneyMeanByJob(job->getJobId()));
 		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
-		auto food = QString::number(traderManager->getFoodMeanByJob(job->getJobId()));
+		auto food = QString::number(traderManager->getFoodLevelMeanByJob(job->getJobId()));
 		job->lbNumber->setText(number);
 		job->lbMoneyAverage->setText(average);
 		job->lbFoodAverage->setText(food);
