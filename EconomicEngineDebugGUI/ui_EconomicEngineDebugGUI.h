@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -19,6 +20,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -53,15 +55,23 @@ public:
     QVBoxLayout *layPlot;
     QCustomPlot *customPlot;
     QSlider *horSlidXNav;
+    QWidget *gridLayoutWidget;
+    QGridLayout *gridLayout;
+    QPushButton *pBKill;
+    QSpinBox *sBKill;
+    QComboBox *cBKill;
+    QFrame *line_3;
+    QWidget *gridLayoutWidget_2;
+    QGridLayout *gridLayJobs;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
     {
         if (EconomicEngineDebugGUIClass->objectName().isEmpty())
             EconomicEngineDebugGUIClass->setObjectName(QString::fromUtf8("EconomicEngineDebugGUIClass"));
-        EconomicEngineDebugGUIClass->resize(1200, 680);
-        EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 680));
-        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1200, 680));
+        EconomicEngineDebugGUIClass->resize(1200, 600);
+        EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 600));
+        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1200, 600));
         EconomicEngineDebugGUIClass->setAutoFillBackground(false);
         EconomicEngineDebugGUIClass->setAnimated(true);
         centralWidget = new QWidget(EconomicEngineDebugGUIClass);
@@ -222,11 +232,61 @@ public:
 
         layGraph->addLayout(layPlot);
 
+        gridLayoutWidget = new QWidget(centralWidget);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(350, 360, 321, 211));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        pBKill = new QPushButton(gridLayoutWidget);
+        pBKill->setObjectName(QString::fromUtf8("pBKill"));
+
+        gridLayout->addWidget(pBKill, 0, 4, 1, 1);
+
+        sBKill = new QSpinBox(gridLayoutWidget);
+        sBKill->setObjectName(QString::fromUtf8("sBKill"));
+        sBKill->setMinimum(1);
+
+        gridLayout->addWidget(sBKill, 0, 2, 1, 1);
+
+        cBKill = new QComboBox(gridLayoutWidget);
+        cBKill->setObjectName(QString::fromUtf8("cBKill"));
+
+        gridLayout->addWidget(cBKill, 0, 1, 1, 1);
+
+        line_3 = new QFrame(gridLayoutWidget);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setFrameShape(QFrame::VLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        gridLayout->addWidget(line_3, 0, 0, 1, 1);
+
+        gridLayoutWidget_2 = new QWidget(centralWidget);
+        gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
+        gridLayoutWidget_2->setGeometry(QRect(10, 360, 341, 211));
+        gridLayJobs = new QGridLayout(gridLayoutWidget_2);
+        gridLayJobs->setSpacing(6);
+        gridLayJobs->setContentsMargins(11, 11, 11, 11);
+        gridLayJobs->setObjectName(QString::fromUtf8("gridLayJobs"));
+        gridLayJobs->setSizeConstraint(QLayout::SetMinimumSize);
+        gridLayJobs->setContentsMargins(0, 0, 0, 0);
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         statusBar->setEnabled(true);
         EconomicEngineDebugGUIClass->setStatusBar(statusBar);
+        QWidget::setTabOrder(horSlidZoomXAxis, horSlidSpeed);
+        QWidget::setTabOrder(horSlidSpeed, horSlidStep);
+        QWidget::setTabOrder(horSlidStep, radBRealTime);
+        QWidget::setTabOrder(radBRealTime, radStepByStep);
+        QWidget::setTabOrder(radStepByStep, pBStart);
+        QWidget::setTabOrder(pBStart, pBReset);
+        QWidget::setTabOrder(pBReset, horSlidXNav);
+        QWidget::setTabOrder(horSlidXNav, sBKill);
+        QWidget::setTabOrder(sBKill, pBKill);
+        QWidget::setTabOrder(pBKill, cBKill);
 
         retranslateUi(EconomicEngineDebugGUIClass);
 
@@ -243,6 +303,7 @@ public:
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
         pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
+        pBKill->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Kill", nullptr));
     } // retranslateUi
 
 };
