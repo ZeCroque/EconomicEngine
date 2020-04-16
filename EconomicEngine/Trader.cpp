@@ -32,6 +32,12 @@ Trader::Trader()
 	}
 }
 
+Trader::Trader(Job* job) : Trader()
+{
+	currentJob = job;
+}
+
+
 //Auto-assign job for the trader
 void Trader::assignJob()
 {
@@ -606,4 +612,9 @@ Craft* Trader::getCurrentCraft() const
 float Trader::getFoodLevel() const
 {
 	return foodLevel;
+}
+
+float Trader::getMoney() const
+{
+	return money;
 }
