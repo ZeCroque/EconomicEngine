@@ -57,7 +57,7 @@ std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<s
 
 		//Decrease food count of picked item
 		foodInfos[index].second.second-=count;
-		
+
 		//Update the foodCount from the provided data
 		foodCount += foodInfos[index].second.first * static_cast<float>(count);
 
@@ -163,8 +163,6 @@ void Trader::fillWonderList()
 		wonderList.splice(wonderList.end(), getRandomFoodCombination(foodInfos, foodGoal));
 	}
 
-void Trader::fillWonderList()
-{
 	//Find the most beneficial unavailable craft
 	Craft* mostBeneficialCraft = nullptr;
 	auto uncraftableList = currentJob->getUncraftableList();
@@ -189,7 +187,7 @@ void Trader::fillWonderList()
 		}
 	}
 
-	//If trader hasn't got a tool he can use then he tries to buy it 
+	//If trader hasn't got a tool he can use then he tries to buy it
 	for (auto usableTool : this->currentJob->getUsableTools())
 	{
 		if (!isInInventory(usableTool))
@@ -204,7 +202,7 @@ void Trader::fillWonderList()
 		TradableManager* tradableManager = TradableManager::getInstance();
 		std::vector < std::pair < size_t, std::pair< float, int> >> foodInfos;
 		foodInfos.reserve(tradableManager->getKeys().size());
-		
+
 		for(auto key : tradableManager->getKeys())
 		{
 			auto* foodItem = dynamic_cast<Food*>(tradableManager->getTradable(key));
@@ -421,7 +419,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 	const float currentMean = priceHistory[ask->getId()][0]->second==0 ? priceBeliefMean : priceHistory[ask->getId()][0]->first / static_cast<float>(priceHistory[ask->getId()][0]->second);
 	*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
 	*priceBeliefs[ask->getId()][1] = std::max<float>(0.02f, *priceBeliefs[ask->getId()][1]+ currentMean - priceBeliefMean);
-	
+
 	if(ask->getStatus() == AskStatus::Sold)
 	{
 		*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean-0.02f, *priceBeliefs[ask->getId()][0]+0.05f * currentMean);
@@ -436,7 +434,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 		else
 		{
 			*priceBeliefs[ask->getId()][0] = std::max<float>(0.01f, *priceBeliefs[ask->getId()][0] - 0.05f * currentMean);
-		}			
+		}
 	}
 }
 
@@ -474,8 +472,8 @@ void Trader::refresh()
 		this->assignJob();
 	}
 	checkAsks();
-  
-	foodLevel -= 0.34f; //TODO make it a setting	
+
+	foodLevel -= 0.34f; //TODO make it a setting
 	if(foodLevel > 0.0 && foodLevel<=10.0f)
 	{
 		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
@@ -510,10 +508,6 @@ bool Trader::isInInventory(const size_t key)
 	return false;
 }
 
-float Trader::getFoodLevel() const
-{
-	return foodLevel;
-}
 
 void Trader::addToInventory(const size_t key, const int count)
 {
