@@ -16,7 +16,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec(100);
+		return turnManager->exec(300);
 	}, turnManager);
 
 	traderManager = TraderManager::getInstance();
@@ -43,8 +43,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
 	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
 
-	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doAdd()));
-	connect(ui.pBAdd, SIGNAL(clicked()), this, SLOT(doKill()));
+	connect(ui.pBAdd, SIGNAL(clicked()), this, SLOT(doAdd()));
+	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
 
 	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
 
@@ -194,7 +194,7 @@ void EconomicEngineDebugGui::doKill()
 void EconomicEngineDebugGui::doAdd()
 {
 	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
-	traderManager->addTrader(ui.sBKill->value(), job->getJobId());
+	traderManager->addTrader(ui.sBAdd->value(), job->getJobId());
 	updateUiJobs();
 }
 
@@ -216,7 +216,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-	turnManager->reset(10);
+	turnManager->reset(300);
 
 	arrayJobs.clear();
 	while (ui.gridLayJobs->count() > 0)

@@ -57,11 +57,13 @@ public:
     QSlider *horSlidXNav;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
-    QSpinBox *sBKill;
     QComboBox *cBKill;
     QVBoxLayout *verticalLayout;
     QPushButton *pBAdd;
     QPushButton *pBKill;
+    QVBoxLayout *verticalLayout_2;
+    QSpinBox *sBAdd;
+    QSpinBox *sBKill;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayJobs;
     QStatusBar *statusBar;
@@ -241,12 +243,6 @@ public:
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        sBKill = new QSpinBox(gridLayoutWidget);
-        sBKill->setObjectName(QString::fromUtf8("sBKill"));
-        sBKill->setMinimum(1);
-
-        gridLayout->addWidget(sBKill, 0, 1, 1, 1);
-
         cBKill = new QComboBox(gridLayoutWidget);
         cBKill->setObjectName(QString::fromUtf8("cBKill"));
 
@@ -267,6 +263,24 @@ public:
 
 
         gridLayout->addLayout(verticalLayout, 0, 2, 1, 1);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        sBAdd = new QSpinBox(gridLayoutWidget);
+        sBAdd->setObjectName(QString::fromUtf8("sBAdd"));
+        sBAdd->setMinimum(1);
+
+        verticalLayout_2->addWidget(sBAdd);
+
+        sBKill = new QSpinBox(gridLayoutWidget);
+        sBKill->setObjectName(QString::fromUtf8("sBKill"));
+        sBKill->setMinimum(1);
+
+        verticalLayout_2->addWidget(sBKill);
+
+
+        gridLayout->addLayout(verticalLayout_2, 0, 1, 1, 1);
 
         gridLayoutWidget_2 = new QWidget(centralWidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
@@ -289,8 +303,7 @@ public:
         QWidget::setTabOrder(radStepByStep, pBStart);
         QWidget::setTabOrder(pBStart, pBReset);
         QWidget::setTabOrder(pBReset, horSlidXNav);
-        QWidget::setTabOrder(horSlidXNav, sBKill);
-        QWidget::setTabOrder(sBKill, cBKill);
+        QWidget::setTabOrder(horSlidXNav, cBKill);
 
         retranslateUi(EconomicEngineDebugGUIClass);
 
