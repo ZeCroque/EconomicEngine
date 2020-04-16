@@ -65,6 +65,17 @@ float TraderManager::getMoneyMeanByJob(const size_t key)
 	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
 }
 
+float TraderManager::getFoodLevelMeanByJob(size_t key)
+{
+	float total = 0.0f;
+	const auto& traders = getTraderByJobId(key);
+	for (const auto& trader : traders)
+	{
+		total += trader->getFoodLevel();
+	}
+	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
+}
+
 int TraderManager::getJobCount(const size_t key)
 {
 	return static_cast<int>(getTraderByJobId(key).size());
