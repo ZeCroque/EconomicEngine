@@ -10,14 +10,16 @@
 #include "Job.h"
 #include "Observable.h"
 #include "VectorArray.h"
+#include "Tradable.h"
+#include "Countable.h"
+#include "Uncountable.h"
 
-class Countable;
-class Uncountable;
 class Job;
 
 class Trader : public Observable
 {
 private:
+	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
 	Job* currentJob;
@@ -31,8 +33,9 @@ private:
 	void assignJob();
 	void fillWonderList();
 	void fillGoodsList();
-	std::list<std::pair<size_t, int>> getRandomFoodCombination(const std::vector<std::pair<size_t, std::pair<float,int>>>& foodInfos, float foodGoal);
+	std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float,int>>>& foodInfos, float foodGoal);
 	float calculateFoodStock();
+	void refreshPriceBelief(Ask* ask);
 	float calculatePriceBeliefMean(size_t key);
 	float evaluatePrice(size_t key);
 	float calculateEarnings(Craft* craft);

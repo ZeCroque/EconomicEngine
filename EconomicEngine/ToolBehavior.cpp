@@ -13,17 +13,16 @@ void ToolBehavior::init(Trader* owner, Tradable* item)
 {
 	this->owner = owner;
 	this->item = item;
-	this->owner->addObserver(this);
-	owner->getCurrentCraft()->incrementRate(craftRateBoost);
+	this->owner->getCurrentCraft()->addObserver(this);
+	this->owner->getCurrentCraft()->incrementRate(craftRateBoost);
 }
 
 void ToolBehavior::notify(Observable* sender)
 {
 	owner->getCurrentCraft()->removeObserver(this);
-	owner->removeFromInventory(item);
-}
-
-ToolBehavior* ToolBehavior::clone()
-{
-	return new ToolBehavior(*this);
+	durability -= degradationRate;
+	if(durability<=0)
+	{
+		owner->removeFromInventory(item);
+	}
 }
