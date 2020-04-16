@@ -12,6 +12,7 @@ private:
 public:
 	void registerJob(Job* job);
 	void addTrader(int count);
+	void addTrader(int count, size_t key);
 	[[nodiscard]] Job* assignJob(size_t key, Trader* trader) const;
 	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
 	[[nodiscard]] int getJobCount(size_t key);
