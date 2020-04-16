@@ -163,8 +163,6 @@ void Trader::fillWonderList()
 		wonderList.splice(wonderList.end(), getRandomFoodCombination(foodInfos, foodGoal));
 	}
 
-void Trader::fillWonderList()
-{
 	//Find the most beneficial unavailable craft
 	Craft* mostBeneficialCraft = nullptr;
 	auto uncraftableList = currentJob->getUncraftableList();
@@ -510,10 +508,6 @@ bool Trader::isInInventory(const size_t key)
 	return false;
 }
 
-float Trader::getFoodLevel() const
-{
-	return foodLevel;
-}
 
 void Trader::addToInventory(const size_t key, const int count)
 {
