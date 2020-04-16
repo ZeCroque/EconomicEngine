@@ -51,6 +51,9 @@ public:
     QRadioButton *radStepByStep;
     QVBoxLayout *LayPushButton;
     QPushButton *pBStart;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label;
+    QSpinBox *sBTraderNumber;
     QPushButton *pBReset;
     QVBoxLayout *layPlot;
     QCustomPlot *customPlot;
@@ -58,10 +61,9 @@ public:
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
     QComboBox *cBKill;
-    QVBoxLayout *verticalLayout;
-    QPushButton *pBAdd;
+    QGridLayout *gridLayout_2;
     QPushButton *pBKill;
-    QVBoxLayout *verticalLayout_2;
+    QPushButton *pBAdd;
     QSpinBox *sBAdd;
     QSpinBox *sBKill;
     QWidget *gridLayoutWidget_2;
@@ -200,6 +202,26 @@ public:
 
         LayPushButton->addWidget(pBStart);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        label = new QLabel(horizontalLayoutWidget_3);
+        label->setObjectName(QString::fromUtf8("label"));
+
+        horizontalLayout->addWidget(label);
+
+        sBTraderNumber = new QSpinBox(horizontalLayoutWidget_3);
+        sBTraderNumber->setObjectName(QString::fromUtf8("sBTraderNumber"));
+        sBTraderNumber->setMinimum(10);
+        sBTraderNumber->setMaximum(1000);
+        sBTraderNumber->setSingleStep(10);
+        sBTraderNumber->setValue(100);
+
+        horizontalLayout->addWidget(sBTraderNumber);
+
+
+        LayPushButton->addLayout(horizontalLayout);
+
         pBReset = new QPushButton(horizontalLayoutWidget_3);
         pBReset->setObjectName(QString::fromUtf8("pBReset"));
         pBReset->setCheckable(true);
@@ -248,39 +270,33 @@ public:
 
         gridLayout->addWidget(cBKill, 0, 0, 1, 1);
 
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        pBAdd = new QPushButton(gridLayoutWidget);
-        pBAdd->setObjectName(QString::fromUtf8("pBAdd"));
-
-        verticalLayout->addWidget(pBAdd);
-
+        gridLayout_2 = new QGridLayout();
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         pBKill = new QPushButton(gridLayoutWidget);
         pBKill->setObjectName(QString::fromUtf8("pBKill"));
 
-        verticalLayout->addWidget(pBKill);
+        gridLayout_2->addWidget(pBKill, 1, 1, 1, 1);
 
+        pBAdd = new QPushButton(gridLayoutWidget);
+        pBAdd->setObjectName(QString::fromUtf8("pBAdd"));
 
-        gridLayout->addLayout(verticalLayout, 0, 2, 1, 1);
+        gridLayout_2->addWidget(pBAdd, 0, 1, 1, 1);
 
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         sBAdd = new QSpinBox(gridLayoutWidget);
         sBAdd->setObjectName(QString::fromUtf8("sBAdd"));
         sBAdd->setMinimum(1);
 
-        verticalLayout_2->addWidget(sBAdd);
+        gridLayout_2->addWidget(sBAdd, 0, 0, 1, 1);
 
         sBKill = new QSpinBox(gridLayoutWidget);
         sBKill->setObjectName(QString::fromUtf8("sBKill"));
         sBKill->setMinimum(1);
 
-        verticalLayout_2->addWidget(sBKill);
+        gridLayout_2->addWidget(sBKill, 1, 0, 1, 1);
 
 
-        gridLayout->addLayout(verticalLayout_2, 0, 1, 1, 1);
+        gridLayout->addLayout(gridLayout_2, 0, 1, 1, 1);
 
         gridLayoutWidget_2 = new QWidget(centralWidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
@@ -319,9 +335,10 @@ public:
         radBRealTime->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Real Time", nullptr));
         radStepByStep->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Step by step", nullptr));
         pBStart->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Start", nullptr));
+        label->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "New trader nb.:", nullptr));
         pBReset->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Reset", nullptr));
-        pBAdd->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Add", nullptr));
         pBKill->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Kill", nullptr));
+        pBAdd->setText(QCoreApplication::translate("EconomicEngineDebugGUIClass", "Add", nullptr));
     } // retranslateUi
 
 };

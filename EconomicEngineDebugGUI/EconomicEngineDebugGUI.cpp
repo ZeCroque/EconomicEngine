@@ -16,7 +16,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
 	{
 		turnManager->init();
-		return turnManager->exec(300);
+		return turnManager->exec(100);
 	}, turnManager);
 
 	traderManager = TraderManager::getInstance();
@@ -216,7 +216,7 @@ void EconomicEngineDebugGui::doReset()
 	ui.customPlot->xAxis->setRange(0, 5);
 	ui.customPlot->replot();
 
-	turnManager->reset(300);
+	
 
 	arrayJobs.clear();
 	while (ui.gridLayJobs->count() > 0)
@@ -225,6 +225,7 @@ void EconomicEngineDebugGui::doReset()
 		QWidget* widget = item->widget();
 		delete widget;
 	}
+	turnManager->reset(ui.sBTraderNumber->value());
 	doInit();
 }
 
@@ -293,6 +294,7 @@ void EconomicEngineDebugGui::doInit()
 
 		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
 		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
+		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, arrayJobs.size() + 1, 2);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -308,8 +310,10 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 	for (auto job : arrayJobs)
 	{
+		auto average = QString::number(traderManager->getMoneyMeanByJob(job->getJobId()));
 		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
 		job->lbNumber->setText(number);
+		job->lbMoneyAverage->setText(average);
 	}
 }
 
