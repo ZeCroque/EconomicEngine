@@ -38,20 +38,36 @@ std::list<std::pair<size_t, std::string>> TraderManager::getJobList() const
 	return result;
 }
 
-int TraderManager::getJobCount(const size_t key)
+std::list<Trader*> TraderManager::getTraderByJobId(const size_t key)
 {
-	int count = 0;
-	for (const auto& trader : this->traders)
+	std::list<Trader*> traderList;
+	for (auto& trader : this->traders)
 	{
 		if (trader.getCurrentJob() != nullptr)
 		{
-			if(trader.getCurrentJob()->getId() == key)
+			if (trader.getCurrentJob()->getId() == key)
 			{
-				++count;
+				traderList.emplace_back(&trader);
 			}
 		}
 	}
-	return count;
+	return traderList;
+}
+
+float TraderManager::getMoneyMeanByJob(const size_t key)
+{
+	float total = 0.0f;
+	const auto& traders = getTraderByJobId(key);
+	for(const auto& trader : traders)
+	{
+		total += trader->getMoney();
+	}
+	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
+}
+
+int TraderManager::getJobCount(const size_t key)
+{
+	return static_cast<int>(getTraderByJobId(key).size());
 }
 
 size_t TraderManager::getMostInterestingJob()
