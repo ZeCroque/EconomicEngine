@@ -42,6 +42,7 @@ private:
 
 public:
 	Trader();
+	Trader(Job* job);
 	void makeAsks();
 	void craft();
 	void refresh();
@@ -51,6 +52,7 @@ public:
 	[[nodiscard]] Craft* getCurrentCraft() const;
 	[[nodiscard]] bool isInInventory(size_t key);
 	[[nodiscard]] float getFoodLevel() const;
+	[[nodiscard]] float getMoney() const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(Countable* countable);
 	void addToInventory(Uncountable* uncountable);

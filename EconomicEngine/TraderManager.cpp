@@ -13,6 +13,14 @@ void TraderManager::addTrader(const int count)
 	}
 }
 
+void TraderManager::addTrader(const int count, const size_t key)
+{
+	for (int i = 0; i < count; ++i)
+	{
+		traders.emplace_back(Trader(jobFactory.createObject(key)));
+	}	
+}
+
 Job* TraderManager::assignJob(const size_t key, Trader* trader) const
 {
 	Job* job = this->jobFactory.createObject(key);
