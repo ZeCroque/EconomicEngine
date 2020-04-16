@@ -19,6 +19,7 @@ class Job;
 class Trader : public Observable
 {
 private:
+	VectorArray<int> failCount;
 	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
