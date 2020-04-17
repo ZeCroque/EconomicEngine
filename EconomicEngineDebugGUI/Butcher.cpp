@@ -17,4 +17,5 @@ Butcher::Butcher() : Job()
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Meat).hash_code(), 2));
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Coal).hash_code(), 2));
 	this->craftFactory->registerCraft(new Craft(1.0f, typeid(Steak).hash_code(), 5, requirements));
+
 }
