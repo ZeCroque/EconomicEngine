@@ -22,6 +22,7 @@ Trader::Trader()
 	auto keys = tradableManager->getKeys();
 	priceBeliefs = VectorArray<float>(keys);
 	priceHistory = VectorArray<std::pair<float, int>>(keys);
+	failCount = VectorArray<int>(keys);
 	for (auto key : keys)
 	{
 		auto tradableDefaultPriceBelief = tradableManager->getTradable(key)->getDefaultPriceBelief();
@@ -29,6 +30,7 @@ Trader::Trader()
 		priceBeliefs[key][0] = std::make_shared<float>(tradableDefaultPriceBelief.first);
 		priceBeliefs[key][1] = std::make_shared<float>(tradableDefaultPriceBelief.second);
 		priceHistory[key].emplace_back(std::make_shared<std::pair<float, int>>(0.0f, 0));
+		failCount[key].emplace_back(std::make_shared<int>(0));
 	}
 }
 
@@ -428,18 +430,22 @@ void Trader::refreshPriceBelief(Ask* ask)
 
 	if(ask->getStatus() == AskStatus::Sold)
 	{
+		* failCount[ask->getId()][0]=0;
 		*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean-0.02f, *priceBeliefs[ask->getId()][0]+0.05f * currentMean);
 		*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean+0.02f, *priceBeliefs[ask->getId()][1]-0.05f * currentMean);
 	}
 	else
 	{
+		++* failCount[ask->getId()][0];
 		if(dynamic_cast<BuyingAsk*>(ask)!=nullptr)
 		{
-			*priceBeliefs[ask->getId()][1] += 0.05f * currentMean;
+			*priceBeliefs[ask->getId()][0] += 0.05f * currentMean * *failCount[ask->getId()][0];
+			*priceBeliefs[ask->getId()][1] += 0.05f * currentMean * *failCount[ask->getId()][0];
 		}
 		else
 		{
-			*priceBeliefs[ask->getId()][0] = std::max<float>(0.01f, *priceBeliefs[ask->getId()][0] - 0.05f * currentMean);
+			*priceBeliefs[ask->getId()][0] = std::max<float>(0.01f, *priceBeliefs[ask->getId()][0] - 0.05f * currentMean * *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] - 0.05f * currentMean * *failCount[ask->getId()][0]);
 		}
 	}
 }
