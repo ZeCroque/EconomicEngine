@@ -1,5 +1,7 @@
 #include "Hoe.h"
 
+#include <typeinfo>
+
 #include "HoeBehavior.h"
 
 Hoe::Hoe() : Uncountable()

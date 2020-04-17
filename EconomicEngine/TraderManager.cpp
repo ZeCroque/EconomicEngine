@@ -18,8 +18,10 @@ void TraderManager::registerJob(Job* job)
 void TraderManager::addTrader(const int count)
 {
 	for (int i = 0; i < count; ++i)
-	{
-		this->traders.emplace_back(Trader());
+	{	
+		this->traders.emplace_back(Trader(jobFactory.createObject(getMostInterestingJob())));
+		traders.back().getCurrentJob()->setOwner(&traders.back());
+		
 	}
 }
 
@@ -38,7 +40,7 @@ Job* TraderManager::assignJob(const size_t key, Trader* trader) const
 
 	Job* job = this->jobFactory.createObject(key);
 	job->setOwner(trader);
-	++demographyCounts[job->getId()][0]->first;
+	++demographyCounts[job->getId()].front()->first;
 	return job;
 }
 
@@ -54,12 +56,12 @@ std::list<std::pair<size_t, std::string>> TraderManager::getJobList() const
 
 std::pair<int, int> TraderManager::getDemographyByJob(const size_t key) const
 {
-	return *demographyCounts[key][0];
+	return *demographyCounts[key].front();
 }
 
-std::list<Trader*> TraderManager::getTraderByJobId(const size_t key)
+std::list<const Trader*> TraderManager::getTraderByJobId(const size_t key) const
 {
-	std::list<Trader*> traderList;
+	std::list<const Trader*> traderList;
 	for (auto& trader : this->traders)
 	{
 		if (trader.getCurrentJob() != nullptr)
@@ -73,7 +75,7 @@ std::list<Trader*> TraderManager::getTraderByJobId(const size_t key)
 	return traderList;
 }
 
-float TraderManager::getMoneyMeanByJob(const size_t key)
+float TraderManager::getMoneyMeanByJob(const size_t key) const
 {
 	float total = 0.0f;
 	const auto& traders = getTraderByJobId(key);
@@ -84,7 +86,7 @@ float TraderManager::getMoneyMeanByJob(const size_t key)
 	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
 }
 
-float TraderManager::getFoodLevelMeanByJob(const size_t key)
+float TraderManager::getFoodLevelMeanByJob(const size_t key) const
 {
 	float total = 0.0f;
 	const auto& traders = getTraderByJobId(key);
@@ -95,12 +97,12 @@ float TraderManager::getFoodLevelMeanByJob(const size_t key)
 	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
 }
 
-int TraderManager::getJobCount(const size_t key)
+int TraderManager::getJobCount(const size_t key) const
 {
 	return static_cast<int>(getTraderByJobId(key).size());
 }
 
-size_t TraderManager::getMostInterestingJob()
+size_t TraderManager::getMostInterestingJob() const
 {
 	std::list<std::pair<size_t, int>> jobCounts;
 	for(auto key : jobFactory.getKeys())
@@ -167,6 +169,11 @@ void TraderManager::doTradersAsking()
 void TraderManager::reset()
 {
 	traders.clear();
+	for(const auto& key : jobFactory.getKeys())
+	{
+		demographyCounts[key].front()->first = 0;
+		demographyCounts[key].front()->second = 0;
+	}
 }
 
 void TraderManager::kill(const size_t key, const int count)

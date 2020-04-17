@@ -6,17 +6,18 @@
 #include "Hoe.h"
 #include "Pickaxe.h"
 #include "Sword.h"
-
 #include "Wood.h"
 #include "Iron.h"
 #include "Leather.h"
+
+#include <typeinfo>
 
 ToolMaker::ToolMaker()
 {
 	this->id = typeid(ToolMaker).hash_code();
 	this->name = "ToolMaker";
 	
-	std::vector<std::pair<size_t, int>> requirements;
+	std::list<std::pair<size_t, int>> requirements;
 
 	//WoodPickaxe : Need wood
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Wood).hash_code(), 1));

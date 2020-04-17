@@ -1,5 +1,7 @@
 #include "Pickaxe.h"
 
+#include <typeinfo>
+
 #include "PickaxeBehavior.h"
 
 Pickaxe::Pickaxe() : Uncountable()

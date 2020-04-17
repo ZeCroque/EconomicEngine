@@ -2,15 +2,16 @@
 
 #include "Meat.h"
 #include "Coal.h"
-
 #include "Steak.h"
+
+#include <typeinfo>
 
 Butcher::Butcher() : Job()
 {
 	this->id = typeid(Butcher).hash_code();
 	this->name = "Butcher";
 	
-	std::vector<std::pair<size_t, int>> requirements;
+	std::list<std::pair<size_t, int>> requirements;
 
 	//Bread : require meat and coal
 	requirements.emplace_back(std::pair<size_t, int>(typeid(Meat).hash_code(), 2));

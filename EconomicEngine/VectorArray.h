@@ -31,6 +31,23 @@ public:
 		};
 		return *result;
 	}
+
+	std::vector<std::shared_ptr<T>>& operator[](size_t key) const
+	{
+		std::vector<std::shared_ptr<T>>* result = nullptr;
+		for (unsigned int i = 0; i < this->keys.size(); ++i)
+		{
+			if (this->keys[i] == key)
+			{
+				result = &vectors[i];
+			}
+		}
+		if (result == nullptr)
+		{
+			result = new std::vector<std::shared_ptr<T>>();
+		};
+		return *result;
+	}
 };
 
 #endif

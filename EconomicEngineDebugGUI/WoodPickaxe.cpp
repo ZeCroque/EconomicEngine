@@ -1,5 +1,7 @@
 #include "WoodPickaxe.h"
 
+#include <typeinfo>
+
 #include "PickaxeBehavior.h"
 
 WoodPickaxe::WoodPickaxe() : Uncountable()

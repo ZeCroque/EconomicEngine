@@ -1,10 +1,9 @@
 #include "Farmer.h"
 
-
-
 #include "Hoe.h"
-#include "Uncountable.h"
 #include "Wheat.h"
+
+#include <typeinfo>
 
 Farmer::Farmer() : Job()
 {
