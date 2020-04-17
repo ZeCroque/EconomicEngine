@@ -12,7 +12,7 @@ Farmer::Farmer() : Job()
 	this->name = "Farmer";
 	
 	//Wheat : no requirement
-	this->craftFactory-> registerCraft(new Craft(0.5f, typeid(Wheat).hash_code(), 3));
+	this->craftFactory-> registerCraft(new Craft(0.5f, typeid(Wheat).hash_code(), 15));
 
 
 	usableToolsList.emplace_back(typeid(Hoe).hash_code());
