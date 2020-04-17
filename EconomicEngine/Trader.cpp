@@ -3,9 +3,6 @@
 #include <memory>
 #include <random>
 
-
-
-#include "../EconomicEngineDebugGUI/Steak.h"
 #include "Countable.h"
 #include "Food.h"
 #include "StockExchange.h"
@@ -24,7 +21,7 @@ Trader::Trader()
 	auto keys = tradableManager->getKeys();
 	priceBeliefs = VectorArray<float>(keys);
 	priceHistory = VectorArray<std::pair<float, int>>(keys);
-	failCount = VectorArray<int>(keys);
+	successCount = 0;
 	for (auto key : keys)
 	{
 		auto tradableDefaultPriceBelief = tradableManager->getTradable(key)->getDefaultPriceBelief();
@@ -32,7 +29,6 @@ Trader::Trader()
 		priceBeliefs[key][0] = std::make_shared<float>(tradableDefaultPriceBelief.first);
 		priceBeliefs[key][1] = std::make_shared<float>(tradableDefaultPriceBelief.second);
 		priceHistory[key].emplace_back(std::make_shared<std::pair<float, int>>(calculatePriceBeliefMean(key), 1));
-		failCount[key].emplace_back(std::make_shared<int>(0));
 	}
 }
 
@@ -143,43 +139,45 @@ void Trader::fillWonderList()
 		TradableManager* tradableManager = TradableManager::getInstance();
 		std::vector < std::pair < size_t, std::pair< float, int> >> foodInfos;
 		foodInfos.reserve(tradableManager->getKeys().size());
-
+		bool isCraftable = false;
 		for (auto key : tradableManager->getKeys())
 		{
 			auto* foodItem = dynamic_cast<Food*>(tradableManager->getTradable(key));
 			if (foodItem != nullptr)
 			{
 				//Checks if the food item we're looking at is self-craftable or not
-				bool isCraftable = false;
-				auto craftableList = currentJob->getCraftableList();
-				for (auto key : craftableList)
+
+				auto uncraftableList = currentJob->getUncraftableList();
+				for (const auto result : uncraftableList)
 				{
-					if (key == foodItem->getId())
+					if (result== foodItem->getId())
 					{
 						isCraftable = true;
-						const int countNeeded = std::roundf((15.0f - calculateFoodStock()) / foodItem->getFoodValue());
+						const int countNeeded = static_cast<int>(std::round((15.0f - calculateFoodStock()) / foodItem->getFoodValue()));
 						auto requirements = currentJob->getCraft(foodItem->getId())->getRequirement();
 						for(auto& requirement : requirements)
 						{
 							requirement.second *= countNeeded;
 							wonderList.emplace_back(requirement);
 						}
-						
 						break;
 					}
 				}
-				//If not adds it to foodInfos
-				if (!isCraftable)
+				if (isCraftable)
 				{
-					foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(key, std::pair<float, int>(foodItem->getFoodValue(), INT_MAX)));
+					break;
 				}
+				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(key, std::pair<float, int>(foodItem->getFoodValue(), INT_MAX)));
 			}
+			
 		}
-
-		//Send food infos to the random food combination generator and then adds to wonderList the generated combination
-		const std::uniform_real_distribution<float> uniformFloatDist(1.0f, 10.0f); //TODO setting
-		const float foodGoal = uniformFloatDist(randomEngine);
-		wonderList.splice(wonderList.end(), getRandomFoodCombination(foodInfos, foodGoal));
+		if (!isCraftable)
+		{
+			//Send food infos to the random food combination generator and then adds to wonderList the generated combination
+			const std::uniform_real_distribution<float> uniformFloatDist(1.0f, 10.0f); //TODO setting
+			const float foodGoal = uniformFloatDist(randomEngine);
+			wonderList.splice(wonderList.end(), getRandomFoodCombination(foodInfos, foodGoal));
+		}
 	}
 
 	//Find the most beneficial unavailable craft
@@ -372,11 +370,21 @@ void Trader::craft()
 	if (currentJob != nullptr && currentCraft == nullptr)
 	{
 		const auto craftableList = this->currentJob->getCraftableList();
-		if (!craftableList.empty())
+		std::vector<size_t> interestingCrafts;
+		interestingCrafts.reserve(craftableList.size());
+		for(const auto& key : craftableList)
 		{
+			if(evaluatePrice(key) * static_cast<float>(getItemCount(key)) < money* 2.0f)
+			{
+				interestingCrafts.emplace_back(key);
+			}
+		}
+
+		if (!interestingCrafts.empty())
+		{		
 			//Picks randomly an available craft
-			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(craftableList.size() - 1));
-			this->currentCraft = this->currentJob->createCraft(craftableList[uniformDist(randomEngine)]);
+			const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(interestingCrafts.size() - 1));
+			this->currentCraft = this->currentJob->createCraft(interestingCrafts[uniformDist(randomEngine)]);
 
 			//Init the associated tool
 			for (auto& item : inventory)
@@ -402,6 +410,7 @@ void Trader::craft()
 	}
 	if (currentCraft != nullptr)
 	{
+		 //TODO make it a setting
 		if (currentCraft->advanceCraft())
 		{
 			addToInventory(currentCraft->getResult(), currentCraft->getCount());
@@ -419,7 +428,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 
 	if(ask->getStatus() == AskStatus::Sold)
 	{
-		*failCount[ask->getId()][0] = 0;
+		++successCount;
 		if(ask->getPrice()*0.7 > currentMean || ask->getPrice() < currentMean * 0.7)
 		{
 			*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
@@ -432,18 +441,17 @@ void Trader::refreshPriceBelief(Ask* ask)
 	}
 	else
 	{
-		++* failCount[ask->getId()][0];
 		*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
 		*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] + currentMean - priceBeliefMean);
 		if(dynamic_cast<BuyingAsk*>(ask)!=nullptr)
 		{	
-			*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean, *priceBeliefs[ask->getId()][0] + 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
-			*priceBeliefs[ask->getId()][1] = std::min<float>(currentMean * 1.5f, *priceBeliefs[ask->getId()][1] + 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean, *priceBeliefs[ask->getId()][0] + 0.05f * priceBeliefMean);
+			*priceBeliefs[ask->getId()][1] = std::min<float>(currentMean * 1.5f, *priceBeliefs[ask->getId()][1] + 0.05f * priceBeliefMean);
 		}
 		else
 		{
-			*priceBeliefs[ask->getId()][0] = std::max<float>(currentMean*0.5f, *priceBeliefs[ask->getId()][0] - 0.05f * priceBeliefMean);// * *failCount[ask->getId()][0]);
-			*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean, *priceBeliefs[ask->getId()][1] - 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][0] = std::max<float>(currentMean * 0.5f, *priceBeliefs[ask->getId()][0] - 0.05f * priceBeliefMean);
+			*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean, *priceBeliefs[ask->getId()][1] - 0.05f * priceBeliefMean);
 		}
 	}
 }
@@ -481,7 +489,13 @@ void Trader::refresh()
 	}
 	checkAsks();
 
-	foodLevel -= 0.34f; //TODO make it a setting
+	if(successCount>10)
+	{
+		successCount=0;
+		TraderManager::getInstance()->addTrader(1, currentJob->getId());
+	}
+	
+	foodLevel -= 0.34f;
 	if(foodLevel > 0.0 && foodLevel<=10.0f)
 	{
 		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
@@ -504,6 +518,28 @@ void Trader::refresh()
 }
 
 //=====Inventory Management=====
+int  Trader::getItemCount(const size_t key)
+{
+	int count = 0;
+	for(auto& item : inventory)
+	{
+		if(item->getId() == key)
+		{
+			auto* countable = dynamic_cast<Countable*>(item.get());
+			if (countable != nullptr)
+			{
+				count = countable->getCount();
+				break;
+			}
+			else
+			{
+				++count;
+			}
+		}
+	}
+	return count;
+}
+
 bool Trader::isInInventory(const size_t key)
 {
 	for (auto& item : inventory)

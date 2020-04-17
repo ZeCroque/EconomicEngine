@@ -1,5 +1,15 @@
 #include "TraderManager.h"
 
+void TraderManager::init() const
+{
+	const auto& keys = instance->jobFactory.getKeys();
+	demographyCounts = VectorArray <std::pair<int, int>>(keys);
+	for(const auto& key : keys)
+	{
+		demographyCounts[key].emplace_back(std::make_shared <std::pair<int, int>>(0, 0));
+	}
+}
+
 void TraderManager::registerJob(Job* job)
 {
 	this->jobFactory.registerObject(typeid(*job).hash_code(), job);
@@ -19,13 +29,16 @@ void TraderManager::addTrader(const int count, const size_t key)
 	{
 		traders.emplace_back(Trader(jobFactory.createObject(key)));
 		traders.back().getCurrentJob()->setOwner(&traders.back());
+		++demographyCounts[traders.back().getCurrentJob()->getId()][0]->first;
 	}	
 }
 
 Job* TraderManager::assignJob(const size_t key, Trader* trader) const
 {
+
 	Job* job = this->jobFactory.createObject(key);
 	job->setOwner(trader);
+	++demographyCounts[job->getId()][0]->first;
 	return job;
 }
 
@@ -37,6 +50,11 @@ std::list<std::pair<size_t, std::string>> TraderManager::getJobList() const
 		result.emplace_back(std::pair<size_t, std::string>(job->getId(), job->getName()));
 	}
 	return result;
+}
+
+std::pair<int, int> TraderManager::getDemographyByJob(const size_t key) const
+{
+	return *demographyCounts[key][0];
 }
 
 std::list<Trader*> TraderManager::getTraderByJobId(const size_t key)
@@ -66,7 +84,7 @@ float TraderManager::getMoneyMeanByJob(const size_t key)
 	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
 }
 
-float TraderManager::getFoodLevelMeanByJob(size_t key)
+float TraderManager::getFoodLevelMeanByJob(const size_t key)
 {
 	float total = 0.0f;
 	const auto& traders = getTraderByJobId(key);
@@ -125,6 +143,7 @@ void TraderManager::killTraders()
 
 	for (auto& it : iterators)
 	{
+		++demographyCounts[it->getCurrentJob()->getId()][0]->second;
 		traders.erase(it);
 	}
 }

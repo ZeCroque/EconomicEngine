@@ -34,6 +34,7 @@ public:
 	{
 		initTraders();
 		initTradables();
+		traderManager->init();
 		stockExchange->init();
 	}
 

@@ -19,7 +19,7 @@ class Job;
 class Trader : public Observable
 {
 private:
-	VectorArray<int> failCount;
+	
 	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
@@ -29,6 +29,7 @@ private:
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
 	std::mt19937 randomEngine;
+	int successCount;
 	float money;
 	float foodLevel;
 	void assignJob();
@@ -54,6 +55,7 @@ public:
 	[[nodiscard]] bool isInInventory(size_t key);
 	[[nodiscard]] float getFoodLevel() const;
 	[[nodiscard]] float getMoney() const;
+	int getItemCount(size_t key);
 	void addToInventory(size_t key, int count);
 	void addToInventory(Countable* countable);
 	void addToInventory(Uncountable* uncountable);
