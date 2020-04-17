@@ -146,6 +146,24 @@
     <ClCompile Include="qcustomplot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AxeBehavior.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BowBehavior.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugEconomicEngine.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HoeBehavior.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickaxeBehavior.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SwordBehavior.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EconomicEngineDebugGUI.h">
@@ -201,24 +219,11 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    
-    
-    
-    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
-    </CustomBuild>
-    
-    
-    
-    
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="EconomicEngineDebugGUI.ui">
-      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -264,6 +269,24 @@
     </ClInclude>
     <ClInclude Include="WoodPickaxe.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="AxeBehavior.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BowBehavior.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugEconomicEngine.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HoeBehavior.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PickaxeBehavior.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SwordBehavior.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

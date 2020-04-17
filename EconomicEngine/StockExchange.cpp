@@ -49,15 +49,18 @@ void StockExchange::resolveOffers()
 			}
 			
 			const int tradedCount = std::min<int>(buyingAsks[buyingAsks.size() - 1]->getCount() - buyingAsks[buyingAsks.size() - 1]->getTradedCount(), sellingAsks[0]->getCount() - sellingAsks[0]->getTradedCount());
-			
-			sellingAsks[0]->setPrice(buyingAsks[buyingAsks.size() - 1]->getPrice());
+			const float price = (buyingAsks[buyingAsks.size() - 1]->getPrice() + sellingAsks[0]->getPrice()) / 2;
+
+			sellingAsks[0]->setPrice(price);
 			sellingAsks[0]->incrementTradedCountBy(tradedCount);
 			sellingAsks[0]->setStatus(AskStatus::Sold);
 			if (sellingAsks[0]->getCount() == sellingAsks[0]->getTradedCount())
 			{
 				sellingAsks.erase(sellingAsks.begin());
 			}
-
+			
+			buyingAsks[buyingAsks.size() - 1]->setPrice(price);
+			buyingAsks[buyingAsks.size() - 1]->incrementTradedCountBy(tradedCount);
 			buyingAsks[buyingAsks.size() - 1]->incrementTradedCountBy(tradedCount);
 			buyingAsks[buyingAsks.size() - 1]->setStatus(AskStatus::Sold);
 			if(buyingAsks[buyingAsks.size() - 1]->getCount() == buyingAsks[buyingAsks.size() - 1]->getTradedCount())
