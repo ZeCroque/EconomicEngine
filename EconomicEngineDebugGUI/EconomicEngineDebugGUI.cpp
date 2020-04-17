@@ -318,21 +318,21 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 	for (auto job : arrayJobs)
 	{
-		auto jobId = job->getJobId();
+		const auto jobId = job->getJobId();
 
 		auto number = QString::number(traderManager->getJobCount(jobId));
 		auto money = QString::number(traderManager->getMoneyMeanByJob(jobId));
 		auto food = QString::number(traderManager->getFoodLevelMeanByJob(jobId));
 
-		//auto demography = traderManager->getDemographyByJob(jobId);
-		//auto birth = QString::number(demography.first());
-		//auto dead = QString::number(demography.second());
+		const auto demography = traderManager->getDemographyByJob(jobId);
+		auto birth = QString::number(demography.first);
+		auto dead = QString::number(demography.second);
 
 		job->lbNumber->setText(number);
 		job->lbMoneyAverage->setText(money);
 		job->lbFoodAverage->setText(food);
-		//job->lbBirth->setText(birth);
-		//job->lbDead->setText(dead);
+		job->lbBirth->setText(birth);
+		job->lbDead->setText(dead);
 	}
 }
 
