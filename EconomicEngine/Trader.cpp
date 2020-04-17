@@ -153,13 +153,16 @@ void Trader::fillWonderList()
 					if (result== foodItem->getId())
 					{
 						isCraftable = true;
+
 						const int countNeeded = static_cast<int>(std::round((15.0f - calculateFoodStock()) / foodItem->getFoodValue()));
+
 						auto requirements = currentJob->getCraft(foodItem->getId())->getRequirement();
 						for(auto& requirement : requirements)
 						{
 							requirement.second *= countNeeded;
 							wonderList.emplace_back(requirement);
 						}
+
 						break;
 					}
 				}
@@ -429,6 +432,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 	if(ask->getStatus() == AskStatus::Sold)
 	{
 		++successCount;
+
 		if(ask->getPrice()*0.7 > currentMean || ask->getPrice() < currentMean * 0.7)
 		{
 			*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
