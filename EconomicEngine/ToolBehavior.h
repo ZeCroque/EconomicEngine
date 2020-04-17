@@ -16,6 +16,7 @@ public:
 	ToolBehavior(float craftRateBoost, float degradationRate);
 	void init(Trader* owner, Tradable* item) override;
 	void notify(Observable* sender) override;
+	[[nodiscard]] float getCraftRateBoost() const;
 };
 
 #endif
