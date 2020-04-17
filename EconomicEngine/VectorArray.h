@@ -15,7 +15,6 @@ public:
 	VectorArray() : vectors(nullptr){}
 	VectorArray(std::vector<size_t> keys) : keys(std::move(keys)), vectors(new std::vector<std::shared_ptr<T>>[this->keys.size()]) {}
 	
-
 	std::vector<std::shared_ptr<T>>& operator[](size_t key)
 	{
 		std::vector<std::shared_ptr<T>>* result = nullptr;
