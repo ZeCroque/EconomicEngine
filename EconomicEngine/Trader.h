@@ -14,6 +14,7 @@
 
 #include "StockExchange.h"
 
+
 class Trader : public Observable
 {
 private:
@@ -51,8 +52,6 @@ private:
 			}
 		}
 	}
-	
-
 	
 public:
 	Trader();
