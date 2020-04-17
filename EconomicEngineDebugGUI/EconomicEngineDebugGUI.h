@@ -14,10 +14,10 @@ class EconomicEngineDebugGui final : public QMainWindow, public IObserver
 Q_OBJECT
 
 public:
-	EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
+	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui();
 	void notify(Observable* sender) override;
-	void EconomicEngineDebugGui::closeEvent(QCloseEvent* event) override;
+	void closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
 	void updateUiSlot();
@@ -37,7 +37,7 @@ public Q_SLOTS:
 	void updateUiJobs();
 
 private:
-	Ui::EconomicEngineDebugGUIClass ui;
+	Ui::EconomicEngineDebugGUIClass ui{};
 	std::vector<GraphManager*> arrayCheckBox;
 	std::vector<JobManager*> arrayJobs;
 	QTimer dataTimer;
@@ -45,7 +45,7 @@ private:
 	DebugEconomicEngine* turnManager;
 	TraderManager* traderManager;
 	int zoomXAxis;
-	bool realTime;
+	bool realTime{};
 
 signals:
 	void nextTurn();

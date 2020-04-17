@@ -20,6 +20,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
@@ -32,7 +33,8 @@ class Ui_EconomicEngineDebugGUIClass
 {
 public:
     QWidget *centralWidget;
-    QWidget *horizontalLayoutWidget_3;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout;
     QHBoxLayout *layGraph;
     QVBoxLayout *layGraphParam;
     QGridLayout *layChBx;
@@ -58,37 +60,41 @@ public:
     QVBoxLayout *layPlot;
     QCustomPlot *customPlot;
     QSlider *horSlidXNav;
-    QWidget *gridLayoutWidget;
+    QFrame *line_3;
+    QHBoxLayout *horizontalLayout_3;
+    QGridLayout *gridLayJobs;
     QGridLayout *gridLayout;
-    QComboBox *cBKill;
     QGridLayout *gridLayout_2;
     QPushButton *pBKill;
     QPushButton *pBAdd;
     QSpinBox *sBAdd;
     QSpinBox *sBKill;
-    QWidget *gridLayoutWidget_2;
-    QGridLayout *gridLayJobs;
+    QComboBox *cBKill;
+    QSpacerItem *horizontalSpacer_2;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *EconomicEngineDebugGUIClass)
     {
         if (EconomicEngineDebugGUIClass->objectName().isEmpty())
             EconomicEngineDebugGUIClass->setObjectName(QString::fromUtf8("EconomicEngineDebugGUIClass"));
-        EconomicEngineDebugGUIClass->resize(1200, 600);
-        EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 600));
-        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1200, 600));
+        EconomicEngineDebugGUIClass->resize(1200, 610);
+        EconomicEngineDebugGUIClass->setMinimumSize(QSize(1180, 610));
+        EconomicEngineDebugGUIClass->setMaximumSize(QSize(1200, 610));
         EconomicEngineDebugGUIClass->setAutoFillBackground(false);
         EconomicEngineDebugGUIClass->setAnimated(true);
         centralWidget = new QWidget(EconomicEngineDebugGUIClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        horizontalLayoutWidget_3 = new QWidget(centralWidget);
-        horizontalLayoutWidget_3->setObjectName(QString::fromUtf8("horizontalLayoutWidget_3"));
-        horizontalLayoutWidget_3->setGeometry(QRect(10, 10, 1179, 341));
-        layGraph = new QHBoxLayout(horizontalLayoutWidget_3);
+        verticalLayoutWidget = new QWidget(centralWidget);
+        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(10, 10, 1181, 571));
+        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        layGraph = new QHBoxLayout();
         layGraph->setSpacing(6);
-        layGraph->setContentsMargins(11, 11, 11, 11);
         layGraph->setObjectName(QString::fromUtf8("layGraph"));
-        layGraph->setContentsMargins(0, 0, 0, 0);
         layGraphParam = new QVBoxLayout();
         layGraphParam->setSpacing(6);
         layGraphParam->setObjectName(QString::fromUtf8("layGraphParam"));
@@ -98,7 +104,7 @@ public:
 
         layGraphParam->addLayout(layChBx);
 
-        line = new QFrame(horizontalLayoutWidget_3);
+        line = new QFrame(verticalLayoutWidget);
         line->setObjectName(QString::fromUtf8("line"));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
@@ -108,12 +114,12 @@ public:
         LaySliders = new QGridLayout();
         LaySliders->setSpacing(6);
         LaySliders->setObjectName(QString::fromUtf8("LaySliders"));
-        labSpeed = new QLabel(horizontalLayoutWidget_3);
+        labSpeed = new QLabel(verticalLayoutWidget);
         labSpeed->setObjectName(QString::fromUtf8("labSpeed"));
 
         LaySliders->addWidget(labSpeed, 1, 0, 1, 1);
 
-        horSlidSpeed = new QSlider(horizontalLayoutWidget_3);
+        horSlidSpeed = new QSlider(verticalLayoutWidget);
         horSlidSpeed->setObjectName(QString::fromUtf8("horSlidSpeed"));
         horSlidSpeed->setCursor(QCursor(Qt::PointingHandCursor));
         horSlidSpeed->setMinimum(1);
@@ -125,7 +131,7 @@ public:
 
         LaySliders->addWidget(horSlidSpeed, 1, 1, 1, 1);
 
-        horSlidZoomXAxis = new QSlider(horizontalLayoutWidget_3);
+        horSlidZoomXAxis = new QSlider(verticalLayoutWidget);
         horSlidZoomXAxis->setObjectName(QString::fromUtf8("horSlidZoomXAxis"));
         horSlidZoomXAxis->setCursor(QCursor(Qt::PointingHandCursor));
         horSlidZoomXAxis->setMinimum(4);
@@ -138,17 +144,17 @@ public:
 
         LaySliders->addWidget(horSlidZoomXAxis, 0, 1, 1, 1);
 
-        labZomXAxis = new QLabel(horizontalLayoutWidget_3);
+        labZomXAxis = new QLabel(verticalLayoutWidget);
         labZomXAxis->setObjectName(QString::fromUtf8("labZomXAxis"));
 
         LaySliders->addWidget(labZomXAxis, 0, 0, 1, 1);
 
-        labStep = new QLabel(horizontalLayoutWidget_3);
+        labStep = new QLabel(verticalLayoutWidget);
         labStep->setObjectName(QString::fromUtf8("labStep"));
 
         LaySliders->addWidget(labStep, 2, 0, 1, 1);
 
-        horSlidStep = new QSlider(horizontalLayoutWidget_3);
+        horSlidStep = new QSlider(verticalLayoutWidget);
         horSlidStep->setObjectName(QString::fromUtf8("horSlidStep"));
         horSlidStep->setCursor(QCursor(Qt::PointingHandCursor));
         horSlidStep->setMinimum(1);
@@ -163,7 +169,7 @@ public:
 
         layGraphParam->addLayout(LaySliders);
 
-        line_2 = new QFrame(horizontalLayoutWidget_3);
+        line_2 = new QFrame(verticalLayoutWidget);
         line_2->setObjectName(QString::fromUtf8("line_2"));
         line_2->setFrameShape(QFrame::HLine);
         line_2->setFrameShadow(QFrame::Sunken);
@@ -177,7 +183,7 @@ public:
         layRadButton->setSpacing(4);
         layRadButton->setObjectName(QString::fromUtf8("layRadButton"));
         layRadButton->setSizeConstraint(QLayout::SetNoConstraint);
-        radBRealTime = new QRadioButton(horizontalLayoutWidget_3);
+        radBRealTime = new QRadioButton(verticalLayoutWidget);
         radBRealTime->setObjectName(QString::fromUtf8("radBRealTime"));
         radBRealTime->setLayoutDirection(Qt::LeftToRight);
         radBRealTime->setAutoFillBackground(false);
@@ -185,7 +191,7 @@ public:
 
         layRadButton->addWidget(radBRealTime);
 
-        radStepByStep = new QRadioButton(horizontalLayoutWidget_3);
+        radStepByStep = new QRadioButton(verticalLayoutWidget);
         radStepByStep->setObjectName(QString::fromUtf8("radStepByStep"));
 
         layRadButton->addWidget(radStepByStep);
@@ -196,7 +202,7 @@ public:
         LayPushButton = new QVBoxLayout();
         LayPushButton->setSpacing(6);
         LayPushButton->setObjectName(QString::fromUtf8("LayPushButton"));
-        pBStart = new QPushButton(horizontalLayoutWidget_3);
+        pBStart = new QPushButton(verticalLayoutWidget);
         pBStart->setObjectName(QString::fromUtf8("pBStart"));
         pBStart->setCheckable(true);
 
@@ -205,12 +211,12 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        label = new QLabel(horizontalLayoutWidget_3);
+        label = new QLabel(verticalLayoutWidget);
         label->setObjectName(QString::fromUtf8("label"));
 
         horizontalLayout->addWidget(label);
 
-        sBTraderNumber = new QSpinBox(horizontalLayoutWidget_3);
+        sBTraderNumber = new QSpinBox(verticalLayoutWidget);
         sBTraderNumber->setObjectName(QString::fromUtf8("sBTraderNumber"));
         sBTraderNumber->setMinimum(0);
         sBTraderNumber->setMaximum(1000);
@@ -222,7 +228,7 @@ public:
 
         LayPushButton->addLayout(horizontalLayout);
 
-        pBReset = new QPushButton(horizontalLayoutWidget_3);
+        pBReset = new QPushButton(verticalLayoutWidget);
         pBReset->setObjectName(QString::fromUtf8("pBReset"));
         pBReset->setCheckable(true);
 
@@ -240,14 +246,14 @@ public:
         layPlot = new QVBoxLayout();
         layPlot->setSpacing(6);
         layPlot->setObjectName(QString::fromUtf8("layPlot"));
-        customPlot = new QCustomPlot(horizontalLayoutWidget_3);
+        customPlot = new QCustomPlot(verticalLayoutWidget);
         customPlot->setObjectName(QString::fromUtf8("customPlot"));
         customPlot->setMinimumSize(QSize(830, 300));
         customPlot->setMaximumSize(QSize(830, 300));
 
         layPlot->addWidget(customPlot);
 
-        horSlidXNav = new QSlider(horizontalLayoutWidget_3);
+        horSlidXNav = new QSlider(verticalLayoutWidget);
         horSlidXNav->setObjectName(QString::fromUtf8("horSlidXNav"));
         horSlidXNav->setValue(99);
         horSlidXNav->setOrientation(Qt::Horizontal);
@@ -257,39 +263,49 @@ public:
 
         layGraph->addLayout(layPlot);
 
-        gridLayoutWidget = new QWidget(centralWidget);
-        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(350, 360, 321, 211));
-        gridLayout = new QGridLayout(gridLayoutWidget);
+
+        verticalLayout->addLayout(layGraph);
+
+        line_3 = new QFrame(verticalLayoutWidget);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line_3);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        gridLayJobs = new QGridLayout();
+        gridLayJobs->setSpacing(6);
+        gridLayJobs->setObjectName(QString::fromUtf8("gridLayJobs"));
+        gridLayJobs->setSizeConstraint(QLayout::SetMinimumSize);
+
+        horizontalLayout_3->addLayout(gridLayJobs);
+
+        gridLayout = new QGridLayout();
         gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        cBKill = new QComboBox(gridLayoutWidget);
-        cBKill->setObjectName(QString::fromUtf8("cBKill"));
-
-        gridLayout->addWidget(cBKill, 0, 0, 1, 1);
-
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setSpacing(6);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        pBKill = new QPushButton(gridLayoutWidget);
+        pBKill = new QPushButton(verticalLayoutWidget);
         pBKill->setObjectName(QString::fromUtf8("pBKill"));
 
         gridLayout_2->addWidget(pBKill, 1, 1, 1, 1);
 
-        pBAdd = new QPushButton(gridLayoutWidget);
+        pBAdd = new QPushButton(verticalLayoutWidget);
         pBAdd->setObjectName(QString::fromUtf8("pBAdd"));
 
         gridLayout_2->addWidget(pBAdd, 0, 1, 1, 1);
 
-        sBAdd = new QSpinBox(gridLayoutWidget);
+        sBAdd = new QSpinBox(verticalLayoutWidget);
         sBAdd->setObjectName(QString::fromUtf8("sBAdd"));
         sBAdd->setMinimum(1);
 
         gridLayout_2->addWidget(sBAdd, 0, 0, 1, 1);
 
-        sBKill = new QSpinBox(gridLayoutWidget);
+        sBKill = new QSpinBox(verticalLayoutWidget);
         sBKill->setObjectName(QString::fromUtf8("sBKill"));
         sBKill->setMinimum(1);
 
@@ -298,15 +314,21 @@ public:
 
         gridLayout->addLayout(gridLayout_2, 0, 1, 1, 1);
 
-        gridLayoutWidget_2 = new QWidget(centralWidget);
-        gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(10, 360, 341, 211));
-        gridLayJobs = new QGridLayout(gridLayoutWidget_2);
-        gridLayJobs->setSpacing(6);
-        gridLayJobs->setContentsMargins(11, 11, 11, 11);
-        gridLayJobs->setObjectName(QString::fromUtf8("gridLayJobs"));
-        gridLayJobs->setSizeConstraint(QLayout::SetMinimumSize);
-        gridLayJobs->setContentsMargins(0, 0, 0, 0);
+        cBKill = new QComboBox(verticalLayoutWidget);
+        cBKill->setObjectName(QString::fromUtf8("cBKill"));
+
+        gridLayout->addWidget(cBKill, 0, 0, 1, 1);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_2, 0, 2, 1, 1);
+
+
+        horizontalLayout_3->addLayout(gridLayout);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
         EconomicEngineDebugGUIClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(EconomicEngineDebugGUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
