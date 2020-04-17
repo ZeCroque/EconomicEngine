@@ -13,7 +13,7 @@ protected:
 	Trader* owner;
 	size_t typeId;
 public:
-	Behavior() = default;
+	Behavior();
 	virtual void init(Trader* owner, Tradable* item) = 0;
 	[[nodiscard]] size_t getId() const;
 

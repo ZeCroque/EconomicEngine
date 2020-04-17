@@ -1,7 +1,6 @@
 #include "StockExchange.h"
 
 #include <algorithm>
-#include <memory>
 
 #include "TradableManager.h"
 
@@ -40,37 +39,38 @@ void StockExchange::resolveOffers()
 		auto& buyingAsks = currentBuyingAsks[key];
 		auto& sellingAsks = currentSellingAsks[key];
 		bool doOnce = true;
-		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks[buyingAsks.size() - 1]->getPrice() > sellingAsks[0]->getPrice() && buyingAsks[buyingAsks.size() - 1]->getCount() < sellingAsks[0]->getCount())
-		{
-			if (doOnce)
-			{
-				doOnce = false;
-				betterAsks[key].emplace_back(buyingAsks[buyingAsks.size() - 1]);
-			}
-			
-			const int tradedCount = std::min<int>(buyingAsks[buyingAsks.size() - 1]->getCount() - buyingAsks[buyingAsks.size() - 1]->getTradedCount(), sellingAsks[0]->getCount() - sellingAsks[0]->getTradedCount());
-			const float price = (buyingAsks[buyingAsks.size() - 1]->getPrice() + sellingAsks[0]->getPrice()) / 2;
+		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks.back()->getPrice() > sellingAsks.front()->getPrice() && buyingAsks.back()->getCount() < sellingAsks.front()->getCount())
+		{			
+			const int tradedCount = std::min<int>(buyingAsks.back()->getCount() - buyingAsks.back()->getTradedCount(), sellingAsks.front()->getCount() - sellingAsks.front()->getTradedCount());
+			const float price = (buyingAsks.back()->getPrice() + sellingAsks.front()->getPrice()) / 2;
 
-			sellingAsks[0]->setPrice(price);
-			sellingAsks[0]->incrementTradedCountBy(tradedCount);
-			sellingAsks[0]->setStatus(AskStatus::Sold);
-			if (sellingAsks[0]->getCount() == sellingAsks[0]->getTradedCount())
+			sellingAsks.front()->setPrice(price);
+			sellingAsks.front()->incrementTradedCountBy(tradedCount);
+			sellingAsks.front()->setStatus(AskStatus::Sold);
+			if (sellingAsks.front()->getCount() == sellingAsks.front()->getTradedCount())
 			{
 				sellingAsks.erase(sellingAsks.begin());
 			}
 			
-			buyingAsks[buyingAsks.size() - 1]->setPrice(price);
-			buyingAsks[buyingAsks.size() - 1]->incrementTradedCountBy(tradedCount);
-			buyingAsks[buyingAsks.size() - 1]->incrementTradedCountBy(tradedCount);
-			buyingAsks[buyingAsks.size() - 1]->setStatus(AskStatus::Sold);
-			if(buyingAsks[buyingAsks.size() - 1]->getCount() == buyingAsks[buyingAsks.size() - 1]->getTradedCount())
+			buyingAsks.back()->setPrice(price);
+			buyingAsks.back()->incrementTradedCountBy(tradedCount);
+			buyingAsks.back()->incrementTradedCountBy(tradedCount);
+			buyingAsks.back()->setStatus(AskStatus::Sold);
+
+			if (doOnce)
+			{
+				doOnce = false;
+				betterAsks[key].emplace_back(buyingAsks.back());
+			}
+			
+			if(buyingAsks.back()->getCount() == buyingAsks.back()->getTradedCount())
 			{
 				buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
 			}
 		}
 		if (doOnce)
 		{
-			betterAsks[key].emplace_back(betterAsks[key][betterAsks[key].size() - 1]);
+			betterAsks[key].emplace_back(betterAsks[key].back());
 		}
 
 		for (auto& sellingAsk : sellingAsks)
@@ -101,10 +101,6 @@ void StockExchange::reset()
 		currentSellingAsks[key].clear();
 		currentBuyingAsks[key].clear();
 		betterAsks[key].clear();
-	}
-
-	for (auto key : keys)
-	{
 		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
 	}
 
@@ -116,7 +112,7 @@ void StockExchange::incrementTurnCount()
 	++this->turnCount;
 }
 
-float StockExchange::getStockExchangePrice(const size_t key)
+float StockExchange::getStockExchangePrice(const size_t key) const
 {
 	float result = 0.0f;
 	if (!betterAsks[key].empty())
@@ -126,7 +122,7 @@ float StockExchange::getStockExchangePrice(const size_t key)
 	return result;
 }
 
-std::list<BuyingAsk> StockExchange::getStockExchangePrice(size_t key, int count)
+std::list<BuyingAsk> StockExchange::getStockExchangePrice(const size_t key, const int count) const
 {
 	std::list<BuyingAsk> result;
 	int i = 0;

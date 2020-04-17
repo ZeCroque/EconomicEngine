@@ -26,8 +26,8 @@ public:
 	void resolveOffers();
 	void reset();
 	void incrementTurnCount();
-	[[nodiscard]] float getStockExchangePrice(size_t key);
-	[[nodiscard]] std::list<BuyingAsk> getStockExchangePrice(size_t key, int count);
+	[[nodiscard]] float getStockExchangePrice(size_t key) const;
+	[[nodiscard]] std::list<BuyingAsk> getStockExchangePrice(size_t key, int count) const;
 	[[nodiscard]] int getTurnCount() const;
 
 

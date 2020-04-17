@@ -37,16 +37,8 @@ Trader::Trader(Job* job) : Trader()
 	currentJob = job;
 }
 
-
-//Auto-assign job for the trader
-void Trader::assignJob()
-{
-	TraderManager* traderManager = TraderManager::getInstance();
-	this->currentJob = traderManager->assignJob(traderManager->getMostInterestingJob(), this);
-}
-
 //Return a random combination of food to satisfy the provided foodGoal, according to the limits specified in provided foodInfos
-std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, const float foodGoal)
+std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, const float foodGoal) const
 {
 	std::list<std::pair<size_t, int>> foodCombinations;
 
@@ -94,7 +86,7 @@ std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<s
 }
 
 //Scans through inventory to return the accumulated foodLevel of each food items
-float Trader::calculateFoodStock()
+float Trader::calculateFoodStock() const
 {
 	float foodStock = 0.0f;
 	for (const auto& item : inventory)
@@ -108,7 +100,7 @@ float Trader::calculateFoodStock()
 	return foodStock;
 }
 
-float Trader::calculateEarnings(Craft* craft)
+float Trader::calculateEarnings(Craft* craft) const
 {
 	const float resultPrice = calculatePriceBeliefMean(craft->getResult());
 
@@ -308,14 +300,14 @@ void Trader::fillGoodsList()
 }
 
 //Returns the price belief mean
-float Trader::calculatePriceBeliefMean(const size_t key)
+float Trader::calculatePriceBeliefMean(const size_t key) const
 {
 	auto resultPriceBelief = priceBeliefs[key];
 	return (*resultPriceBelief.front() + *resultPriceBelief.back()) / 2.0f;
 }
 
 //Picks a random price in the price belief interval
-float Trader::evaluatePrice(const size_t key)
+float Trader::evaluatePrice(const size_t key) const
 {
 	const std::uniform_int_distribution<int> uniformIntDist(0, 1);
 	std::uniform_real_distribution<float> uniformFloatDist;
@@ -483,10 +475,6 @@ void Trader::checkAsks()
 
 void Trader::refresh()
 {
-	if (currentJob == nullptr)
-	{
-		this->assignJob();
-	}
 	checkAsks();
 
 	if(successCount>10)
@@ -518,7 +506,7 @@ void Trader::refresh()
 }
 
 //=====Inventory Management=====
-int  Trader::getItemCount(const size_t key)
+int  Trader::getItemCount(const size_t key) const
 {
 	int count = 0;
 	for(auto& item : inventory)

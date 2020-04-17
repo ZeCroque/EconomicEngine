@@ -19,12 +19,12 @@ public:
 	void addTrader(int count, size_t key);
 	[[nodiscard]] Job* assignJob(size_t key, Trader* trader) const;
 	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
-	[[nodiscard]] std::list<Trader*> getTraderByJobId(size_t key);
+	[[nodiscard]] std::list<const Trader*> getTraderByJobId(size_t key) const;
 	[[nodiscard]] std::pair<int, int> getDemographyByJob(size_t key) const;
-	[[nodiscard]] float getMoneyMeanByJob(size_t key);
-	[[nodiscard]] float getFoodLevelMeanByJob(size_t key);
-	[[nodiscard]] int getJobCount(size_t key);
-	[[nodiscard]] size_t getMostInterestingJob();
+	[[nodiscard]] float getMoneyMeanByJob(size_t key) const;
+	[[nodiscard]] float getFoodLevelMeanByJob(size_t key) const;
+	[[nodiscard]] int getJobCount(size_t key) const;
+	[[nodiscard]] size_t getMostInterestingJob() const;
 	void refreshTraders();
 	void killTraders();
 	void doTradersCrafting();

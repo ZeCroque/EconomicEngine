@@ -8,15 +8,7 @@ class Observable
 private:
 	std::list<IObserver*> registeredObservers;
 
-public:
-	Observable() = default;
-	Observable(const Observable&) = default;
-	Observable(Observable&&) = default;
-	Observable& operator=(const Observable&) = default;
-	Observable& operator=(Observable&&) = default;
-	virtual ~Observable() = default;
-	
-	
+public:	
 	void addObserver(IObserver* observer);
 	void removeObserver(IObserver* observer);
 	[[nodiscard]] std::list<IObserver*> getRegisteredObservers() const;

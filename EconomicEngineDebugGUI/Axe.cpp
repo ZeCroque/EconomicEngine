@@ -1,5 +1,7 @@
 #include "Axe.h"
 
+#include <typeinfo>
+
 #include "AxeBehavior.h"
 
 Axe::Axe() : Uncountable()

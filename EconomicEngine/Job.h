@@ -4,8 +4,9 @@
 #include "CraftFactory.h"
 #include "Craft.h"
 
+#include <string>
+
 class Trader;
-class CraftFactory;
 
 class Job : public Clonable<Job>
 {

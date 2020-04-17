@@ -6,7 +6,7 @@
 
 Craft::Craft() : advancement(0.0f), rate(0.0f), count(), result(0){}
 
-Craft::Craft(const float baseRate, const size_t craftResult, const int count, std::vector<std::pair<size_t, int>> requirements, std::vector<size_t> toolsRequired) : advancement(0.0f), rate(baseRate), count(count), result(craftResult), requirements(std::move(requirements)), toolsRequired(std::move(toolsRequired)){}
+Craft::Craft(const float baseRate, const size_t craftResult, const int count, std::list<std::pair<size_t, int>> requirements, std::list<size_t> toolsRequired) : advancement(0.0f), rate(baseRate), count(count), result(craftResult), requirements(std::move(requirements)), toolsRequired(std::move(toolsRequired)){}
 	                                                                                                                           
 Craft::Craft(Craft& craft) : advancement(craft.advancement), rate(craft.rate), count(craft.count), result(craft.result), requirements(craft.requirements), toolsRequired(craft.toolsRequired) {}
 
@@ -15,12 +15,12 @@ Craft* Craft::clone()
 	return new Craft(*this);
 }
 
-std::vector<std::pair<size_t, int>> Craft::getRequirement() const
+std::list<std::pair<size_t, int>> Craft::getRequirement() const
 {
 	return requirements;
 }
 
-std::vector<size_t> Craft::getToolsRequired() const
+std::list<size_t> Craft::getToolsRequired() const
 {
 	return toolsRequired;
 }
