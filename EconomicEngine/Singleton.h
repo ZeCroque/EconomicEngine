@@ -16,16 +16,16 @@ public :
 
 	static T* getInstance()
 	{
-		if (Singleton<T>::instance == nullptr)
+		if (instance == nullptr)
 		{
-			Singleton<T>::instance = new T();
+			instance = new T();
 		}
-		return Singleton<T>::instance;
+		return instance;
 	}
 
 	static void destroyInstance()
 	{
-		delete Singleton<T>::instance;
+		delete instance;
 	}
 };
 

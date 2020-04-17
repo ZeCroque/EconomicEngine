@@ -1,5 +1,7 @@
 #include "Sword.h"
 
+#include <typeinfo>
+
 #include "SwordBehavior.h"
 
 Sword::Sword() : Uncountable()

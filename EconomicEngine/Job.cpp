@@ -1,6 +1,5 @@
 #include "Job.h"
 
-#include "Countable.h" //DEBUG
 #include "Uncountable.h"
 
 Job::Job() : craftFactory(new CraftFactory()){}

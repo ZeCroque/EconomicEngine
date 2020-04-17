@@ -1,8 +1,6 @@
 #ifndef ASK_H
 #define ASK_H
 
-#include<map>
-
 enum class AskStatus { Pending, Sold, Refused };
 
 class Ask
@@ -30,9 +28,9 @@ public:
 	[[nodiscard]] int getDate() const;
 	[[nodiscard]] size_t getId() const;
 	[[nodiscard]] AskStatus getStatus() const;
+	[[nodiscard]] int getTradedCount() const;
 	void setPrice(float price);
 	void setStatus(AskStatus status);
-	[[nodiscard]] int getTradedCount() const;
 	void incrementTradedCountBy(int count);
 
 };

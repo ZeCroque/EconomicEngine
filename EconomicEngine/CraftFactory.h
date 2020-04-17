@@ -2,7 +2,6 @@
 #define CRAFT_FACTORY_H
 
 #include "Craft.h"
-#include "Trader.h"
 #include "AbstractFactory.h"
 
 class Trader;

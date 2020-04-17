@@ -1,6 +1,9 @@
 #include "Bow.h"
 
+#include <typeinfo>
+
 #include "BowBehavior.h"
+
 
 Bow::Bow() : Uncountable()
 {

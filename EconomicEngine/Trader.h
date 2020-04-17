@@ -1,10 +1,6 @@
 #ifndef TRADER_H
 #define TRADER_H
 
-#include <list>
-#include <random>
-
-
 #include "Ask.h"
 #include "Craft.h"
 #include "Job.h"
@@ -14,7 +10,8 @@
 #include "Countable.h"
 #include "Uncountable.h"
 
-class Job;
+#include <list>
+#include <random>
 
 class Trader : public Observable
 {
@@ -28,19 +25,20 @@ private:
 	std::list<std::pair<size_t, int>> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
-	std::mt19937 randomEngine;
+	mutable std::mt19937 randomEngine;
 	int successCount;
 	float money;
 	float foodLevel;
-	void assignJob();
 	void fillWonderList();
 	void fillGoodsList();
-	std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float,int>>>& foodInfos, float foodGoal);
-	float calculateFoodStock();
 	void refreshPriceBelief(Ask* ask);
-	float calculatePriceBeliefMean(size_t key);
-	float evaluatePrice(size_t key);
-	float calculateEarnings(Craft* craft);
+	
+	std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) const;
+	float calculateEarnings(Craft* craft) const;
+	float calculateFoodStock() const;
+	float calculatePriceBeliefMean(size_t key) const;
+	float evaluatePrice(size_t key) const;
+
 
 public:
 	Trader();
@@ -55,7 +53,7 @@ public:
 	[[nodiscard]] bool isInInventory(size_t key);
 	[[nodiscard]] float getFoodLevel() const;
 	[[nodiscard]] float getMoney() const;
-	int getItemCount(size_t key);
+	int getItemCount(size_t key) const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(Countable* countable);
 	void addToInventory(Uncountable* uncountable);
