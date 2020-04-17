@@ -18,6 +18,7 @@ void TraderManager::addTrader(const int count, const size_t key)
 	for (int i = 0; i < count; ++i)
 	{
 		traders.emplace_back(Trader(jobFactory.createObject(key)));
+		traders.back().getCurrentJob()->setOwner(&traders.back());
 	}	
 }
 

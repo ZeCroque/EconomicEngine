@@ -4,6 +4,8 @@
 #include <random>
 
 
+
+#include "../EconomicEngineDebugGUI/Steak.h"
 #include "Countable.h"
 #include "Food.h"
 #include "StockExchange.h"
@@ -29,7 +31,7 @@ Trader::Trader()
 		priceBeliefs[key].resize(2);
 		priceBeliefs[key][0] = std::make_shared<float>(tradableDefaultPriceBelief.first);
 		priceBeliefs[key][1] = std::make_shared<float>(tradableDefaultPriceBelief.second);
-		priceHistory[key].emplace_back(std::make_shared<std::pair<float, int>>(0.0f, 0));
+		priceHistory[key].emplace_back(std::make_shared<std::pair<float, int>>(calculatePriceBeliefMean(key), 1));
 		failCount[key].emplace_back(std::make_shared<int>(0));
 	}
 }
@@ -60,7 +62,7 @@ std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<s
 		const int index = uniformIntDist(randomEngine);
 
 		//Establish the food count, that is random between 1 and either the number of items necessary to fulfill the food goal or the max count of food provided in entry table
-		uniformIntDist = std::uniform_int_distribution<int>(1, std::max<int>(1, std::min<int>(foodInfos[index].second.second, static_cast<int>(foodGoal / foodInfos[index].second.first))));
+		uniformIntDist = std::uniform_int_distribution<int>(1, std::max<int>(1, std::min<int>(foodInfos[index].second.second, std::roundf(foodGoal / foodInfos[index].second.first))));
 		const int count = uniformIntDist(randomEngine);
 
 		//Decrease food count of picked item
@@ -155,6 +157,15 @@ void Trader::fillWonderList()
 					if (key == foodItem->getId())
 					{
 						isCraftable = true;
+						const int countNeeded = std::roundf((15.0f - calculateFoodStock()) / foodItem->getFoodValue());
+						auto requirements = currentJob->getCraft(foodItem->getId())->getRequirement();
+						for(auto& requirement : requirements)
+						{
+							requirement.second *= countNeeded;
+							wonderList.emplace_back(requirement);
+						}
+						
+						break;
 					}
 				}
 				//If not adds it to foodInfos
@@ -202,27 +213,6 @@ void Trader::fillWonderList()
 		{
 			wonderList.emplace_back(std::pair<size_t, int>(usableTool, 1));
 		}
-	}
-
-	//Food
-	if(calculateFoodStock()<=5.0f)
-	{
-		TradableManager* tradableManager = TradableManager::getInstance();
-		std::vector < std::pair < size_t, std::pair< float, int> >> foodInfos;
-		foodInfos.reserve(tradableManager->getKeys().size());
-
-		for(auto key : tradableManager->getKeys())
-		{
-			auto* foodItem = dynamic_cast<Food*>(tradableManager->getTradable(key));
-			if(foodItem!=nullptr)
-			{
-				foodInfos.emplace_back(std::pair<size_t, std::pair<float, int>>(key, std::pair<float, int>(foodItem->getFoodValue(), INT_MAX)));
-			}
-		}
-
-		const std::uniform_real_distribution<float> uniformFloatDist(1.0f, 10.0f);
-		const float foodGoal = uniformFloatDist(randomEngine);
-		wonderList.splice(wonderList.end(),getRandomFoodCombination(foodInfos, foodGoal));
 	}
 }
 
@@ -297,7 +287,7 @@ void Trader::fillGoodsList()
 
 	//Then we look if trader has food surplus to sell
 	const float foodStock = calculateFoodStock();
-	if (foodStock > 10.0f) //TODO setting
+	if (foodStock > 5.0f) //TODO setting
 	{
 		//Adds every food items possessed to foodInfos
 		std::vector<std::pair<size_t, std::pair<float, int>>> foodInfos;
@@ -424,28 +414,36 @@ void Trader::craft()
 void Trader::refreshPriceBelief(Ask* ask)
 {
 	const float priceBeliefMean = calculatePriceBeliefMean(ask->getId());
-	const float currentMean = priceHistory[ask->getId()][0]->second==0 ? priceBeliefMean : priceHistory[ask->getId()][0]->first / static_cast<float>(priceHistory[ask->getId()][0]->second);
-	*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
-	*priceBeliefs[ask->getId()][1] = std::max<float>(0.02f, *priceBeliefs[ask->getId()][1]+ currentMean - priceBeliefMean);
+	const float currentMean = priceHistory[ask->getId()][0]->first / static_cast<float>(priceHistory[ask->getId()][0]->second);
+
 
 	if(ask->getStatus() == AskStatus::Sold)
 	{
-		* failCount[ask->getId()][0]=0;
-		*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean-0.02f, *priceBeliefs[ask->getId()][0]+0.05f * currentMean);
-		*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean+0.02f, *priceBeliefs[ask->getId()][1]-0.05f * currentMean);
+		*failCount[ask->getId()][0] = 0;
+		if(ask->getPrice()*0.7 > currentMean || ask->getPrice() < currentMean * 0.7)
+		{
+			*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
+			*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] + currentMean - priceBeliefMean);
+		}
+		*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean-0.02f, *priceBeliefs[ask->getId()][0]+0.15f * currentMean);
+		*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean+0.02f, *priceBeliefs[ask->getId()][1]-0.15f * currentMean);
+		priceHistory[ask->getId()][0]->first += ask->getPrice();
+		++priceHistory[ask->getId()][0]->second;
 	}
 	else
 	{
 		++* failCount[ask->getId()][0];
+		*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
+		*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] + currentMean - priceBeliefMean);
 		if(dynamic_cast<BuyingAsk*>(ask)!=nullptr)
-		{
-			*priceBeliefs[ask->getId()][0] += 0.05f * currentMean * *failCount[ask->getId()][0];
-			*priceBeliefs[ask->getId()][1] += 0.05f * currentMean * *failCount[ask->getId()][0];
+		{	
+			*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean, *priceBeliefs[ask->getId()][0] + 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][1] = std::min<float>(currentMean * 1.5f, *priceBeliefs[ask->getId()][1] + 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
 		}
 		else
 		{
-			*priceBeliefs[ask->getId()][0] = std::max<float>(0.01f, *priceBeliefs[ask->getId()][0] - 0.05f * currentMean * *failCount[ask->getId()][0]);
-			*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] - 0.05f * currentMean * *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][0] = std::max<float>(currentMean*0.5f, *priceBeliefs[ask->getId()][0] - 0.05f * priceBeliefMean);// * *failCount[ask->getId()][0]);
+			*priceBeliefs[ask->getId()][1] = std::max<float>(currentMean, *priceBeliefs[ask->getId()][1] - 0.05f * priceBeliefMean); //* *failCount[ask->getId()][0]);
 		}
 	}
 }
@@ -468,8 +466,6 @@ void Trader::checkAsks()
 				removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
 				money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
 			}
-			priceHistory[ask->getId()][0]->first += ask->getPrice();
-			++priceHistory[ask->getId()][0]->second;
 		}
 
 		refreshPriceBelief(ask.get());
