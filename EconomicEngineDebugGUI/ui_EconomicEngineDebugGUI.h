@@ -212,7 +212,7 @@ public:
 
         sBTraderNumber = new QSpinBox(horizontalLayoutWidget_3);
         sBTraderNumber->setObjectName(QString::fromUtf8("sBTraderNumber"));
-        sBTraderNumber->setMinimum(10);
+        sBTraderNumber->setMinimum(0);
         sBTraderNumber->setMaximum(1000);
         sBTraderNumber->setSingleStep(10);
         sBTraderNumber->setValue(100);
