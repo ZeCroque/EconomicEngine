@@ -6,7 +6,7 @@
 
 #include <list>
 
-class Craft : public Clonable<Craft>, public Observable
+class Craft final: public Clonable<Craft>, public Observable
 {
 private:
 	float advancement;

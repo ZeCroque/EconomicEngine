@@ -1,8 +1,6 @@
 #include "Job.h"
 
-#include "Uncountable.h"
-
-Job::Job() : craftFactory(new CraftFactory()){}
+Job::Job() : craftFactory(new CraftFactory()), id(0){}
 
 Job::Job(const Job& job) : Job()
 {

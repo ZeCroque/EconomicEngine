@@ -10,6 +10,7 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
+	
 	turnManager = DebugEconomicEngine::getInstance();
 	turnManager->addObserver(this);
 	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int

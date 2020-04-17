@@ -26,3 +26,8 @@ void ToolBehavior::notify(Observable* sender)
 		owner->removeFromInventory(item);
 	}
 }
+
+float ToolBehavior::getCraftRateBoost() const
+{
+	return craftRateBoost;
+}

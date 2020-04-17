@@ -30,7 +30,6 @@ void Observable::removeObserver(IObserver* const observer)
 			break;
 		}
 	}
-	//this->registeredObservers.remove(observer);
 }
 
 std::list<IObserver*> Observable::getRegisteredObservers() const
