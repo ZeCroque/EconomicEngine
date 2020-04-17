@@ -7,7 +7,6 @@
 #include "TraderManager.h"
 #include "TradableManager.h"
 
-
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
@@ -91,7 +90,7 @@ void EconomicEngineDebugGui::setYRange()
 		{
 			const auto data = ui.customPlot->graph(graphIndex)->data().get();
 			auto start = ui.customPlot->xAxis->range().lower;
-			auto end = ui.customPlot->xAxis->range().upper;
+			const auto end = ui.customPlot->xAxis->range().upper;
 			if (start < 0)
 			{
 				start = 0;
@@ -279,9 +278,11 @@ void EconomicEngineDebugGui::doInit()
 
 
 	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
-	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
-	ui.gridLayJobs->addWidget(new QLabel("Avg. money"), 0, 2);
-	ui.gridLayJobs->addWidget(new QLabel("Avg. food"), 0, 3);
+	ui.gridLayJobs->addWidget(new QLabel("Numbers |"), 0, 1);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. money |"), 0, 2);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. food |"), 0, 3);
+	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
+	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
 	for (const auto& job : traderManager->getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
@@ -292,13 +293,17 @@ void EconomicEngineDebugGui::doInit()
 		jobManager->lbNumber = new QLabel(number);
 
 		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
-
 		jobManager->lbFoodAverage = new QLabel(QString::number(0));
+		jobManager->lbBirth = new QLabel(QString::number(0));
+		jobManager->lbDead = new QLabel(QString::number(0));
 
-		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
-		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
-		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, arrayJobs.size() + 1, 2);
-		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, arrayJobs.size() + 1, 3);
+		const auto layRow = static_cast<int>(arrayJobs.size()) + 1;
+		ui.gridLayJobs->addWidget(jobManager->lbName, layRow, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, layRow, 1);
+		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, layRow, 2);
+		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, layRow, 3);
+		ui.gridLayJobs->addWidget(jobManager->lbBirth, layRow, 4);
+		ui.gridLayJobs->addWidget(jobManager->lbDead, layRow, 5);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -314,19 +319,28 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 	for (auto job : arrayJobs)
 	{
-		auto average = QString::number(traderManager->getMoneyMeanByJob(job->getJobId()));
-		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
-		auto food = QString::number(traderManager->getFoodLevelMeanByJob(job->getJobId()));
+		const auto jobId = job->getJobId();
+
+		auto number = QString::number(traderManager->getJobCount(jobId));
+		auto money = QString::number(traderManager->getMoneyMeanByJob(jobId));
+		auto food = QString::number(traderManager->getFoodLevelMeanByJob(jobId));
+
+		const auto demography = traderManager->getDemographyByJob(jobId);
+		auto birth = QString::number(demography.first);
+		auto dead = QString::number(demography.second);
+
 		job->lbNumber->setText(number);
-		job->lbMoneyAverage->setText(average);
+		job->lbMoneyAverage->setText(money);
 		job->lbFoodAverage->setText(food);
+		job->lbBirth->setText(birth);
+		job->lbDead->setText(dead);
 	}
 }
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
 	const auto key = turnManager->getTurnCount();
-	auto stockExchange = StockExchange::getInstance();
+	const auto stockExchange = StockExchange::getInstance();
 
 	auto totalData = 0;
 
@@ -337,7 +351,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 		auto const graphIndex = checkBox->getGraphIndex();
 
 		auto i = key - step;
-		for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
+		for (const auto& data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;

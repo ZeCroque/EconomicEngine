@@ -14,7 +14,7 @@ Hunter::Hunter() : Job()
 	this->name = "Hunter";
 	
 	//Steak : no requirement
-	this->craftFactory->registerCraft(new Craft(0.5f, typeid(Meat).hash_code(), 5));
+	this->craftFactory->registerCraft(new Craft(0.5f, typeid(Meat).hash_code(), 3));
 
 
 	std::list<size_t> toolsRequired;
