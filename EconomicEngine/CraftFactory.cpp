@@ -17,65 +17,48 @@ void CraftFactory::setOwner(Trader* owner)
 
 bool CraftFactory::isCraftable(const size_t key) const
 {
-	if(owner!=nullptr)
+	//Items required
+	for (const auto& requirement : getDefaultObject(key)->getRequirement())
 	{
-		bool requirementsOwned = true;
-
-		//Items required
-		for (const auto requirement : this->getDefaultObject(key)->getRequirement())
+		bool requirementsOwned = false;
+		for(const auto& item : owner->getInventory())
 		{
-			auto it = owner->getInventory().begin();
-
-			for (; it != owner->getInventory().end(); ++it)
+			if(item->getId() == requirement.first)
 			{
-				if (typeid(*it->get()).hash_code() == requirement.first)
+				auto* countableItem = dynamic_cast<Countable*>(item.get());
+				if (countableItem != nullptr && countableItem->getCount() >= requirement.second)
 				{
-					auto* countableItem = dynamic_cast<Countable*>(it->get());
-					if (countableItem != nullptr && countableItem->getCount() >= requirement.second)
-					{
-						break;
-					}
-
+					requirementsOwned = true;
 				}
-			}
-			if (it == owner->getInventory().end())
-			{
-				requirementsOwned = false;
 				break;
 			}
 		}
-
-		//ToolsRequired
-		auto toolsRequired = this->getDefaultObject(key)->getToolsRequired();
-		if(!toolsRequired.empty())
+		if(!requirementsOwned)
 		{
-			auto it2 = toolsRequired.begin();
-			for (; it2 != toolsRequired.end(); ++it2)
+			return false;
+		}
+	}
+
+	//Tools
+	for (const auto& requiredTool : getDefaultObject(key)->getToolsRequired())
+	{
+		bool hasBehavior = false;
+		for (const auto& item : owner->getInventory())
+		{
+			auto* tool = dynamic_cast<Uncountable*>(item.get());
+			if (tool != nullptr && tool->getBehavior() != nullptr && tool->getBehavior()->getId() == requiredTool)
 			{
-				bool hasBehavior = false;
-				for(const auto& item : owner->getInventory())
-				{
-					auto* tool = dynamic_cast<Uncountable*>(item.get());
-					if(tool != nullptr && tool->getBehavior()!=nullptr && tool->getBehavior()->getId() == *it2)
-					{
-						hasBehavior = true;
-						break;
-					}
-				}
-				if(hasBehavior)
-				{
-					break;
-				}
-			}
-			if (it2 == toolsRequired.end())
-			{
-				requirementsOwned = false;
+				hasBehavior = true;
+				break;
 			}
 		}
-		
-		return requirementsOwned;
+		if (!hasBehavior)
+		{
+			return false;
+		}
 	}
-	return false;
+	
+	return true;
 }
 
 void CraftFactory::registerCraft(Craft* craft)

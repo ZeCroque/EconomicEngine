@@ -11,7 +11,8 @@
 #include "Uncountable.h"
 
 #include <list>
-#include <random>
+
+#include "StockExchange.h"
 
 class Trader : public Observable
 {
@@ -21,25 +22,38 @@ private:
 	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
 	Job* currentJob;
-	std::list<std::pair<size_t, int>> wonderList;
-	std::list<std::pair<size_t, int>> goodsList;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	std::list<std::shared_ptr<Ask>> currentAsks;
-	mutable std::mt19937 randomEngine;
 	int successCount;
 	float money;
 	float foodLevel;
-	void fillWonderList();
-	void fillGoodsList();
+	void makeBuyingAsks();
+	void makeSellingAsks();
 	void refreshPriceBelief(Ask* ask);
-	
+	void refreshFoodLevel();
+	void makeChild();
 	std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) const;
-	float calculateEarnings(Craft* craft) const;
-	float calculateFoodStock() const;
-	float calculatePriceBeliefMean(size_t key) const;
-	float evaluatePrice(size_t key) const;
+	[[nodiscard]] float calculateEarnings(Craft* craft) const;
+	[[nodiscard]] float calculateFoodStock() const;
+	[[nodiscard]] float calculatePriceBeliefMean(size_t key) const;
+	[[nodiscard]] float evaluatePrice(size_t key) const;
 
+	template<class T> void registerAsks(const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
+	{
+		for (const auto item : itemList)
+		{
+			float price = evaluatePrice(item.first);
+			if (price <= maxPrice)
+			{
+				auto ask = std::make_shared<T>(item.first, item.second, price);
+				StockExchange::getInstance()->registerAsk(ask);
+				this->currentAsks.emplace_back(ask);
+			}
+		}
+	}
+	
 
+	
 public:
 	Trader();
 	Trader(Job* job);

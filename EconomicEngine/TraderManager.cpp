@@ -1,5 +1,7 @@
 #include "TraderManager.h"
 
+#include <algorithm>
+
 void TraderManager::init() const
 {
 	const auto& keys = instance->jobFactory.getKeys();
@@ -178,8 +180,7 @@ void TraderManager::reset()
 
 void TraderManager::kill(const size_t key, const int count)
 {
-	std::vector<std::list<Trader>::iterator> iterators;
-	iterators.reserve(traders.size());
+	std::list<std::list<Trader>::iterator> iterators;
 
 	int i = 0;
 	for(auto  it = traders.begin(); it!=traders.end() && i<count; ++it)
