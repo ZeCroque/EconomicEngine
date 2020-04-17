@@ -297,12 +297,13 @@ void EconomicEngineDebugGui::doInit()
 		jobManager->lbBirth = new QLabel(QString::number(0));
 		jobManager->lbDead = new QLabel(QString::number(0));
 
-		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
-		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
-		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, arrayJobs.size() + 1, 2);
-		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, arrayJobs.size() + 1, 3);
-		ui.gridLayJobs->addWidget(jobManager->lbBirth, arrayJobs.size() + 1, 4);
-		ui.gridLayJobs->addWidget(jobManager->lbDead, arrayJobs.size() + 1, 5);
+		auto row = static_cast<int>(arrayJobs.size()) + 1;
+		ui.gridLayJobs->addWidget(jobManager->lbName, row, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, row, 1);
+		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, row, 2);
+		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, row, 3);
+		ui.gridLayJobs->addWidget(jobManager->lbBirth, row, 4);
+		ui.gridLayJobs->addWidget(jobManager->lbDead, row, 5);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
