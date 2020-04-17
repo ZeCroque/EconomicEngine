@@ -278,9 +278,11 @@ void EconomicEngineDebugGui::doInit()
 
 
 	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
-	ui.gridLayJobs->addWidget(new QLabel("Numbers"), 0, 1);
-	ui.gridLayJobs->addWidget(new QLabel("Avg. money"), 0, 2);
-	ui.gridLayJobs->addWidget(new QLabel("Avg. food"), 0, 3);
+	ui.gridLayJobs->addWidget(new QLabel("Numbers |"), 0, 1);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. money |"), 0, 2);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. food |"), 0, 3);
+	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
+	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
 	for (const auto& job : traderManager->getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
@@ -291,13 +293,16 @@ void EconomicEngineDebugGui::doInit()
 		jobManager->lbNumber = new QLabel(number);
 
 		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
-
 		jobManager->lbFoodAverage = new QLabel(QString::number(0));
+		jobManager->lbBirth = new QLabel(QString::number(0));
+		jobManager->lbDead = new QLabel(QString::number(0));
 
 		ui.gridLayJobs->addWidget(jobManager->lbName, arrayJobs.size() + 1, 0);
 		ui.gridLayJobs->addWidget(jobManager->lbNumber, arrayJobs.size() + 1, 1);
 		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, arrayJobs.size() + 1, 2);
 		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, arrayJobs.size() + 1, 3);
+		ui.gridLayJobs->addWidget(jobManager->lbBirth, arrayJobs.size() + 1, 4);
+		ui.gridLayJobs->addWidget(jobManager->lbDead, arrayJobs.size() + 1, 5);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -313,12 +318,21 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 	for (auto job : arrayJobs)
 	{
-		auto average = QString::number(traderManager->getMoneyMeanByJob(job->getJobId()));
-		auto number = QString::number(traderManager->getJobCount(job->getJobId()));
-		auto food = QString::number(traderManager->getFoodLevelMeanByJob(job->getJobId()));
+		auto jobId = job->getJobId();
+
+		auto number = QString::number(traderManager->getJobCount(jobId));
+		auto money = QString::number(traderManager->getMoneyMeanByJob(jobId));
+		auto food = QString::number(traderManager->getFoodLevelMeanByJob(jobId));
+
+		//auto demography = traderManager->getDemographyByJob(jobId);
+		//auto birth = QString::number(demography.first());
+		//auto dead = QString::number(demography.second());
+
 		job->lbNumber->setText(number);
-		job->lbMoneyAverage->setText(average);
+		job->lbMoneyAverage->setText(money);
 		job->lbFoodAverage->setText(food);
+		//job->lbBirth->setText(birth);
+		//job->lbDead->setText(dead);
 	}
 }
 
