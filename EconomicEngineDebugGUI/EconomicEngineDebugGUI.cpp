@@ -7,7 +7,6 @@
 #include "TraderManager.h"
 #include "TradableManager.h"
 
-
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {
@@ -90,7 +89,7 @@ void EconomicEngineDebugGui::setYRange()
 		{
 			const auto data = ui.customPlot->graph(graphIndex)->data().get();
 			auto start = ui.customPlot->xAxis->range().lower;
-			auto end = ui.customPlot->xAxis->range().upper;
+			const auto end = ui.customPlot->xAxis->range().upper;
 			if (start < 0)
 			{
 				start = 0;
@@ -297,13 +296,13 @@ void EconomicEngineDebugGui::doInit()
 		jobManager->lbBirth = new QLabel(QString::number(0));
 		jobManager->lbDead = new QLabel(QString::number(0));
 
-		auto row = static_cast<int>(arrayJobs.size()) + 1;
-		ui.gridLayJobs->addWidget(jobManager->lbName, row, 0);
-		ui.gridLayJobs->addWidget(jobManager->lbNumber, row, 1);
-		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, row, 2);
-		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, row, 3);
-		ui.gridLayJobs->addWidget(jobManager->lbBirth, row, 4);
-		ui.gridLayJobs->addWidget(jobManager->lbDead, row, 5);
+		const auto layRow = static_cast<int>(arrayJobs.size()) + 1;
+		ui.gridLayJobs->addWidget(jobManager->lbName, layRow, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, layRow, 1);
+		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, layRow, 2);
+		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, layRow, 3);
+		ui.gridLayJobs->addWidget(jobManager->lbBirth, layRow, 4);
+		ui.gridLayJobs->addWidget(jobManager->lbDead, layRow, 5);
 
 		ui.cBKill->addItem(jobManager->getJobName());
 		this->arrayJobs.push_back(jobManager);
@@ -340,7 +339,7 @@ void EconomicEngineDebugGui::updateUiJobs()
 void EconomicEngineDebugGui::updateUiSlot()
 {
 	const auto key = turnManager->getTurnCount();
-	auto stockExchange = StockExchange::getInstance();
+	const auto stockExchange = StockExchange::getInstance();
 
 	auto totalData = 0;
 
@@ -351,7 +350,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 		auto const graphIndex = checkBox->getGraphIndex();
 
 		auto i = key - step;
-		for (auto data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
+		for (const auto& data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;
