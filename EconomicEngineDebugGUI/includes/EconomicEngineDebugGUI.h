@@ -1,11 +1,9 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-
-
-#include "DebugEconomicEngine.h"
 #include "GraphManager.h"
 #include "JobManager.h"
+#include "EconomicEngine.h"
 #include "ui_EconomicEngineDebugGUI.h"
 
 class EconomicEngineDebugGui final : public QMainWindow, public IObserver
@@ -42,7 +40,7 @@ private:
 	std::vector<JobManager*> arrayJobs;
 	QTimer dataTimer;
 	std::thread economicEngineThread;
-	DebugEconomicEngine* turnManager;
+	EconomicEngine* turnManager;
 	TraderManager* traderManager;
 	int zoomXAxis;
 	bool realTime{};

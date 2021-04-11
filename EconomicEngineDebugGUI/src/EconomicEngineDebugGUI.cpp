@@ -6,13 +6,13 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {	
-	turnManager = DebugEconomicEngine::getInstance();
+	turnManager = EconomicEngine::getInstance();
 	turnManager->addObserver(this);
 
 	traderManager = TraderManager::getInstance();
 
 #ifdef STANDALONE_MODE
-	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
+	economicEngineThread = std::thread([](EconomicEngine* turnManager)-> int
 	{
 		turnManager->init("./Content/Prefabs/");
 		return turnManager->exec(100);

@@ -29,7 +29,6 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(HEADERS
     ${HEADER_DIR}/JobManager.h
     ${HEADER_DIR}/GraphManager.h
-    ${HEADER_DIR}/DebugEconomicEngine.h
     ${HEADER_DIR}/EconomicEngineDebugGUI.ui
     ${HEADER_DIR}/EconomicEngineDebugGUI.h
     ${HEADER_DIR}/qcustomplot.h
@@ -38,7 +37,6 @@ set(HEADERS
 set(SOURCES
     ${SOURCE_DIR}/JobManager.cpp
     ${SOURCE_DIR}/GraphManager.cpp
-    ${SOURCE_DIR}/DebugEconomicEngine.cpp
     ${SOURCE_DIR}/EconomicEngineDebugGUI.cpp
     ${SOURCE_DIR}/EconomicEngineDebugGUI.qrc
     ${SOURCE_DIR}/qcustomplot.cpp

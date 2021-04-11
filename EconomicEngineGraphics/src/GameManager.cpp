@@ -44,9 +44,9 @@ void GameManager::Exec()
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800,600), "g_windowTitle")), debugGUI(nullptr)
 {
 	window->setFramerateLimit(maxFPS);
-	auto* turnManager = DebugEconomicEngine::getInstance();
+	auto* turnManager = EconomicEngine::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread.reset(new std::thread([](DebugEconomicEngine* turnManager)-> int
+	economicEngineThread.reset(new std::thread([](EconomicEngine* turnManager)-> int
 	{
 		turnManager->init("./Content/Prefabs/");
 		return turnManager->exec(100);
@@ -102,7 +102,7 @@ void GameManager::Render()
 
 void GameManager::quit()
 {
-    DebugEconomicEngine::getInstance()->stop();
+    EconomicEngine::getInstance()->stop();
 	economicEngineThread->join();
 
 	if(debugGUI)
