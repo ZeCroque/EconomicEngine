@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Wood",
+    "defaultPriceBelief" :
+    {
+        "min" : 0.25,
+        "max" : 0.75
+    }
+}

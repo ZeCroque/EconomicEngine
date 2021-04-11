@@ -1,0 +1,35 @@
+{
+    "type" : "Job",
+    "name" : "Hunter",
+    "crafts" :
+    [
+        {
+            "baseRate" : 0.5,
+            "result" : "Meat",
+            "producedCount" : 3,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 0.5,
+            "result" : "Leather",
+            "producedCount" : 2,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+                "Bow"
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+        "Bow",
+        "Sword"
+    ]
+}

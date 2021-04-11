@@ -1,0 +1,22 @@
+{
+    "type" : "Job",
+    "name" : "Farmer",
+    "crafts" :
+    [
+        {
+            "baseRate" : 0.5,
+            "result" : "Wheat",
+            "producedCount" : 7,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+        "Hoe"
+    ]
+}

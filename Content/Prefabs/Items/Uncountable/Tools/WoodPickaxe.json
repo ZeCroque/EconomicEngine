@@ -1,0 +1,14 @@
+{
+    "type" : "Uncountable",
+    "name" : "WoodPickaxe",
+    "defaultPriceBelief" :
+    {
+        "min" : 3.0,
+        "max" : 5.0
+    },
+    "behavior" :
+    {
+        "craftRateBoost" : 0.0,
+        "degradationRate" : 0.1
+    }
+}

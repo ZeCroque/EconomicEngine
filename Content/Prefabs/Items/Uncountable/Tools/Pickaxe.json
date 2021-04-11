@@ -1,0 +1,14 @@
+{
+    "type" : "Uncountable",
+    "name" : "Pickaxe",
+    "defaultPriceBelief" :
+    {
+        "min" : 5.0,
+        "max" : 7.0
+    },
+    "behavior" :
+    {
+        "craftRateBoost" : 0.33,
+        "degradationRate" : 0.1
+    }
+}

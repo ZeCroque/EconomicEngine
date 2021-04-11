@@ -1,0 +1,6 @@
+{
+    "type" : "Trader",
+    "name" : "Butcher",
+    "job" : "Butcher",
+    "texturePath" : "Content/Textures/Traders/TX_Butcher.jpg"
+}

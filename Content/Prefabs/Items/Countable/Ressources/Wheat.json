@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Wheat",
+    "defaultPriceBelief" :
+    {
+        "min" : 0.25,
+        "max" : 0.5
+    }
+}

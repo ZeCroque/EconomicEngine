@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Coal",
+    "defaultPriceBelief" :
+    {
+        "min" : 0.25,
+        "max" : 0.5
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "type" : "Job",
+    "name" : "Baker",
+    "crafts" :
+    [
+        {
+            "baseRate" : 1.0,
+            "result" : "Bread",
+            "producedCount" : 10,
+            "requirements" :
+            [
+                {
+                    "name" : "Wheat",
+                    "count" : 3
+                },
+                {
+                    "name" : "Coal",
+                    "count" : 1
+                }
+                
+            ],
+            "requiredTools" :
+            [
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+    ]
+}

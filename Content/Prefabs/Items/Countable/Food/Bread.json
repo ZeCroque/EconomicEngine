@@ -1,0 +1,10 @@
+{
+    "type" : "Food",
+    "name" : "Bread",
+    "defaultPriceBelief" :
+    {
+        "min" : 1.0,
+        "max" : 2.0
+    },
+    "foodValue" : 3.0
+}

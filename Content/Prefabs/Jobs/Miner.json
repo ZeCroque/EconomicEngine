@@ -1,0 +1,35 @@
+{
+    "type" : "Job",
+    "name" : "Miner",
+    "crafts" :
+    [
+        {
+            "baseRate" : 0.5,
+            "result" : "Coal",
+            "producedCount" : 5,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 0.5,
+            "result" : "Iron",
+            "producedCount" : 2,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+                "Pickaxe"
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+        "WoodPickaxe",
+        "Pickaxe"
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "type" : "Job",
+    "name" : "Butcher",
+    "crafts" :
+    [
+        {
+            "baseRate" : 1.0,
+            "result" : "Steak",
+            "producedCount" : 5,
+            "requirements" :
+            [
+                {
+                    "name" : "Meat",
+                    "count" : 2
+                },
+                {
+                    "name" : "Coal",
+                    "count" : 2
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+    ]
+}

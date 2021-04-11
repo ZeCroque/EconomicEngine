@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Iron",
+    "defaultPriceBelief" :
+    {
+        "min" : 2.0,
+        "max" : 3.0
+    }
+}

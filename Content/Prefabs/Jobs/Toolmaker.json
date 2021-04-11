@@ -1,0 +1,124 @@
+{
+    "type" : "Job",
+    "name" : "Toolmaker",
+    "crafts" :
+    [
+        {
+            "baseRate" : 1.0,
+            "result" : "WoodPickaxe",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 1.0,
+            "result" : "Hoe",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                },
+                {
+                    "name" : "Iron",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 1.0,
+            "result" : "Pickaxe",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                },
+                {
+                    "name" : "Iron",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 1.0,
+            "result" : "Axe",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                },
+                {
+                    "name" : "Iron",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 1.0,
+            "result" : "Bow",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                },
+                {
+                    "name" : "Iron",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        },
+        {
+            "baseRate" : 1.0,
+            "result" : "Sword",
+            "producedCount" : 1,
+            "requirements" :
+            [
+                {
+                    "name" : "Wood",
+                    "count" : 1
+                },
+                {
+                    "name" : "Iron",
+                    "count" : 1
+                },
+                {
+                    "name" : "Leather",
+                    "count" : 1
+                }
+            ],
+            "requiredTools" :
+            [
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+    ]
+}

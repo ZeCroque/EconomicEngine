@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Meat",
+    "defaultPriceBelief" :
+    {
+        "min" : 0.5,
+        "max" : 1.0
+    }
+}

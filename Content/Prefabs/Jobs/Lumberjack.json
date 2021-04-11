@@ -1,0 +1,22 @@
+{
+    "type" : "Job",
+    "name" : "Lumberjack",
+    "crafts" :
+    [
+        {
+            "baseRate" : 0.5,
+            "result" : "Wood",
+            "producedCount" : 1,
+            "requirements" :
+            [
+            ],
+            "requiredTools" :
+            [
+            ]
+        }
+    ],
+    "usableTools" :
+    [
+        "Axe"
+    ]
+}

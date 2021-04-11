@@ -1,0 +1,9 @@
+{
+    "type" : "Countable",
+    "name" : "Leather",
+    "defaultPriceBelief" :
+    {
+        "min" : 0.1,
+        "max" : 0.5
+    }
+}

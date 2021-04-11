@@ -1,0 +1,14 @@
+{
+    "type" : "Uncountable",
+    "name" : "Sword",
+    "defaultPriceBelief" :
+    {
+        "min" : 7.0,
+        "max" : 10.0
+    },
+    "behavior" :
+    {
+        "craftRateBoost" : 0.33,
+        "degradationRate" : 0.1
+    }
+}
