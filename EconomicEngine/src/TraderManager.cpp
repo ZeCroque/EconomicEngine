@@ -4,7 +4,7 @@
 
 void TraderManager::init() const
 {
-	const auto& keys = instance->jobFactory.getKeys();
+	const auto& keys = jobFactory.getKeys();
 	demographyCounts = VectorArray <std::pair<int, int>>(keys);
 	for(const auto& key : keys)
 	{

@@ -48,7 +48,6 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
-	DebugEconomicEngine::destroyInstance();
 	this->turnManager = nullptr;
 }
 
