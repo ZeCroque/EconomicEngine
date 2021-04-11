@@ -1,18 +1,14 @@
 #ifndef TRADER_H
 #define TRADER_H
 
-#include "Ask.h"
 #include "Craft.h"
 #include "Job.h"
 #include "Observable.h"
 #include "VectorArray.h"
-#include "Tradable.h"
-#include "Countable.h"
-#include "Uncountable.h"
 
 #include <list>
 
-#include "StockExchange.h"
+#include "StockExchange/StockExchange.h"
 
 
 class Trader : public Observable
@@ -23,8 +19,8 @@ private:
 	VectorArray<float> priceBeliefs;
 	Craft* currentCraft;
 	Job* currentJob;
-	std::list<std::shared_ptr<Tradable>> inventory;
-	std::list<std::shared_ptr<Ask>> currentAsks;
+	std::list<std::shared_ptr<class Tradable>> inventory;
+	std::list<std::shared_ptr<class Ask>> currentAsks;
 	int successCount;
 	float money;
 	float foodLevel;
@@ -68,8 +64,8 @@ public:
 	[[nodiscard]] float getMoney() const;
 	int getItemCount(size_t key) const;
 	void addToInventory(size_t key, int count);
-	void addToInventory(Countable* countable);
-	void addToInventory(Uncountable* uncountable);
+	void addToInventory(class Countable* countable);
+	void addToInventory(class Uncountable* uncountable);
 	void removeFromInventory(size_t key, int count);
 	void removeFromInventory(Tradable* tradable);
 };

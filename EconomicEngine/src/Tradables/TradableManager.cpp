@@ -1,5 +1,4 @@
-#include "TradableManager.h"
-#include <typeinfo>
+#include "Tradables/TradableManager.h"
 
 void TradableManager::registerTradable(Tradable* tradable)
 {

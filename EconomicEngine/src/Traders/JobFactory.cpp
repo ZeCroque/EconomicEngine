@@ -1,4 +1,4 @@
-#include "JobFactory.h"
+#include "Traders/JobFactory.h"
 
 std::list<Job*> JobFactory::getJobs() const
 {

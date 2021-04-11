@@ -1,4 +1,4 @@
-#include "Job.h"
+#include "Traders/Job.h"
 
 Job::Job() : craftFactory(new CraftFactory()), id(0){}
 

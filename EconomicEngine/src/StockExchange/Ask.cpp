@@ -1,6 +1,6 @@
-#include "Ask.h"
+#include "StockExchange/Ask.h"
 
-#include "StockExchange.h"
+#include "StockExchange/StockExchange.h"
 
 Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(StockExchange::getInstance()->getTurnCount()), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
 

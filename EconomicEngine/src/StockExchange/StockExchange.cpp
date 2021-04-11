@@ -1,8 +1,6 @@
-#include "StockExchange.h"
-
+#include "StockExchange/StockExchange.h"
+#include "Tradables/TradableManager.h"
 #include <algorithm>
-
-#include "TradableManager.h"
 
 StockExchange::StockExchange() : turnCount(0) {}
 

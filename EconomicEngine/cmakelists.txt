@@ -10,44 +10,43 @@ set(HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADERS
-	${HEADER_DIR}/Ask.h
-	${HEADER_DIR}/AskFactory.h
-	${HEADER_DIR}/Behavior.h
-	${HEADER_DIR}/Countable.h
-	${HEADER_DIR}/Craft.h
-	${HEADER_DIR}/CraftFactory.h
-	${HEADER_DIR}/Currency.h
+	${HEADER_DIR}/StockExchange/Ask.h
+	${HEADER_DIR}/StockExchange/AskFactory.h
+	${HEADER_DIR}/Tradables/Uncountable/Behavior.h
+	${HEADER_DIR}/Tradables/Countable.h
+	${HEADER_DIR}/Traders/Craft.h
+	${HEADER_DIR}/Traders/CraftFactory.h
 	${HEADER_DIR}/EconomicEngine.h
-	${HEADER_DIR}/Food.h
-	${HEADER_DIR}/Job.h
-	${HEADER_DIR}/JobFactory.h
-	${HEADER_DIR}/StockExchange.h
-	${HEADER_DIR}/ToolBehavior.h
-	${HEADER_DIR}/Tradable.h
-	${HEADER_DIR}/TradableFactory.h
-	${HEADER_DIR}/TradableManager.h
-	${HEADER_DIR}/Trader.h
-	${HEADER_DIR}/TraderManager.h
-	${HEADER_DIR}/Uncountable.h
+	${HEADER_DIR}/Tradables/Food.h
+	${HEADER_DIR}/Traders/Job.h
+	${HEADER_DIR}/Traders/JobFactory.h
+	${HEADER_DIR}/StockExchange/StockExchange.h
+	${HEADER_DIR}/Tradables/Uncountable/ToolBehavior.h
+	${HEADER_DIR}/Tradables/Tradable.h
+	${HEADER_DIR}/Tradables/TradableFactory.h
+	${HEADER_DIR}/Tradables/TradableManager.h
+	${HEADER_DIR}/Traders/Trader.h
+	${HEADER_DIR}/Traders/TraderManager.h
+	${HEADER_DIR}/Tradables/Uncountable/Uncountable.h
 	${HEADER_DIR}/VectorArray.h
 )
 
 set(SOURCES
-	${SOURCE_DIR}/Ask.cpp
-	${SOURCE_DIR}/Behavior.cpp
-	${SOURCE_DIR}/Countable.cpp
-	${SOURCE_DIR}/Craft.cpp
-	${SOURCE_DIR}/CraftFactory.cpp
-	${SOURCE_DIR}/Food.cpp
-	${SOURCE_DIR}/Job.cpp
-	${SOURCE_DIR}/JobFactory.cpp
-	${SOURCE_DIR}/StockExchange.cpp
-	${SOURCE_DIR}/ToolBehavior.cpp
-	${SOURCE_DIR}/Tradable.cpp
-	${SOURCE_DIR}/TradableManager.cpp
-	${SOURCE_DIR}/Trader.cpp
-	${SOURCE_DIR}/TraderManager.cpp
-	${SOURCE_DIR}/Uncountable.cpp
+	${SOURCE_DIR}/StockExchange/Ask.cpp
+	${SOURCE_DIR}/Tradables/Uncountable/Behavior.cpp
+	${SOURCE_DIR}/Tradables/Countable.cpp
+	${SOURCE_DIR}/Traders/Craft.cpp
+	${SOURCE_DIR}/Traders/CraftFactory.cpp
+	${SOURCE_DIR}/Tradables/Food.cpp
+	${SOURCE_DIR}/Traders/Job.cpp
+	${SOURCE_DIR}/Traders/JobFactory.cpp
+	${SOURCE_DIR}/StockExchange/StockExchange.cpp
+	${SOURCE_DIR}/Tradables/Uncountable/ToolBehavior.cpp
+	${SOURCE_DIR}/Tradables/Tradable.cpp
+	${SOURCE_DIR}/Tradables/TradableManager.cpp
+	${SOURCE_DIR}/Traders/Trader.cpp
+	${SOURCE_DIR}/Traders/TraderManager.cpp
+	${SOURCE_DIR}/Tradables/Uncountable/Uncountable.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})

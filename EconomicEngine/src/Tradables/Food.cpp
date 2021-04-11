@@ -1,4 +1,4 @@
-#include "Food.h"
+#include "Tradables/Food.h"
 
 Food::Food() : Countable(), foodValue(0.0f){}
 

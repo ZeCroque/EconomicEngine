@@ -1,7 +1,7 @@
-#include "CraftFactory.h"
-
-#include "Countable.h"
-#include "Trader.h"
+#include "Traders/CraftFactory.h"
+#include "Tradables/Countable.h"
+#include "Tradables/Uncountable/Uncountable.h"
+#include "Traders/Trader.h"
 
 CraftFactory::CraftFactory() : owner(nullptr){}
 

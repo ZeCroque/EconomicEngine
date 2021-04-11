@@ -1,13 +1,15 @@
-#include "Trader.h"
 #include <chrono>
 #include <random>
+#include "Traders/Trader.h"
 
-#include "Countable.h"
-#include "Food.h"
-#include "StockExchange.h"
-#include "TradableManager.h"
-#include "TraderManager.h"
-#include "Uncountable.h"
+
+#include "StockExchange/Ask.h"
+#include "Tradables/Tradable.h"
+#include "Tradables/Food.h"
+#include "Tradables/Countable.h"
+#include "Tradables/Uncountable/Uncountable.h"
+#include "Tradables/TradableManager.h"
+#include "Traders/TraderManager.h"
 
 Trader::Trader()
 {

@@ -1,4 +1,4 @@
-#include "Tradable.h"
+#include "Tradables/Tradable.h"
 
 Tradable::Tradable() : id(0){}
 

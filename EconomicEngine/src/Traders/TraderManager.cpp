@@ -1,5 +1,4 @@
-#include "TraderManager.h"
-
+#include "Traders/TraderManager.h"
 #include <algorithm>
 
 void TraderManager::init() const

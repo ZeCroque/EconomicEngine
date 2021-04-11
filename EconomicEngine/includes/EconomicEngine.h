@@ -4,15 +4,19 @@
 
 #include "Observable.h"
 #include "Singleton.h"
-#include "StockExchange.h"
-#include "TradableManager.h"
-#include "TraderManager.h"
 #include "nlohmann/json.hpp"
 #include <mutex>
 #include <thread>
 #include <fstream>
 
-#include "Food.h"
+
+#include "StockExchange/StockExchange.h"
+#include "Tradables/Countable.h"
+#include "Tradables/Food.h"
+#include "Tradables/TradableManager.h"
+#include "Tradables/Uncountable/Uncountable.h"
+#include "Traders/TraderManager.h"
+
 
 template <class T> class EconomicEngine : public Observable, public Singleton<T>
 {

@@ -1,6 +1,4 @@
-#include "Craft.h"
-
-#include "TradableManager.h"
+#include "Traders/Craft.h"
 
 Craft::Craft() : advancement(0.0f), rate(0.0f), count(), result(0){}
 

@@ -1,4 +1,4 @@
-#include "Behavior.h"
+#include "Tradables/Uncountable/Behavior.h"
 
 Behavior::Behavior() : item(nullptr), owner(nullptr), typeId(0){}
 

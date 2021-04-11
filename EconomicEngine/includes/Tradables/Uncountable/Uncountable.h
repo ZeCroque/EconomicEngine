@@ -1,6 +1,6 @@
 #ifndef UNCOUNTABLE_H
 #define UNCOUNTABLE_H
-#include "Tradable.h"
+#include "Tradables/Tradable.h"
 
 #include "ToolBehavior.h"
 
