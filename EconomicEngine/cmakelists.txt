@@ -1,0 +1,69 @@
+cmake_minimum_required(VERSION 3.2)
+
+project(EconomicEngine VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+
+find_package(nlohmann_json CONFIG REQUIRED)
+
+set(HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(HEADERS
+	${HEADER_DIR}/AbstractFactory.h
+	${HEADER_DIR}/Ask.h
+	${HEADER_DIR}/AskFactory.h
+	${HEADER_DIR}/Behavior.h
+	${HEADER_DIR}/Clonable.h
+	${HEADER_DIR}/Countable.h
+	${HEADER_DIR}/Craft.h
+	${HEADER_DIR}/CraftFactory.h
+	${HEADER_DIR}/Currency.h
+	${HEADER_DIR}/EconomicEngine.h
+	${HEADER_DIR}/Food.h
+	${HEADER_DIR}/Job.h
+	${HEADER_DIR}/JobFactory.h
+	${HEADER_DIR}/Observable.h
+	${HEADER_DIR}/Observer.h
+	${HEADER_DIR}/Singleton.h
+	${HEADER_DIR}/StockExchange.h
+	${HEADER_DIR}/ToolBehavior.h
+	${HEADER_DIR}/Tradable.h
+	${HEADER_DIR}/TradableFactory.h
+	${HEADER_DIR}/TradableManager.h
+	${HEADER_DIR}/Trader.h
+	${HEADER_DIR}/TraderManager.h
+	${HEADER_DIR}/Uncountable.h
+	${HEADER_DIR}/VectorArray.h
+)
+
+set(SOURCES
+	${SOURCE_DIR}
+	${SOURCE_DIR}/Ask.cpp
+	${SOURCE_DIR}/Behavior.cpp
+	${SOURCE_DIR}/Countable.cpp
+	${SOURCE_DIR}/Craft.cpp
+	${SOURCE_DIR}/CraftFactory.cpp
+	${SOURCE_DIR}/Food.cpp
+	${SOURCE_DIR}/Job.cpp
+	${SOURCE_DIR}/JobFactory.cpp
+	${SOURCE_DIR}/Observable.cpp
+	${SOURCE_DIR}/StockExchange.cpp
+	${SOURCE_DIR}/ToolBehavior.cpp
+	${SOURCE_DIR}/Tradable.cpp
+	${SOURCE_DIR}/TradableManager.cpp
+	${SOURCE_DIR}/Trader.cpp
+	${SOURCE_DIR}/TraderManager.cpp
+	${SOURCE_DIR}/Uncountable.cpp
+)
+
+add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		${HEADER_DIR}		
+)
+target_link_libraries(${PROJECT_NAME} 
+	PUBLIC 
+		nlohmann_json 
+		nlohmann_json::nlohmann_json
+)
