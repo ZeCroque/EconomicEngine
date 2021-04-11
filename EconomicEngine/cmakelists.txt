@@ -10,11 +10,9 @@ set(HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADERS
-	${HEADER_DIR}/AbstractFactory.h
 	${HEADER_DIR}/Ask.h
 	${HEADER_DIR}/AskFactory.h
 	${HEADER_DIR}/Behavior.h
-	${HEADER_DIR}/Clonable.h
 	${HEADER_DIR}/Countable.h
 	${HEADER_DIR}/Craft.h
 	${HEADER_DIR}/CraftFactory.h
@@ -23,9 +21,6 @@ set(HEADERS
 	${HEADER_DIR}/Food.h
 	${HEADER_DIR}/Job.h
 	${HEADER_DIR}/JobFactory.h
-	${HEADER_DIR}/Observable.h
-	${HEADER_DIR}/Observer.h
-	${HEADER_DIR}/Singleton.h
 	${HEADER_DIR}/StockExchange.h
 	${HEADER_DIR}/ToolBehavior.h
 	${HEADER_DIR}/Tradable.h
@@ -38,7 +33,6 @@ set(HEADERS
 )
 
 set(SOURCES
-	${SOURCE_DIR}
 	${SOURCE_DIR}/Ask.cpp
 	${SOURCE_DIR}/Behavior.cpp
 	${SOURCE_DIR}/Countable.cpp
@@ -47,7 +41,6 @@ set(SOURCES
 	${SOURCE_DIR}/Food.cpp
 	${SOURCE_DIR}/Job.cpp
 	${SOURCE_DIR}/JobFactory.cpp
-	${SOURCE_DIR}/Observable.cpp
 	${SOURCE_DIR}/StockExchange.cpp
 	${SOURCE_DIR}/ToolBehavior.cpp
 	${SOURCE_DIR}/Tradable.cpp
@@ -66,4 +59,5 @@ target_link_libraries(${PROJECT_NAME}
 	PUBLIC 
 		nlohmann_json 
 		nlohmann_json::nlohmann_json
+		DesignPattern
 )
