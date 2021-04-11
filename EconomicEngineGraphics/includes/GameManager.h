@@ -7,16 +7,17 @@
 #include <list>
 
 #include "Grid.h"
+#include "Observer.h"
 
 class Actor;
 
-class GameManager : public Singleton<GameManager>
+class GameManager : public Singleton<GameManager>, public IObserver
 {
 
 friend class Singleton<GameManager>;
 	
 public:
-    ~GameManager();
+    ~GameManager() override;
     void Exec();
 
 private:
@@ -26,6 +27,14 @@ private:
     void Update(float deltaTime);
     void Render();
 
+    void quit();
+	
+	void notify(Observable* sender) override;
+
+	class EconomicEngineDebugGui** debugGUI;
+	std::unique_ptr<std::thread> economicEngineThread;
+    std::unique_ptr<std::thread> debugGUIThread;
+	
     std::unique_ptr<sf::RenderWindow> window;
     static const sf::Int32 maxFPS;
 

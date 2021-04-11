@@ -17,6 +17,7 @@ public:
 	~EconomicEngineDebugGui();
 	void notify(Observable* sender) override;
 	void closeEvent(QCloseEvent* event) override;
+	void quit();
 
 public Q_SLOTS:
 	void updateUiSlot();
