@@ -1,19 +1,19 @@
-##### DesignPattern
+### DesignPattern
 - add signal slot **(croque)**
 
-##### General
+### General
 - wait for thread closing in sfml project by using signal slots **croque**
 - remplacer observer par signal slot **croque**
 - enlever les références des singletons dans nos objets et remplacer les accès par waitForLock(Singleton<T>* singleton) **croque**
 
-##### Economic:
+### Economic:
 - time rate pour cycle journalier
 - temps travail relatif à durée cycle journalier
 - trader décorellés de tick de la bourse et suivant logique tour par tour (boulot/vente)
 - bourse à chaque offre
 - bouffe à chaque action
 
-##### Graphic:
+### Graphic:
 - ActorFactory **croque**
 - affichage **croque**
     - actor **croque**
@@ -26,13 +26,13 @@
     - astar **maxence**
 - génération bâtiments **vincent**
 
-##### Gui:
+### Gui:
 - investiguer et clean les intéractions entre le turnManager et la gui **croque**
 - speed = daycycle speed **croque**
 - *virer step-by-step & step*
 
 
-##### Polish :
+### Polish :
 - énérer hdv intervalle régulier **vincent**
 - cycle jour nuit et tâche dodo
 - remplacer tour par tour traders par algo meilleur choix **maxence**
