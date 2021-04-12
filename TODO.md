@@ -15,12 +15,12 @@
 
 ### Graphic:
 - ActorFactory **croque**
-- affichage **croque**
+- affichage 
     - actor **croque**
-    - dezoom = réduire taille case grille graphique
-    - scroll 
-        - bouger intervalle grille logique
-        - gérer position souris avec accélération mini jeu adn
+    - dezoom = réduire taille case grille graphique **croque**
+    - scroll **croque**
+        - bouger intervalle grille logique **croque**
+        - gérer position souris avec accélération mini jeu adn **croque**
 - déplacements
     - vitesse des ias corellées à timeRate journalier **maxence**
     - astar **maxence**
