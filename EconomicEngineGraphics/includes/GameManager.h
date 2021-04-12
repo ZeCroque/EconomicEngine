@@ -6,8 +6,8 @@
 #include <memory>
 #include <list>
 
-#include "Grid.h"
 #include "Observer.h"
+#include "GridManager.h"
 
 class Actor;
 
@@ -39,7 +39,7 @@ private:
     static const sf::Int32 maxFPS;
 
     std::list<std::shared_ptr<Actor>> actors;
-	Grid grid;
+    GridManager gridManager;
     
 };
 

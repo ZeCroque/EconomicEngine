@@ -21,7 +21,7 @@ public:
 	Craft(Craft& craft);
 	Craft* clone() override;
 
-    [[noreturn]] [[nodiscard]] std::list<std::pair<size_t, int>> getRequirement() const;
+    [[nodiscard]] std::list<std::pair<size_t, int>> getRequirement() const;
 	[[nodiscard]] std::list<size_t> getToolsRequired() const;
 	[[nodiscard]] size_t getResult() const;
 	[[nodiscard]] int getCount() const;

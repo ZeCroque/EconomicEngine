@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-void Grid::setActorAt(const std::shared_ptr<StaticActor>&& staticActor, int x, int y)
+void Grid::setActorAt(const std::shared_ptr<StaticActor>& staticActor, int x, int y)
 {
 	getWeakPtrAt(x, y) = std::weak_ptr<StaticActor>(staticActor);
 }

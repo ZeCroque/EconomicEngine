@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "EconomicEngineDebugGUI.h"
+#include "GridManager.h"
 
 const sf::Int32 GameManager::maxFPS = 60;
 

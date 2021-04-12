@@ -15,8 +15,9 @@ typedef std::array<std::array<std::weak_ptr<StaticActor>,  REGION_SIZE>,  REGION
 
 class Grid
 {
+
 public:
-	void setActorAt(const std::shared_ptr<StaticActor>&& staticActor, int x, int y);
+	void setActorAt(const std::shared_ptr<StaticActor>& staticActor, int x, int y);
 	StaticActor* getActorAt(int x, int y); 
 	bool isOccupied(int x, int y);
 
