@@ -1,11 +1,9 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-
-
-#include "DebugEconomicEngine.h"
 #include "GraphManager.h"
 #include "JobManager.h"
+#include "EconomicEngine.h"
 #include "ui_EconomicEngineDebugGUI.h"
 
 class EconomicEngineDebugGui final : public QMainWindow, public IObserver
@@ -17,6 +15,7 @@ public:
 	~EconomicEngineDebugGui() override;
 	void notify(Observable* sender) override;
 	void closeEvent(QCloseEvent* event) override;
+	void quit();
 
 public Q_SLOTS:
 	void updateUiSlot();
@@ -40,7 +39,7 @@ private:
 	std::vector<GraphManager*> arrayCheckBox;
 	std::vector<JobManager*> arrayJobs;
 	std::thread economicEngineThread;
-	DebugEconomicEngine* turnManager;
+	EconomicEngine* turnManager;
 	TraderManager* traderManager;
 	int zoomXAxis;
 

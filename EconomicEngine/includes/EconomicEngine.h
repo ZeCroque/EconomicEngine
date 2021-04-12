@@ -18,15 +18,16 @@
 #include "Traders/TraderManager.h"
 
 
-template <class T> class EconomicEngine : public Observable, public Singleton<T>
+class EconomicEngine : public Observable, public Singleton<EconomicEngine>
 {
+friend class Singleton<EconomicEngine>;
+	
 protected:
 	TraderManager* traderManager;
 	TradableManager* tradableManager;
 	StockExchange* stockExchange;
 
 	EconomicEngine() : traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1) {}
-	virtual ~EconomicEngine() = default;
 private:
 	bool bRunning;
 	bool bPaused;

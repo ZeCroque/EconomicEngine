@@ -1,0 +1,79 @@
+cmake_minimum_required(VERSION 3.2)
+
+project(EconomicEngineGraphics VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+
+find_package(nlohmann_json CONFIG REQUIRED)
+
+find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+
+if(WIN32)
+    set(QT_VERSION "5.15.2")
+    set(CMAKE_PREFIX_PATH J:/QT/${QT_VERSION}/msvc2019_64)
+endif(WIN32)
+
+find_package(Qt5 ${QT_VERSION} COMPONENTS
+    Core 
+    Widgets 
+    Gui
+    PrintSupport
+    REQUIRED
+)
+
+set(HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(HEADERS
+	${HEADER_DIR}/Actor.h
+    ${HEADER_DIR}/GameManager.h
+    ${HEADER_DIR}/Grid.h
+    ${HEADER_DIR}/MovableActor.h
+    ${HEADER_DIR}/StaticActor.h
+)
+
+set(SOURCES
+	${SOURCE_DIR}/GameManager.cpp
+    ${SOURCE_DIR}/Grid.cpp
+    ${SOURCE_DIR}/main.cpp
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		${HEADER_DIR}		
+)
+target_link_libraries(${PROJECT_NAME} 
+	PUBLIC
+		nlohmann_json 
+		nlohmann_json::nlohmann_json
+		DesignPattern
+        EconomicEngine
+        EconomicEngineDebugGUI_lib
+    PRIVATE
+        sfml-system
+        sfml-network
+        sfml-graphics
+        sfml-window
+)
+
+#Move QT dlls to output dir
+if(WIN32)
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Qt5::Widgets>
+            $<TARGET_FILE:Qt5::Core>
+            $<TARGET_FILE:Qt5::Gui>
+            $<TARGET_FILE:Qt5::PrintSupport>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+endif(WIN32)
+
+#Move assets to output dir
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/Content ${CMAKE_CURRENT_BINARY_DIR}/Content
+)

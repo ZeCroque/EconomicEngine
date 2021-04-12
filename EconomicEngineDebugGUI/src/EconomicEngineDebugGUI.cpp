@@ -6,15 +6,23 @@
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {	
-	turnManager = DebugEconomicEngine::getInstance();
+	turnManager = EconomicEngine::getInstance();
 	turnManager->addObserver(this);
+<<<<<<< HEAD
 	economicEngineThread = std::thread([](DebugEconomicEngine* newTurnManager)-> int
+=======
+
+	traderManager = TraderManager::getInstance();
+
+#ifdef STANDALONE_MODE
+	economicEngineThread = std::thread([](EconomicEngine* turnManager)-> int
+>>>>>>> origin/master
 	{
         newTurnManager->init("./Content/Prefabs/");
 		return newTurnManager->exec(100);
 	}, turnManager);
-
-	traderManager = TraderManager::getInstance();
+#endif
+	
 	ui.setupUi(this);
 
 	doInit();
@@ -365,6 +373,20 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
+<<<<<<< HEAD
 	turnManager->stop();
 	economicEngineThread.join();
+=======
+#ifdef STANDALONE_MODE
+	this->turnManager->stop();
+	this->economicEngineThread.join();
+#endif
+}
+
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+void EconomicEngineDebugGui::quit()
+{
+	QApplication::quit();
+>>>>>>> origin/master
 }

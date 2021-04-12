@@ -29,28 +29,32 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(HEADERS
     ${HEADER_DIR}/JobManager.h
     ${HEADER_DIR}/GraphManager.h
-    ${HEADER_DIR}/DebugEconomicEngine.h
     ${HEADER_DIR}/EconomicEngineDebugGUI.ui
     ${HEADER_DIR}/EconomicEngineDebugGUI.h
     ${HEADER_DIR}/qcustomplot.h
 )
 
 set(SOURCES
-	${SOURCE_DIR}/main.cpp
     ${SOURCE_DIR}/JobManager.cpp
     ${SOURCE_DIR}/GraphManager.cpp
-    ${SOURCE_DIR}/DebugEconomicEngine.cpp
     ${SOURCE_DIR}/EconomicEngineDebugGUI.cpp
     ${SOURCE_DIR}/EconomicEngineDebugGUI.qrc
     ${SOURCE_DIR}/qcustomplot.cpp
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+set(SOURCE_EXE
+    ${SOURCE_DIR}/main.cpp
+)
+
+#=======================================
+#Exe target (standalone mode)
+add_executable(${PROJECT_NAME} ${SOURCES} ${SOURCE_EXE} ${HEADERS})
+
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
 		${HEADER_DIR}
 )
-include_directories(${EconomicEngine_SOURCE_DIR})
+
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ${Qt5Widgets_LIBRARIES}
@@ -61,15 +65,13 @@ target_link_libraries(${PROJECT_NAME}
 		EconomicEngine
 )
 
-target_compile_features(${PROJECT_NAME}
-    PRIVATE 
-        cxx_auto_type
-)
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
         ${Qt5Widgets_DEFINITIONS}
+        STANDALONE_MODE
 )
 
+#Move QT dlls to output dir
 if(WIN32)
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
@@ -82,4 +84,33 @@ if(WIN32)
     )
 endif(WIN32)
 
-file(COPY ${CMAKE_SOURCE_DIR}/Content DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+#Move assets to output dir
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/Content ${CMAKE_CURRENT_BINARY_DIR}/Content
+)
+
+#=======================================
+#Lib target (to be used by SFML project)
+add_library(${PROJECT_NAME}_lib ${SOURCES} ${HEADERS})
+
+target_include_directories(${PROJECT_NAME}_lib
+	PUBLIC
+		${HEADER_DIR}
+)
+
+target_link_libraries(${PROJECT_NAME}_lib
+    PUBLIC
+        ${Qt5Widgets_LIBRARIES}
+        Qt5::Core
+        Qt5::Widgets
+        Qt5::Gui
+        Qt5::PrintSupport
+		EconomicEngine
+)
+
+target_compile_definitions(${PROJECT_NAME}_lib
+    PUBLIC
+        ${Qt5Widgets_DEFINITIONS}
+)
