@@ -25,7 +25,8 @@ public:
 	[[nodiscard]] std::vector<size_t> getCraftList() const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
 	[[nodiscard]] std::vector<size_t> getUncraftableList() const;
-	[[nodiscard]] const std::list<size_t>& getUsableTools() const;
+
+	[[maybe_unused]] [[nodiscard]] const std::list<size_t>& getUsableTools() const;
 	[[nodiscard]] std::list<size_t>& getUsableTools();
 	[[nodiscard]] Craft* getCraft(size_t key) const;
 	[[nodiscard]] size_t getId() const;

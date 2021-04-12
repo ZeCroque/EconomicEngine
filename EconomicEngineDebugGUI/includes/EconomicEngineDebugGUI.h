@@ -14,7 +14,7 @@ Q_OBJECT
 
 public:
 	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
-	~EconomicEngineDebugGui();
+	~EconomicEngineDebugGui() override;
 	void notify(Observable* sender) override;
 	void closeEvent(QCloseEvent* event) override;
 
@@ -26,7 +26,7 @@ public Q_SLOTS:
 	void setStep(int value) const;
 	void setYRange();
 	void setXRange() const;
-	void useXSlider(int value);
+	void useXSlider(int);
 	void toggleStart() const;
 	void setMode() const;
 	void doKill();
@@ -39,12 +39,10 @@ private:
 	Ui::EconomicEngineDebugGUIClass ui{};
 	std::vector<GraphManager*> arrayCheckBox;
 	std::vector<JobManager*> arrayJobs;
-	QTimer dataTimer;
 	std::thread economicEngineThread;
 	DebugEconomicEngine* turnManager;
 	TraderManager* traderManager;
 	int zoomXAxis;
-	bool realTime{};
 
 signals:
 	void nextTurn();

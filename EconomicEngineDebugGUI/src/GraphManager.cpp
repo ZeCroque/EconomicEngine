@@ -2,20 +2,22 @@
 
 int GraphManager::getGraphIndex() const
 {
-	return this->graphIndex;
+	return graphIndex;
 }
 
-void GraphManager::setGraphIndex(const int graphIndex)
+void GraphManager::setGraphIndex(const int newGraphIndex)
 {
-	this->graphIndex = graphIndex;
+	graphIndex = newGraphIndex;
 }
 
 size_t GraphManager::getItemId() const
 {
-	return this->itemId;
+	return itemId;
 }
 
-void GraphManager::setItemId(const size_t itemId)
+void GraphManager::setItemId(const size_t newItemId)
 {
-	this->itemId = itemId;
+	itemId = newItemId;
 }
+
+GraphManager::GraphManager(QWidget *parent, size_t itemId) : QCheckBox(parent), itemId(itemId) {}

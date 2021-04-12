@@ -36,7 +36,7 @@ void TraderManager::addTrader(const int count, const size_t key)
 	}	
 }
 
-Job* TraderManager::assignJob(const size_t key, Trader* trader) const
+[[maybe_unused]] Job* TraderManager::assignJob(const size_t key, Trader* trader) const
 {
 
 	Job* job = this->jobFactory.createObject(key);
@@ -79,23 +79,23 @@ std::list<const Trader*> TraderManager::getTraderByJobId(const size_t key) const
 float TraderManager::getMoneyMeanByJob(const size_t key) const
 {
 	float total = 0.0f;
-	const auto& traders = getTraderByJobId(key);
-	for(const auto& trader : traders)
+	const auto& NewTraders = getTraderByJobId(key);
+	for(const auto& trader : NewTraders)
 	{
 		total += trader->getMoney();
 	}
-	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
+	return total / static_cast<float>(std::max<size_t>(1, NewTraders.size()));
 }
 
 float TraderManager::getFoodLevelMeanByJob(const size_t key) const
 {
 	float total = 0.0f;
-	const auto& traders = getTraderByJobId(key);
-	for (const auto& trader : traders)
+	const auto& NewTraders = getTraderByJobId(key);
+	for (const auto& trader : NewTraders)
 	{
 		total += trader->getFoodLevel();
 	}
-	return total / static_cast<float>(std::max<size_t>(1, traders.size()));
+	return total / static_cast<float>(std::max<size_t>(1, NewTraders.size()));
 }
 
 int TraderManager::getJobCount(const size_t key) const

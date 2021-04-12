@@ -6,17 +6,17 @@
 class JobManager final
 {
 public:
-	JobManager(const size_t jobId, const QString jobName);
+	JobManager(size_t jobId, const QString& jobName);
 
-	QString getJobName() const;
-	size_t getJobId() const;
+	[[nodiscard]] QString getJobName() const;
+	[[nodiscard]] size_t getJobId() const;
 
-	QLabel* lbName;
-	QLabel* lbNumber;
-	QLabel* lbMoneyAverage;
-	QLabel* lbFoodAverage;
-	QLabel* lbBirth;
-	QLabel* lbDead;
+	QLabel* lbName{};
+	QLabel* lbNumber{};
+	QLabel* lbMoneyAverage{};
+	QLabel* lbFoodAverage{};
+	QLabel* lbBirth{};
+	QLabel* lbDead{};
 
 private:
 	QString jobName;

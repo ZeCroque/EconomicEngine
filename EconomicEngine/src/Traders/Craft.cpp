@@ -41,19 +41,19 @@ void Craft::incrementRate(const float i)
 	rate += i;
 }
 
-void Craft::decrementRate(const float i)
+[[maybe_unused]] void Craft::decrementRate(const float i)
 {
 	rate-=i;
 }
 
 bool Craft::advanceCraft()
 {
-	bool result = false;
+	bool bResult = false;
 	advancement += rate;
 	if(advancement >= 1.0f)
 	{
-		result = true;
+        bResult = true;
 		notifyObservers();
 	}
-	return result;
+	return bResult;
 }

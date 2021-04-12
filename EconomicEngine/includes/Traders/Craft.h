@@ -21,13 +21,14 @@ public:
 	Craft(Craft& craft);
 	Craft* clone() override;
 
-	[[nodiscard]] std::list<std::pair<size_t, int>> getRequirement() const;
+    [[noreturn]] [[nodiscard]] std::list<std::pair<size_t, int>> getRequirement() const;
 	[[nodiscard]] std::list<size_t> getToolsRequired() const;
 	[[nodiscard]] size_t getResult() const;
 	[[nodiscard]] int getCount() const;
 	[[nodiscard]] float getRate() const;
 	void incrementRate(float i);
-	void decrementRate(float i);
+
+    [[maybe_unused]] void decrementRate(float i);
 	bool advanceCraft();
 
 };

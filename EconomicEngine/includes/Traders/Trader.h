@@ -29,7 +29,7 @@ private:
 	void refreshPriceBelief(Ask* ask);
 	void refreshFoodLevel();
 	void makeChild();
-	std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) const;
+	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) ;
 	[[nodiscard]] float calculateEarnings(Craft* craft) const;
 	[[nodiscard]] float calculateFoodStock() const;
 	[[nodiscard]] float calculatePriceBeliefMean(size_t key) const;

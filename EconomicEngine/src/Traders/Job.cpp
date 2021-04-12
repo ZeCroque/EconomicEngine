@@ -1,20 +1,22 @@
 #include "Traders/Job.h"
 
+#include <utility>
+
 Job::Job() : craftFactory(new CraftFactory()), id(0){}
 
-Job::Job(std::string name) : Job()
+Job::Job(std::string newName) : Job()
 {
-	std::hash<std::string> hasher;
+	std::hash<std::string> hash;
 	
-	this->name = name;
-	this->id = hasher(this->name);
+	name = std::move(newName);
+	id = hash(name);
 }
 
 Job::Job(const Job& job) : Job()
 {
-	this->craftFactory = job.craftFactory->clone();
-	this->usableToolsList = std::list<size_t>(job.usableToolsList);
-	this->id = job.id;
+	craftFactory = job.craftFactory->clone();
+	usableToolsList = std::list<size_t>(job.usableToolsList);
+	id = job.id;
 }
 
 Job::~Job()
@@ -24,12 +26,12 @@ Job::~Job()
 
 void Job::setOwner(Trader* owner) const
 {
-	this->craftFactory->setOwner(owner);
+	craftFactory->setOwner(owner);
 }
 
 Craft* Job::createCraft(const size_t typeId) const
 {
-	return this->craftFactory->createObject(typeId);
+	return craftFactory->createObject(typeId);
 }
 
 std::vector<size_t> Job::getCraftList() const
@@ -80,7 +82,7 @@ std::vector<size_t> Job::getUncraftableList() const
 	return uncraftableList;
 }
 
-const std::list<size_t>& Job::getUsableTools() const
+[[maybe_unused]] const std::list<size_t>& Job::getUsableTools() const
 {
 	return usableToolsList;
 }

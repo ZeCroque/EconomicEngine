@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "EconomicEngineDebugGUI.h"
 #include <QtWidgets/QApplication>
 

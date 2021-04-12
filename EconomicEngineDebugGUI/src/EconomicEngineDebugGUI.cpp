@@ -8,10 +8,10 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 {	
 	turnManager = DebugEconomicEngine::getInstance();
 	turnManager->addObserver(this);
-	economicEngineThread = std::thread([](DebugEconomicEngine* turnManager)-> int
+	economicEngineThread = std::thread([](DebugEconomicEngine* newTurnManager)-> int
 	{
-		turnManager->init("./Content/Prefabs/");
-		return turnManager->exec(100);
+        newTurnManager->init("./Content/Prefabs/");
+		return newTurnManager->exec(100);
 	}, turnManager);
 
 	traderManager = TraderManager::getInstance();
@@ -19,7 +19,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	doInit();
 
-	this->zoomXAxis = ui.horSlidZoomXAxis->value();
+	zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 
 	turnManager->setTurnSecond(ui.horSlidSpeed->value());
@@ -48,12 +48,12 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
-	this->turnManager = nullptr;
+	turnManager = nullptr;
 }
 
 void EconomicEngineDebugGui::notify(Observable* sender)
 {
-	this->nextTurn();
+	nextTurn();
 }
 
 void EconomicEngineDebugGui::setGraphVisibility()
@@ -65,7 +65,7 @@ void EconomicEngineDebugGui::setGraphVisibility()
 
 void EconomicEngineDebugGui::setZoomXAxis(const int value)
 {
-	this->zoomXAxis = value;
+	zoomXAxis = value;
 	setXRange();
 	setYRange();
 }
@@ -73,7 +73,6 @@ void EconomicEngineDebugGui::setZoomXAxis(const int value)
 void EconomicEngineDebugGui::setYRange()
 {
 	auto haveData = false;
-	const auto key = ui.horSlidXNav->value();
 	double valueHigh = 0;
 	double valueLow = 999999;
 	for (auto checkBox : this->arrayCheckBox)
@@ -89,7 +88,7 @@ void EconomicEngineDebugGui::setYRange()
 			{
 				start = 0;
 			}
-			for (auto i = start; i <= end; i++)
+			for (int i = start; i <= end; i++)
 			{
 				const auto value = data->at(i)->value;
 				if (value > 0)
@@ -119,20 +118,20 @@ void EconomicEngineDebugGui::setXRange() const
 {
 	const auto key = turnManager->getTurnCount();
 	ui.horSlidXNav->setMaximum(key);
-	if (key > this->zoomXAxis)
+	if (key > zoomXAxis)
 	{
-		ui.horSlidXNav->setMinimum(this->zoomXAxis);
+		ui.horSlidXNav->setMinimum(zoomXAxis);
 	}
 
 	if (ui.horSlidXNav->value() >= key - ui.horSlidStep->value())
 	{
 		ui.horSlidXNav->setValue(key);
-		ui.customPlot->xAxis->setRange(key, this->zoomXAxis, Qt::AlignRight);
+		ui.customPlot->xAxis->setRange(key, zoomXAxis, Qt::AlignRight);
 	}
 	else
 	{
 		auto const center = (ui.customPlot->xAxis->range().upper + ui.customPlot->xAxis->range().lower) / 2;
-		ui.customPlot->xAxis->setRange(center, this->zoomXAxis, Qt::AlignCenter);
+		ui.customPlot->xAxis->setRange(center, zoomXAxis, Qt::AlignCenter);
 	}
 
 	ui.customPlot->replot();
@@ -148,7 +147,7 @@ void EconomicEngineDebugGui::setStep(const int value) const
 	turnManager->setStep(value);
 }
 
-void EconomicEngineDebugGui::useXSlider(int value)
+void EconomicEngineDebugGui::useXSlider(int)
 {
 	ui.customPlot->xAxis->setRange(ui.horSlidXNav->value(), this->zoomXAxis, Qt::AlignRight);
 	setYRange();
@@ -180,14 +179,14 @@ void EconomicEngineDebugGui::setMode() const
 
 void EconomicEngineDebugGui::doKill()
 {
-	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
 	traderManager->kill(job->getJobId(), ui.sBKill->value());
 	updateUiJobs();
 }
 
 void EconomicEngineDebugGui::doAdd()
 {
-	const auto job = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
 	traderManager->addTrader(ui.sBAdd->value(), job->getJobId());
 	updateUiJobs();
 }
@@ -300,14 +299,14 @@ void EconomicEngineDebugGui::doInit()
 		ui.gridLayJobs->addWidget(jobManager->lbDead, layRow, 5);
 
 		ui.cBKill->addItem(jobManager->getJobName());
-		this->arrayJobs.push_back(jobManager);
+		arrayJobs.push_back(jobManager);
 	}
 	updateUiJobs();
 }
 
 void EconomicEngineDebugGui::updateUiJobs()
 {
-	const auto cbJob = this->arrayJobs.at(ui.cBKill->currentIndex());
+	const auto cbJob = arrayJobs.at(ui.cBKill->currentIndex());
 	const auto traderCount = traderManager->getJobCount(cbJob->getJobId());
 	ui.sBKill->setMaximum(traderCount);
 
@@ -366,6 +365,6 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
-	this->turnManager->stop();
-	this->economicEngineThread.join();
+	turnManager->stop();
+	economicEngineThread.join();
 }

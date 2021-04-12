@@ -3,10 +3,8 @@
 #include "Traders/Trader.h"
 
 
-#include "StockExchange/Ask.h"
 #include "Tradables/Tradable.h"
 #include "Tradables/Food.h"
-#include "Tradables/Countable.h"
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Tradables/TradableManager.h"
 #include "Traders/TraderManager.h"
@@ -38,7 +36,7 @@ Trader::Trader(Job* job) : Trader()
 }
 
 //Return a random combination of food to satisfy the provided foodGoal, according to the limits specified in provided foodInfos
-std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, const float foodGoal) const
+std::list<std::pair<size_t, int>> Trader::getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, const float foodGoal)
 {
 	std::mt19937 randomEngine(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	std::list<std::pair<size_t, int>> foodCombinations;
