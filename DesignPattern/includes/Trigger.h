@@ -5,32 +5,30 @@
 #include <any>
 #include <functional>
 
-using EventSignal = Signal<const std::any&>;
-
 template<class T> class Trigger final
 {
 public:
 	Trigger() = default;
-	Trigger(const Trigger& trigger) : m_value(trigger.m_value){}
-	explicit  Trigger(const T& value) : m_value(value){}
+	Trigger(const Trigger& trigger) : value(trigger.value){}
+	explicit  Trigger(const T& value) : value(value){}
 	~Trigger() = default;
 
-	Trigger& operator=(const T& value)
+	Trigger& operator=(const T& newValue)
 	{
-		if(m_value != value)
+		if(value != newValue)
 		{
-			m_value = value;
-			Notify();
+			value = newValue;
+			notify();
 		}
 		return *this;
 	}
 
 	Trigger& operator=(const Trigger& trigger)
 	{
-		if(m_value != trigger.m_value)
+		if(value != trigger.value)
 		{
-			m_value = trigger.m_value;
-			Notify();
+			value = trigger.value;
+			notify();
 		}
 
 		return *this;
@@ -38,47 +36,48 @@ public:
 
 	operator T() const
 	{
-		return m_value;
+		return value;
 	}
 
-	void SetNoTrig(const Trigger& trigger)
+	void setWithoutNotifying(const Trigger& trigger)
 	{
-		if(m_value != trigger.m_value)
+		if(value != trigger.value)
 		{
-			m_value = trigger.m_value;
+			value = trigger.value;
 		}
 	}
 
-	void SetNoTrig(const T& value)
+	void setWithoutNotifying(const T& newValue)
 	{
-		if(m_value != trigger)
+		if(value != newValue)
 		{
-			m_value = value;
+			value = newValue;
 		}
 	}
 
-	void Connect(const std::function<void(const std::any&)>& func) const
+	void connect(const std::function<void(const std::any&)>& func) const
 	{
-		m_signal.Connect(func);
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		signal.connect(func);
 	}
 
-	void ConnectTyped(const std::function<void(const T&)>& func) const
+	void connect(const std::function<void(const T&)>& func) const
 	{
 		const auto funcAny = [func](const std::any& lhs)
 		{
 			const auto element = std::any_cast<T>(lhs);
 			func(element);
 		};
-		m_signal.Connect(funcAny);
+		signal.connect(funcAny);
 	}
 private:
-	void Notify()
+	void notify()
 	{
-		m_signal(m_value);
+		signal(value);
 	}
 	
-	T m_value;
-	mutable EventSignal m_signal;
+	T value;
+	mutable Signal<const std::any&> signal;
 };
 
 #endif //TRIGGER_H
