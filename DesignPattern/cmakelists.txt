@@ -13,6 +13,8 @@ set(HEADERS
 	${HEADER_DIR}/Observable.h
 	${HEADER_DIR}/Observer.h
 	${HEADER_DIR}/Singleton.h
+	${HEADER_DIR}/Signal.h
+	${HEADER_DIR}/Trigger.h
 )
 
 set(SOURCES
