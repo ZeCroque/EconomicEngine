@@ -10,12 +10,15 @@
 #include <fstream>
 
 
+
+#include "Signal.h"
 #include "StockExchange/StockExchange.h"
 #include "Tradables/Countable.h"
 #include "Tradables/Food.h"
 #include "Tradables/TradableManager.h"
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Traders/TraderManager.h"
+#include <any>
 
 
 class EconomicEngine : public Observable, public Singleton<EconomicEngine>
@@ -35,9 +38,14 @@ private:
 	int step;
 	std::condition_variable cv;
 	std::mutex m;
+	Signal<std::any> postInitSignal;
 
 public:
-
+	const Signal<std::any>& getPostInitSignal() const
+	{
+		return postInitSignal;
+	}
+	
 	void initJobs(std::vector<nlohmann::json>& parsedJobs) const
 	{
 		const std::hash<std::string> hasher;
@@ -127,7 +135,8 @@ public:
 		initTradables(tradables);
 		
 		traderManager->init();
-		stockExchange->init();	
+		stockExchange->init();
+		postInitSignal(std::any(0));
 	}
 
 	void reset(const int count) const

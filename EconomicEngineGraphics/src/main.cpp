@@ -4,5 +4,5 @@
 int main()
 {
 	auto* gameManager = GameManager::getInstance();
-	gameManager->Exec();
+	gameManager->exec();
 }

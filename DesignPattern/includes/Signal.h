@@ -5,6 +5,8 @@
 #include <map>
 #include <functional>
 
+#undef slots
+
 template<class... Args> using Slot = std::function<void(Args...)>;
 
 template<class... Args> class Signal final
@@ -60,7 +62,7 @@ public:
     	});
     }
 
-	void operator()(Args... args)
+	void operator()(Args... args) const
 	{
 		for(auto slot : slots)
 		{
@@ -72,5 +74,7 @@ private:
     mutable std::map<int, Slot<Args...>> slots;
     mutable std::atomic<int> id;
 };
+
+#define slots Q_SLOTS;
 
 #endif //SIGNAL_H

@@ -55,6 +55,11 @@ EconomicEngineDebugGui::~EconomicEngineDebugGui()
 	this->turnManager = nullptr;
 }
 
+const Signal<std::any>& EconomicEngineDebugGui::getCloseSignal() const
+{
+	return closeSignal;
+}
+
 void EconomicEngineDebugGui::notify(Observable* sender)
 {
 	this->nextTurn();
@@ -374,11 +379,6 @@ void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 	this->turnManager->stop();
 	this->economicEngineThread.join();
 #endif
-}
-
-
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void EconomicEngineDebugGui::quit()
-{
+	closeSignal(std::any());
 	QApplication::quit();
 }
