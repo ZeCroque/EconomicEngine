@@ -4,8 +4,9 @@
 #include <map>
 #include <array>
 #include <memory>
+#include <StaticActor.h>
 
-class StaticActor;
+
 
 constexpr size_t REGION_SIZE = 16;
 constexpr size_t REGION_MINOR = REGION_SIZE - 1;
