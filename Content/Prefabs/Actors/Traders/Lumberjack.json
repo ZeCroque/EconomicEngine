@@ -1,6 +1,5 @@
 {
-    "type" : "Trader",
-    "name" : "Lumberjack",
+    "type" : "MovableTrader",
     "job" : "Lumberjack",
     "texturePath" : "Content/Textures/Traders/TX_Lumberjack.jpg"
 }

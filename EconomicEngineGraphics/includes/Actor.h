@@ -3,7 +3,10 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-class Actor {
+#include "Clonable.h"
+
+class Actor : public Clonable<Actor>
+{
     sf::Sprite sprite;
 public:
     int x;

@@ -1,6 +1,5 @@
 {
-    "type" : "Trader",
-    "name" : "Miner",
+    "type" : "MovableTrader",
     "job" : "Miner",
     "texturePath" : "Content/Textures/Traders/TX_Miner.jpg"
 }

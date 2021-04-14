@@ -4,10 +4,17 @@
 
 #include "MovableTrader.h"
 
+MovableTrader::MovableTrader(std::string jobName)
+{
+	std::hash<std::string> hasher;
+	jobId = hasher(jobName);
+}
+
 size_t MovableTrader::getJobId() const {
     return jobId;
 }
 
-void MovableTrader::setJobId(size_t newJobId) {
-    jobId = newJobId;
+MovableTrader* MovableTrader::clone()
+{
+	return new MovableTrader(*this);
 }

@@ -3,8 +3,10 @@
 
 #include "Actor.h"
 
-class MovableActor : public Actor {
-
+class MovableActor : public Actor
+{
+public:
+	Actor* clone() override;
 };
 
 

@@ -5,14 +5,18 @@
 #ifndef ECONOMICENGINE_MOVABLETRADER_H
 #define ECONOMICENGINE_MOVABLETRADER_H
 
+#include <string>
+
 #include "MovableActor.h"
 
 class MovableTrader : public MovableActor {
 
 public:
-    void setJobId(size_t jobId);
+	MovableTrader(std::string jobName);
 
     size_t getJobId() const;
+
+	MovableTrader* clone() override;
 
 private:
     size_t jobId;

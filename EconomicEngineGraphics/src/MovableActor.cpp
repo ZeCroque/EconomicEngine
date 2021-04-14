@@ -3,3 +3,8 @@
 //
 
 #include <MovableActor.h>
+
+Actor* MovableActor::clone()
+{
+	return new MovableActor(*this);
+}

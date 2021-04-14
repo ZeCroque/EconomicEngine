@@ -10,6 +10,39 @@ const sf::Int32 GameManager::maxFPS = 60;
 
 GameManager::~GameManager() = default;
 
+void GameManager::init(const char* prefabsPath)
+{
+		assert(std::filesystem::exists(prefabsPath) && std::filesystem::is_directory(prefabsPath));
+
+		std::vector<nlohmann::json> parsedMovableTraders;
+		std::vector<nlohmann::json> parsedWorkshops;
+		
+		std::ifstream fileStream;
+		for (const auto& entry : std::filesystem::recursive_directory_iterator(prefabsPath))
+		{
+			if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ".json")
+			{
+				nlohmann::json parsedJson;
+				
+				fileStream.open (entry.path());
+				fileStream >> parsedJson;
+			    fileStream.close();
+
+				if(parsedJson["type"] == "MovableTrader")
+				{
+					parsedMovableTraders.push_back(parsedJson);
+				}
+				else if(parsedJson["type"] == "Workshop")
+				{
+					parsedWorkshops.push_back(parsedJson);
+				}
+			}
+		}
+		initMovableTraders(parsedMovableTraders);
+		initWorkshops(parsedWorkshops);
+		initThreads(prefabsPath);
+}
+
 void GameManager::exec() {
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
@@ -25,42 +58,67 @@ void GameManager::exec() {
         previousTimestamp = currentTimestamp;
         lag += timeSinceLastFrame;
 
-        ProcessInput();
+        processInput();
 
         while (lag >= deltaTimeUs) {
-            Update(deltaTimeS);
+            update(deltaTimeS);
             lag -= deltaTimeUs;
         }
 
-        Render();
+        render();
     }
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
                              economicEngineInitialized(false), isGuiOpened(false) {
-    window->setFramerateLimit(maxFPS);
-    auto *turnManager = EconomicEngine::getInstance();
+	window->setFramerateLimit(maxFPS);
+}
+
+void GameManager::initThreads(const char* prefabsPath)
+{
+	auto *turnManager = EconomicEngine::getInstance();
     turnManager->addObserver(this);
     turnManager->getPostInitSignal().connect([this](const std::any &) {
         economicEngineInitialized = true;
     });
 
-    auto *traderManager = TraderManager::getInstance();
-    traderManager->getAddTraderSignal().connect([this](Trader *trader) {
-        auto *movableTrader = new MovableTrader();
-        movableTrader->setJobId(trader->getCurrentJob()->getId());
-        pendingTrader.push(movableTrader); //TODO: Connect
+    economicEngineThread = std::make_unique<std::thread>([prefabsPath, turnManager]() -> int {
+        turnManager->init(prefabsPath);
+        return turnManager->exec(100);
     });
 
-
-    economicEngineThread = std::make_unique<std::thread>([](EconomicEngine *turnManager) -> int {
-        turnManager->init("./Content/Prefabs/");
-        return turnManager->exec(100);
-    }, turnManager);
+	
+    auto *traderManager = TraderManager::getInstance();
+    traderManager->getAddTraderSignal().connect([this](Trader *trader) {
+        auto *movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());  //TODO: Connect
+        pendingTraders.push(movableTrader);
+    });
 }
 
-void GameManager::ProcessInput() {
+void GameManager::initMovableTraders(std::vector<nlohmann::json>& parsedMovableTraders)
+{
+	const std::hash<std::string> hasher;
+	for(const auto& parsedMovableTrader : parsedMovableTraders)
+	{
+		auto hash = parsedMovableTrader["job"];
+		auto* movableTrader = new MovableTrader(parsedMovableTrader["job"]);
+		movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
+	}
+}
+
+void GameManager::initWorkshops(std::vector<nlohmann::json>& parsedWorkshops)
+{
+	const std::hash<std::string> hasher;
+	for(const auto& parsedWorkshop : parsedWorkshops)
+	{
+		auto hash = parsedWorkshop["job"];
+		auto* workshop = new Workshop(parsedWorkshop["job"]);
+		workshopFactory.registerObject(hasher(parsedWorkshop["job"]), workshop);
+	}
+}
+
+void GameManager::processInput() {
     sf::Event event{};
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -94,29 +152,26 @@ Workshop *GameManager::findAvailableWorkshop(size_t jobId) {
     return nullptr;
 }
 
-void GameManager::Update(float deltaTime) {
+void GameManager::update(float deltaTime) {
 
     if (economicEngineInitialized) {
 
         std::vector<std::shared_ptr<StaticActor>> workshopToPlace;
 
-        while (!pendingTrader.empty()) {
-            auto trader = std::shared_ptr<MovableTrader>(pendingTrader.front());
+        while (!pendingTraders.empty()) {
+            auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
             traders.push_back(trader);
 
             auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
             if (availableWorkshop) {
                 availableWorkshop->setTrader(trader);
             } else {
-                auto *newWorkshop = new Workshop();
-                newWorkshop->setTrader(trader);
-                newWorkshop->setJobId(trader->getJobId());
-
-                workshops.emplace_back(newWorkshop);
-                workshopToPlace.emplace_back(newWorkshop);
+            	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(trader->getJobId()));
+                workshop->setTrader(trader);
+                workshops.emplace_back(workshop);
+                workshopToPlace.emplace_back(workshop);
             }
-            std::cout << workshopToPlace[0].use_count() << std::endl;
-            pendingTrader.pop();
+            pendingTraders.pop();
         }
 
         if (!workshopToPlace.empty()) {
@@ -126,16 +181,17 @@ void GameManager::Update(float deltaTime) {
     }
 }
 
-void GameManager::Render() {
+void GameManager::render() const
+{
     window->clear();
 
     sf::CircleShape shape(100.f);
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 100);
+    const std::uniform_int_distribution<> distrib(1, 100);
 
-    auto greyValue = distrib(gen);
+    const sf::Uint8 greyValue = distrib(gen);
     shape.setFillColor(sf::Color(greyValue, greyValue, greyValue));
     shape.setPosition(100, 100);
 
@@ -143,7 +199,8 @@ void GameManager::Render() {
     window->display();
 }
 
-void GameManager::quit() {
+void GameManager::quit() const
+{
     EconomicEngine::getInstance()->stop();
     economicEngineThread->join();
 
@@ -151,11 +208,10 @@ void GameManager::quit() {
 }
 
 void GameManager::guiCloseSignalCallback(std::any lhs) {
-    std::cout << "wsh" << std::endl;
     isGuiOpened = false;
 }
 
 void GameManager::notify(Observable *sender) {
-    //TODO handle economic engine
+    //TODO replace signal slot
 }
  

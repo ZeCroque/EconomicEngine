@@ -8,17 +8,15 @@
 #include <memory>
 #include <list>
 #include <queue>
-#include <Traders/Trader.h>
+#include <nlohmann/json_fwd.hpp>
 
+
+#include "AbstractFactory.h"
 #include "Observer.h"
 #include "GridManager.h"
 
-
 class Workshop;
-
 class MovableTrader;
-
-class Actor;
 
 class GameManager : public Singleton<GameManager>, public IObserver {
 
@@ -26,24 +24,34 @@ class GameManager : public Singleton<GameManager>, public IObserver {
 
 public:
     ~GameManager() override;
-
+	
+    void init(const char* prefabsPath);
+	
     void exec();
 
 private:
     GameManager();
 
-    void ProcessInput();
+	void initThreads(const char* prefabsPath);
 
-    void Update(float deltaTime);
+	void initMovableTraders(std::vector<nlohmann::json>& parsedJobs);
 
-    void Render();
+	void initWorkshops(std::vector<nlohmann::json>& parsedWorkshops);
+	
+    void processInput();
 
-    void quit();
+    void update(float deltaTime);
+
+    void render() const;
+
+    void quit() const;
 
     void guiCloseSignalCallback(std::any lhs);
-
+    
     void notify(Observable *sender) override;
 
+    Workshop* findAvailableWorkshop(size_t jobId);
+	
     std::unique_ptr<std::thread> economicEngineThread;
     std::unique_ptr<std::thread> debugGUIThread;
 
@@ -55,11 +63,14 @@ private:
     bool economicEngineInitialized;
     bool isGuiOpened;
 
-    std::queue<MovableTrader*> pendingTrader;
+    AbstractFactory<size_t, MovableTrader> movableTraderFactory;
+	AbstractFactory<size_t, Workshop> workshopFactory;
+	
+    std::queue<MovableTrader*> pendingTraders;
     std::vector<std::shared_ptr<MovableTrader>> traders;
     std::vector<std::shared_ptr<Workshop>> workshops;
 
-    Workshop *findAvailableWorkshop(size_t jobId);
+
 };
 
 #endif // GAME_H

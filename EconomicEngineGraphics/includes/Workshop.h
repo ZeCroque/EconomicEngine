@@ -14,15 +14,17 @@ class MovableTrader;
 class Workshop : public StaticActor {
 
 public:
+    Workshop(std::string jobName);
+	
     bool isAvailable() const;
 
     size_t getJobId() const;
 
     MovableTrader *getTrader() const;
 
-    void setJobId(size_t jobId);
-
     void setTrader(const std::shared_ptr<MovableTrader> &newTrader);
+
+	Workshop* clone() override;
 
 private:
     std::weak_ptr<MovableTrader> trader;

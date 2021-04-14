@@ -1,6 +1,5 @@
 {
-    "type" : "Trader",
-    "name" : "Toolmaker",
+    "type" : "MovableTrader",
     "job" : "Toolmaker",
     "texturePath" : "Content/Textures/Traders/TX_Toolmaker.jpg"
 }

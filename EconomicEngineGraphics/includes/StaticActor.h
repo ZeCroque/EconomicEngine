@@ -4,7 +4,8 @@
 
 class StaticActor : public Actor
 {
-	
+public:
+	Actor* clone() override;
 };
 
 #endif //STATIC_ACTOR
