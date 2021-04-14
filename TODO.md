@@ -14,7 +14,6 @@
 - bouffe à chaque action
 
 ### Graphic:
-- ActorFactory **croque**
 - affichage 
     - actor **croque**
     - dezoom = réduire taille case grille graphique **croque**
