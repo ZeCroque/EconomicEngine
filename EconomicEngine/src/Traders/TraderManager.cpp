@@ -22,7 +22,7 @@ void TraderManager::addTrader(const int count)
 	{	
 		this->traders.emplace_back(Trader(jobFactory.createObject(getMostInterestingJob())));
 		traders.back().getCurrentJob()->setOwner(&traders.back());
-		
+        addTraderSignal(&traders.back());
 	}
 }
 
@@ -33,6 +33,7 @@ void TraderManager::addTrader(const int count, const size_t key)
 		traders.emplace_back(Trader(jobFactory.createObject(key)));
 		traders.back().getCurrentJob()->setOwner(&traders.back());
 		++demographyCounts[traders.back().getCurrentJob()->getId()][0]->first;
+        addTraderSignal(&traders.back());
 	}	
 }
 
@@ -195,4 +196,12 @@ void TraderManager::kill(const size_t key, const int count)
 	{
 		traders.erase(it);
 	}
+}
+
+const Signal <Trader*> &TraderManager::getAddTraderSignal() const {
+    return addTraderSignal;
+}
+
+const Signal<Trader *> &TraderManager::getKillTraderSignal() const {
+    return killTraderSignal;
 }

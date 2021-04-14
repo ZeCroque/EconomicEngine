@@ -14,8 +14,8 @@ if(WIN32)
 endif(WIN32)
 
 find_package(Qt5 ${QT_VERSION} COMPONENTS
-    Core 
-    Widgets 
+    Core
+    Widgets
     Gui
     PrintSupport
     REQUIRED
@@ -31,6 +31,8 @@ set(HEADERS
     ${HEADER_DIR}/MovableActor.h
     ${HEADER_DIR}/StaticActor.h
 	${HEADER_DIR}/GridManager.h
+	${HEADER_DIR}/WorkShop.h
+	${HEADER_DIR}/MovableTrader.h
 )
 
 set(SOURCES
@@ -38,17 +40,20 @@ set(SOURCES
     ${SOURCE_DIR}/Grid.cpp
     ${SOURCE_DIR}/main.cpp
 	${SOURCE_DIR}/GridManager.cpp
+	${SOURCE_DIR}/WorkShop.cpp
+	${SOURCE_DIR}/MovableTrader.cpp
+	${SOURCE_DIR}/MovableActor.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
-		${HEADER_DIR}		
+		${HEADER_DIR}
 )
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
 	PUBLIC
-		nlohmann_json 
+		nlohmann_json
 		nlohmann_json::nlohmann_json
 		DesignPattern
         EconomicEngine
