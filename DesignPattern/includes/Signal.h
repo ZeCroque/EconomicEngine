@@ -5,70 +5,76 @@
 #include <map>
 #include <functional>
 
+#undef slots
+
+template<class... Args> using Slot = std::function<void(Args...)>;
+
 template<class... Args> class Signal final
 {
 public:
-    Signal() : m_currentID(0){}
+    Signal() : id(0){}
 
     ~Signal()
     {
-        DisconnectAll();
+        disconnectAll();
     }
 
     Signal(const Signal& signal)
     {
-        m_currentID = signal.m_currentID;
-    	for(auto&& [id, slot] : signal.m_slots)
+        id = signal.id;
+    	for(auto&& [id, slot] : signal.slots)
     	{
-    		m_slots[id] = slot;
+    		slots[id] = slot;
     	}
     }
 
 
-	void Disconnect(const int& id) const
+	void disconnect(const int& id) const
     {
-	    m_slots.erase(id);
+	    slots.erase(id);
     }
 
-	void DisconnectAll() const
+	void disconnectAll() const
     {
-	    m_slots.clear();
-    	m_currentID = 0;
+	    slots.clear();
+    	id = 0;
     }
 
-    int Connect(const std::function<void(Args...)>& slot) const
+    int connect(const std::function<void(Args...)>& slot) const
     {
-	    m_slots.insert({++m_currentID, slot});
-    	return m_currentID;
+	    slots.insert({++id, slot});
+    	return id;
     }
 
-	template<class T> int Connect(T* pInstance, void(T::*func)(Args...)) const
+	template<class T> int connect(T* instance, void(T::*func)(Args...)) const
     {
-    	return Connect([=](Args... args)
+    	return connect([=](Args... args)
     	{
-    		(pInstance->*func)(args...);
+    		(instance->*func)(args...);
     	});
     }
 
-	template<class T> int Connect(T* pInstance, void(T::*func)(Args...) const) const
+	template<class T> int connect(T* instance, void(T::*func)(Args...) const) const
     {
-    	return Connect([=](Args... args)
+    	return connect([=](Args... args)
     	{
-    		(pInstance->*func)(args...);
+    		(instance->*func)(args...);
     	});
     }
 
-	void operator()(Args... args)
+	void operator()(Args... args) const
 	{
-		for(auto slot : m_slots)
+		for(auto slot : slots)
 		{
 			slot.second(args...);
 		}
 	}
 	
 private:
-    mutable std::map<int, std::function<void(Args...)> > m_slots;
-    mutable std::atomic<int> m_currentID;
+    mutable std::map<int, Slot<Args...>> slots;
+    mutable std::atomic<int> id;
 };
+
+#define slots Q_SLOTS;
 
 #endif //SIGNAL_H

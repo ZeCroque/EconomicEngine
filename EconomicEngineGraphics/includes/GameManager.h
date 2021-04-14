@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <any>
+
 #include "Singleton.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -18,7 +20,7 @@ friend class Singleton<GameManager>;
 	
 public:
     ~GameManager() override;
-    void Exec();
+    void exec();
 
 private:
     GameManager();
@@ -28,10 +30,10 @@ private:
     void Render();
 
     void quit();
-	
+
+	void guiCloseSignalCallback(std::any lhs);
 	void notify(Observable* sender) override;
 
-	class EconomicEngineDebugGui** debugGUI;
 	std::unique_ptr<std::thread> economicEngineThread;
     std::unique_ptr<std::thread> debugGUIThread;
 	
@@ -40,7 +42,9 @@ private:
 
     std::list<std::shared_ptr<Actor>> actors;
 	Grid grid;
-    
+
+	bool economicEngineInitialized;
+    bool isGuiOpened;
 };
 
 #endif // GAME_H

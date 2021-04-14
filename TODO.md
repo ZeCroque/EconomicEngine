@@ -7,6 +7,7 @@
 - enlever les références des singletons dans nos objets et remplacer les accès par waitForLock(Singleton<T>* singleton) **croque**
 
 ### Economic:
+- add economic engine.cpp
 - time rate pour cycle journalier
 - temps travail relatif à durée cycle journalier
 - trader décorellés de tick de la bourse et suivant logique tour par tour (boulot/vente)
