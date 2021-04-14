@@ -56,6 +56,11 @@ EconomicEngineDebugGui::~EconomicEngineDebugGui()
 	turnManager = nullptr;
 }
 
+const Signal<std::any>& EconomicEngineDebugGui::getCloseSignal() const
+{
+	return closeSignal;
+}
+
 void EconomicEngineDebugGui::notify(Observable* sender)
 {
 	nextTurn();
@@ -371,13 +376,11 @@ void EconomicEngineDebugGui::updateUiSlot()
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
 
-	turnManager->stop();
-	economicEngineThread.join();
-
-}
-
-void EconomicEngineDebugGui::quit() // NOLINT(readability-convert-member-functions-to-static)
-{
+#ifdef STANDALONE_MODE
+	this->turnManager->stop();
+	this->economicEngineThread.join();
+#endif
+	closeSignal(std::any());
 	QApplication::quit();
 
 }

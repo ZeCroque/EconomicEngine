@@ -1,38 +1,25 @@
 #include "GameManager.h"
 
-#include <memory>
+#include <iostream>
 #include "EconomicEngineDebugGUI.h"
 
 const sf::Int32 GameManager::maxFPS = 60;
 
-GameManager::~GameManager() {
-    if (debugGUI) {
-        delete *debugGUI;
-        delete debugGUI;
-    }
-}
+GameManager::~GameManager(){}
 
-void GameManager::Exec() {
+void GameManager::exec()
+{	
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
     sf::Int64 lag = 0;
 
-    const auto deltaTime = sf::seconds(1.f / maxFPS);
-    const auto deltaTimeUs = deltaTime.asMicroseconds();
-    const auto deltaTimeS = deltaTime.asSeconds();
-
-    auto traderManagerInstance = TraderManager::getInstance();
-    std::vector<std::shared_ptr<StaticActor>> newActor;
-    for (const auto &job : traderManagerInstance->getJobList()) {
-        for (int i = 0; i < traderManagerInstance->getDemographyByJob(job.first).first; i++) {
-
-            newActor.emplace_back(std::make_shared<StaticActor>());
-        }
-    }
-//    gridManager.placeWorkshop(0,0,newActor);
-
-    while (window->isOpen()) {
-        const auto currentTimestamp = clock.getElapsedTime().asMicroseconds();
+	const auto deltaTime = sf::seconds(1.f / maxFPS);
+	const auto deltaTimeUs = deltaTime.asMicroseconds();
+	const auto deltaTimeS = deltaTime.asSeconds();
+	
+    while (window->isOpen())
+    {	
+    	const auto currentTimestamp = clock.getElapsedTime().asMicroseconds();
         const auto timeSinceLastFrame = currentTimestamp - previousTimestamp;
         previousTimestamp = currentTimestamp;
         lag += timeSinceLastFrame;
@@ -49,15 +36,20 @@ void GameManager::Exec() {
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
-GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
-                             debugGUI(nullptr) {
-    window->setFramerateLimit(maxFPS);
-    auto *turnManager = EconomicEngine::getInstance();
-    turnManager->addObserver(this);
-    economicEngineThread = std::make_unique<std::thread>([](EconomicEngine *turnManager) -> int {
-        turnManager->init("./Content/Prefabs/");
-        return turnManager->exec(100);
-    }, turnManager);
+GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800,600), "g_windowTitle")), economicEngineInitialized(false), isGuiOpened(false)
+{
+	window->setFramerateLimit(maxFPS);
+	auto* turnManager = EconomicEngine::getInstance();
+	turnManager->addObserver(this);
+	turnManager->getPostInitSignal().connect([this](std::any)
+	{
+		economicEngineInitialized = true;
+	});
+	economicEngineThread.reset(new std::thread([](EconomicEngine* turnManager)-> int
+	{
+		turnManager->init("./Content/Prefabs/");
+		return turnManager->exec(100);
+	}, turnManager));
 }
 
 void GameManager::ProcessInput() {
@@ -68,23 +60,36 @@ void GameManager::ProcessInput() {
         }
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        if (!debugGUIThread) {
-            debugGUI = new EconomicEngineDebugGui *();
-            debugGUIThread = std::make_unique<std::thread>([](EconomicEngineDebugGui **debugGui) -> int {
-                int argc = 0;
-                QApplication a(argc, nullptr);
-
-                *debugGui = new EconomicEngineDebugGui();
-                (*debugGui)->show();
-                return QApplication::exec();
-            }, debugGUI);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		if(!isGuiOpened)
+		{
+			isGuiOpened = true;
+			debugGUIThread.reset(new std::thread([this]()-> int
+			{
+				int argc = 0;
+				QApplication a(argc, nullptr);
+				
+				EconomicEngineDebugGui w;
+				w.getCloseSignal().connect(this, &GameManager::guiCloseSignalCallback);
+				w.show();
+				return QApplication::exec();
+			}));
+			debugGUIThread->detach();
         }
     }
 }
 
-void GameManager::Update(float deltaTime) {
-
+void GameManager::Update(float deltaTime)
+{
+	if(economicEngineInitialized)
+    {
+		auto* traderManager = TraderManager::getInstance();
+    	if(traderManager)
+    	{
+    		//std::cout << traderManager->getJobList().size() << std::endl;
+    	}
+    }
 }
 
 void GameManager::Render() {
@@ -108,13 +113,17 @@ void GameManager::quit() {
     EconomicEngine::getInstance()->stop();
     economicEngineThread->join();
 
-    if (debugGUI) {
-        (*debugGUI)->quit();
-        debugGUIThread->join();
-    }
     window->close();
 }
 
-void GameManager::notify(Observable *sender) {
-    //TODO
+void GameManager::guiCloseSignalCallback(std::any lhs)
+{
+	std::cout << "wsh" << std::endl;
+	isGuiOpened = false;
 }
+
+void GameManager::notify(Observable* sender)
+{
+	//TODO handle economic engine
+}
+ 
