@@ -4,7 +4,6 @@
 ### General
 - wait for thread closing in sfml project by using signal slots **croque**
 - remplacer observer par signal slot **croque**
-- enlever les références des singletons dans nos objets et remplacer les accès par waitForLock(Singleton<T>* singleton) **croque**
 
 ### Economic:
 - add economic engine.cpp
