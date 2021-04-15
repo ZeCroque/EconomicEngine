@@ -15,7 +15,7 @@ bool Grid::isOccupied(int x, int y)
 	return getActorAt(x,y);
 }
 
-std::weak_ptr<StaticActor> Grid::getWeakPtrAt(int x, int y)
+std::weak_ptr<StaticActor>& Grid::getWeakPtrAt(int x, int y)
 {
 	//Note: operator[] auto instantiate if nothing is found
     Chunk& chunk = world[std::pair<int,int>(x & REGION_MAJOR, y & REGION_MAJOR)];

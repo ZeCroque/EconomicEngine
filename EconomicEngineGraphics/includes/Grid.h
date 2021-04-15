@@ -23,7 +23,7 @@ public:
 	bool isOccupied(int x, int y);
 
 private:
-	std::weak_ptr<StaticActor> getWeakPtrAt(int x, int y);
+	std::weak_ptr<StaticActor>& getWeakPtrAt(int x, int y);
 	
 	std::map<std::pair<int, int>, Chunk> world;
 };
