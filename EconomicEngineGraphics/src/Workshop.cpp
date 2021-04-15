@@ -6,7 +6,7 @@
 
 
 size_t Workshop::getJobId() const {
-    return id;
+    return jobId;
 }
 
 Workshop::Workshop(const std::string &name, const std::string &jobName) {
@@ -17,6 +17,11 @@ Workshop::Workshop(const std::string &name, const std::string &jobName) {
 
 bool Workshop::isAvailable() const {
     return id && !getTrader();
+}
+
+size_t Workshop::getId() const
+{
+	return id;
 }
 
 

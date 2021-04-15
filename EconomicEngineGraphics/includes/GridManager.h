@@ -25,6 +25,8 @@ class GridManager {
 public:
     explicit GridManager();
 
+    void init();
+	
     bool canPlaceWorkshop(int x, int y);
 
     void placeWorkshop(int x, int y, std::vector<std::shared_ptr<StaticActor>> &newWorkshops);

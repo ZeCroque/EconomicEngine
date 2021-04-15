@@ -40,6 +40,7 @@ void GameManager::init(const char* prefabsPath)
 		initMovableTraders(parsedMovableTraders);
 		initWorkshops(parsedWorkshops);
 		initThreads(prefabsPath);
+		gridManager.init();
 }
 
 void GameManager::exec() {
@@ -173,7 +174,7 @@ void GameManager::update(float deltaTime) {
             if (availableWorkshop) {
                 availableWorkshop->setTrader(trader);
             } else {
-            	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(trader->getJobId()));
+            	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(workshopFactory.getIdByJobId(trader->getJobId())));
                 workshop->setTrader(trader);
                 workshops.emplace_back(workshop);
                 workshopToPlace.emplace_back(workshop);

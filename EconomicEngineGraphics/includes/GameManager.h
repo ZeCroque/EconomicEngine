@@ -14,11 +14,11 @@
 #include "AbstractFactory.h"
 #include "Observer.h"
 #include "GridManager.h"
+#include "WorkshopFactory.h"
 
 class Workshop;
 class MovableTrader;
 
-using WorkshopFactory = AbstractFactory<size_t, Workshop>;
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 
 class GameManager : public Singleton<GameManager>, public IObserver {

@@ -1,5 +1,6 @@
 {
     "type" : "Workshop",
+    "name": "HunterWorkshop",
     "job" : "Hunter",
     "texturePath" : "Content/Textures/Traders/TX_HunterWorkshop.jpg"
 }

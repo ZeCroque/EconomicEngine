@@ -1,5 +1,6 @@
 {
-  "type": "Market",
-  "job": null,
+  "type": "Workshop",
+  "name": "Market",
+  "job": "Thief",
   "texturePath": "Content/Textures/Traders/TX_Market.jpg"
 }

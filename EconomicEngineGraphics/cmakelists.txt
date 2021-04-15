@@ -33,6 +33,7 @@ set(HEADERS
 	${HEADER_DIR}/GridManager.h
 	${HEADER_DIR}/WorkShop.h
 	${HEADER_DIR}/MovableTrader.h
+    ${HEADER_DIR}/WorkshopFactory.h
 )
 
 set(SOURCES
@@ -44,6 +45,7 @@ set(SOURCES
 	${SOURCE_DIR}/MovableTrader.cpp
 	${SOURCE_DIR}/MovableActor.cpp
     ${SOURCE_DIR}/StaticActor.cpp
+    ${SOURCE_DIR}/WorkshopFactory.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})

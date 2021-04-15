@@ -10,9 +10,13 @@
 #include "Workshop.h"
 
 GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), maxCoordinate(0, 0) {
-    const std::hash<std::string> hash;
-    auto market = std::shared_ptr<Workshop>(
-            GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
+
+}
+
+void GridManager::init()
+{
+	const std::hash<std::string> hash;
+	auto market = std::shared_ptr<Workshop>( GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
     grid.setActorAt(market, 0, 0);
 }
 

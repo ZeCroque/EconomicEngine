@@ -1,5 +1,6 @@
 {
     "type" : "Workshop",
+    "name": "Sawmill",
     "job" : "Lumberjack",
     "texturePath" : "Content/Textures/Traders/TX_Sawmill.jpg"
 }

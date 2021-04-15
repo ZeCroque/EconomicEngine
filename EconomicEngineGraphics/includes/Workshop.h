@@ -18,6 +18,8 @@ public:
 	
     bool isAvailable() const;
 
+    size_t getId() const;
+	
     size_t getJobId() const;
 
     MovableTrader *getTrader() const;
