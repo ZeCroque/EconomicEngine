@@ -4,7 +4,7 @@
 
 #include "MovableTrader.h"
 
-MovableTrader::MovableTrader(std::string jobName)
+MovableTrader::MovableTrader(const std::string& jobName)
 {
 	std::hash<std::string> hasher;
 	jobId = hasher(jobName);

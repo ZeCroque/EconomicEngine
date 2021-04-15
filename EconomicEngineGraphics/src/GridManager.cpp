@@ -7,10 +7,13 @@
 #include <vector>
 #include <fstream>
 #include <GameManager.h>
+#include "Workshop.h"
 
 GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), maxCoordinate(0, 0) {
-    GameManager::getInstance();
-    grid.setActorAt(, 0, 0)
+    const std::hash<std::string> hash;
+    auto market = std::shared_ptr<Workshop>(
+            GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
+    grid.setActorAt(market, 0, 0);
 }
 
 int getRandomInt(int min = 0, int max = 1) {

@@ -117,12 +117,11 @@ void GameManager::initMovableTraders(std::vector<nlohmann::json>& parsedMovableT
 
 void GameManager::initWorkshops(std::vector<nlohmann::json>& parsedWorkshops)
 {
-	const std::hash<std::string> hasher;
+	const std::hash<std::string> hash;
 	for(const auto& parsedWorkshop : parsedWorkshops)
 	{
-		auto hash = parsedWorkshop["job"];
-		auto* workshop = new Workshop(parsedWorkshop["job"]);
-		workshopFactory.registerObject(hasher(parsedWorkshop["job"]), workshop);
+		auto* workshop = new Workshop(parsedWorkshop["name"],parsedWorkshop["job"]);
+		workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
 	}
 }
 

@@ -19,6 +19,7 @@ class GridManager {
     std::pair<int,int> minCoordinate;
     std::pair<int,int> maxCoordinate;
 
+
     void updateBound(int x,int y);
 
 public:

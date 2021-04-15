@@ -14,7 +14,7 @@ class MovableTrader;
 class Workshop : public StaticActor {
 
 public:
-    Workshop(std::string jobName);
+    Workshop(const std::string& name,const std::string& jobName);
 	
     bool isAvailable() const;
 
@@ -28,6 +28,7 @@ public:
 
 private:
     std::weak_ptr<MovableTrader> trader;
+    size_t id;
     size_t jobId;
 
 };
