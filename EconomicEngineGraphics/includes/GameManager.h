@@ -18,6 +18,9 @@
 class Workshop;
 class MovableTrader;
 
+using WorkshopFactory = AbstractFactory<size_t, Workshop>;
+using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
+
 class GameManager : public Singleton<GameManager>, public IObserver {
 
     friend class Singleton<GameManager>;
@@ -28,6 +31,11 @@ public:
     void init(const char* prefabsPath);
 	
     void exec();
+
+	const WorkshopFactory& getWorkshopFactory() const;
+
+	const MovableTraderFactory& getMovableTraderFactory() const;
+	
 
 private:
     GameManager();
@@ -63,8 +71,8 @@ private:
     bool economicEngineInitialized;
     bool isGuiOpened;
 
-    AbstractFactory<size_t, MovableTrader> movableTraderFactory;
-	AbstractFactory<size_t, Workshop> workshopFactory;
+	MovableTraderFactory movableTraderFactory;
+	WorkshopFactory workshopFactory;
 	
     std::queue<MovableTrader*> pendingTraders;
     std::vector<std::shared_ptr<MovableTrader>> traders;
