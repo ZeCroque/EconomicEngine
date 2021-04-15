@@ -69,6 +69,15 @@ void GameManager::exec() {
     }
 }
 
+const WorkshopFactory& GameManager::getWorkshopFactory() const
+{
+	return workshopFactory;
+}
+
+const MovableTraderFactory& GameManager::getMovableTraderFactory() const
+{
+	return movableTraderFactory;
+}
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
                              economicEngineInitialized(false), isGuiOpened(false) {
