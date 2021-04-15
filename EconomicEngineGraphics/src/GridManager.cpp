@@ -5,9 +5,12 @@
 #include "GridManager.h"
 #include <random>
 #include <vector>
+#include <fstream>
+#include <GameManager.h>
 
-GridManager::GridManager() : minRange(3), parcourStep(10) {
-
+GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), maxCoordinate(0, 0) {
+    GameManager::getInstance();
+    grid.setActorAt(, 0, 0)
 }
 
 int getRandomInt(int min = 0, int max = 1) {
@@ -22,7 +25,7 @@ bool GridManager::canPlaceWorkshop(int x, int y) {
 
     for (int i = x - minRange / 2; i < x + minRange / 2; i++) {
         for (int j = y - minRange / 2; j < y + minRange / 2; j++) {
-            if (grid.isOccupied(x, y)) {
+            if (grid.isOccupied(i, j)) {
                 return false;
             }
         }
@@ -40,7 +43,8 @@ void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<Static
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
                 if (canPlaceWorkshop(x, y)) {
-                    grid.setActorAt(newWorkshops.at(c), x, y);
+                    grid.setActorAt(newWorkshops[c], x, y);
+                    updateBound(x, y);
                     c++;
                     if (c >= newWorkshops.size()) {
                         return;
@@ -66,4 +70,28 @@ void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<Static
         }
         s = s + parcourStep;
     }
+}
+
+void GridManager::updateBound(int x, int y) {
+    if (x < minCoordinate.first) minCoordinate.first = x;
+    if (y < minCoordinate.second) minCoordinate.second = y;
+    if (x > maxCoordinate.first) maxCoordinate.first = x;
+    if (y > maxCoordinate.second) maxCoordinate.second = y;
+}
+
+void GridManager::makeDebugFile() {
+    std::ofstream file;
+    file.open("../result.txt");
+
+    for (int i = minCoordinate.first - 1; i < maxCoordinate.first; ++i) {
+        for (int j = minCoordinate.second - 1; j < maxCoordinate.second; ++j) {
+            if (grid.isOccupied(i, j)) {
+                file << 1 << "\t";
+            } else {
+                file << 0 << "\t";
+            }
+        }
+        file << std::endl;
+    }
+    file.close();
 }

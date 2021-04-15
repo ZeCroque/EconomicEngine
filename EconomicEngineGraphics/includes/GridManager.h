@@ -16,12 +16,19 @@ class GridManager {
     int minRange;
     int parcourStep;
 
+    std::pair<int,int> minCoordinate;
+    std::pair<int,int> maxCoordinate;
+
+    void updateBound(int x,int y);
+
 public:
     explicit GridManager();
 
     bool canPlaceWorkshop(int x, int y);
 
     void placeWorkshop(int x, int y, std::vector<std::shared_ptr<StaticActor>> &newWorkshops);
+
+    void makeDebugFile();
 };
 
 

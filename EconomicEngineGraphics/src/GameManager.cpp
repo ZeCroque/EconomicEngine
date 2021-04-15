@@ -1,6 +1,5 @@
 #include "GameManager.h"
 
-#include <iostream>
 #include <memory>
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
@@ -176,8 +175,8 @@ void GameManager::update(float deltaTime) {
 
         if (!workshopToPlace.empty()) {
             gridManager.placeWorkshop(0, 0, workshopToPlace);
+            gridManager.makeDebugFile();
         }
-
     }
 }
 
