@@ -11,25 +11,25 @@
 
 
 class GridManager {
-
-    Grid grid;
     int minRange;
     int parcourStep;
 
-    std::pair<int,int> minCoordinate;
-    std::pair<int,int> maxCoordinate;
+    std::pair<int, int> minCoordinate;
+    std::pair<int, int> maxCoordinate;
 
 
-    void updateBound(int x,int y);
+    void updateBound(int x, int y);
 
 public:
+    Grid grid;
+
     explicit GridManager();
 
     void init();
-	
+
     bool canPlaceWorkshop(int x, int y);
 
-    void placeWorkshop(int x, int y, std::vector<std::shared_ptr<StaticActor>> &newWorkshops);
+    void placeWorkshop(int x, int y, std::vector<std::shared_ptr<Workshop>> &newWorkshops);
 
     void makeDebugFile();
 };

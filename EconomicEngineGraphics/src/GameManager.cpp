@@ -4,43 +4,38 @@
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
 #include "Workshop.h"
+#include <iostream>
 
 const sf::Int32 GameManager::maxFPS = 60;
 
 GameManager::~GameManager() = default;
 
-void GameManager::init(const char* prefabsPath)
-{
-		assert(std::filesystem::exists(prefabsPath) && std::filesystem::is_directory(prefabsPath));
+void GameManager::init(const char *prefabsPath) {
+    assert(std::filesystem::exists(prefabsPath) && std::filesystem::is_directory(prefabsPath));
 
-		std::vector<nlohmann::json> parsedMovableTraders;
-		std::vector<nlohmann::json> parsedWorkshops;
-		
-		std::ifstream fileStream;
-		for (const auto& entry : std::filesystem::recursive_directory_iterator(prefabsPath))
-		{
-			if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ".json")
-			{
-				nlohmann::json parsedJson;
-				
-				fileStream.open (entry.path());
-				fileStream >> parsedJson;
-			    fileStream.close();
+    std::vector<nlohmann::json> parsedMovableTraders;
+    std::vector<nlohmann::json> parsedWorkshops;
 
-				if(parsedJson["type"] == "MovableTrader")
-				{
-					parsedMovableTraders.push_back(parsedJson);
-				}
-				else if(parsedJson["type"] == "Workshop")
-				{
-					parsedWorkshops.push_back(parsedJson);
-				}
-			}
-		}
-		initMovableTraders(parsedMovableTraders);
-		initWorkshops(parsedWorkshops);
-		initThreads(prefabsPath);
-		gridManager.init();
+    std::ifstream fileStream;
+    for (const auto &entry : std::filesystem::recursive_directory_iterator(prefabsPath)) {
+        if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ".json") {
+            nlohmann::json parsedJson;
+
+            fileStream.open(entry.path());
+            fileStream >> parsedJson;
+            fileStream.close();
+
+            if (parsedJson["type"] == "MovableTrader") {
+                parsedMovableTraders.push_back(parsedJson);
+            } else if (parsedJson["type"] == "Workshop") {
+                parsedWorkshops.push_back(parsedJson);
+            }
+        }
+    }
+    initMovableTraders(parsedMovableTraders);
+    initWorkshops(parsedWorkshops);
+    initThreads(prefabsPath);
+    gridManager.init();
 }
 
 void GameManager::exec() {
@@ -69,24 +64,22 @@ void GameManager::exec() {
     }
 }
 
-const WorkshopFactory& GameManager::getWorkshopFactory() const
-{
-	return workshopFactory;
+const WorkshopFactory &GameManager::getWorkshopFactory() const {
+    return workshopFactory;
 }
 
-const MovableTraderFactory& GameManager::getMovableTraderFactory() const
-{
-	return movableTraderFactory;
+const MovableTraderFactory &GameManager::getMovableTraderFactory() const {
+    return movableTraderFactory;
 }
+
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
                              economicEngineInitialized(false), isGuiOpened(false) {
-	window->setFramerateLimit(maxFPS);
+    window->setFramerateLimit(maxFPS);
 }
 
-void GameManager::initThreads(const char* prefabsPath)
-{
-	auto *turnManager = EconomicEngine::getInstance();
+void GameManager::initThreads(const char *prefabsPath) {
+    auto *turnManager = EconomicEngine::getInstance();
     turnManager->addObserver(this);
     turnManager->getPostInitSignal().connect([this](const std::any &) {
         economicEngineInitialized = true;
@@ -97,7 +90,7 @@ void GameManager::initThreads(const char* prefabsPath)
         return turnManager->exec(100);
     });
 
-	
+
     auto *traderManager = TraderManager::getInstance();
     traderManager->getAddTraderSignal().connect([this](Trader *trader) {
         auto *movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());  //TODO: Connect
@@ -105,25 +98,21 @@ void GameManager::initThreads(const char* prefabsPath)
     });
 }
 
-void GameManager::initMovableTraders(std::vector<nlohmann::json>& parsedMovableTraders)
-{
-	const std::hash<std::string> hasher;
-	for(const auto& parsedMovableTrader : parsedMovableTraders)
-	{
-		auto hash = parsedMovableTrader["job"];
-		auto* movableTrader = new MovableTrader(parsedMovableTrader["job"]);
-		movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
-	}
+void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders) {
+    const std::hash<std::string> hasher;
+    for (const auto &parsedMovableTrader : parsedMovableTraders) {
+        auto hash = parsedMovableTrader["job"];
+        auto *movableTrader = new MovableTrader(parsedMovableTrader["job"]);
+        movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
+    }
 }
 
-void GameManager::initWorkshops(std::vector<nlohmann::json>& parsedWorkshops)
-{
-	const std::hash<std::string> hash;
-	for(const auto& parsedWorkshop : parsedWorkshops)
-	{
-		auto* workshop = new Workshop(parsedWorkshop["name"],parsedWorkshop["job"]);
-		workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
-	}
+void GameManager::initWorkshops(std::vector<nlohmann::json> &parsedWorkshops) {
+    const std::hash<std::string> hash;
+    for (const auto &parsedWorkshop : parsedWorkshops) {
+        auto *workshop = new Workshop(parsedWorkshop["name"], parsedWorkshop["job"]);
+        workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
+    }
 }
 
 void GameManager::processInput() {
@@ -164,7 +153,7 @@ void GameManager::update(float deltaTime) {
 
     if (economicEngineInitialized) {
 
-        std::vector<std::shared_ptr<StaticActor>> workshopToPlace;
+        std::vector<std::shared_ptr<Workshop>> workshopToPlace;
 
         while (!pendingTraders.empty()) {
             auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
@@ -174,7 +163,8 @@ void GameManager::update(float deltaTime) {
             if (availableWorkshop) {
                 availableWorkshop->setTrader(trader);
             } else {
-            	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(workshopFactory.getIdByJobId(trader->getJobId())));
+                auto workshop = std::shared_ptr<Workshop>(
+                        workshopFactory.createObject(workshopFactory.getIdByJobId(trader->getJobId())));
                 workshop->setTrader(trader);
                 workshops.emplace_back(workshop);
                 workshopToPlace.emplace_back(workshop);
@@ -189,8 +179,7 @@ void GameManager::update(float deltaTime) {
     }
 }
 
-void GameManager::render() const
-{
+void GameManager::render() const {
     window->clear();
 
     sf::CircleShape shape(100.f);
@@ -207,8 +196,7 @@ void GameManager::render() const
     window->display();
 }
 
-void GameManager::quit() const
-{
+void GameManager::quit() const {
     EconomicEngine::getInstance()->stop();
     economicEngineThread->join();
 

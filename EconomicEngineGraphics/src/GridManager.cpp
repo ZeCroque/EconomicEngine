@@ -8,15 +8,16 @@
 #include <fstream>
 #include <GameManager.h>
 #include "Workshop.h"
+#include <iostream>
 
 GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), maxCoordinate(0, 0) {
 
 }
 
-void GridManager::init()
-{
-	const std::hash<std::string> hash;
-	auto market = std::shared_ptr<Workshop>( GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
+void GridManager::init() {
+    const std::hash<std::string> hash;
+    auto market = std::shared_ptr<Workshop>(
+            GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
     grid.setActorAt(market, 0, 0);
 }
 
@@ -40,7 +41,7 @@ bool GridManager::canPlaceWorkshop(int x, int y) {
     return true;
 }
 
-void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<StaticActor>> &newWorkshops) {
+void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<Workshop>> &newWorkshops) {
     int d = getRandomInt(0, 4); // current direction; 0=RIGHT, 1=DOWN, 2=LEFT, 3=UP
     int s = 1; // chain size
     int c = 0;
