@@ -32,10 +32,9 @@ public:
 	
     void exec();
 
-	const WorkshopFactory& getWorkshopFactory() const;
-
-	const MovableTraderFactory& getMovableTraderFactory() const;
+	std::shared_ptr<Workshop> addWorkshop(const std::string& name) const;
 	
+	std::shared_ptr<MovableTrader> addMovableTrader(const std::string& name) const;
 
 private:
     GameManager();
@@ -75,8 +74,8 @@ private:
 	WorkshopFactory workshopFactory;
 	
     std::queue<MovableTrader*> pendingTraders;
-    std::vector<std::shared_ptr<MovableTrader>> traders;
-    std::vector<std::shared_ptr<Workshop>> workshops;
+    mutable std::vector<std::shared_ptr<MovableTrader>> traders;
+    mutable std::vector<std::shared_ptr<Workshop>> workshops;
 
 
 };

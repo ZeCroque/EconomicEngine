@@ -69,14 +69,20 @@ void GameManager::exec() {
     }
 }
 
-const WorkshopFactory& GameManager::getWorkshopFactory() const
+std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string& name) const
 {
-	return workshopFactory;
+	const std::hash<std::string> hash;
+	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(hash(name)));
+	workshops.push_back(workshop);
+	return workshop;
 }
 
-const MovableTraderFactory& GameManager::getMovableTraderFactory() const
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string& name) const
 {
-	return movableTraderFactory;
+	const std::hash<std::string> hash;
+	auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(hash(name)));
+	traders.push_back(movableTrader);
+	return movableTrader;
 }
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
