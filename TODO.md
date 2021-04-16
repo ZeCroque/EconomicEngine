@@ -1,8 +1,4 @@
-### DesignPattern
-- add signal slot **(croque)**
-
 ### General
-- wait for thread closing in sfml project by using signal slots **croque**
 - remplacer observer par signal slot **croque**
 
 ### Economic:
@@ -32,7 +28,7 @@
 
 
 ### Polish :
-- énérer hdv intervalle régulier **vincent**
+- générer hdv intervalle régulier **vincent**
 - cycle jour nuit et tâche dodo
 - remplacer tour par tour traders par algo meilleur choix **maxence**
 - hint au dessus workshop **maxence**
