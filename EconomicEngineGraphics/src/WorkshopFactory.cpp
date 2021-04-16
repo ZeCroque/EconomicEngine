@@ -2,7 +2,7 @@
 
 #include "Workshop.h"
 
-size_t WorkshopFactory::getIdByJobId(size_t jobId)
+size_t WorkshopFactory::getIdByJobId(size_t jobId) const
 {
 	const auto& keys = getKeys();
 	for(const auto& key : keys)

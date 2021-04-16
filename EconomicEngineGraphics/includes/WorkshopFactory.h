@@ -9,7 +9,7 @@ class WorkshopFactory : public AbstractFactory<size_t, Workshop>
     friend class AbstractFactory<size_t, Workshop>;
 
 public:
-    size_t getIdByJobId(size_t jobId);
+    size_t getIdByJobId(size_t jobId) const;
 };
 
 #endif //WORKSHOP_FACTORY
