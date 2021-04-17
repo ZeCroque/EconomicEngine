@@ -64,12 +64,20 @@ void GameManager::exec() {
     }
 }
 
-const WorkshopFactory &GameManager::getWorkshopFactory() const {
-    return workshopFactory;
+std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string& name) const
+{
+	const std::hash<std::string> hash;
+	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(hash(name)));
+	workshops.push_back(workshop);
+	return workshop;
 }
 
-const MovableTraderFactory &GameManager::getMovableTraderFactory() const {
-    return movableTraderFactory;
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string& name) const
+{
+	const std::hash<std::string> hash;
+	auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(hash(name)));
+	traders.push_back(movableTrader);
+	return movableTrader;
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
@@ -157,6 +165,7 @@ void GameManager::update(float deltaTime) {
 
         while (!pendingTraders.empty()) {
             auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
+            pendingTraders.pop();
             traders.push_back(trader);
 
             auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
@@ -169,7 +178,6 @@ void GameManager::update(float deltaTime) {
                 workshops.emplace_back(workshop);
                 workshopToPlace.emplace_back(workshop);
             }
-            pendingTraders.pop();
         }
 
         if (!workshopToPlace.empty()) {

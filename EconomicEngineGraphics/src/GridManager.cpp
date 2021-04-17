@@ -14,11 +14,10 @@ GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), 
 
 }
 
-void GridManager::init() {
-    const std::hash<std::string> hash;
-    auto market = std::shared_ptr<Workshop>(
-            GameManager::getInstance()->getWorkshopFactory().createObject(hash(std::string("Market"))));
-    grid.setActorAt(market, 0, 0);
+
+void GridManager::init()
+{
+	grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
 }
 
 int getRandomInt(int min = 0, int max = 1) {
