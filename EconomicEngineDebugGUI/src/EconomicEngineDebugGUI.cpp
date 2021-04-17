@@ -7,8 +7,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {	
 	turnManager = EconomicEngine::getInstance();
-	turnManager->addObserver(this);
-
+	turnManager->getAsksResolvedSignal().connect(this, &EconomicEngineDebugGui::nextTurn);
 
 	traderManager = TraderManager::getInstance();
 
@@ -54,11 +53,6 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 EconomicEngineDebugGui::~EconomicEngineDebugGui()
 {
 	turnManager = nullptr;
-}
-
-void EconomicEngineDebugGui::notify(Observable* sender)
-{
-	nextTurn();
 }
 
 void EconomicEngineDebugGui::setGraphVisibility()

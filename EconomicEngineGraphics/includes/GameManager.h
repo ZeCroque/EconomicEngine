@@ -8,7 +8,6 @@
 #include <nlohmann/json_fwd.hpp>
 
 #include "AbstractFactory.h"
-#include "Observer.h"
 #include "GridManager.h"
 #include "Signal.h"
 #include "WorkshopFactory.h"
@@ -18,7 +17,7 @@ class MovableTrader;
 
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 
-class GameManager : public Singleton<GameManager>, public IObserver
+class GameManager : public Singleton<GameManager>
 {
     friend class Singleton<GameManager>;
 
@@ -55,12 +54,9 @@ private:
 	
 //SLOTS
 //=======
-public:
-	void notify(Observable *sender) override; //TODO remove
-
 private:
 	void traderAddedCallback(class Trader* trader);
-
+	void askResolvedCallback();
 	
 //GAMEPLAY
 //========

@@ -1,20 +1,18 @@
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
 #include "Clonable.h"
-#include "Observer.h"
 
 class Tradable;
-class Trader;
 
-class Behavior : public Clonable<Behavior>, public IObserver
+class Behavior : public Clonable<Behavior>
 {
 protected:
-	Tradable* item;
-	Trader* owner;
+	class Uncountable* owningTool;
 	size_t typeId;
 public:
 	Behavior();
-	virtual void init(Trader* owner, Tradable* item) = 0;
+	virtual ~Behavior() = default;
+	virtual void init(Uncountable* owner) = 0;
 	[[nodiscard]] size_t getId() const;
 
 };

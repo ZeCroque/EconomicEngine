@@ -8,7 +8,7 @@
 #include "Signal.h"
 #include "ui_EconomicEngineDebugGUI.h"
 
-class EconomicEngineDebugGui final : public QMainWindow, public IObserver
+class EconomicEngineDebugGui final : public QMainWindow
 {
 Q_OBJECT
 
@@ -16,7 +16,6 @@ public:
 	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui();
 
-	void notify(Observable* sender) override;
 	void closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:

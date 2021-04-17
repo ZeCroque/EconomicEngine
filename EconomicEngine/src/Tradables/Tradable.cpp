@@ -1,20 +1,30 @@
 #include "Tradables/Tradable.h"
 
-Tradable::Tradable() : id(0){}
+#include "Traders/Trader.h"
 
-Tradable::Tradable(std::string name, std::pair<float, float> defaultPriceBelief)
+Tradable::Tradable() : id(0), owningTrader(nullptr){}
+
+Tradable::Tradable(std::string newName, std::pair<float, float> newDefaultPriceBelief) : name(std::move(newName)), defaultPriceBelief(std::move(newDefaultPriceBelief)), owningTrader(nullptr)
 {
 	const std::hash<std::string> hasher;
-	this->name = name;
-	this->id = hasher(this->name);
-	this->defaultPriceBelief = defaultPriceBelief;
+	id = hasher(this->name);
 }
 
 Tradable::Tradable(const Tradable& tradable) : Tradable()
 {
-	this->id = tradable.id;
-	this->name = std::string(tradable.name);
-	this->defaultPriceBelief = std::pair<float, float>(tradable.defaultPriceBelief);
+	id = tradable.id;
+	name = std::string(tradable.name);
+	defaultPriceBelief = std::pair<float, float>(tradable.defaultPriceBelief);
+}
+
+void Tradable::setOwner(Trader* newOwningTrader)
+{
+	owningTrader = newOwningTrader;
+}
+
+void Tradable::removeFromOwnerInventory()
+{
+	owningTrader->removeFromInventory(this);
 }
 
 std::string Tradable::getName() const
@@ -22,13 +32,18 @@ std::string Tradable::getName() const
 	return name;
 }
 
+Trader* Tradable::getOwningTrader() const
+{
+	return owningTrader;
+}
+
 size_t Tradable::getId() const
 {
-	return this->id;
+	return id;
 }
 
 
-std::pair<float, float> Tradable::getDefaultPriceBelief() const
+const std::pair<float, float>& Tradable::getDefaultPriceBelief() const
 {
-	return this->defaultPriceBelief;
+	return defaultPriceBelief;
 }

@@ -1,6 +1,10 @@
 #include "GameManager.h"
 
 #include <memory>
+#include <filesystem>
+#include <fstream>
+
+
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
 #include "Workshop.h"
@@ -81,7 +85,7 @@ void GameManager::initEconomicEngine(const char* prefabsPath)
     economicEngineThread = std::make_unique<std::thread>([this, prefabsPath]() -> int 
     {
     	auto* economicEngine = EconomicEngine::getInstance();
-	    economicEngine->addObserver(this);
+	    economicEngine->getPostInitSignal().connect(this, &GameManager::askResolvedCallback);
 	    economicEngine->getPostInitSignal().connect([this]() 
         {
 	        isInitialized = true;
@@ -149,7 +153,6 @@ void GameManager::processInput()
             			
             			isGuiOpened = false;
             			while(!isGuiOpened && isRunning);
-            			EconomicEngine::getInstance()->removeObserver(&debugGui);
 	                } while(isRunning);
             		
 					return result;
@@ -214,6 +217,9 @@ void GameManager::render() const
 void GameManager::quit()
 {
 	isRunning = false;
+
+    EconomicEngine::getInstance()->stop();
+    economicEngineThread->join();
 	
     if(debugGuiThread)
     {
@@ -224,21 +230,18 @@ void GameManager::quit()
 	    debugGuiThread->join();
     }
 	
-    EconomicEngine::getInstance()->stop();
-    economicEngineThread->join();
-	
     window->close();
-}
-
-void GameManager::notify(Observable *sender)
-{
-    //TODO replace by signal slot
 }
 
 void GameManager::traderAddedCallback(Trader* trader)
 {
     auto* movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());  //TODO Connect to trader
     pendingTraders.push(movableTrader);
+}
+
+void GameManager::askResolvedCallback()
+{
+	
 }
 
 std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const

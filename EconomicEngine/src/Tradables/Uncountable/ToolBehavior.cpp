@@ -1,29 +1,22 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
-#include "Traders/Trader.h"
+
+#include "Tradables/Uncountable/Uncountable.h"
 
 ToolBehavior::ToolBehavior() : Behavior(), craftRateBoost(0.0f), degradationRate(0.0f), durability(1.0f){}
 
-ToolBehavior::ToolBehavior(const float craftRateBoost, const float degradationRate) : ToolBehavior()
+ToolBehavior::ToolBehavior(const float newCraftRateBoost, const float newDegradationRate) : craftRateBoost(newCraftRateBoost), degradationRate(newDegradationRate), durability(1.0f){}
+
+void ToolBehavior::init(Uncountable* newOwningTool)
 {
-	this->craftRateBoost = craftRateBoost;
-	this->degradationRate = degradationRate;
+	owningTool = newOwningTool;
 }
 
-void ToolBehavior::init(Trader* owner, Tradable* item)
+void ToolBehavior::updateToolDurability()
 {
-	this->owner = owner;
-	this->item = item;
-	this->owner->getCurrentCraft()->addObserver(this);
-	this->owner->getCurrentCraft()->incrementRate(craftRateBoost);
-}
-
-void ToolBehavior::notify(Observable* sender)
-{
-	owner->getCurrentCraft()->removeObserver(this);
 	durability -= degradationRate;
 	if(durability<=0)
 	{
-		owner->removeFromInventory(item);
+		owningTool->removeFromOwnerInventory();
 	}
 }
 
