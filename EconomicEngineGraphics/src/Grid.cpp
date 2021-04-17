@@ -12,7 +12,11 @@ StaticActor* Grid::getActorAt(int x, int y)
 
 bool Grid::isOccupied(int x, int y)
 {
-	return getActorAt(x,y);
+	if(world.contains(std::pair<int, int>(x,y)))
+	{
+		return getActorAt(x,y);
+	}
+	return false;
 }
 
 std::weak_ptr<StaticActor>& Grid::getWeakPtrAt(int x, int y)
