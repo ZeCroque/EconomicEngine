@@ -176,9 +176,8 @@ void GameManager::update(float deltaTime)
                 availableWorkshop->setTrader(trader);
             }
         	else 
-            {
-            	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(workshopFactory.getIdByJobId(trader->getJobId())));
-                workshop->setTrader(trader);
+            {       		
+            	auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
                 workshops.emplace_back(workshop);
                 workshopToPlace.emplace_back(workshop);
             }
@@ -242,20 +241,30 @@ void GameManager::traderAddedCallback(Trader* trader)
     pendingTraders.push(movableTrader);
 }
 
+std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const
+{
+	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(key));
+	workshops.push_back(workshop);
+	return workshop;
+}
+
 std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string& name) const
 {
 	const std::hash<std::string> hash;
-	auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(hash(name)));
-	workshops.push_back(workshop);
-	return workshop;
+	return addWorkshop(hash(name));
+}
+
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(size_t key) const
+{
+	auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(key));
+	traders.push_back(movableTrader);
+	return movableTrader;
 }
 
 std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string& name) const
 {
 	const std::hash<std::string> hash;
-	auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(hash(name)));
-	traders.push_back(movableTrader);
-	return movableTrader;
+	return addMovableTrader(hash(name));
 }
 
 Workshop* GameManager::findAvailableWorkshop(size_t jobId) const

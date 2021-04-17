@@ -65,7 +65,9 @@ private:
 //GAMEPLAY
 //========
 public:
-	std::shared_ptr<Workshop> addWorkshop(const std::string& name) const;	
+	std::shared_ptr<Workshop> addWorkshop(size_t key) const;	
+	std::shared_ptr<Workshop> addWorkshop(const std::string& name) const;
+	std::shared_ptr<MovableTrader> addMovableTrader(size_t key) const;
 	std::shared_ptr<MovableTrader> addMovableTrader(const std::string& name) const;
     Workshop* findAvailableWorkshop(size_t jobId) const;
 

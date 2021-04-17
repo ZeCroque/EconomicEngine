@@ -84,7 +84,7 @@ public:
 		for(const auto& parsedTradable : parsedTradables)
 		{
 			Tradable* tradable = nullptr;
-			std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]);
+			const std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]);
 			
 			if(parsedTradable["type"] == "Countable")
 			{

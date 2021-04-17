@@ -9,14 +9,22 @@ size_t Workshop::getJobId() const {
     return jobId;
 }
 
-Workshop::Workshop(const std::string &name, const std::string &jobName) {
-    std::hash<std::string> hash;
+Workshop::Workshop(const std::string &newName, const std::string &jobName)
+{
+	name = newName;
+	const std::hash<std::string> hash;
     id = hash(name);
     jobId = hash(jobName);
 }
 
-bool Workshop::isAvailable() const {
+bool Workshop::isAvailable() const
+{
     return id && !getTrader();
+}
+
+const std::string& Workshop::getName() const
+{
+	return name;
 }
 
 size_t Workshop::getId() const
@@ -34,7 +42,7 @@ Workshop *Workshop::clone() {
 }
 
 MovableTrader *Workshop::getTrader() const {
-    auto referencedTrader = trader.lock();
+	const auto referencedTrader = trader.lock();
     return referencedTrader.get();
 }
 
