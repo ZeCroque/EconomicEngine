@@ -1,8 +1,4 @@
-### General
-- remplacer observer par signal slot **croque**
-
 ### Economic:
-- add economic engine.cpp
 - time rate pour cycle journalier
 - temps travail relatif à durée cycle journalier
 - trader décorellés de tick de la bourse et suivant logique tour par tour (boulot/vente)
@@ -22,8 +18,8 @@
 - génération bâtiments **vincent**
 
 ### Gui:
-- investiguer et clean les intéractions entre le turnManager et la gui **croque**
 - speed = daycycle speed **croque**
+- investiguer et clean les intéractions entre le turnManager et la gui **croque**
 - *virer step-by-step & step*
 
 
