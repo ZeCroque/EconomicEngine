@@ -1,15 +1,16 @@
 #include "StockExchange/StockExchange.h"
-#include "Tradables/TradableManager.h"
 #include <algorithm>
+
+#include "EconomicEngine.h"
 
 StockExchange::StockExchange() : turnCount(0) {}
 
 void StockExchange::init()
 {
-	this->keys = std::vector<size_t>(TradableManager::getInstance()->getKeys());
-	this->currentBuyingAsks = VectorArray<BuyingAsk>(this->keys);
-	this->currentSellingAsks = VectorArray<SellingAsk>(this->keys);
-	this->betterAsks = VectorArray<BuyingAsk>(this->keys);
+	keys = std::vector<size_t>(EconomicEngine::getInstance()->getTradableFactory().getKeys());
+	currentBuyingAsks = VectorArray<BuyingAsk>(keys);
+	currentSellingAsks = VectorArray<SellingAsk>(keys);
+	betterAsks = VectorArray<BuyingAsk>(keys);
 	for (auto key : keys)
 	{
 		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
@@ -32,7 +33,7 @@ void StockExchange::registerAsk(std::shared_ptr<SellingAsk> sellingAsk)
 
 void StockExchange::resolveOffers()
 {
-	for (auto key : this->keys)
+	for (auto key : keys)
 	{
 		auto& buyingAsks = currentBuyingAsks[key];
 		auto& sellingAsks = currentSellingAsks[key];
@@ -101,13 +102,13 @@ void StockExchange::reset()
 		betterAsks[key].clear();
 		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
 	}
-
+	//TODO remove turncount
 	turnCount = 0;
 }
 
 void StockExchange::incrementTurnCount()
 {
-	++this->turnCount;
+	++turnCount;
 }
 
 float StockExchange::getStockExchangePrice(const size_t key) const
