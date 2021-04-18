@@ -192,7 +192,7 @@ void GameManager::update(float deltaTime)
         {
             gridManager.placeWorkshop(0, 0, workshopToPlace);
             gridManager.makeDebugFile();
-        	NavigationSystem::drawPath(gridManager.grid, std::pair(workshopToPlace[0]->x, workshopToPlace[0]->y), std::pair(0,0));
+        	//NavigationSystem::drawPath(gridManager.grid, std::pair(workshopToPlace[0]->x, workshopToPlace[0]->y), std::pair(0,0));
         }
     }
 }
