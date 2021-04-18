@@ -7,6 +7,7 @@
 
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
+#include "NavigationSystem.h"
 #include "Workshop.h"
 
 const sf::Int32 GameManager::maxFPS = 60;
@@ -191,6 +192,7 @@ void GameManager::update(float deltaTime)
         {
             gridManager.placeWorkshop(0, 0, workshopToPlace);
             gridManager.makeDebugFile();
+        	NavigationSystem::drawPath(gridManager.grid, std::pair(workshopToPlace[0]->x, workshopToPlace[0]->y), std::pair(0,0));
         }
     }
 }

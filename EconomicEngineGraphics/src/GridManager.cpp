@@ -9,7 +9,7 @@
 #include <GameManager.h>
 #include "Workshop.h"
 
-GridManager::GridManager() : minRange(10), parcourStep(3), minCoordinate(0, 0), maxCoordinate(0, 0) {
+GridManager::GridManager() : minRange(10), parcourStep(3) {
 
 }
 
@@ -49,7 +49,7 @@ void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<Static
             for (int i = 0; i < s; i += parcourStep) {
                 if (canPlaceWorkshop(x, y)) {
                     grid.setActorAt(newWorkshops[c], x, y);
-                    updateBound(x, y);
+                    grid.updateBound(x, y);
                     c++;
                     if (c >= newWorkshops.size()) {
                         return;
@@ -77,19 +77,12 @@ void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<Static
     }
 }
 
-void GridManager::updateBound(int x, int y) {
-    if (x < minCoordinate.first) minCoordinate.first = x;
-    if (y < minCoordinate.second) minCoordinate.second = y;
-    if (x > maxCoordinate.first) maxCoordinate.first = x;
-    if (y > maxCoordinate.second) maxCoordinate.second = y;
-}
-
 void GridManager::makeDebugFile() {
     std::ofstream file;
     file.open("../result.txt");
 
-    for (int i = minCoordinate.first - 1; i < maxCoordinate.first; ++i) {
-        for (int j = minCoordinate.second - 1; j < maxCoordinate.second; ++j) {
+    for (int i = grid.getMinCoordinate().first - 1; i < grid.getMaxCoordinate().first; ++i) {
+        for (int j = grid.getMinCoordinate().second - 1; j < grid.getMaxCoordinate().second; ++j) {
             if (grid.isOccupied(i, j)) {
                 file << 1 << "\t";
             } else {

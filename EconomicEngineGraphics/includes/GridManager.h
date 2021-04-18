@@ -11,16 +11,10 @@
 
 
 class GridManager {
-
+    friend class GameManager;	// Debug
     Grid grid;
     int minRange;
     int parcourStep;
-
-    std::pair<int,int> minCoordinate;
-    std::pair<int,int> maxCoordinate;
-
-
-    void updateBound(int x,int y);
 
 public:
     explicit GridManager();
