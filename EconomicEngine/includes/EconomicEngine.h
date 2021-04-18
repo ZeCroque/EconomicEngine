@@ -3,11 +3,9 @@
 
 #include "Singleton.h"
 #include "nlohmann/json.hpp"
-#include <mutex>
-
 #include "Signal.h"
 #include "StockExchange/StockExchange.h"
-#include "Tradables/TradableManager.h"
+#include "Tradables/TradableFactory.h"
 #include "Traders/TraderManager.h"
 
 
@@ -17,25 +15,23 @@ friend class Singleton<EconomicEngine>;
 	
 protected:
 	TraderManager* traderManager;
-	TradableManager* tradableManager;
+	mutable TradableFactory tradableFactory;
 	StockExchange* stockExchange;
 
-	EconomicEngine() : traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1) {}
+	EconomicEngine() : traderManager(TraderManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1), elapsedTimeSinceDayStart(0), dayDuration(320.f), baseActionTime(dayDuration / 4.f)  {}
 private:
 	bool bRunning;
 	bool bPaused;
 	int turnSecond;
 	int step;
-	std::condition_variable cv;
-	std::mutex m;
-	Signal<> postInitSignal;
 	Signal<> asksResolvedSignal;
+	float elapsedTimeSinceDayStart;
+	float dayDuration;
+	float baseActionTime;
 
 public:
 
 	const Signal<>& getAsksResolvedSignal() const;
-	
-	const Signal<>& getPostInitSignal() const;
 	
 	void initJobs(std::vector<nlohmann::json>& parsedJobs) const;
 	
@@ -43,11 +39,11 @@ public:
 	
 	void init(const char* prefabsPath) const;
 
-	void reset(const int count) const;
-
-	int exec(const int count);
-
-	void stop();
+	void start(int count);
+	
+	void update(float deltaTime);
+	
+	void reset(int count);
 
 	void pause();
 
@@ -58,6 +54,10 @@ public:
 	[[nodiscard]] int getTurnCount() const;
 
 	void setStep(const int step);
+
+	[[nodiscard]] float getBaseActionTime() const;
+
+	[[nodiscard]] const TradableFactory& getTradableFactory() const;
 
 };
 

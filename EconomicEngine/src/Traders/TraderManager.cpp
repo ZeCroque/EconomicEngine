@@ -22,7 +22,7 @@ void TraderManager::addTrader(const int count)
 	{	
 		this->traders.emplace_back(Trader(jobFactory.createObject(getMostInterestingJob())));
 		traders.back().getCurrentJob()->setOwner(&traders.back());
-        addTraderSignal(&traders.back());
+        traderAddedSignal(&traders.back());
 	}
 }
 
@@ -33,17 +33,8 @@ void TraderManager::addTrader(const int count, const size_t key)
 		traders.emplace_back(Trader(jobFactory.createObject(key)));
 		traders.back().getCurrentJob()->setOwner(&traders.back());
 		++demographyCounts[traders.back().getCurrentJob()->getId()][0]->first;
-        addTraderSignal(&traders.back());
+        traderAddedSignal(&traders.back());
 	}	
-}
-
-[[maybe_unused]] Job* TraderManager::assignJob(const size_t key, Trader* trader) const
-{
-
-	Job* job = this->jobFactory.createObject(key);
-	job->setOwner(trader);
-	++demographyCounts[job->getId()].front()->first;
-	return job;
 }
 
 std::list<std::pair<size_t, std::string>> TraderManager::getJobList() const
@@ -124,15 +115,7 @@ size_t TraderManager::getMostInterestingJob() const
 	return minCount.first;
 }
 
-void TraderManager::refreshTraders()
-{
-	for(auto& trader : traders)
-	{
-		trader.refresh();
-	}
-}
-
-void TraderManager::killTraders()
+void TraderManager::killStarvedTraders()
 {
 	std::vector<std::list<Trader>::iterator> iterators;
 	iterators.reserve(traders.size());
@@ -152,19 +135,11 @@ void TraderManager::killTraders()
 	}
 }
 
-void TraderManager::doTradersCrafting()
+void TraderManager::update(float deltaTime)
 {
 	for (auto& trader : traders)
 	{
-		trader.craft();
-	}
-}
-
-void TraderManager::doTradersAsking()
-{
-	for (auto& trader : traders)
-	{
-		trader.makeAsks();
+		trader.update(deltaTime);
 	}
 }
 
@@ -198,10 +173,10 @@ void TraderManager::kill(const size_t key, const int count)
 	}
 }
 
-const Signal <Trader*> &TraderManager::getAddTraderSignal() const {
-    return addTraderSignal;
+const Signal <Trader*> &TraderManager::getTraderAddedSignal() const {
+    return traderAddedSignal;
 }
 
-const Signal<Trader *> &TraderManager::getKillTraderSignal() const {
-    return killTraderSignal;
+const Signal<Trader *> &TraderManager::getTraderKilledSignal() const {
+    return traderKilledSignal;
 }

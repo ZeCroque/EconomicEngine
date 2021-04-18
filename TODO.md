@@ -1,9 +1,6 @@
 ### Economic:
-- time rate pour cycle journalier
-- temps travail relatif à durée cycle journalier
-- trader décorellés de tick de la bourse et suivant logique tour par tour (boulot/vente)
 - bourse à chaque offre
-- bouffe à chaque action
+- generalize insertion sort and put it in design pattern project 
 
 ### Graphic:
 - affichage 

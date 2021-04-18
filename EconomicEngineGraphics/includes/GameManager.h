@@ -45,7 +45,6 @@ private:
     static const sf::Int32 maxFPS;
 	
 	std::unique_ptr<std::thread> debugGuiThread;
-	std::unique_ptr<std::thread> economicEngineThread;
 	
 	bool isInitialized;
     bool isRunning;

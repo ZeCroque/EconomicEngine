@@ -83,21 +83,14 @@ GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::Video
 
 void GameManager::initEconomicEngine(const char* prefabsPath)
 {
-    economicEngineThread = std::make_unique<std::thread>([this, prefabsPath]() -> int 
-    {
+
     	auto* economicEngine = EconomicEngine::getInstance();
-	    economicEngine->getPostInitSignal().connect(this, &GameManager::askResolvedCallback);
-	    economicEngine->getPostInitSignal().connect([this]() 
-        {
-	        isInitialized = true;
-	    });
+	    economicEngine->init(prefabsPath);   	
+	    economicEngine->start(100);
+		economicEngine->getAsksResolvedSignal().connect(this, &GameManager::askResolvedCallback);
 
         auto* traderManager = TraderManager::getInstance();
-	    traderManager->getAddTraderSignal().connect(this, &GameManager::traderAddedCallback);
-
-    	economicEngine->init(prefabsPath);   	
-        return economicEngine->exec(100);
-    });
+	    traderManager->getTraderAddedSignal().connect(this, &GameManager::traderAddedCallback);
 }
 
 void GameManager::initMovableTraders(std::vector<nlohmann::json>& parsedMovableTraders)
@@ -167,6 +160,8 @@ void GameManager::update(float deltaTime)
 {
     if (isInitialized) 
     {
+        EconomicEngine::getInstance()->update(deltaTime);
+    	
         std::vector<std::shared_ptr<StaticActor>> workshopToPlace;
 
         while (!pendingTraders.empty()) 
@@ -220,8 +215,6 @@ void GameManager::quit()
 {
 	isRunning = false;
 
-    EconomicEngine::getInstance()->stop();
-    economicEngineThread->join();
 	
     if(debugGuiThread)
     {

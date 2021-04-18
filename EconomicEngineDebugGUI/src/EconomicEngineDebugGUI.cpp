@@ -12,11 +12,14 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	traderManager = TraderManager::getInstance();
 
 #ifdef STANDALONE_MODE
-	economicEngineThread = std::thread([](EconomicEngine* newTurnManager)-> int
+    turnManager->init("./Content/Prefabs/");
+	//TODO connect to isInitialized
+	turnManager->start(100);
+
+	//TODO update economic engine at fixed rate
+	/*economicEngineThread = std::thread([this]()
 	{
-        newTurnManager->init("./Content/Prefabs/");
-		return newTurnManager->exec(100);
-	}, turnManager);
+	});*/
 #endif
 	
 	ui.setupUi(this);
@@ -222,9 +225,9 @@ void EconomicEngineDebugGui::doReset()
 
 void EconomicEngineDebugGui::doInit()
 {
-	const auto tradableManager = TradableManager::getInstance();
-	auto itemsName = tradableManager->getTradablesName();
-	auto itemsKeys = tradableManager->getKeys();
+	const auto tradableManager = turnManager->getTradableFactory();
+	auto itemsName = tradableManager.getTradablesName();
+	auto itemsKeys = tradableManager.getKeys();
 
 	auto row = 0;
 	auto column = 0;
@@ -365,7 +368,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
 #ifdef STANDALONE_MODE
-	this->turnManager->stop();
+	//TODO stop runner thread
 	this->economicEngineThread.join();
 #endif
 }

@@ -13,11 +13,6 @@ const Signal<>& EconomicEngine::getAsksResolvedSignal() const
 	return asksResolvedSignal;
 }
 
-const Signal<>& EconomicEngine::getPostInitSignal() const
-{
-	return postInitSignal;
-}
-
 void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 {
 	const std::hash<std::string> hasher;
@@ -42,7 +37,7 @@ void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 			 job->getCraftFactory()->registerCraft(new Craft(parsedCraft["baseRate"], hasher(parsedCraft["result"]), parsedCraft["producedCount"], requirements, requiredTools));
 		}
 
-		for(const auto parsedTool : parsedJob["usableTools"])
+		for(const auto& parsedTool : parsedJob["usableTools"])
 		{
 			job->getUsableTools().emplace_back(hasher(parsedTool));
 		}
@@ -70,8 +65,8 @@ void EconomicEngine::initTradables(std::vector<nlohmann::json>& parsedTradables)
 		{
 			tradable = new Food(parsedTradable["name"], defaultPriceBelief, parsedTradable["foodValue"]);
 		}
-
-		tradableManager->registerTradable(tradable);
+		const std::hash<std::string> hasher;
+		tradableFactory.registerObject(hasher(parsedTradable["name"]),tradable);
 	}	
 }
 
@@ -108,17 +103,43 @@ void EconomicEngine::init(const char* prefabsPath) const
 	
 	traderManager->init();
 	stockExchange->init();
-	postInitSignal();
 }
 
-void EconomicEngine::reset(const int count) const
+void EconomicEngine::start(const int count)
 {
+	bRunning = true;
+
+	//Create traders
+	traderManager->addTrader(count);
+	
+}
+
+void EconomicEngine::update(float deltaTime)
+{
+
+	if(bRunning)
+	{
+		elapsedTimeSinceDayStart += deltaTime;
+		if(elapsedTimeSinceDayStart >= dayDuration)
+		{
+			elapsedTimeSinceDayStart = 0.f;
+			traderManager->killStarvedTraders();
+		}
+		
+		traderManager->update(deltaTime);
+		//TODO stockexchange
+	}
+}
+
+void EconomicEngine::reset(const int count)
+{
+	elapsedTimeSinceDayStart = 0.f;
 	traderManager->reset();
 	stockExchange->reset();
 	traderManager->addTrader(count);
 }
 
-int EconomicEngine::exec(const int count)
+/*int EconomicEngine::exec(const int count)
 {
 	this->bRunning = true;
 
@@ -149,29 +170,22 @@ int EconomicEngine::exec(const int count)
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / turnSecond));
 	}
 	return 0;
-}
+}*/
 
-void EconomicEngine::stop()
+/*void EconomicEngine::stop()
 {
-	if(bPaused)
-	{
-		resume();
-	}
 	asksResolvedSignal.disconnectAll();
 	bRunning = false;
-}
+}*/
 
 void EconomicEngine::pause()
 {
-	std::lock_guard<std::mutex> lk(m);
-	bPaused = true;
+	bRunning = false;
 }
 
 void EconomicEngine::resume()
 {
-	std::lock_guard<std::mutex> lk(m);
-	bPaused = false;
-	cv.notify_one();
+	bRunning = false;
 }
 
 void EconomicEngine::setTurnSecond(const int turnSecond)
@@ -187,4 +201,14 @@ int EconomicEngine::getTurnCount() const
 void EconomicEngine::setStep(const int step)
 {
 	this->step = step;
+}
+
+float EconomicEngine::getBaseActionTime() const
+{
+	return baseActionTime;
+}
+
+const TradableFactory& EconomicEngine::getTradableFactory() const
+{
+	return tradableFactory;
 }

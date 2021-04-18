@@ -1,10 +1,12 @@
 #include "Traders/Craft.h"
 
-Craft::Craft() : advancement(0.0f), rate(0.0f), count(), result(0){}
+#include "EconomicEngine.h"
 
-Craft::Craft(const float baseRate, const size_t craftResult, const int count, std::list<std::pair<size_t, int>> requirements, std::list<size_t> toolsRequired) : advancement(0.0f), rate(baseRate), count(count), result(craftResult), requirements(std::move(requirements)), toolsRequired(std::move(toolsRequired)){}
+Craft::Craft() : elapsedTime(0.0f), rate(0.0f), count(), result(0){}
+
+Craft::Craft(const float baseRate, const size_t craftResult, const int count, std::list<std::pair<size_t, int>> requirements, std::list<size_t> toolsRequired) : elapsedTime(0.0f), rate(baseRate), count(count), result(craftResult), requirements(std::move(requirements)), toolsRequired(std::move(toolsRequired)){}
 	                                                                                                                           
-Craft::Craft(Craft& craft) : advancement(craft.advancement), rate(craft.rate), count(craft.count), result(craft.result), requirements(craft.requirements), toolsRequired(craft.toolsRequired) {}
+Craft::Craft(Craft& craft) : elapsedTime(craft.elapsedTime), rate(craft.rate), count(craft.count), result(craft.result), requirements(craft.requirements), toolsRequired(craft.toolsRequired) {}
 
 Craft* Craft::clone()
 {
@@ -46,19 +48,15 @@ void Craft::incrementRate(const float i)
 	rate += i;
 }
 
-[[maybe_unused]] void Craft::decrementRate(const float i)
+void Craft::update(float deltaTime)
 {
-	rate-=i;
-}
-
-bool Craft::advanceCraft()
-{
-	bool bResult = false;
-	advancement += rate;
-	if(advancement >= 1.0f)
+	elapsedTime += deltaTime;
+	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() / rate)
 	{
-        bResult = true;
+		elapsedTime = 0.f;
 		craftSuccessSignal();
 	}
-	return bResult;
 }
+
+			
+			
