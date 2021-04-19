@@ -8,20 +8,25 @@
 
 #include <vector>
 #include "Grid.h"
+#include <queue>
 
 
 class GridManager {
+    Grid grid;
     int minRange;
     int parcourStep;
 
+    std::queue<std::shared_ptr<Workshop>> workshopQueue;
+
     std::pair<int, int> minCoordinate;
     std::pair<int, int> maxCoordinate;
-
+    std::thread generationThread;
 
     void updateBound(int x, int y);
 
+    void placeWorkshop();
+
 public:
-    Grid grid;
 
     explicit GridManager();
 
@@ -29,9 +34,13 @@ public:
 
     bool canPlaceWorkshop(int x, int y);
 
-    void placeWorkshop(int x, int y, std::vector<std::shared_ptr<Workshop>> &newWorkshops);
+    void queueWorkshop(std::shared_ptr<Workshop> workshop);
+
+    [[nodiscard]] std::thread &getGenerationThread();
 
     void makeDebugFile();
+
+
 };
 
 

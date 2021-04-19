@@ -38,10 +38,10 @@ private:
 	int step;
 	std::condition_variable cv;
 	std::mutex m;
-	Signal<std::any> postInitSignal;
+	Signal<> postInitSignal;
 
 public:
-	const Signal<std::any>& getPostInitSignal() const
+	const Signal<>& getPostInitSignal() const
 	{
 		return postInitSignal;
 	}
@@ -136,7 +136,7 @@ public:
 		
 		traderManager->init();
 		stockExchange->init();
-		postInitSignal(std::any(0));
+		postInitSignal();
 	}
 
 	void reset(const int count) const
