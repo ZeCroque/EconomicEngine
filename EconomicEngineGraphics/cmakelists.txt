@@ -2,15 +2,13 @@ cmake_minimum_required(VERSION 3.2)
 
 project(EconomicEngineGraphics VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-
 find_package(nlohmann_json CONFIG REQUIRED)
 
 find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 
 if(WIN32)
     set(QT_VERSION "5.15.2")
-    set(CMAKE_PREFIX_PATH J:/Qt/${QT_VERSION}/msvc2019_64)
+    set(CMAKE_PREFIX_PATH D:/Qt/${QT_VERSION}/msvc2019_64)
 endif(WIN32)
 
 find_package(Qt5 ${QT_VERSION} COMPONENTS
@@ -34,6 +32,7 @@ set(HEADERS
 	${HEADER_DIR}/WorkShop.h
 	${HEADER_DIR}/MovableTrader.h
     ${HEADER_DIR}/WorkshopFactory.h
+    ${HEADER_DIR}/NavigationSystem.h
 )
 
 set(SOURCES
@@ -46,6 +45,7 @@ set(SOURCES
 	${SOURCE_DIR}/MovableActor.cpp
     ${SOURCE_DIR}/StaticActor.cpp
     ${SOURCE_DIR}/WorkshopFactory.cpp
+    ${SOURCE_DIR}/NavigationSystem.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
@@ -87,3 +87,4 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/Content ${CMAKE_CURRENT_BINARY_DIR}/Content
 )
+

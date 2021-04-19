@@ -36,6 +36,11 @@ float Craft::getRate() const
 	return rate;
 }
 
+const Signal<>& Craft::getCraftSuccessSignal() const
+{
+	return craftSuccessSignal;
+}
+
 void Craft::incrementRate(const float i)
 {
 	rate += i;
@@ -53,7 +58,7 @@ bool Craft::advanceCraft()
 	if(advancement >= 1.0f)
 	{
         bResult = true;
-		notifyObservers();
+		craftSuccessSignal();
 	}
 	return bResult;
 }

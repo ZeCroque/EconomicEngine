@@ -8,7 +8,6 @@
 #include <nlohmann/json_fwd.hpp>
 
 #include "AbstractFactory.h"
-#include "Observer.h"
 #include "GridManager.h"
 #include "Signal.h"
 #include "WorkshopFactory.h"
@@ -18,11 +17,10 @@ class MovableTrader;
 
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 
-class GameManager : public Singleton<GameManager>, public IObserver
+class GameManager : public Singleton<GameManager>
 {
     friend class Singleton<GameManager>;
 
-	
 //FRAMEWORK
 //==========
 public:
@@ -57,17 +55,16 @@ private:
 	
 //SLOTS
 //=======
-public:
-	void notify(Observable *sender) override; //TODO remove
-
 private:
 	void traderAddedCallback(class Trader* trader);
-
+	void askResolvedCallback();
 	
 //GAMEPLAY
 //========
 public:
-	std::shared_ptr<Workshop> addWorkshop(const std::string& name) const;	
+	std::shared_ptr<Workshop> addWorkshop(size_t key) const;	
+	std::shared_ptr<Workshop> addWorkshop(const std::string& name) const;
+	std::shared_ptr<MovableTrader> addMovableTrader(size_t key) const;
 	std::shared_ptr<MovableTrader> addMovableTrader(const std::string& name) const;
     Workshop* findAvailableWorkshop(size_t jobId) const;
 

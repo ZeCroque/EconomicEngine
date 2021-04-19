@@ -387,7 +387,9 @@ void Trader::craft()
 			}
 			if(tool!=nullptr)
 			{
-				tool->getBehavior()->init(this, tool);
+				auto* toolBehavior = dynamic_cast<ToolBehavior*>(tool->getBehavior());
+				currentCraft->getCraftSuccessSignal().connect(toolBehavior, &ToolBehavior::updateToolDurability);
+				currentCraft->incrementRate(toolBehavior->getCraftRateBoost());
 			}
 
 			for(const auto requirement : currentCraft->getRequirement())
@@ -576,11 +578,13 @@ void Trader::addToInventory(Countable* countable)
 		}
 	}
 	inventory.emplace_back(countable);
+	countable->setOwner(this);
 }
 
 void Trader::addToInventory(Uncountable* uncountable)
 {
 	inventory.emplace_back(uncountable);
+	uncountable->setOwner(this);
 }
 
 void Trader::removeFromInventory(const size_t key, const int count = 1)

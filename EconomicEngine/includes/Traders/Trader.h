@@ -3,7 +3,6 @@
 
 #include "Craft.h"
 #include "Job.h"
-#include "Observable.h"
 #include "VectorArray.h"
 
 #include <list>
@@ -11,7 +10,7 @@
 #include "StockExchange/StockExchange.h"
 
 
-class Trader : public Observable
+class Trader
 {
 private:
 	

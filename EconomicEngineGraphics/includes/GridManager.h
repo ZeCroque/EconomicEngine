@@ -12,17 +12,16 @@
 
 
 class GridManager {
+
+    friend class GameManager;	// Debug
+
     Grid grid;
     int minRange;
     int parcourStep;
 
+
     std::queue<std::shared_ptr<Workshop>> workshopQueue;
-
-    std::pair<int, int> minCoordinate;
-    std::pair<int, int> maxCoordinate;
     std::thread generationThread;
-
-    void updateBound(int x, int y);
 
     void placeWorkshop();
 

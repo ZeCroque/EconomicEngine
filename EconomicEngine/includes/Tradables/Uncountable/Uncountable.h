@@ -11,10 +11,12 @@ protected:
 
 public:
 	Uncountable();
-	Uncountable(std::string name, std::pair<float, float> defaultPriceBelief, Behavior* behavior);
+	Uncountable(std::string newName, std::pair<float, float> newDefaultPriceBelief, Behavior* newBehavior);
 	Uncountable(const Uncountable& uncountable);
 	~Uncountable() override;
 	[[nodiscard]] Behavior* getBehavior() const;
+
+	void setOwner(Trader* newOwner) override;
 
 	Uncountable* clone() override { return new Uncountable(*this); }
 };
