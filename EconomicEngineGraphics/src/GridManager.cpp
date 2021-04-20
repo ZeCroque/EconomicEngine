@@ -9,7 +9,7 @@
 #include "Workshop.h"
 #include <iostream>
 
-GridManager::GridManager() : minRange(10), parcourStep(3), maxDistanceToMarket(100) {
+GridManager::GridManager() : minRange(10), parcourStep(3), maxDistanceToMarket(25) {
 
 }
 
@@ -52,11 +52,12 @@ void GridManager::placeWorkshop() {
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning());
-                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHaveEverRun()) {
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning()) std::cout << "done" << std::endl;
+                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHasEverRun()) {
+                    makeDebugFile();
                     return;
                 }
-                if (canPlaceWorkshop(x, y)) {
+                if (!workshopQueue.empty() && canPlaceWorkshop(x, y)) {
                     if (haveMarketInRange(x, y)) {
                         grid.setActorAt(workshopQueue.front(), x, y);
                         workshopQueue.pop();
@@ -93,10 +94,12 @@ void GridManager::makeDebugFile() {
     std::ofstream file;
     file.open("../result.txt");
 
-    for (int i = grid.getMinCoordinate().first - 1; i < grid.getMaxCoordinate().first; ++i) {
-        for (int j = grid.getMinCoordinate().second - 1; j < grid.getMaxCoordinate().second; ++j) {
-            if (grid.isOccupied(i, j)) {
-                file << grid.getActorAt(i, j)->getId() << "\t";
+	for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second; ++y)
+	{
+		for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first; ++x)
+		{
+            if (grid.isOccupied(x, y)) {
+                file << grid.getActorAt(x, y)->getId() << "\t";
             } else {
                 file << 0 << "\t";
             }

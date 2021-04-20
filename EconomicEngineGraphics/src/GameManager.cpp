@@ -43,7 +43,6 @@ void GameManager::init(const char *prefabsPath) {
 
 void GameManager::exec() {
     isRunning = true;
-    haveEverRun = true;
 
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
@@ -74,13 +73,14 @@ bool GameManager::getIsRunning() const {
     return isRunning;
 }
 
-bool GameManager::getHaveEverRun() const {
-    return haveEverRun;
+bool GameManager::getHasEverRun() const
+{
+	return hasEverRun;
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
-                             isInitialized(false), isRunning(false), haveEverRun(false), isGuiOpened(false) {
+                             isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false) {
     window->setFramerateLimit(maxFPS);
 }
 
@@ -126,7 +126,6 @@ void GameManager::processInput() {
         }
     }
 
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         if (!isGuiOpened) {
             isGuiOpened = true;
@@ -155,7 +154,7 @@ void GameManager::processInput() {
 
 void GameManager::update(float deltaTime) {
     if (isInitialized) {
-
+        hasEverRun = true;
         while (!pendingTraders.empty()) {
             auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
             pendingTraders.pop();
@@ -171,8 +170,6 @@ void GameManager::update(float deltaTime) {
                 //NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
             }
         }
-        gridManager.makeDebugFile();
-        std::cout << workshops.size() << std::endl;
     }
 }
 
@@ -208,7 +205,6 @@ void GameManager::quit() {
         debugGuiThread->join();
     }
 
-    gridManager.makeDebugFile();
     gridManager.getGenerationThread().join();
 
     window->close();

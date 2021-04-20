@@ -28,8 +28,8 @@ public:
     void exec();
 
     bool getIsRunning() const;
-    bool getHaveEverRun() const;
-
+	bool getHasEverRun() const;
+	
 private:
     GameManager();
 	
@@ -48,10 +48,11 @@ private:
 	
 	std::unique_ptr<std::thread> debugGuiThread;
 	std::unique_ptr<std::thread> economicEngineThread;
-	
+
+
 	bool isInitialized;
     bool isRunning;
-    bool haveEverRun;
+    bool hasEverRun;
 	bool isGuiOpened;
 
 	
