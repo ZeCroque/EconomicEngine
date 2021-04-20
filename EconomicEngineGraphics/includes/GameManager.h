@@ -28,6 +28,7 @@ public:
     void exec();
 
     bool getIsRunning() const;
+    bool getHaveEverRun() const;
 
 private:
     GameManager();
@@ -50,6 +51,7 @@ private:
 	
 	bool isInitialized;
     bool isRunning;
+    bool haveEverRun;
 	bool isGuiOpened;
 
 	

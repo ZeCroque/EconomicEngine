@@ -14,17 +14,6 @@
 class GridManager {
 
     friend class GameManager;	// Debug
-
-    Grid grid;
-    int minRange;
-    int parcourStep;
-
-
-    std::queue<std::shared_ptr<Workshop>> workshopQueue;
-    std::thread generationThread;
-
-    void placeWorkshop();
-
 public:
 
     explicit GridManager();
@@ -39,6 +28,22 @@ public:
 
     void makeDebugFile();
 
+private :
+
+    Grid grid;
+    int minRange;
+    int parcourStep;
+    int maxDistanceToMarket;
+
+    std::queue<std::shared_ptr<Workshop>> workshopQueue;
+    std::thread generationThread;
+
+    void placeWorkshop();
+
+    bool haveMarketInRange(int x, int  y);
+    int getClosestMarketCoordinate(int x, int y);
+
+    std::vector<std::pair<int, int>> marketCoordinate;
 
 };
 

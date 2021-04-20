@@ -3,6 +3,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 
 #include "EconomicEngineDebugGUI.h"
@@ -42,6 +43,7 @@ void GameManager::init(const char *prefabsPath) {
 
 void GameManager::exec() {
     isRunning = true;
+    haveEverRun = true;
 
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
@@ -72,9 +74,13 @@ bool GameManager::getIsRunning() const {
     return isRunning;
 }
 
+bool GameManager::getHaveEverRun() const {
+    return haveEverRun;
+}
+
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")),
-                             isInitialized(false), isRunning(false), isGuiOpened(false) {
+                             isInitialized(false), isRunning(false), haveEverRun(false), isGuiOpened(false) {
     window->setFramerateLimit(maxFPS);
 }
 
@@ -162,9 +168,11 @@ void GameManager::update(float deltaTime) {
                 auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
                 workshop->setTrader(trader);
                 gridManager.queueWorkshop(workshop);
-                NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
+                //NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
             }
         }
+        gridManager.makeDebugFile();
+        std::cout << workshops.size() << std::endl;
     }
 }
 

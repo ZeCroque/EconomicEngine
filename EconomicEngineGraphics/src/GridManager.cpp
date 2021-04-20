@@ -7,14 +7,16 @@
 #include <fstream>
 #include <GameManager.h>
 #include "Workshop.h"
+#include <iostream>
 
-GridManager::GridManager() : minRange(10), parcourStep(3) {
+GridManager::GridManager() : minRange(10), parcourStep(3), maxDistanceToMarket(100) {
 
 }
 
 
 void GridManager::init() {
     grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
+    marketCoordinate.emplace_back(std::pair<int, int>(0, 0));
 
     generationThread = std::thread([this]() { placeWorkshop(); });
 }
@@ -51,12 +53,17 @@ void GridManager::placeWorkshop() {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
                 while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning());
-                if (!GameManager::getInstance()->getIsRunning()) {
+                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHaveEverRun()) {
                     return;
                 }
                 if (canPlaceWorkshop(x, y)) {
-                    grid.setActorAt(workshopQueue.front(), x, y);
-                    workshopQueue.pop();
+                    if (haveMarketInRange(x, y)) {
+                        grid.setActorAt(workshopQueue.front(), x, y);
+                        workshopQueue.pop();
+                    } else {
+                        grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), x, y);
+                        marketCoordinate.emplace_back(std::pair<int, int>(x, y));
+                    }
                     grid.updateBounds(x, y);
                 }
 
@@ -106,3 +113,28 @@ std::thread &GridManager::getGenerationThread() {
 void GridManager::queueWorkshop(std::shared_ptr<Workshop> workshop) { // NOLINT(performance-unnecessary-value-param)
     workshopQueue.emplace(workshop);
 }
+
+int GridManager::getClosestMarketCoordinate(int x, int y) {
+    int closest = maxDistanceToMarket + 1;
+    int current;
+
+    for (auto coord : marketCoordinate) {
+        current = int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2) * 1.0));
+        if (current <= closest) {
+            closest = current;
+        }
+    }
+    return closest;
+}
+
+bool GridManager::haveMarketInRange(int x, int y) {
+
+    if (std::any_of(marketCoordinate.begin(), marketCoordinate.end(), [x, y, this](std::pair<int, int> coord) {
+        return int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2) * 1.0)) < maxDistanceToMarket;
+    })) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
