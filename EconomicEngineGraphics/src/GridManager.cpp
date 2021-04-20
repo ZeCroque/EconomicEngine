@@ -7,9 +7,8 @@
 #include <fstream>
 #include <GameManager.h>
 #include "Workshop.h"
-#include <iostream>
 
-GridManager::GridManager() : minRange(10), parcourStep(3), maxDistanceToMarket(25) {
+GridManager::GridManager() : minRange(10), parcourStep(4), maxDistanceToMarket(25) {
 
 }
 
@@ -26,13 +25,12 @@ int getRandomInt(int min = 0, int max = 1) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(min, max);
 
-    return distrib(gen);
+    return int(distrib(gen));
 }
 
 bool GridManager::canPlaceWorkshop(int x, int y) {
 
-    int range = minRange + getRandomInt(-1, 1);
-
+    int range = minRange;
     for (int i = x - range / 2; i < x + range / 2; i++) {
         for (int j = y - range / 2; j < y + range / 2; j++) {
             if (grid.isOccupied(i, j)) {
@@ -52,20 +50,22 @@ void GridManager::placeWorkshop() {
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning()) std::cout << "done" << std::endl;
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning());
                 if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHasEverRun()) {
                     makeDebugFile();
                     return;
                 }
-                if (!workshopQueue.empty() && canPlaceWorkshop(x, y)) {
-                    if (haveMarketInRange(x, y)) {
-                        grid.setActorAt(workshopQueue.front(), x, y);
+                int noiseX = getRandomInt(x - minRange / 5, x + minRange / 5);
+                int noiseY = getRandomInt(y - minRange / 5, y + minRange / 5);
+                if (!workshopQueue.empty() && canPlaceWorkshop(noiseX, noiseY)) {
+                    if (haveMarketInRange(noiseX, noiseY)) {
+                        grid.setActorAt(workshopQueue.front(), noiseX, noiseY);
                         workshopQueue.pop();
                     } else {
-                        grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), x, y);
-                        marketCoordinate.emplace_back(std::pair<int, int>(x, y));
+                        grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), noiseX, noiseY);
+                        marketCoordinate.emplace_back(std::pair<int, int>(noiseX, noiseY));
                     }
-                    grid.updateBounds(x, y);
+                    grid.updateBounds(noiseX, noiseY);
                 }
 
                 switch (d) {
@@ -94,10 +94,8 @@ void GridManager::makeDebugFile() {
     std::ofstream file;
     file.open("../result.txt");
 
-	for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second; ++y)
-	{
-		for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first; ++x)
-		{
+    for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second; ++y) {
+        for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first; ++x) {
             if (grid.isOccupied(x, y)) {
                 file << grid.getActorAt(x, y)->getId() << "\t";
             } else {
