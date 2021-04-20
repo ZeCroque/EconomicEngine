@@ -34,7 +34,7 @@ Workshop* Grid::getActorAt(int x, int y)
 
 bool Grid::isOccupied(int x, int y)
 {
-	if(world.contains(std::pair(x,y)))
+	if(world.contains(std::pair(x & REGION_MAJOR, y & REGION_MAJOR)))
 	{
 		return getNodeAt(x,y).isOccupied();
 	}
