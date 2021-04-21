@@ -50,7 +50,9 @@ void GridManager::placeWorkshop() {
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning());
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning()) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::maxFPS));
+                }
                 if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHasEverRun()) {
                     makeDebugFile();
                     return;

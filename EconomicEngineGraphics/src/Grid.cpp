@@ -20,7 +20,7 @@ Grid::Grid() : minCoordinate(0,0), maxCoordinate(0,0)
 {
 }
 
-void Grid::setActorAt(const std::shared_ptr<Workshop>& workshop, int x, int y)
+void Grid::setActorAt(const std::shared_ptr<Workshop> workshop, int x, int y)
 {
     workshop->x = x;
     workshop->y = y;
