@@ -99,8 +99,8 @@ private:
     mutable std::vector<std::shared_ptr<Workshop>> workshops;
     WorkshopFactory workshopFactory;
 
-    std::pair<float, float> cameraPosition;
     float zoom;
+    std::pair<float,float> cameraPosition;
 };
 
 #endif //GAME_H

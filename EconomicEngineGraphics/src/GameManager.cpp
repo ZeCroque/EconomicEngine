@@ -103,7 +103,7 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
                              isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false),
-                             cameraPosition(0, 0), zoom(1000)
+                             zoom(1000.f), cameraPosition(0, 0)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -174,18 +174,17 @@ void GameManager::processInput()
         }
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) cameraPosition.second -= zoom / 25.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) cameraPosition.second -= zoom * 0.10f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.second += zoom / 25.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.second += zoom * 0.10f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) cameraPosition.first -= zoom / 25.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) cameraPosition.first -= zoom * 0.10f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.first += zoom / 25.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.first += zoom * 0.10f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom = std::max(62.f, zoom - zoom / 25.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom = std::max(620.f, zoom - zoom * 0.10f);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom += zoom / 25.f;
-
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom = std::min(62000.f, zoom + zoom * 0.10f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
     {
@@ -250,21 +249,52 @@ void GameManager::render() const
 {
     window->clear();
 
-    for (auto &ws : workshops)
+    auto viewLeft = (window->getSize().x / 2.f) - zoom / 2.f + cameraPosition.first;
+    auto viewTop = (window->getSize().y / 2.f) - zoom / 2.f + cameraPosition.second;
+
+    auto &grid = gridManager.grid;
+
+
+    float xMin = viewLeft - 62.f;
+    float xMax = (window->getSize().x / 2.f) + zoom / 2.f + cameraPosition.first + 62;
+    float yMin = viewTop - 62.f;
+    float yMax = (window->getSize().y / 2.f) + zoom / 2.f + cameraPosition.second + 62;
+
+    sf::RectangleShape rectangle;
+    rectangle.setSize(sf::Vector2f(62, 62));
+    rectangle.setFillColor(sf::Color::Green);
+    for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
     {
-        auto &sprite = ws->getSprite();
-        sprite.setPosition((window->getSize().x / 2.f) + float(ws->x) * 62,
-                           (window->getSize().y / 2.f) + float(ws->y) * 62);
-        window->draw(sprite);
+        for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first + 1; ++x)
+        {
+            auto positionX = window->getSize().x / 2.f + float(x) * 62;
+            auto positionY = window->getSize().y / 2.f + float(y) * 62;
+            if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+            {
+                rectangle.setPosition(positionX, positionY);
+                window->draw(rectangle);
+            }
+        }
     }
 
-    sf::View view;
-    view.reset(sf::FloatRect((window->getSize().x / 2.f) - zoom / 2.f + cameraPosition.first,
-                             (window->getSize().y / 2.f) - zoom / 2.f + cameraPosition.second,
-                             zoom, zoom));
 
-    window->setView(view);
+    for (auto &ws : workshops)
+    {
+        auto positionX = window->getSize().x / 2.f + float(ws->x) * 62;
+        auto positionY = window->getSize().y / 2.f + float(ws->y) * 62;
+        if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+        {
+            auto &sprite = ws->getSprite();
+            sprite.setPosition(positionX, positionY);
+            window->draw(sprite);
+        }
+    }
+
     window->display();
+
+    sf::View view;
+    view.reset(sf::FloatRect(xMin, yMin, xMax - xMin, yMax - yMin));
+    window->setView(view);
 }
 
 
