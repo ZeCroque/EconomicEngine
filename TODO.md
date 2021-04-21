@@ -13,11 +13,13 @@
     - vitesse des ias corellées à timeRate journalier **maxence**
     - astar **maxence**
 - génération bâtiments **vincent**
+- workshop creation -> calculate path
+- trader move -> check closest market and refresh path
 
 ### Gui:
 - speed = daycycle speed **croque**
 - investiguer et clean les intéractions entre le turnManager et la gui **croque**
-- *virer step-by-step & step*
+- virer step-by-step & step
 
 
 ### Polish :

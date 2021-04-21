@@ -21,13 +21,14 @@ class GameManager : public Singleton<GameManager>
 {
     friend class Singleton<GameManager>;
 
-	
 //FRAMEWORK
 //==========
 public:
     void init(const char* prefabsPath);
     void exec();
 
+    bool getIsRunning() const;
+	bool getHasEverRun() const;
 private:
     GameManager();
 	
@@ -45,7 +46,7 @@ private:
     static const sf::Int32 maxFPS;
 	
 	std::unique_ptr<std::thread> debugGuiThread;
-	
+	bool hasEverRun;
 	bool isInitialized;
     bool isRunning;
 	bool isGuiOpened;

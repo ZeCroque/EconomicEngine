@@ -4,7 +4,7 @@
 #include <map>
 #include <array>
 #include <memory>
-#include <StaticActor.h>
+#include <Workshop.h>
 #include <vector>
 
 
@@ -12,42 +12,47 @@ constexpr size_t REGION_SIZE = 16;
 constexpr size_t REGION_MINOR = REGION_SIZE - 1;
 constexpr size_t REGION_MAJOR = ~REGION_MINOR;
 
-struct Node
-{
-	int x = 0;
-	int y = 0;
-	bool visited = false;
-	float globalGoal = INFINITY;
-	float localGoal = INFINITY;
-	std::vector<Node*> neighbors;
-	Node* parent = nullptr;
-	std::weak_ptr<StaticActor> actor;
+struct Node {
+    int x = 0;
+    int y = 0;
+    bool visited = false;
+    float globalGoal = INFINITY;
+    float localGoal = INFINITY;
+    std::vector<Node *> neighbors;
+    Node *parent = nullptr;
+    std::weak_ptr<Workshop> actor;
 
-	[[nodiscard]] bool isOccupied() const;
-	void resetNode();
+    [[nodiscard]] bool isOccupied() const;
+
+    void resetNode();
 };
 
-typedef std::array<std::array<Node, REGION_SIZE>,  REGION_SIZE> Chunk;
+typedef std::array<std::array<Node, REGION_SIZE>, REGION_SIZE> Chunk;
 
-class Grid
-{
+
+class Grid {
 public:
-	Grid();
-	void setActorAt(const std::shared_ptr<StaticActor>& staticActor, int x, int y);
-	StaticActor* getActorAt(int x, int y); 
-	bool isOccupied(int x, int y);
-	Node& getNodeAt(int x, int y);
+    Grid();
 
-    void updateBound(int x,int y);
+    void setActorAt(const std::shared_ptr<Workshop> &workshop, int x, int y);
 
-	[[nodiscard]] const std::pair<int,int>& getMinCoordinate() const;
-	[[nodiscard]] const std::pair<int,int>& getMaxCoordinate() const;
+    Workshop *getActorAt(int x, int y);
+
+    bool isOccupied(int x, int y);
+
+    Node &getNodeAt(int x, int y);
+
+    void updateBounds(int x, int y);
+
+    [[nodiscard]] const std::pair<int, int> &getMinCoordinate() const;
+
+    [[nodiscard]] const std::pair<int, int> &getMaxCoordinate() const;
 
 private:
-	std::map<std::pair<int, int>, Chunk> world;
-	
-    std::pair<int,int> minCoordinate;
-    std::pair<int,int> maxCoordinate;
+    std::map<std::pair<int, int>, Chunk> world;
+
+    std::pair<int, int> minCoordinate;
+    std::pair<int, int> maxCoordinate;
 };
 
 #endif //GRID_H

@@ -1,5 +1,7 @@
 #include "Grid.h"
 
+
+
 bool Node::isOccupied() const
 {
 	return actor.lock().get();
@@ -18,26 +20,27 @@ Grid::Grid() : minCoordinate(0,0), maxCoordinate(0,0)
 {
 }
 
-void Grid::setActorAt(const std::shared_ptr<StaticActor>& staticActor, int x, int y)
+void Grid::setActorAt(const std::shared_ptr<Workshop>& workshop, int x, int y)
 {
-	staticActor->x = x;
-	staticActor->y = y;
-	getNodeAt(x, y).actor = std::weak_ptr(staticActor);
+    workshop->x = x;
+    workshop->y = y;
+	getNodeAt(x, y).actor = std::weak_ptr(workshop);
 }
 
-StaticActor* Grid::getActorAt(int x, int y)
+Workshop* Grid::getActorAt(int x, int y)
 {
 	return getNodeAt(x, y).actor.lock().get();
 }
 
 bool Grid::isOccupied(int x, int y)
 {
-	if(world.contains(std::pair(x,y)))
+	if(world.contains(std::pair(x & REGION_MAJOR, y & REGION_MAJOR)))
 	{
 		return getNodeAt(x,y).isOccupied();
 	}
 	return false;
 }
+
 
 Node& Grid::getNodeAt(int x, int y)
 {
@@ -49,7 +52,7 @@ Node& Grid::getNodeAt(int x, int y)
 	return node;
 }
 
-void Grid::updateBound(int x, int y)
+void Grid::updateBounds(int x, int y)
 {
 	if (x < minCoordinate.first) minCoordinate.first = x;
     if (y < minCoordinate.second) minCoordinate.second = y;

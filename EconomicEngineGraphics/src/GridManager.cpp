@@ -4,7 +4,6 @@
 
 #include "GridManager.h"
 #include <random>
-#include <vector>
 #include <fstream>
 #include <GameManager.h>
 #include "Workshop.h"
@@ -13,9 +12,11 @@ GridManager::GridManager() : minRange(10), parcourStep(3) {
 
 }
 
-void GridManager::init()
-{
-	grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
+
+void GridManager::init() {
+    grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
+
+    generationThread = std::thread([this]() { placeWorkshop(); });
 }
 
 int getRandomInt(int min = 0, int max = 1) {
@@ -28,8 +29,10 @@ int getRandomInt(int min = 0, int max = 1) {
 
 bool GridManager::canPlaceWorkshop(int x, int y) {
 
-    for (int i = x - minRange / 2; i < x + minRange / 2; i++) {
-        for (int j = y - minRange / 2; j < y + minRange / 2; j++) {
+    int range = minRange + getRandomInt(-1, 1);
+
+    for (int i = x - range / 2; i < x + range / 2; i++) {
+        for (int j = y - range / 2; j < y + range / 2; j++) {
             if (grid.isOccupied(i, j)) {
                 return false;
             }
@@ -38,23 +41,33 @@ bool GridManager::canPlaceWorkshop(int x, int y) {
     return true;
 }
 
-void GridManager::placeWorkshop(int x, int y, std::vector<std::shared_ptr<StaticActor>> &newWorkshops) {
+void GridManager::placeWorkshop() {
     int d = getRandomInt(0, 4); // current direction; 0=RIGHT, 1=DOWN, 2=LEFT, 3=UP
     int s = 1; // chain size
-    int c = 0;
-    // starting point
+    int x = 0;
+    int y = 0;
 
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                if (canPlaceWorkshop(x, y)) {
-                    grid.setActorAt(newWorkshops[c], x, y);
-                    grid.updateBound(x, y);
-                    c++;
-                    if (c >= newWorkshops.size()) {
-                        return;
-                    }
+                bool doOnce = false;
+            	while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() || !GameManager::getInstance()->getHasEverRun())
+                {
+            		if(!doOnce)
+            		{
+            			makeDebugFile();
+            		}
+	                doOnce = true;
                 }
+                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getHasEverRun()) {
+                    return;
+                }
+                if (!workshopQueue.empty() && canPlaceWorkshop(x, y)) {
+                    grid.setActorAt(workshopQueue.front(), x, y);
+                    workshopQueue.pop();
+                    grid.updateBounds(x, y);
+                }
+
                 switch (d) {
                     case 0:
                         y += parcourStep;
@@ -81,10 +94,12 @@ void GridManager::makeDebugFile() {
     std::ofstream file;
     file.open("../result.txt");
 
-    for (int i = grid.getMinCoordinate().first - 1; i < grid.getMaxCoordinate().first; ++i) {
-        for (int j = grid.getMinCoordinate().second - 1; j < grid.getMaxCoordinate().second; ++j) {
-            if (grid.isOccupied(i, j)) {
-                file << 1 << "\t";
+	for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second; ++y)
+	{
+		for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first; ++x)
+		{
+            if (grid.isOccupied(x, y)) {
+                file << grid.getActorAt(x, y)->getId() << "\t";
             } else {
                 file << 0 << "\t";
             }
@@ -92,4 +107,12 @@ void GridManager::makeDebugFile() {
         file << std::endl;
     }
     file.close();
+}
+
+std::thread &GridManager::getGenerationThread() {
+    return generationThread;
+}
+
+void GridManager::queueWorkshop(std::shared_ptr<Workshop> workshop) { // NOLINT(performance-unnecessary-value-param)
+    workshopQueue.emplace(workshop);
 }
