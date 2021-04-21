@@ -4,17 +4,18 @@
 
 #include "MovableTrader.h"
 
-MovableTrader::MovableTrader(const std::string& jobName)
+MovableTrader::MovableTrader(const std::string &jobName, const std::string &textureName) : MovableActor(textureName)
 {
-	std::hash<std::string> hasher;
-	jobId = hasher(jobName);
+    std::hash<std::string> hasher;
+    jobId = hasher(jobName);
 }
 
-size_t MovableTrader::getJobId() const {
+size_t MovableTrader::getJobId() const
+{
     return jobId;
 }
 
-MovableTrader* MovableTrader::clone()
+MovableTrader *MovableTrader::clone()
 {
-	return new MovableTrader(*this);
+    return new MovableTrader(*this);
 }

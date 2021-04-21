@@ -2,5 +2,5 @@
     "type" : "Workshop",
     "name": "Mine",
     "job" : "Miner",
-    "texturePath" : "Content/Textures/Traders/TX_Mine.jpg"
+    "texture" : "TX_Mine.png"
 }

@@ -11,37 +11,46 @@
 
 const sf::Int32 GameManager::maxFPS = 60;
 
-void GameManager::init(const char *prefabsPath)
+void GameManager::init(const char *contentPath)
 {
-    assert(std::filesystem::exists(prefabsPath) && std::filesystem::is_directory(prefabsPath));
+    assert(std::filesystem::exists(contentPath) && std::filesystem::is_directory(contentPath));
 
     std::vector<nlohmann::json> parsedMovableTraders;
     std::vector<nlohmann::json> parsedWorkshops;
 
     std::ifstream fileStream;
-    for (const auto &entry : std::filesystem::recursive_directory_iterator(prefabsPath))
+    for (const auto &entry : std::filesystem::recursive_directory_iterator(contentPath))
     {
-        if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ".json")
+        if (std::filesystem::is_regular_file(entry.status()))
         {
-            nlohmann::json parsedJson;
-
-            fileStream.open(entry.path());
-            fileStream >> parsedJson;
-            fileStream.close();
-
-            if (parsedJson["type"] == "MovableTrader")
+            if (entry.path().extension() == ".json")
             {
-                parsedMovableTraders.push_back(parsedJson);
+                nlohmann::json parsedJson;
+
+                fileStream.open(entry.path());
+                fileStream >> parsedJson;
+                fileStream.close();
+
+                if (parsedJson["type"] == "MovableTrader")
+                {
+                    parsedMovableTraders.push_back(parsedJson);
+                }
+                else if (parsedJson["type"] == "Workshop")
+                {
+                    parsedWorkshops.push_back(parsedJson);
+                }
             }
-            else if (parsedJson["type"] == "Workshop")
+            else if (entry.path().extension() == ".png")
             {
-                parsedWorkshops.push_back(parsedJson);
+                initTexture(entry.path());
             }
         }
     }
+
+
     initMovableTraders(parsedMovableTraders);
     initWorkshops(parsedWorkshops);
-    initEconomicEngine(prefabsPath);
+    initEconomicEngine(contentPath);
     gridManager.init();
 }
 
@@ -86,10 +95,15 @@ bool GameManager::getHasEverRun() const
     return hasEverRun;
 }
 
+const sf::Texture &GameManager::getTexture(size_t textureId) const
+{
+    return texturesDictionary[textureId];
+}
+
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
                              isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false),
-                             cameraPosition(0, 0), zoom(100)
+                             cameraPosition(0, 0), zoom(1000)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -103,10 +117,11 @@ void GameManager::initEconomicEngine(const char *prefabsPath)
                 auto *economicEngine = EconomicEngine::getInstance();
                 economicEngine->getPostInitSignal().connect(this,
                                                             &GameManager::askResolvedCallback);
-                economicEngine->getPostInitSignal().connect([this]()
-                                                            {
-                                                                isInitialized = true;
-                                                            });
+                economicEngine->getPostInitSignal().connect(
+                        [this]()
+                        {
+                            isInitialized = true;
+                        });
 
                 auto *traderManager = TraderManager::getInstance();
                 traderManager->getAddTraderSignal().connect(this,
@@ -123,7 +138,7 @@ void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableT
     const std::hash<std::string> hasher;
     for (const auto &parsedMovableTrader : parsedMovableTraders)
     {
-        auto *movableTrader = new MovableTrader(parsedMovableTrader["job"]);
+        auto *movableTrader = new MovableTrader(parsedMovableTrader["job"], parsedMovableTrader["texture"]);
         movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
     }
 }
@@ -133,10 +148,20 @@ void GameManager::initWorkshops(std::vector<nlohmann::json> &parsedWorkshops)
     const std::hash<std::string> hash;
     for (const auto &parsedWorkshop : parsedWorkshops)
     {
-        auto *workshop = new Workshop(parsedWorkshop["name"], parsedWorkshop["job"]);
+        auto *workshop = new Workshop(parsedWorkshop["name"], parsedWorkshop["job"], parsedWorkshop["texture"]);
         workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
     }
 }
+
+void GameManager::initTexture(const std::filesystem::path &path)
+{
+    sf::Texture texture;
+    texture.loadFromFile(path.string());
+
+    const std::hash<std::string> hash;
+    texturesDictionary.emplace(hash(path.filename().string()), texture);
+}
+
 
 void GameManager::processInput()
 {
@@ -157,9 +182,9 @@ void GameManager::processInput()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.first += zoom / 25.f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom -= 10.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom = std::max(62.f, zoom - zoom / 25.f);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom += 10.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom += zoom / 25.f;
 
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
@@ -225,29 +250,12 @@ void GameManager::render() const
 {
     window->clear();
 
-    auto grid = gridManager.grid;
-
-    sf::RectangleShape rectangle;
-    rectangle.setSize(sf::Vector2f(1, 1));
-    rectangle.setOutlineThickness(1);
-
-    for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second; ++y)
+    for (auto &ws : workshops)
     {
-        for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first; ++x)
-        {
-            rectangle.setPosition(window->getSize().x / 2.f + float(x),
-                                  window->getSize().y / 2.f + float(y));
-            rectangle.setOutlineColor(sf::Color::Green);
-            window->draw(rectangle);
-        }
-    }
-
-    for (const auto &ws : workshops)
-    {
-        rectangle.setPosition(window->getSize().x / 2.f + float(ws->x),
-                              window->getSize().y / 2.f + float(ws->y));
-        rectangle.setOutlineColor(sf::Color::Red);
-        window->draw(rectangle);
+        auto &sprite = ws->getSprite();
+        sprite.setPosition((window->getSize().x / 2.f) + float(ws->x) * 62,
+                           (window->getSize().y / 2.f) + float(ws->y) * 62);
+        window->draw(sprite);
     }
 
     sf::View view;

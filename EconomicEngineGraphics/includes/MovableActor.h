@@ -6,7 +6,10 @@
 class MovableActor : public Actor
 {
 public:
-	Actor* clone() override;
+    explicit MovableActor(const std::string &textureName) : Actor(textureName)
+    {}
+
+    Actor *clone() override;
 };
 
 

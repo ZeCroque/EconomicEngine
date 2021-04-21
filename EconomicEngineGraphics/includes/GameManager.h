@@ -6,6 +6,7 @@
 #include <memory>
 #include <queue>
 #include <nlohmann/json_fwd.hpp>
+#include <filesystem>
 
 #include "AbstractFactory.h"
 #include "GridManager.h"
@@ -24,13 +25,15 @@ class GameManager : public Singleton<GameManager> {
 //FRAMEWORK
 //==========
 public:
-    void init(const char *prefabsPath);
+    void init(const char *contentPath);
 
     void exec();
 
     bool getIsRunning() const;
 
     bool getHasEverRun() const;
+
+    const sf::Texture& getTexture(size_t textureId) const ;
 
     static const sf::Int32 maxFPS;
 
@@ -42,6 +45,8 @@ private:
     void initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders);
 
     void initWorkshops(std::vector<nlohmann::json> &parsedWorkshops);
+
+    void initTexture(const std::filesystem::path &path);
 
     void processInput();
 
@@ -62,6 +67,7 @@ private:
     bool hasEverRun;
     bool isGuiOpened;
 
+    mutable std::map<size_t, sf::Texture> texturesDictionary;
 
 //SLOTS
 //=======

@@ -12,7 +12,7 @@
 class MovableTrader : public MovableActor {
 
 public:
-	MovableTrader(const std::string& jobName);
+	MovableTrader(const std::string& jobName, const std::string& textureName);
 
     size_t getJobId() const;
 

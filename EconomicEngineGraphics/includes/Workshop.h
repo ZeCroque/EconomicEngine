@@ -14,7 +14,7 @@ class MovableTrader;
 class Workshop : public StaticActor {
 
 public:
-    Workshop(const std::string& newName,const std::string& jobName);
+    Workshop(const std::string& newName,const std::string& jobName, const std::string& textureName);
 	
     bool isAvailable() const;
 
@@ -35,7 +35,6 @@ private:
 	std::string name;
     size_t id;
     size_t jobId;
-
 };
 
 #endif //ECONOMICENGINE_WORKSHOP_H

@@ -46,6 +46,7 @@ set(SOURCES
     ${SOURCE_DIR}/StaticActor.cpp
     ${SOURCE_DIR}/WorkshopFactory.cpp
     ${SOURCE_DIR}/NavigationSystem.cpp
+	${SOURCE_DIR}/Actor.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})

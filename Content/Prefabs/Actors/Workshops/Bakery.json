@@ -2,5 +2,5 @@
     "type" : "Workshop",
     "name": "Bakery",
     "job" : "Baker",
-    "texturePath" : "Content/Textures/Traders/TX_Bakery.jpg"
+    "texture" : "TX_Bakery.png"
 }

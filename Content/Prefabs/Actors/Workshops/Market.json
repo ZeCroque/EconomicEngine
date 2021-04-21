@@ -2,5 +2,5 @@
   "type": "Workshop",
   "name": "Market",
   "job": "Thief",
-  "texturePath": "Content/Textures/Traders/TX_Market.jpg"
+  "texture": "TX_Market.png"
 }

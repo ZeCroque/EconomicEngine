@@ -5,14 +5,15 @@
 #include "Workshop.h"
 
 
-size_t Workshop::getJobId() const {
+size_t Workshop::getJobId() const
+{
     return jobId;
 }
 
-Workshop::Workshop(const std::string &newName, const std::string &jobName)
+Workshop::Workshop(const std::string &newName, const std::string &jobName, const std::string &textureName): StaticActor(textureName)
 {
-	name = newName;
-	const std::hash<std::string> hash;
+    name = newName;
+    const std::hash<std::string> hash;
     id = hash(name);
     jobId = hash(jobName);
 }
@@ -22,27 +23,30 @@ bool Workshop::isAvailable() const
     return id && !getTrader();
 }
 
-const std::string& Workshop::getName() const
+const std::string &Workshop::getName() const
 {
-	return name;
+    return name;
 }
 
 size_t Workshop::getId() const
 {
-	return id;
+    return id;
 }
 
 
-void Workshop::setTrader(const std::shared_ptr<MovableTrader> &newTrader) {
+void Workshop::setTrader(const std::shared_ptr<MovableTrader> &newTrader)
+{
     trader = newTrader;
 }
 
-Workshop *Workshop::clone() {
+Workshop *Workshop::clone()
+{
     return new Workshop(*this);
 }
 
-MovableTrader *Workshop::getTrader() const {
-	const auto referencedTrader = trader.lock();
+MovableTrader *Workshop::getTrader() const
+{
+    const auto referencedTrader = trader.lock();
     return referencedTrader.get();
 }
 
