@@ -3,6 +3,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
@@ -103,7 +104,7 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
                              isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false),
-                             zoom(1000.f), cameraPosition(0, 0)
+                             zoom(0.0f), cameraPosition(0, 0)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -174,17 +175,24 @@ void GameManager::processInput()
         }
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) cameraPosition.second -= zoom * 0.10f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        cameraPosition.second -= (window->getSize().y + window->getSize().y * zoom) * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.second += zoom * 0.10f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        cameraPosition.second += (window->getSize().y + window->getSize().y * zoom) * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) cameraPosition.first -= zoom * 0.10f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        cameraPosition.first -= (window->getSize().x + window->getSize().x * zoom) * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.first += zoom * 0.10f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        cameraPosition.first += (window->getSize().x + window->getSize().x * zoom) * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom = std::max(620.f, zoom - zoom * 0.10f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+    {
+        zoom = std::max(-0.82f, zoom - 0.01f);
+    }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom = std::min(62000.f, zoom + zoom * 0.10f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) zoom = std::min(8.2f, zoom + 0.01f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
     {
@@ -249,26 +257,24 @@ void GameManager::render() const
 {
     window->clear();
 
-    auto viewLeft = (window->getSize().x / 2.f) - zoom / 2.f + cameraPosition.first;
-    auto viewTop = (window->getSize().y / 2.f) - zoom / 2.f + cameraPosition.second;
+    float xMin = cameraPosition.first - 62;
+    float xMax = cameraPosition.first + window->getSize().x + window->getSize().x * zoom;
+    float yMin = cameraPosition.second - 62;
+    float yMax = cameraPosition.second + window->getSize().y + window->getSize().y * zoom;
+
 
     auto &grid = gridManager.grid;
-
-
-    float xMin = viewLeft - 62.f;
-    float xMax = (window->getSize().x / 2.f) + zoom / 2.f + cameraPosition.first + 62;
-    float yMin = viewTop - 62.f;
-    float yMax = (window->getSize().y / 2.f) + zoom / 2.f + cameraPosition.second + 62;
-
     sf::RectangleShape rectangle;
     rectangle.setSize(sf::Vector2f(62, 62));
+
+
     rectangle.setFillColor(sf::Color::Green);
     for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
     {
         for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first + 1; ++x)
         {
-            auto positionX = window->getSize().x / 2.f + float(x) * 62;
-            auto positionY = window->getSize().y / 2.f + float(y) * 62;
+            auto positionX = float(x) * 62;
+            auto positionY = float(y) * 62;
             if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
             {
                 rectangle.setPosition(positionX, positionY);
@@ -280,8 +286,8 @@ void GameManager::render() const
 
     for (auto &ws : workshops)
     {
-        auto positionX = window->getSize().x / 2.f + float(ws->x) * 62;
-        auto positionY = window->getSize().y / 2.f + float(ws->y) * 62;
+        auto positionX = float(ws->x) * 62;
+        auto positionY = float(ws->y) * 62;
         if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
         {
             auto &sprite = ws->getSprite();
@@ -290,11 +296,22 @@ void GameManager::render() const
         }
     }
 
-    window->display();
+
+    rectangle.setFillColor(sf::Color::Red);
+    rectangle.setPosition(xMin + 62, yMin + 62);
+    window->draw(rectangle);
+    rectangle.setPosition(xMax - 62, yMax - 62);
+    window->draw(rectangle);
+
 
     sf::View view;
-    view.reset(sf::FloatRect(xMin, yMin, xMax - xMin, yMax - yMin));
+    view.reset(sf::FloatRect(xMin, yMax, xMax - xMin, xMax - yMax));
+    view.reset(
+            sf::FloatRect(cameraPosition.first, cameraPosition.second, window->getSize().x + window->getSize().x * zoom,
+                          window->getSize().y + window->getSize().y * zoom));
+
     window->setView(view);
+    window->display();
 }
 
 
