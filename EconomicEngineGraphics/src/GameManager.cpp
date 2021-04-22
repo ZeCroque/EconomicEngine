@@ -104,7 +104,7 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
                              isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false),
-                             zoom(0.0f), cameraPosition(0, 0)
+                             zoom(0.5f), cameraPosition(0, 0)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -175,6 +175,19 @@ void GameManager::processInput()
         }
     }
 
+    switch (event.type)
+    {
+        case sf::Event::MouseWheelScrolled:
+
+            if (event.mouseWheelScroll.delta <= -1)
+                zoom = std::min(10.f, zoom + std::max(0.2f, zoom * .01f));
+            else if (event.mouseWheelScroll.delta >= 1)
+                zoom = std::max(.01f, zoom - std::max(0.2f, zoom * .01f));
+            break;
+        default:;
+    }
+
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
         cameraPosition.second -= (window->getSize().y + window->getSize().y * zoom) * 0.01f;
 
@@ -187,9 +200,9 @@ void GameManager::processInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         cameraPosition.first += (window->getSize().x + window->getSize().x * zoom) * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))zoom = std::max(-0.82f, zoom - 0.01f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom += 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))zoom = std::min(8.2f, zoom + 0.01f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))zoom -= 0.01f;
 
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
