@@ -21,7 +21,6 @@ public:
 
     Signal(const Signal& signal)
     {
-        id = signal.id;
     	for(auto&& [id, slot] : signal.slots)
     	{
     		slots[id] = slot;

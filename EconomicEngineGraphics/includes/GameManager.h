@@ -9,7 +9,6 @@
 
 #include "AbstractFactory.h"
 #include "GridManager.h"
-#include "Signal.h"
 #include "WorkshopFactory.h"
 
 class Workshop;
@@ -47,7 +46,6 @@ private:
 	
 	std::unique_ptr<std::thread> debugGuiThread;
 	bool hasEverRun;
-	bool isInitialized;
     bool isRunning;
 	bool isGuiOpened;
 
@@ -56,7 +54,6 @@ private:
 //=======
 private:
 	void traderAddedCallback(class Trader* trader);
-	void askResolvedCallback();
 	
 //GAMEPLAY
 //========

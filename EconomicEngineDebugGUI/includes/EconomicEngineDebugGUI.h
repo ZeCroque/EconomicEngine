@@ -1,11 +1,7 @@
 #pragma once
 
-#include <any>
-#include <QtWidgets/QMainWindow>
-#include "GraphManager.h"
-#include "JobManager.h"
-#include "EconomicEngine.h"
-#include "Signal.h"
+class GraphManager; 
+class JobManager;
 #include "ui_EconomicEngineDebugGUI.h"
 
 class EconomicEngineDebugGui final : public QMainWindow
@@ -14,7 +10,7 @@ Q_OBJECT
 
 public:
 	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
-	~EconomicEngineDebugGui();
+	~EconomicEngineDebugGui() = default;
 
 	void closeEvent(QCloseEvent* event) override;
 
@@ -23,7 +19,6 @@ public Q_SLOTS:
 	void setGraphVisibility();
 	void setZoomXAxis(int value);
 	void setSpeed(int value) const;
-	void setStep(int value) const;
 	void setYRange();
 	void setXRange() const;
 	void useXSlider(int);
@@ -40,8 +35,6 @@ private:
 	std::vector<GraphManager*> arrayCheckBox;
 	std::vector<JobManager*> arrayJobs;
 	std::thread economicEngineThread;
-	EconomicEngine* turnManager;
-	TraderManager* traderManager;
 	int zoomXAxis;
 
 signals:

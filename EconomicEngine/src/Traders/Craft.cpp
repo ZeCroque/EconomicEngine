@@ -1,6 +1,6 @@
 #include "Traders/Craft.h"
 
-#include "EconomicEngine.h"
+#include "Traders/Trader.h"
 
 Craft::Craft() : elapsedTime(0.0f), rate(0.0f), count(), result(0){}
 
@@ -51,7 +51,7 @@ void Craft::incrementRate(const float i)
 void Craft::update(float deltaTime)
 {
 	elapsedTime += deltaTime;
-	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() / rate)
+	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() * rate)
 	{
 		elapsedTime = 0.f;
 		craftSuccessSignal();

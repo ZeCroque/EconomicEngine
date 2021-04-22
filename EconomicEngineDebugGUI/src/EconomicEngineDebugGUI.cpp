@@ -1,19 +1,19 @@
 #include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
 #include <thread>
+#include "EconomicEngine.h"
+#include "Traders/Trader.h"
 #include "GraphManager.h"
+#include "JobManager.h"
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	: QMainWindow(parent)
 {	
-	turnManager = EconomicEngine::getInstance();
-	turnManager->getAsksResolvedSignal().connect(this, &EconomicEngineDebugGui::nextTurn);
-
-	traderManager = TraderManager::getInstance();
+	auto* turnManager = EconomicEngine::getInstance();
+	turnManager->getStockExchange().getAskResolvedSignal().connect(this, &EconomicEngineDebugGui::nextTurn);
 
 #ifdef STANDALONE_MODE
     turnManager->init("./Content/Prefabs/");
-	//TODO connect to isInitialized
 	turnManager->start(100);
 
 	//TODO update economic engine at fixed rate
@@ -29,11 +29,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 
-	turnManager->setTurnSecond(ui.horSlidSpeed->value());
-	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
-
-	turnManager->setStep(ui.horSlidStep->value());
-	connect(ui.horSlidStep, SIGNAL(valueChanged(int)), this, SLOT(setStep(int)));
+	//Set daycycle speed
+	/*turnManager->setTurnSecond(ui.horSlidSpeed->value());
+	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));*/
 
 	ui.horSlidXNav->setMaximum(ui.horSlidZoomXAxis->value());
 	ui.horSlidXNav->setValue(ui.horSlidZoomXAxis->value());
@@ -51,11 +49,6 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
-}
-
-EconomicEngineDebugGui::~EconomicEngineDebugGui()
-{
-	turnManager = nullptr;
 }
 
 void EconomicEngineDebugGui::setGraphVisibility()
@@ -118,7 +111,7 @@ void EconomicEngineDebugGui::setYRange()
 
 void EconomicEngineDebugGui::setXRange() const
 {
-	const auto key = turnManager->getTurnCount();
+	const auto key = EconomicEngine::getInstance()->getElapsedDayCount();
 	ui.horSlidXNav->setMaximum(key);
 	if (key > zoomXAxis)
 	{
@@ -141,12 +134,7 @@ void EconomicEngineDebugGui::setXRange() const
 
 void EconomicEngineDebugGui::setSpeed(const int value) const
 {
-	turnManager->setTurnSecond(value);
-}
-
-void EconomicEngineDebugGui::setStep(const int value) const
-{
-	turnManager->setStep(value);
+	//TODO daycycle speed
 }
 
 void EconomicEngineDebugGui::useXSlider(int)
@@ -161,12 +149,12 @@ void EconomicEngineDebugGui::toggleStart() const
 	if (ui.pBStart->isChecked())
 	{
 		ui.pBStart->setText("Stop");
-		turnManager->resume();
+		EconomicEngine::getInstance()->resume();
 	}
 	else
 	{
 		ui.pBStart->setText("Start");
-		turnManager->pause();
+		EconomicEngine::getInstance()->pause();
 	}
 }
 
@@ -182,14 +170,14 @@ void EconomicEngineDebugGui::setMode() const
 void EconomicEngineDebugGui::doKill()
 {
 	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
-	traderManager->kill(job->getJobId(), ui.sBKill->value());
+	EconomicEngine::getInstance()->getTraderManager().kill(job->getJobId(), ui.sBKill->value());
 	updateUiJobs();
 }
 
 void EconomicEngineDebugGui::doAdd()
 {
 	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
-	traderManager->addTrader(ui.sBAdd->value(), job->getJobId());
+	EconomicEngine::getInstance()->getTraderManager().addTrader(ui.sBAdd->value(), job->getJobId());
 	updateUiJobs();
 }
 
@@ -219,13 +207,13 @@ void EconomicEngineDebugGui::doReset()
 		QWidget* widget = item->widget();
 		delete widget;
 	}
-	turnManager->reset(ui.sBTraderNumber->value());
+	EconomicEngine::getInstance()->reset(ui.sBTraderNumber->value());
 	doInit();
 }
 
 void EconomicEngineDebugGui::doInit()
 {
-	const auto tradableManager = turnManager->getTradableFactory();
+	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
 	auto itemsName = tradableManager.getTradablesName();
 	auto itemsKeys = tradableManager.getKeys();
 
@@ -278,13 +266,15 @@ void EconomicEngineDebugGui::doInit()
 	ui.gridLayJobs->addWidget(new QLabel("Avg. food |"), 0, 3);
 	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
 	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
-	for (const auto& job : traderManager->getJobList())
+
+	auto& traderManager = EconomicEngine::getInstance()->getTraderManager();
+	for (const auto& job : traderManager.getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
 
 		jobManager->lbName = new QLabel(jobManager->getJobName());
 
-		auto number = QString::number(traderManager->getJobCount(jobManager->getJobId()));
+		auto number = QString::number(traderManager.getJobCount(jobManager->getJobId()));
 		jobManager->lbNumber = new QLabel(number);
 
 		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
@@ -309,18 +299,20 @@ void EconomicEngineDebugGui::doInit()
 void EconomicEngineDebugGui::updateUiJobs()
 {
 	const auto cbJob = arrayJobs.at(ui.cBKill->currentIndex());
-	const auto traderCount = traderManager->getJobCount(cbJob->getJobId());
+	auto& traderManager = EconomicEngine::getInstance()->getTraderManager();
+	
+	const auto traderCount = traderManager.getJobCount(cbJob->getJobId());
 	ui.sBKill->setMaximum(traderCount);
 
 	for (auto job : arrayJobs)
 	{
 		const auto jobId = job->getJobId();
 
-		auto number = QString::number(traderManager->getJobCount(jobId));
-		auto money = QString::number(traderManager->getMoneyMeanByJob(jobId));
-		auto food = QString::number(traderManager->getFoodLevelMeanByJob(jobId));
+		auto number = QString::number(traderManager.getJobCount(jobId));
+		auto money = QString::number(traderManager.getMoneyMeanByJob(jobId));
+		auto food = QString::number(traderManager.getFoodLevelMeanByJob(jobId));
 
-		const auto demography = traderManager->getDemographyByJob(jobId);
+		const auto demography = traderManager.getDemographyByJob(jobId);
 		auto birth = QString::number(demography.first);
 		auto dead = QString::number(demography.second);
 
@@ -334,8 +326,9 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
-	const auto key = turnManager->getTurnCount();
-	const auto stockExchange = StockExchange::getInstance();
+	auto* turnManager = EconomicEngine::getInstance();
+	const auto key = turnManager->getElapsedDayCount();
+	const auto stockExchange = turnManager->getStockExchange();
 
 	auto totalData = 0;
 
@@ -346,7 +339,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 		auto const graphIndex = checkBox->getGraphIndex();
 
 		auto i = key - step;
-		for (const auto& data : stockExchange->getStockExchangePrice(checkBox->getItemId(), step))
+		for (const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), step))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;
@@ -369,6 +362,6 @@ void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)
 {
 #ifdef STANDALONE_MODE
 	//TODO stop runner thread
-	this->economicEngineThread.join();
+	//this->economicEngineThread.join();
 #endif
 }

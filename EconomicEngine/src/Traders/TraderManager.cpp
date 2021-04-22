@@ -1,6 +1,8 @@
 #include "Traders/TraderManager.h"
 #include <algorithm>
 
+#include "Traders/Trader.h"
+
 void TraderManager::init() const
 {
 	const auto& keys = jobFactory.getKeys();
@@ -122,8 +124,9 @@ void TraderManager::killStarvedTraders()
 
 	for (auto it = traders.begin(); it != traders.end(); ++it)
 	{
+		it->updateFoodLevel();
 		if (it->getFoodLevel() <= 0)
-		{
+		{		
 			iterators.emplace_back(it);
 		}
 	}

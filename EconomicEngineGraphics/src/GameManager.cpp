@@ -88,7 +88,7 @@ bool GameManager::getHasEverRun() const
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
-GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")), isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false)
+GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")), hasEverRun(false), isRunning(false), isGuiOpened(false)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -99,10 +99,7 @@ void GameManager::initEconomicEngine(const char* prefabsPath)
         auto* economicEngine = EconomicEngine::getInstance();
         economicEngine->init(prefabsPath);      
         economicEngine->start(100);
-        economicEngine->getAsksResolvedSignal().connect(this, &GameManager::askResolvedCallback);
-
-        auto* traderManager = TraderManager::getInstance();
-        traderManager->getTraderAddedSignal().connect(this, &GameManager::traderAddedCallback);
+        economicEngine->getTraderManager().getTraderAddedSignal().connect(this, &GameManager::traderAddedCallback);
 }
 
 
@@ -171,32 +168,27 @@ void GameManager::processInput()
 
 void GameManager::update(float deltaTime)
 {
-    if (isInitialized) 
-    {
-        hasEverRun = true;
-        EconomicEngine::getInstance()->update(deltaTime);
-        
-         while (!pendingTraders.empty()) 
-         {
-            auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
-            pendingTraders.pop();
-            traders.push_back(trader);
+    EconomicEngine::getInstance()->update(deltaTime);
+    
+	while (!pendingTraders.empty()) 
+	{
+		auto trader = std::shared_ptr<MovableTrader>(pendingTraders.front());
+		pendingTraders.pop();
+		traders.push_back(trader);
 
-            auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
-            if (availableWorkshop) 
-            {
-                availableWorkshop->setTrader(trader);
-            } 
-            else 
-            {
-                auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
-                workshop->setTrader(trader);
-                gridManager.queueWorkshop(workshop);
-                //NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
-            }
+		auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
+		if (availableWorkshop) 
+		{
+		availableWorkshop->setTrader(trader);
+		} 
+		else 
+		{
+		auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
+		workshop->setTrader(trader);
+		gridManager.queueWorkshop(workshop);
+		//NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
         }
-        
-    }
+	}
 }
 
 void GameManager::render() const 
@@ -251,12 +243,6 @@ Workshop* GameManager::findAvailableWorkshop(size_t jobId) const
         }
     }
     return nullptr;
-}
-
-
-void GameManager::askResolvedCallback() 
-{
-
 }
 
 std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const 

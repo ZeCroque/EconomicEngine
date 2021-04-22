@@ -10,7 +10,7 @@
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Traders/TraderManager.h"
 
-Trader::Trader() : isWorking(false), currentAction(Action::None), currentCraft(nullptr), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f)
+Trader::Trader() : isWaitingForActivity(true), currentAction(Action::None), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f)
 {
 	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
 	auto keys = tradableManager.getKeys();
@@ -33,43 +33,44 @@ Trader::Trader(Job* job) : Trader()
 
 void Trader::update(const float deltaTime)
 {
-	if(!isWorking)
+	if(isWaitingForActivity)
 	{
-		refreshFoodLevel();
 		switch(currentAction)
 		{
 			case Action::None:
-				currentAction = Action::Working;
-				startCrafting();
+				currentAction = Action::Crafting;
 				break;
-			case Action::Working:
-				delete currentCraft; //TODO replace with unique_ptr
-				currentCraft = nullptr;
+			case Action::Crafting:
 				currentAction = Action::Trading;
 				break;
 			case Action::Trading:
-				makeChild();
-				startCrafting();
-				currentAction = Action::Working;
+				makeChild(); //TODO move it at better place (after night?)
+				currentAction = Action::Crafting;
 				break;
 			case Action::Sleeping:
 				break;
 		}
-		isWorking = true;
+		isWaitingForActivity = false;
 	}
-	else
+
+	// ReSharper disable once CppIncompleteSwitchStatement
+	// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
+	switch(currentAction)  // NOLINT(clang-diagnostic-switch)
 	{
-		// ReSharper disable once CppIncompleteSwitchStatement
-		// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
-		switch(currentAction)  // NOLINT(clang-diagnostic-switch)
-		{
-			case Action::Working:
+		case Action::Crafting:
+			if(!currentCraft)
+			{
+				startCrafting();
+			}
+			if(currentCraft)
+			{
 				currentCraft->update(deltaTime);
-				break;
-			case Action::Trading:
-				makeAsks();
-				break;
-		}
+			}
+			break;
+		case Action::Trading:
+			makeAsks();
+			isWaitingForActivity = true; //TODO signal slot with displacements
+			break;
 	}
 }
 
@@ -395,7 +396,7 @@ void Trader::startCrafting()
 		std::mt19937 randomEngine(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 		//Picks randomly an available craft
 		const std::uniform_int_distribution<int> uniformDist(0, static_cast<int>(interestingCrafts.size() - 1));
-		currentCraft = currentJob->createCraft(interestingCrafts[uniformDist(randomEngine)]);
+		currentCraft = std::unique_ptr<Craft>(currentJob->createCraft(interestingCrafts[uniformDist(randomEngine)]));
 		currentCraft->getCraftSuccessSignal().connect(this, &Trader::craftSuccessCallback);
 		
 		//Init the associated tool
@@ -436,8 +437,7 @@ void Trader::startCrafting()
 	}
 }
 
-
-void Trader::refreshPriceBelief(Ask* ask)
+void Trader::updatePriceBelief(Ask* ask)
 {
 	const float priceBeliefMean = calculatePriceBeliefMean(ask->getId());
 	const float currentMean = priceHistory[ask->getId()][0]->first / static_cast<float>(priceHistory[ask->getId()][0]->second);
@@ -461,7 +461,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 	{
 		*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
 		*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] + currentMean - priceBeliefMean);
-		if(dynamic_cast<BuyingAsk*>(ask)!=nullptr)
+		if(static_cast<BuyingAsk*>(ask)!=nullptr)
 		{	
 			*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean, *priceBeliefs[ask->getId()][0] + 0.05f * priceBeliefMean);
 			*priceBeliefs[ask->getId()][1] = std::min<float>(currentMean * 1.5f, *priceBeliefs[ask->getId()][1] + 0.05f * priceBeliefMean);
@@ -474,7 +474,7 @@ void Trader::refreshPriceBelief(Ask* ask)
 	}
 }
 
-void Trader::refreshFoodLevel()
+void Trader::updateFoodLevel()
 {
 	foodLevel -= 0.34f;
 	if (foodLevel > 0.f && foodLevel <= 10.f)
@@ -503,49 +503,36 @@ void Trader::makeChild()
 	if (successCount > 10)
 	{
 		successCount = 0;
-		TraderManager::getInstance()->addTrader(1, currentJob->getId());
+		EconomicEngine::getInstance()->getTraderManager().addTrader(1, currentJob->getId());
 	}
 }
 
-void Trader::checkAsks()
+void Trader::checkAskCallback(Ask* ask)
 {
-	for (auto& ask : currentAsks)
+	if (ask->getStatus() == AskStatus::Sold)
 	{
-		if (ask->getStatus() == AskStatus::Sold)
+		auto* buyingAsk = static_cast<BuyingAsk*>(ask);
+		if (buyingAsk)
 		{
-			auto* buyingAsk = dynamic_cast<BuyingAsk*>(ask.get());
-			if (buyingAsk != nullptr)
-			{
-				addToInventory(buyingAsk->getId(), buyingAsk->getCount());
-				money -= ask->getPrice() * static_cast<float>(ask->getCount());
-			}
-			else
-			{
-				auto* sellingAsk = dynamic_cast<SellingAsk*>(ask.get());
-				removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
-				money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
-			}
+			addToInventory(buyingAsk->getId(), buyingAsk->getCount());
+			money -= ask->getPrice() * static_cast<float>(ask->getCount());
 		}
-
-		refreshPriceBelief(ask.get());
+		else
+		{
+			auto* sellingAsk = static_cast<SellingAsk*>(ask);
+			removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
+			money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
+		}
 	}
-	currentAsks.clear();
+	updatePriceBelief(ask);
 }
 
 void Trader::craftSuccessCallback()
 {
 	addToInventory(currentCraft->getResult(), currentCraft->getCount());
-	isWorking = false;
+	isWaitingForActivity = true;
 }
 
-/*void Trader::refresh()
-{
-	//add remove items from inventory based on asks and update price beliefs -> TODO connected to ask resolved
-	checkAsks();
-	
-}*/
-
-//=====Inventory Management=====
 int  Trader::getItemCount(const size_t key) const
 {
 	int count = 0;
@@ -580,7 +567,7 @@ bool Trader::isInInventory(const size_t key)
 
 void Trader::addToInventory(const size_t key, const int count)
 {
-	const auto tradableManager = EconomicEngine::getInstance()->getTradableFactory();
+	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
 
 	auto* item = tradableManager.createObject(key);
 	auto* countable = dynamic_cast<Countable*>(item);
@@ -658,7 +645,6 @@ void Trader::removeFromInventory(Tradable* tradable)
 	}
 }
 
-//=====Accessors/Mutators=====
 const std::list<std::shared_ptr<Tradable>>& Trader::getInventory() const
 {
 	return inventory;
@@ -671,7 +657,7 @@ Job* Trader::getCurrentJob() const
 
 Craft* Trader::getCurrentCraft() const
 {
-	return currentCraft;
+	return currentCraft.get();
 }
 
 float Trader::getFoodLevel() const

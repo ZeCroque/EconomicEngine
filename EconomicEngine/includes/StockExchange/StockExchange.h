@@ -4,35 +4,19 @@
 #include <list>
 
 #include "Ask.h"
-#include "Singleton.h"
 #include "VectorArray.h"
 
-class StockExchange : public Singleton<StockExchange>
+class StockExchange
 {
-	friend class Singleton<StockExchange>;
-private:
-	int turnCount;
-	VectorArray<BuyingAsk> currentBuyingAsks;
-	VectorArray<SellingAsk> currentSellingAsks;
-	VectorArray<BuyingAsk> betterAsks;
-	std::vector<size_t> keys;
-
-	StockExchange();
-	
 public:
 	void init();
 	void registerAsk(std::shared_ptr<BuyingAsk> buyingAsk);	
 	void registerAsk(std::shared_ptr<SellingAsk> sellingAsk);
 	void resolveOffers();
 	void reset();
-	void incrementTurnCount();
 	[[nodiscard]] float getStockExchangePrice(size_t key) const;
 	[[nodiscard]] std::list<BuyingAsk> getStockExchangePrice(size_t key, int count) const;
-	[[nodiscard]] int getTurnCount() const;
-
-
-
-	
+	[[nodiscard]] const Signal<>& getAskResolvedSignal() const;
 	
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
 	{
@@ -52,7 +36,11 @@ public:
 		}
 	}
 
-
+private:
+	VectorArray<BuyingAsk> currentBuyingAsks;
+	VectorArray<SellingAsk> currentSellingAsks;
+	VectorArray<BuyingAsk> betterAsks;
+	Signal<> askResolvedSignal;
 
 };
 

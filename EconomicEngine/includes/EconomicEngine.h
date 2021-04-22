@@ -14,24 +14,23 @@ class EconomicEngine : public Singleton<EconomicEngine>
 friend class Singleton<EconomicEngine>;
 	
 protected:
-	TraderManager* traderManager;
+	mutable TraderManager traderManager;
 	mutable TradableFactory tradableFactory;
-	StockExchange* stockExchange;
+	mutable StockExchange stockExchange;
 
-	EconomicEngine() : traderManager(TraderManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1), elapsedTimeSinceDayStart(0), dayDuration(320.f), baseActionTime(dayDuration / 4.f)  {}
+	EconomicEngine() : bRunning(false), bPaused(true), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(320.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 100),baseActionTime(dayDuration / 200.f)  {}
 private:
 	bool bRunning;
 	bool bPaused;
-	int turnSecond;
-	int step;
-	Signal<> asksResolvedSignal;
+
+	int elapsedDayCount;
 	float elapsedTimeSinceDayStart;
 	float dayDuration;
+	float elapsedTimeSinceLastStockExchangeResolution;
+	float stockExchangeResolutionTime;
 	float baseActionTime;
 
 public:
-
-	const Signal<>& getAsksResolvedSignal() const;
 	
 	void initJobs(std::vector<nlohmann::json>& parsedJobs) const;
 	
@@ -49,15 +48,15 @@ public:
 
 	void resume();
 
-	void setTurnSecond(const int turnSecond);
-
-	[[nodiscard]] int getTurnCount() const;
-
-	void setStep(const int step);
-
 	[[nodiscard]] float getBaseActionTime() const;
 
-	[[nodiscard]] const TradableFactory& getTradableFactory() const;
+	[[nodiscard]] int getElapsedDayCount() const;
+
+	[[nodiscard]] TradableFactory& getTradableFactory() const;
+
+	[[nodiscard]] TraderManager& getTraderManager() const;
+
+	[[nodiscard]] StockExchange& getStockExchange() const;
 
 };
 

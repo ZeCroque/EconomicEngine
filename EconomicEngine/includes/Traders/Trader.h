@@ -7,12 +7,14 @@
 
 #include <list>
 
+
+#include "EconomicEngine.h"
 #include "StockExchange/StockExchange.h"
 
 enum class Action
 {
 	None = 0,
-	Working = 1,
+	Crafting = 1,
 	Trading = 2,
 	Sleeping = 3
 };
@@ -21,22 +23,20 @@ class Trader
 {
 private:
 
-	bool isWorking;
+	bool isWaitingForActivity;
 	Action currentAction;
 	
 	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
-	Craft* currentCraft;
+	std::unique_ptr<Craft> currentCraft;
 	Job* currentJob;
-	std::list<std::shared_ptr<class Tradable>> inventory;
-	std::list<std::shared_ptr<class Ask>> currentAsks;
+	std::list<std::shared_ptr<Tradable>> inventory;
 	int successCount;
 	float money;
 	float foodLevel;
 	void makeBuyingAsks();
 	void makeSellingAsks();
-	void refreshPriceBelief(Ask* ask);
-	void refreshFoodLevel();
+	void updatePriceBelief(Ask* ask);
 	void makeChild();
 	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) ;
 	[[nodiscard]] float calculateEarnings(Craft* craft) const;
@@ -52,8 +52,8 @@ private:
 			if (price <= maxPrice)
 			{
 				auto ask = std::make_shared<T>(item.first, item.second, price);
-				StockExchange::getInstance()->registerAsk(ask);
-				currentAsks.emplace_back(ask);
+				EconomicEngine::getInstance()->getStockExchange().registerAsk(ask);
+				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);
 			}
 		}
 	}
@@ -65,7 +65,8 @@ public:
 	void update(float deltaTime);
 	void makeAsks();
 	void startCrafting();
-	void checkAsks();
+	void updateFoodLevel();
+	void checkAskCallback(Ask* ask);
 	void craftSuccessCallback();
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] Job* getCurrentJob() const;

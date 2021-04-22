@@ -2,18 +2,17 @@
 #include <algorithm>
 
 #include "EconomicEngine.h"
-
-StockExchange::StockExchange() : turnCount(0) {}
+#include "Traders/Trader.h"
 
 void StockExchange::init()
 {
-	keys = std::vector<size_t>(EconomicEngine::getInstance()->getTradableFactory().getKeys());
+	auto keys = EconomicEngine::getInstance()->getTradableFactory().getKeys();
 	currentBuyingAsks = VectorArray<BuyingAsk>(keys);
 	currentSellingAsks = VectorArray<SellingAsk>(keys);
 	betterAsks = VectorArray<BuyingAsk>(keys);
 	for (auto key : keys)
 	{
-		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
+		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(key, 0, 0.0f));
 	}
 }
 
@@ -33,7 +32,7 @@ void StockExchange::registerAsk(std::shared_ptr<SellingAsk> sellingAsk)
 
 void StockExchange::resolveOffers()
 {
-	for (auto key : keys)
+	for (auto key : EconomicEngine::getInstance()->getTradableFactory().getKeys())
 	{
 		auto& buyingAsks = currentBuyingAsks[key];
 		auto& sellingAsks = currentSellingAsks[key];
@@ -65,6 +64,7 @@ void StockExchange::resolveOffers()
 			if(buyingAsks.back()->getCount() == buyingAsks.back()->getTradedCount())
 			{
 				buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
+				buyingAsks.back()->resolve();
 			}
 		}
 		if (doOnce)
@@ -77,6 +77,7 @@ void StockExchange::resolveOffers()
 			if(sellingAsk->getStatus()==AskStatus::Pending)
 			{
 				sellingAsk->setStatus(AskStatus::Refused);
+				sellingAsk->resolve();
 			}
 		}
 
@@ -85,30 +86,25 @@ void StockExchange::resolveOffers()
 			if (buyingAsk->getStatus() == AskStatus::Pending)
 			{
 				buyingAsk->setStatus(AskStatus::Refused);
+				buyingAsk->resolve();
 			}
 		}
 
 		buyingAsks.clear();
 		sellingAsks.clear();
 	}
+	askResolvedSignal();
 }
 
 void StockExchange::reset()
 {
-	for (auto key : keys)
+	for (auto key : EconomicEngine::getInstance()->getTradableFactory().getKeys())
 	{
 		currentSellingAsks[key].clear();
 		currentBuyingAsks[key].clear();
 		betterAsks[key].clear();
-		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(BuyingAsk(key, 0, 0.0f)));
+		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(key, 0, 0.0f));
 	}
-	//TODO remove turncount
-	turnCount = 0;
-}
-
-void StockExchange::incrementTurnCount()
-{
-	++turnCount;
 }
 
 float StockExchange::getStockExchangePrice(const size_t key) const
@@ -132,8 +128,8 @@ std::list<BuyingAsk> StockExchange::getStockExchangePrice(const size_t key, cons
 	return result;
 }
 
-int StockExchange::getTurnCount() const
+const Signal<>& StockExchange::getAskResolvedSignal() const
 {
-	return turnCount;
+	return askResolvedSignal;
 }
 

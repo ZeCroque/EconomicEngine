@@ -2,16 +2,15 @@
 #define TRADER_MANAGER_H
 
 #include "JobFactory.h"
-#include "Singleton.h"
-#include "Trader.h"
 #include "Signal.h"
-#include <any>
+#include "VectorArray.h"
 
-class TraderManager final : public Singleton<TraderManager>
+
+class TraderManager final
 {
 private:
 	std::list<Trader> traders;
-	mutable VectorArray < std::pair<int, int>> demographyCounts;
+	mutable VectorArray< std::pair<int, int>> demographyCounts;
 	JobFactory jobFactory;
     Signal<Trader*> traderAddedSignal;
     Signal<Trader*> traderKilledSignal;

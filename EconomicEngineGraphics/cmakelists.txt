@@ -8,7 +8,7 @@ find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 
 if(WIN32)
     set(QT_VERSION "5.15.2")
-    set(CMAKE_PREFIX_PATH D:/Qt/${QT_VERSION}/msvc2019_64)
+    set(CMAKE_PREFIX_PATH J:/QT/${QT_VERSION}/msvc2019_64)
 endif(WIN32)
 
 find_package(Qt5 ${QT_VERSION} COMPONENTS
