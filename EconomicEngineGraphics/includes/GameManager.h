@@ -19,7 +19,8 @@ class MovableTrader;
 
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 
-class GameManager : public Singleton<GameManager> {
+class GameManager : public Singleton<GameManager>
+{
     friend class Singleton<GameManager>;
 
 //FRAMEWORK
@@ -33,7 +34,7 @@ public:
 
     bool getHasEverRun() const;
 
-    const sf::Texture& getTexture(size_t textureId) const ;
+    const sf::Texture &getTexture(size_t textureId) const;
 
     static const sf::Int32 maxFPS;
 
@@ -57,6 +58,7 @@ private:
     void quit();
 
     std::unique_ptr<sf::RenderWindow> window;
+    sf::View view;
 
     std::unique_ptr<std::thread> debugGuiThread;
     std::unique_ptr<std::thread> economicEngineThread;
@@ -99,8 +101,6 @@ private:
     mutable std::vector<std::shared_ptr<Workshop>> workshops;
     WorkshopFactory workshopFactory;
 
-    std::pair<float, float> cameraPosition;
-    float zoom;
 };
 
 #endif //GAME_H

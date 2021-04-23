@@ -103,8 +103,7 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
-                             isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false),
-                             zoom(0.5f), cameraPosition(0, 0)
+                             view(), isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -177,33 +176,37 @@ void GameManager::processInput()
 
     switch (event.type)
     {
-        case sf::Event::MouseWheelScrolled:
-
-            if (event.mouseWheelScroll.delta <= -1)
-                zoom = std::min(10.f, zoom + std::max(0.2f, zoom * .01f));
-            else if (event.mouseWheelScroll.delta >= 1)
-                zoom = std::max(.01f, zoom - std::max(0.2f, zoom * .01f));
+        case sf::Event::Resized:
+        {
+            auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+            view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, float(event.size.width), float(event.size.height)));
             break;
+        }
+        case sf::Event::MouseWheelScrolled:
+        {
+            if (event.mouseWheelScroll.delta <= -1)
+                view.zoom(1.10f);
+            else if (event.mouseWheelScroll.delta >= 1 &&
+                     (view.getSize().x * 0.95f > 620.f && view.getSize().y * 0.95f > 620.f))
+                view.zoom(0.90f);
+            break;
+        }
         default:;
     }
 
+    auto deltaX = 0;
+    auto deltaY = 0;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-        cameraPosition.second -= (window->getSize().y + window->getSize().y * zoom) * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) deltaY -= view.getSize().y * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        cameraPosition.second += (window->getSize().y + window->getSize().y * zoom) * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) deltaY += view.getSize().y * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        cameraPosition.first -= (window->getSize().x + window->getSize().x * zoom) * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) deltaX -= view.getSize().x * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        cameraPosition.first += (window->getSize().x + window->getSize().x * zoom) * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) deltaX += view.getSize().x * 0.01f;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) zoom += 0.01f;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))zoom -= 0.01f;
-
+    view.move(deltaX, deltaY);
+    window->setView(view);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
     {
@@ -267,12 +270,11 @@ void GameManager::update(float deltaTime)
 void GameManager::render() const
 {
     window->clear();
-
-
-    float xMin = (cameraPosition.first - (window->getSize().x * zoom) / 2);
-    float xMax = (xMin + window->getSize().x + window->getSize().x * zoom);
-    float yMin = (cameraPosition.second - (window->getSize().y * zoom) / 2);
-    float yMax = (yMin + window->getSize().y + window->getSize().y * zoom);
+    auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+    float xMin = viewOrigin.x - 62;
+    float xMax = viewOrigin.x + view.getSize().x;
+    float yMin = viewOrigin.y - 62;
+    float yMax = viewOrigin.y + view.getSize().y;
 
 
     auto &grid = gridManager.grid;
@@ -312,10 +314,6 @@ void GameManager::render() const
     rectangle.setPosition(xMax - 62, yMax - 62);
     window->draw(rectangle);
 
-    sf::View view;
-    view.reset(sf::FloatRect(xMin + 62, yMin + 62, xMax - xMin - 62, yMax - yMin - 62));
-
-    window->setView(view);
     window->display();
 }
 
