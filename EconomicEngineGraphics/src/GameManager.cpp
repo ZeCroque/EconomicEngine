@@ -48,6 +48,8 @@ void GameManager::init(const char *contentPath)
         }
     }
 
+    const std::hash<std::string> hash;
+    grassId = hash("TX_Grass.png");
 
     initMovableTraders(parsedMovableTraders);
     initWorkshops(parsedWorkshops);
@@ -309,9 +311,8 @@ void GameManager::render() const
 
         auto &grid = gridManager.grid;
 
-        sf::RectangleShape rectangle;
-        rectangle.setSize(sf::Vector2f(62, 62));
-        rectangle.setFillColor(sf::Color::Green);
+        sf::Sprite grassSprite;
+        grassSprite.setTexture(getTexture(grassId));
 
         for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
         {
@@ -321,8 +322,8 @@ void GameManager::render() const
                 auto positionY = float(y) * 62;
                 if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
                 {
-                    rectangle.setPosition(positionX, positionY);
-                    background.draw(rectangle);
+                    grassSprite.setPosition(positionX, positionY);
+                    background.draw(grassSprite);
                 }
             }
         }
@@ -333,17 +334,21 @@ void GameManager::render() const
             auto positionY = float(ws->y) * 62;
             if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
             {
-                auto &sprite = ws->getSprite();
-                sprite.setPosition(positionX, positionY);
-                background.draw(sprite);
+                auto &workshopSprite = ws->getSprite();
+                workshopSprite.setPosition(positionX, positionY);
+                background.draw(workshopSprite);
             }
         }
 
+        sf::RectangleShape rectangle;
+        rectangle.setSize(sf::Vector2f(62, 62));
         rectangle.setFillColor(sf::Color::Red);
         rectangle.setPosition(xMin + 62, yMin + 62);
         background.draw(rectangle);
         rectangle.setPosition(xMax - 62, yMax - 62);
         background.draw(rectangle);
+
+
         background.display();
 
         backgroundNeedsUpdate = false;

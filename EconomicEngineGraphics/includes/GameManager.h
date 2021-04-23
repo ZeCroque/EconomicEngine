@@ -74,6 +74,7 @@ private:
 
     mutable std::map<size_t, sf::Texture> texturesDictionary;
     mutable sf::RenderTexture background;
+    size_t grassId;
 
 //SLOTS
 //=======
