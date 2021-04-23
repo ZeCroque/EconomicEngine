@@ -103,7 +103,8 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
-                             view(), isInitialized(false), isRunning(false), isGuiOpened(false), hasEverRun(false)
+                             background(), view(), isInitialized(false), isRunning(false), isGuiOpened(false),
+                             hasEverRun(false), backgroundNeedsUpdate(true)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -162,48 +163,71 @@ void GameManager::initTexture(const std::filesystem::path &path)
     texturesDictionary.emplace(hash(path.filename().string()), texture);
 }
 
-
 void GameManager::processInput()
 {
     sf::Event event{};
+
     while (window->pollEvent(event))
     {
-        if (event.type == sf::Event::Closed)
+        switch (event.type)
         {
-            quit();
+            case sf::Event::Closed:
+            {
+                quit();
+                break;
+            }
+            case sf::Event::Resized:
+            {
+                auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+                view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, float(event.size.width), float(event.size.height)));
+                backgroundNeedsUpdate = true;
+                break;
+            }
+            case sf::Event::MouseWheelScrolled:
+            {
+                if (event.mouseWheelScroll.delta <= -1 &&
+                    (view.getSize().x * 1.10f < 32768.f && view.getSize().y * 1.10f < 32768.f))
+                {
+                    view.zoom(1.10f);
+                }
+                else if (event.mouseWheelScroll.delta >= 1 &&
+                         (view.getSize().x * 0.90f > 620.f && view.getSize().y * 0.90f > 620.f))
+                {
+                    view.zoom(0.90f);
+                }
+                backgroundNeedsUpdate = true;
+                break;
+            }
+            default:;
         }
-    }
-
-    switch (event.type)
-    {
-        case sf::Event::Resized:
-        {
-            auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-            view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, float(event.size.width), float(event.size.height)));
-            break;
-        }
-        case sf::Event::MouseWheelScrolled:
-        {
-            if (event.mouseWheelScroll.delta <= -1)
-                view.zoom(1.10f);
-            else if (event.mouseWheelScroll.delta >= 1 &&
-                     (view.getSize().x * 0.95f > 620.f && view.getSize().y * 0.95f > 620.f))
-                view.zoom(0.90f);
-            break;
-        }
-        default:;
     }
 
     auto deltaX = 0;
     auto deltaY = 0;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) deltaY -= view.getSize().y * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+    {
+        deltaY -= view.getSize().y * 0.01f;
+        backgroundNeedsUpdate = true;
+    }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) deltaY += view.getSize().y * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        deltaY += view.getSize().y * 0.01f;
+        backgroundNeedsUpdate = true;
+    }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) deltaX -= view.getSize().x * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+    {
+        deltaX -= view.getSize().x * 0.01f;
+        backgroundNeedsUpdate = true;
+    }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) deltaX += view.getSize().x * 0.01f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        deltaX += view.getSize().x * 0.01f;
+        backgroundNeedsUpdate = true;
+    }
 
     view.move(deltaX, deltaY);
     window->setView(view);
@@ -269,54 +293,71 @@ void GameManager::update(float deltaTime)
 
 void GameManager::render() const
 {
-    window->clear();
     auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-    float xMin = viewOrigin.x - 62;
-    float xMax = viewOrigin.x + view.getSize().x;
-    float yMin = viewOrigin.y - 62;
-    float yMax = viewOrigin.y + view.getSize().y;
 
-
-    auto &grid = gridManager.grid;
-    sf::RectangleShape rectangle;
-    rectangle.setSize(sf::Vector2f(62, 62));
-    rectangle.setFillColor(sf::Color::Green);
-
-    for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
+    if (backgroundNeedsUpdate)
     {
-        for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first + 1; ++x)
+        float xMin = viewOrigin.x - 62;
+        float xMax = viewOrigin.x + view.getSize().x;
+        float yMin = viewOrigin.y - 62;
+        float yMax = viewOrigin.y + view.getSize().y;
+
+        background.clear();
+        background.create(view.getSize().x, view.getSize().y);
+        background.setView(view);
+
+
+        auto &grid = gridManager.grid;
+
+        sf::RectangleShape rectangle;
+        rectangle.setSize(sf::Vector2f(62, 62));
+        rectangle.setFillColor(sf::Color::Green);
+
+        for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
         {
-            auto positionX = float(x) * 62;
-            auto positionY = float(y) * 62;
-            if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+            for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first + 1; ++x)
             {
-                rectangle.setPosition(positionX, positionY);
-                window->draw(rectangle);
+                auto positionX = float(x) * 62;
+                auto positionY = float(y) * 62;
+                if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+                {
+                    rectangle.setPosition(positionX, positionY);
+                    background.draw(rectangle);
+                }
             }
         }
-    }
 
-    for (auto &ws : workshops)
-    {
-        auto positionX = float(ws->x) * 62;
-        auto positionY = float(ws->y) * 62;
-        if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+        for (auto &ws : workshops)
         {
-            auto &sprite = ws->getSprite();
-            sprite.setPosition(positionX, positionY);
-            window->draw(sprite);
+            auto positionX = float(ws->x) * 62;
+            auto positionY = float(ws->y) * 62;
+            if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+            {
+                auto &sprite = ws->getSprite();
+                sprite.setPosition(positionX, positionY);
+                background.draw(sprite);
+            }
         }
+
+        rectangle.setFillColor(sf::Color::Red);
+        rectangle.setPosition(xMin + 62, yMin + 62);
+        background.draw(rectangle);
+        rectangle.setPosition(xMax - 62, yMax - 62);
+        background.draw(rectangle);
+        background.display();
+
+        backgroundNeedsUpdate = false;
     }
 
-    rectangle.setFillColor(sf::Color::Red);
-    rectangle.setPosition(xMin + 62, yMin + 62);
-    window->draw(rectangle);
-    rectangle.setPosition(xMax - 62, yMax - 62);
-    window->draw(rectangle);
 
+    const sf::Texture &texture = background.getTexture();
+    sf::Sprite backgroundSprite(texture);
+    backgroundSprite.setPosition(viewOrigin);
+
+    window->clear();
+    window->draw(backgroundSprite);
     window->display();
 }
-
 
 void GameManager::quit()
 {
@@ -356,7 +397,6 @@ Workshop *GameManager::findAvailableWorkshop(size_t jobId) const
     return nullptr;
 }
 
-
 void GameManager::askResolvedCallback()
 {
 
@@ -386,4 +426,9 @@ std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string &
 {
     const std::hash<std::string> hash;
     return addMovableTrader(hash(name));
+}
+
+void GameManager::setBackgroundNeedsUpdate(bool value)
+{
+    backgroundNeedsUpdate = value;
 }

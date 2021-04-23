@@ -34,6 +34,8 @@ public:
 
     bool getHasEverRun() const;
 
+    void setBackgroundNeedsUpdate(bool value);
+
     const sf::Texture &getTexture(size_t textureId) const;
 
     static const sf::Int32 maxFPS;
@@ -68,8 +70,10 @@ private:
     bool isRunning;
     bool hasEverRun;
     bool isGuiOpened;
+    mutable bool backgroundNeedsUpdate;
 
     mutable std::map<size_t, sf::Texture> texturesDictionary;
+    mutable sf::RenderTexture background;
 
 //SLOTS
 //=======
