@@ -61,6 +61,8 @@ private:
 
     std::unique_ptr<sf::RenderWindow> window;
     sf::View view;
+    sf::Vector2f oldPos;
+    bool moving;
 
     std::unique_ptr<std::thread> debugGuiThread;
     std::unique_ptr<std::thread> economicEngineThread;
@@ -70,11 +72,12 @@ private:
     bool isRunning;
     bool hasEverRun;
     bool isGuiOpened;
-    mutable bool backgroundNeedsUpdate;
 
+    mutable bool backgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;
     mutable sf::RenderTexture background;
     size_t grassId;
+    float caseSize;
 
 //SLOTS
 //=======

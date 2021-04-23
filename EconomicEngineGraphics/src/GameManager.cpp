@@ -3,7 +3,6 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
@@ -105,10 +104,12 @@ const sf::Texture &GameManager::getTexture(size_t textureId) const
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
+                             caseSize(62.f),
                              background(), view(), isInitialized(false), isRunning(false), isGuiOpened(false),
-                             hasEverRun(false), backgroundNeedsUpdate(true)
+                             hasEverRun(false), backgroundNeedsUpdate(true), moving(false), grassId(), oldPos()
 {
     window->setFramerateLimit(maxFPS);
+    view.setCenter(0, 0);
 }
 
 
@@ -185,17 +186,78 @@ void GameManager::processInput()
                 backgroundNeedsUpdate = true;
                 break;
             }
+            case sf::Event::MouseButtonPressed:
+            {
+                if (event.mouseButton.button == 0)
+                {
+                    moving = true;
+                    oldPos = window->mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+                }
+                backgroundNeedsUpdate = true;
+                break;
+            }
+            case sf::Event::MouseButtonReleased:
+            {
+                if (event.mouseButton.button == 0)
+                {
+                    moving = false;
+                }
+                backgroundNeedsUpdate = true;
+                break;
+            }
+            case sf::Event::MouseMoved:
+            {
+                if (!moving)
+                    break;
+
+                const sf::Vector2f newPos = window->mapPixelToCoords(
+                        sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+                sf::Vector2f deltaPos = oldPos - newPos;
+
+                auto &grid = gridManager.grid;
+                auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+
+                if (viewOrigin.x + deltaPos.x + 620.f >= grid.getMinCoordinate().first * caseSize &&
+                    viewOrigin.y + deltaPos.y + 620.f >= grid.getMinCoordinate().second * caseSize &&
+                    viewOrigin.x + view.getSize().x + deltaPos.x - 620.f <= grid.getMaxCoordinate().first * caseSize &&
+                    viewOrigin.y + view.getSize().y + deltaPos.y - 620.f <= grid.getMaxCoordinate().second * caseSize)
+                {
+                    view.setCenter(view.getCenter() + deltaPos);
+                    window->setView(view);
+                }
+
+                oldPos = window->mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
+                backgroundNeedsUpdate = true;
+                break;
+            }
             case sf::Event::MouseWheelScrolled:
             {
-                if (event.mouseWheelScroll.delta <= -1 &&
+                auto &grid = gridManager.grid;
+                auto viewOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
+
+                bool canUnZoom = viewOrigin.x + 600.f >= grid.getMinCoordinate().first * caseSize &&
+                                 viewOrigin.y + 600.f >= grid.getMinCoordinate().second * caseSize &&
+                                 viewOrigin.x + view.getSize().x - 600.f <= grid.getMaxCoordinate().first * caseSize &&
+                                 viewOrigin.y + view.getSize().y - 600.f <= grid.getMaxCoordinate().second * caseSize;
+
+                if (event.mouseWheelScroll.delta <= -1 && canUnZoom &&
                     (view.getSize().x * 1.10f < 32768.f && view.getSize().y * 1.10f < 32768.f))
                 {
                     view.zoom(1.10f);
                 }
                 else if (event.mouseWheelScroll.delta >= 1 &&
-                         (view.getSize().x * 0.90f > 620.f && view.getSize().y * 0.90f > 620.f))
+                         (view.getSize().x * 0.90f > 310.f && view.getSize().y * 0.90f > 310.f))
                 {
                     view.zoom(0.90f);
+                }
+                backgroundNeedsUpdate = true;
+                break;
+            }
+            case sf::Event::KeyPressed:
+            {
+                if (event.key.code == 57) //Space
+                {
+                    view.setCenter(0, 0);
                 }
                 backgroundNeedsUpdate = true;
                 break;
@@ -204,34 +266,6 @@ void GameManager::processInput()
         }
     }
 
-    auto deltaX = 0;
-    auto deltaY = 0;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-    {
-        deltaY -= view.getSize().y * 0.01f;
-        backgroundNeedsUpdate = true;
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        deltaY += view.getSize().y * 0.01f;
-        backgroundNeedsUpdate = true;
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-    {
-        deltaX -= view.getSize().x * 0.01f;
-        backgroundNeedsUpdate = true;
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        deltaX += view.getSize().x * 0.01f;
-        backgroundNeedsUpdate = true;
-    }
-
-    view.move(deltaX, deltaY);
     window->setView(view);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
@@ -314,9 +348,9 @@ void GameManager::render() const
         sf::Sprite grassSprite;
         grassSprite.setTexture(getTexture(grassId));
 
-        for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second + 1; ++y)
+        for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second + 2; ++y)
         {
-            for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first + 1; ++x)
+            for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first + 2; ++x)
             {
                 auto positionX = float(x) * 62;
                 auto positionY = float(y) * 62;
@@ -347,7 +381,6 @@ void GameManager::render() const
         background.draw(rectangle);
         rectangle.setPosition(xMax - 62, yMax - 62);
         background.draw(rectangle);
-
 
         background.display();
 
