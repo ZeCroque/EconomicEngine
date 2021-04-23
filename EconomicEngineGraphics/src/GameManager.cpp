@@ -216,13 +216,19 @@ void GameManager::processInput()
 
                 auto &grid = gridManager.grid;
                 auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+                auto margin = caseSize * 20.f;
 
-                if (viewOrigin.x + deltaPos.x + 620.f >= grid.getMinCoordinate().first * caseSize &&
-                    viewOrigin.y + deltaPos.y + 620.f >= grid.getMinCoordinate().second * caseSize &&
-                    viewOrigin.x + view.getSize().x + deltaPos.x - 620.f <= grid.getMaxCoordinate().first * caseSize &&
-                    viewOrigin.y + view.getSize().y + deltaPos.y - 620.f <= grid.getMaxCoordinate().second * caseSize)
+                if (viewOrigin.x + deltaPos.x + margin >= grid.getMinCoordinate().first * caseSize &&
+                    viewOrigin.x + view.getSize().x + deltaPos.x - margin <= grid.getMaxCoordinate().first * caseSize)
                 {
-                    view.setCenter(view.getCenter() + deltaPos);
+                    view.setCenter(view.getCenter().x + deltaPos.x, view.getCenter().y);
+                    window->setView(view);
+                }
+
+                if (viewOrigin.y + deltaPos.y + margin >= grid.getMinCoordinate().second * caseSize &&
+                    viewOrigin.y + view.getSize().y + deltaPos.y - margin <= grid.getMaxCoordinate().second * caseSize)
+                {
+                    view.setCenter(view.getCenter().x, view.getCenter().y + deltaPos.y);
                     window->setView(view);
                 }
 
@@ -233,12 +239,13 @@ void GameManager::processInput()
             case sf::Event::MouseWheelScrolled:
             {
                 auto &grid = gridManager.grid;
-                auto viewOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
+                auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
+                auto margin = caseSize * 10.f;
 
-                bool canUnZoom = viewOrigin.x + 600.f >= grid.getMinCoordinate().first * caseSize &&
-                                 viewOrigin.y + 600.f >= grid.getMinCoordinate().second * caseSize &&
-                                 viewOrigin.x + view.getSize().x - 600.f <= grid.getMaxCoordinate().first * caseSize &&
-                                 viewOrigin.y + view.getSize().y - 600.f <= grid.getMaxCoordinate().second * caseSize;
+                bool canUnZoom = newOrigin.x + margin >= grid.getMinCoordinate().first * caseSize &&
+                                 newOrigin.y + margin >= grid.getMinCoordinate().second * caseSize &&
+                                 newOrigin.x + view.getSize().x - margin <= grid.getMaxCoordinate().first * caseSize &&
+                                 newOrigin.y + view.getSize().y - margin <= grid.getMaxCoordinate().second * caseSize;
 
                 if (event.mouseWheelScroll.delta <= -1 && canUnZoom &&
                     (view.getSize().x * 1.10f < 32768.f && view.getSize().y * 1.10f < 32768.f))
