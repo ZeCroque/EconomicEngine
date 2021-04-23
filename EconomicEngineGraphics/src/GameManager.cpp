@@ -253,7 +253,7 @@ void GameManager::processInput()
                     view.zoom(1.10f);
                 }
                 else if (event.mouseWheelScroll.delta >= 1 &&
-                         (view.getSize().x * 0.90f > 310.f && view.getSize().y * 0.90f > 310.f))
+                         (view.getSize().x * 0.90f > 400.f && view.getSize().y * 0.90f > 400.f))
                 {
                     view.zoom(0.90f);
                 }
