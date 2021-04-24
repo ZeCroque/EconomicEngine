@@ -182,7 +182,7 @@ void GameManager::processInput()
             case sf::Event::Resized:
             {
                 auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-                view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, float(event.size.width), float(event.size.height)));
+                view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, static_cast<float>(event.size.width), static_cast<float>(event.size.height)));
                 backgroundNeedsUpdate = true;
                 break;
             }
@@ -351,14 +351,10 @@ void GameManager::render() const
         float viewYMin = viewOrigin.y - caseSize;
         float viewYMax = viewOrigin.y + view.getSize().y;
 
-        int groundYMax = int(float(grid.getMaxCoordinate().second) +
-                             std::max(0.f, viewYMax / caseSize - float(grid.getMaxCoordinate().second)) + 1.0f);
-        int groundXMax = int(float(grid.getMaxCoordinate().first) +
-                             std::max(0.f, viewXMax / caseSize - float(grid.getMaxCoordinate().first)) + 1.0f);
-        int groundYMin = int(float(grid.getMinCoordinate().second) +
-                             std::min(0.f, viewYMin / caseSize - float(grid.getMinCoordinate().second)));
-        int groundXMin = int(float(grid.getMinCoordinate().first) +
-                             std::min(0.f, viewXMin / caseSize - float(grid.getMinCoordinate().first)));
+        auto groundYMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().second), viewYMax / caseSize) + 1.0f);
+        auto groundXMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().first), viewXMax / caseSize) + 1.0f);
+        auto groundYMin = static_cast<int>(std::min(static_cast<float>(grid.getMinCoordinate().second), viewYMin / caseSize));
+        auto groundXMin = static_cast<int>(std::min(static_cast<float>(grid.getMinCoordinate().first), viewXMin / caseSize));
 
 
         sf::Sprite groundSprite;
@@ -368,15 +364,15 @@ void GameManager::render() const
         {
             for (int x = groundXMin; x < groundXMax; ++x)
             {
-                groundSprite.setPosition(float(x) * caseSize, float(y) * caseSize);
+                groundSprite.setPosition(static_cast<float>(x) * caseSize, static_cast<float>(y) * caseSize);
                 background.draw(groundSprite);
             }
         }
 
         for (auto &ws : workshops)
         {
-            auto positionX = float(ws->x) * caseSize;
-            auto positionY = float(ws->y) * caseSize;
+            auto positionX = static_cast<float>(ws->x) * caseSize;
+            auto positionY = static_cast<float>(ws->y) * caseSize;
             if (positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
             {
                 auto &workshopSprite = ws->getSprite();
