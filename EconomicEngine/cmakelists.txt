@@ -10,7 +10,6 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADERS
 	${HEADER_DIR}/StockExchange/Ask.h
-	${HEADER_DIR}/StockExchange/AskFactory.h
 	${HEADER_DIR}/Tradables/Uncountable/Behavior.h
 	${HEADER_DIR}/Tradables/Countable.h
 	${HEADER_DIR}/Traders/Craft.h
