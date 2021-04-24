@@ -1,32 +1,22 @@
 ### Economic:
-- time rate pour cycle journalier
-- temps travail relatif à durée cycle journalier
-- trader décorellés de tick de la bourse et suivant logique tour par tour (boulot/vente)
-- bourse à chaque offre
-- bouffe à chaque action
+- fix tools economy
 
 ### Graphic:
-- affichage 
-    - actor **croque**
-    - dezoom = réduire taille case grille graphique **croque**
-    - scroll **croque**
-        - bouger intervalle grille logique **croque**
-        - gérer position souris avec accélération mini jeu adn **croque**
+- affichage **vincent**
 - déplacements
-    - vitesse des ias corellées à timeRate journalier **maxence**
+    - vitesse des ias corellées à timeRate journalier **croque**
     - astar **maxence**
 - génération bâtiments **vincent**
-- workshop creation -> calculate path
+    - workshop creation -> calculate path
 - trader move -> check closest market and refresh path
 
 ### Gui:
 - speed = daycycle speed **croque**
-- investiguer et clean les intéractions entre le turnManager et la gui **croque**
-- virer step-by-step & step
+- gui update thread **croque**
+- travel simulation threads (50%) **croque**
 
 
 ### Polish :
-- générer hdv intervalle régulier **vincent**
 - cycle jour nuit et tâche dodo
 - remplacer tour par tour traders par algo meilleur choix **maxence**
 - hint au dessus workshop **maxence**

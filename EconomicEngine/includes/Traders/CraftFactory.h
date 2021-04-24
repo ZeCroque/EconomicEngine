@@ -15,7 +15,7 @@ private:
 public:
 	CraftFactory();
 	CraftFactory(CraftFactory& craftFactory);
-	void setOwner(Trader* owner);
+	void setOwner(Trader* inOwner);
 	[[nodiscard]] bool isCraftable(size_t key) const;
 	void registerCraft(Craft* craft);
 	CraftFactory* clone() override;

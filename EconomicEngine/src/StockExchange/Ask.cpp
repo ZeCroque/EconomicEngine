@@ -1,8 +1,16 @@
 #include "StockExchange/Ask.h"
 
-#include "StockExchange/StockExchange.h"
+Ask::Ask(const bool inIsSellingAsk, const size_t id, const int count, const float price) : count(count), price(price), isSellingAsk(inIsSellingAsk), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
 
-Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), date(StockExchange::getInstance()->getTurnCount()), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
+void Ask::resolve()
+{
+	askResolvedSignal(this);
+}
+
+bool Ask::getIsSellingAsk() const
+{
+	return isSellingAsk;
+}
 
 float Ask::getPrice() const
 {
@@ -12,11 +20,6 @@ float Ask::getPrice() const
 int Ask::getCount() const
 {
 	return count;
-}
-
-int Ask::getDate() const
-{
-	return date;
 }
 
 size_t Ask::getId() const
@@ -29,14 +32,14 @@ AskStatus Ask::getStatus() const
 	return status;
 }
 
-void Ask::setPrice(const float price)
+void Ask::setPrice(const float inPrice)
 {
-	this->price = price;
+	price = inPrice;
 }
 
-void Ask::setStatus(const AskStatus status)
+void Ask::setStatus(const AskStatus inStatus)
 {
-	this->status = status;
+	status = inStatus;
 }
 
 int Ask::getTradedCount() const
@@ -44,12 +47,12 @@ int Ask::getTradedCount() const
 	return tradedCount;
 }
 
-void Ask::incrementTradedCountBy(const int count)
+const Signal<Ask*>& Ask::getAskResolvedSignal() const
 {
-	tradedCount += count;
+	return askResolvedSignal;
 }
 
-
-BuyingAsk::BuyingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
-
-SellingAsk::SellingAsk(const size_t id, const int count, const float price) : Ask(id, count, price){}
+void Ask::incrementTradedCountBy(const int inCount)
+{
+	tradedCount += inCount;
+}

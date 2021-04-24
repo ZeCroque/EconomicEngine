@@ -14,7 +14,7 @@ class MovableTrader;
 class Workshop : public StaticActor {
 
 public:
-    Workshop(const std::string& newName,const std::string& jobName, const std::string& textureName);
+    Workshop(const std::string& inName,const std::string& inJobName, const std::string& inTextureName);
 	
     bool isAvailable() const;
 
@@ -26,7 +26,7 @@ public:
 
     MovableTrader *getTrader() const;
 
-    void setTrader(const std::shared_ptr<MovableTrader> &newTrader);
+    void setTrader(const std::shared_ptr<MovableTrader> &inTrader);
 
 	Workshop* clone() override;
 

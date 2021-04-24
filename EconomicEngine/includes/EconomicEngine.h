@@ -3,11 +3,8 @@
 
 #include "Singleton.h"
 #include "nlohmann/json.hpp"
-#include <mutex>
-
-#include "Signal.h"
 #include "StockExchange/StockExchange.h"
-#include "Tradables/TradableManager.h"
+#include "Tradables/TradableFactory.h"
 #include "Traders/TraderManager.h"
 
 
@@ -16,26 +13,22 @@ class EconomicEngine : public Singleton<EconomicEngine>
 friend class Singleton<EconomicEngine>;
 	
 protected:
-	TraderManager* traderManager;
-	TradableManager* tradableManager;
-	StockExchange* stockExchange;
+	mutable TraderManager traderManager;
+	mutable TradableFactory tradableFactory;
+	mutable StockExchange stockExchange;
 
-	EconomicEngine() : traderManager(TraderManager::getInstance()), tradableManager(TradableManager::getInstance()), stockExchange(StockExchange::getInstance()), bRunning(false), bPaused(true), turnSecond(1), step(1) {}
+	EconomicEngine();
 private:
 	bool bRunning;
-	bool bPaused;
-	int turnSecond;
-	int step;
-	std::condition_variable cv;
-	std::mutex m;
-	Signal<> postInitSignal;
-	Signal<> asksResolvedSignal;
+
+	int elapsedDayCount;
+	float elapsedTimeSinceDayStart;
+	float dayDuration;
+	float elapsedTimeSinceLastStockExchangeResolution;
+	float stockExchangeResolutionTime;
+	float baseActionTime;
 
 public:
-
-	const Signal<>& getAsksResolvedSignal() const;
-	
-	const Signal<>& getPostInitSignal() const;
 	
 	void initJobs(std::vector<nlohmann::json>& parsedJobs) const;
 	
@@ -43,21 +36,25 @@ public:
 	
 	void init(const char* prefabsPath) const;
 
-	void reset(const int count) const;
-
-	int exec(const int count);
-
-	void stop();
+	void start(int count);
+	
+	void update(float deltaTime);
+	
+	void reset(int count);
 
 	void pause();
 
 	void resume();
 
-	void setTurnSecond(const int turnSecond);
+	[[nodiscard]] float getBaseActionTime() const;
 
-	[[nodiscard]] int getTurnCount() const;
+	[[nodiscard]] int getElapsedDayCount() const;
 
-	void setStep(const int step);
+	[[nodiscard]] TradableFactory& getTradableFactory() const;
+
+	[[nodiscard]] TraderManager& getTraderManager() const;
+
+	[[nodiscard]] StockExchange& getStockExchange() const;
 
 };
 

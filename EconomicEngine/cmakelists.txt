@@ -10,7 +10,6 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADERS
 	${HEADER_DIR}/StockExchange/Ask.h
-	${HEADER_DIR}/StockExchange/AskFactory.h
 	${HEADER_DIR}/Tradables/Uncountable/Behavior.h
 	${HEADER_DIR}/Tradables/Countable.h
 	${HEADER_DIR}/Traders/Craft.h
@@ -23,7 +22,6 @@ set(HEADERS
 	${HEADER_DIR}/Tradables/Uncountable/ToolBehavior.h
 	${HEADER_DIR}/Tradables/Tradable.h
 	${HEADER_DIR}/Tradables/TradableFactory.h
-	${HEADER_DIR}/Tradables/TradableManager.h
 	${HEADER_DIR}/Traders/Trader.h
 	${HEADER_DIR}/Traders/TraderManager.h
 	${HEADER_DIR}/Tradables/Uncountable/Uncountable.h
@@ -42,7 +40,6 @@ set(SOURCES
 	${SOURCE_DIR}/StockExchange/StockExchange.cpp
 	${SOURCE_DIR}/Tradables/Uncountable/ToolBehavior.cpp
 	${SOURCE_DIR}/Tradables/Tradable.cpp
-	${SOURCE_DIR}/Tradables/TradableManager.cpp
 	${SOURCE_DIR}/Traders/Trader.cpp
 	${SOURCE_DIR}/Traders/TraderManager.cpp
 	${SOURCE_DIR}/Tradables/Uncountable/Uncountable.cpp

@@ -8,3 +8,8 @@ Actor* MovableActor::clone()
 {
 	return new MovableActor(*this);
 }
+
+const Signal<>& MovableActor::getPathfindSucceededSignal() const
+{
+	return pathfindSucceededSignal;
+}

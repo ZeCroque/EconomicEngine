@@ -10,7 +10,6 @@
 
 #include "AbstractFactory.h"
 #include "GridManager.h"
-#include "Signal.h"
 #include "WorkshopFactory.h"
 
 class Workshop;
@@ -32,11 +31,11 @@ public:
 
     bool getIsRunning() const;
 
-    bool getHasEverRun() const;
-
     void setBackgroundNeedsUpdate(bool value);
 
     const sf::Texture &getTexture(size_t textureId) const;
+
+	bool getIsInitialized() const;
 
     static const sf::Int32 maxFPS;
 
@@ -45,11 +44,13 @@ private:
 
     void initEconomicEngine(const char *prefabsPath);
 
+	void initGui();
+
     void initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders);
 
     void initWorkshops(std::vector<nlohmann::json> &parsedWorkshops);
 
-    void initTexture(const std::filesystem::path &path);
+    void initTexture(const std::filesystem::path &path) const;
 
     void processInput();
 
@@ -64,13 +65,10 @@ private:
     sf::Vector2f oldPos;
     bool moving;
 
-    std::unique_ptr<std::thread> debugGuiThread;
-    std::unique_ptr<std::thread> economicEngineThread;
-
-
-    bool isInitialized;
+    std::unique_ptr<std::thread> debugGuiThread;	
+	
+	bool isInitialized;
     bool isRunning;
-    bool hasEverRun;
     bool isGuiOpened;
 
     mutable bool backgroundNeedsUpdate;
@@ -82,10 +80,8 @@ private:
 //SLOTS
 //=======
 private:
-    void traderAddedCallback(class Trader *trader);
-
-    void askResolvedCallback();
-
+	void traderAddedCallback(class Trader* trader);
+	
 //GAMEPLAY
 //========
 public:

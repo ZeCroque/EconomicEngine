@@ -48,7 +48,6 @@ public:
 		return keys;
 	}
 	
-protected:
 	[[nodiscard]] T* getDefaultObject(Key key) const
 	{
 		T* defaultObject = nullptr;

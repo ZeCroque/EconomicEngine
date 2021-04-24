@@ -7,61 +7,92 @@
 
 #include <list>
 
+
+#include "EconomicEngine.h"
 #include "StockExchange/StockExchange.h"
 
+enum class Action
+{
+	None = 0,
+	Crafting = 1,
+	Trading = 2,
+	Sleeping = 3
+};
+
+enum class Position
+{
+	Workshop = 0,
+	Market = 1,
+	Street = 2
+};
 
 class Trader
 {
 private:
+
+	bool isWaitingForActivity;
+	Action currentAction;
 	
 	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
-	Craft* currentCraft;
+	std::unique_ptr<Craft> currentCraft;
 	Job* currentJob;
-	std::list<std::shared_ptr<class Tradable>> inventory;
-	std::list<std::shared_ptr<class Ask>> currentAsks;
+	std::list<std::shared_ptr<Ask>> currentAsks;
+	std::list<std::shared_ptr<Tradable>> inventory;
 	int successCount;
 	float money;
 	float foodLevel;
+	Position position;
+	
 	void makeBuyingAsks();
 	void makeSellingAsks();
-	void refreshPriceBelief(Ask* ask);
-	void refreshFoodLevel();
-	void makeChild();
+	void updatePriceBelief(Ask* ask);
+
 	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) ;
 	[[nodiscard]] float calculateEarnings(Craft* craft) const;
 	[[nodiscard]] float calculateFoodStock() const;
 	[[nodiscard]] float calculatePriceBeliefMean(size_t key) const;
 	[[nodiscard]] float evaluatePrice(size_t key) const;
+	Signal<Position> moveToRequestSignal;
 
-	template<class T> void registerAsks(const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
+	void registerAsks(bool inIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
 	{
-		for (const auto item : itemList)
+		for (const auto& item : itemList)
 		{
 			float price = evaluatePrice(item.first);
 			if (price <= maxPrice)
 			{
-				auto ask = std::make_shared<T>(item.first, item.second, price);
-				StockExchange::getInstance()->registerAsk(ask);
-				this->currentAsks.emplace_back(ask);
+				auto ask = std::make_shared<Ask>(inIsSellingAsk, item.first, item.second, price);
+				currentAsks.push_back(ask);
+				EconomicEngine::getInstance()->getStockExchange().registerAsk(ask);
+				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);		
 			}
 		}
 	}
 	
 public:
 	Trader();
-	Trader(Job* job);
+	explicit Trader(Job* job);
+	Trader(Trader&&) = default;
+	~Trader();
+
+	void update(float deltaTime);
 	void makeAsks();
-	void craft();
-	void refresh();
-	void checkAsks();
+	void makeChild();
+	void startCrafting();
+	void updateFoodLevel();
+	void checkAskCallback(Ask* ask);
+	void craftSuccessCallback();
+	void setPosition(Position inPosition);
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] Job* getCurrentJob() const;
 	[[nodiscard]] Craft* getCurrentCraft() const;
 	[[nodiscard]] bool isInInventory(size_t key);
 	[[nodiscard]] float getFoodLevel() const;
 	[[nodiscard]] float getMoney() const;
-	int getItemCount(size_t key) const;
+	[[nodiscard]] int getItemCount(size_t key) const;
+	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
+	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(class Countable* countable);
 	void addToInventory(class Uncountable* uncountable);
