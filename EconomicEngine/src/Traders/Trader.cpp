@@ -4,13 +4,14 @@
 
 
 
+
 #include "EconomicEngine.h"
 #include "Tradables/Tradable.h"
 #include "Tradables/Food.h"
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Traders/TraderManager.h"
 
-Trader::Trader() : isWaitingForActivity(true), currentAction(Action::None), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f)
+Trader::Trader() : isWaitingForActivity(true), isWaitingForAskResolution(false), currentAction(Action::None), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f), position(Position::Workshop)
 {
 	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
 	auto keys = tradableManager.getKeys();
@@ -55,21 +56,46 @@ void Trader::update(const float deltaTime)
 
 	// ReSharper disable once CppIncompleteSwitchStatement
 	// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
-	switch(currentAction)  // NOLINT(clang-diagnostic-switch)
+	switch(currentAction)  // NOLINT(clang-diagnostic-switch) //TODO better action decision (use goodsList to prefer trading over crafting when above threshold
 	{
 		case Action::Crafting:
 			if(!currentCraft)
 			{
-				startCrafting();
+				if(!getCurrentJob()->getCraftableList().empty())
+				{				
+					if(position == Position::Market)
+					{
+						moveToRequestSignal(Position::Workshop);
+					}
+					else if(position == Position::Workshop)
+					{
+						startCrafting();
+					}
+					break;				
+				}		
+				if(isWaitingForAskResolution)
+				{
+					break;
+				}
+				//If no craft is available and no trade awaiting then trade
+				[[fallthrough]];
 			}
-			if(currentCraft)
+			else
 			{
 				currentCraft->update(deltaTime);
-			}
-			break;
+				break;
+			}		
 		case Action::Trading:
-			makeAsks();
-			isWaitingForActivity = true; //TODO signal slot with displacements
+			if(position == Position::Workshop)
+			{
+				moveToRequestSignal(Position::Market);
+			}
+			else if(position == Position::Market)
+			{
+				makeAsks();
+				isWaitingForAskResolution = true;
+				isWaitingForActivity = true;
+			}
 			break;
 	}
 }
@@ -245,7 +271,7 @@ void Trader::makeBuyingAsks()
 		}
 	}
 
-	registerAsks<BuyingAsk>(wonderList, money);
+	registerAsks(false, wonderList, money);
 }
 
 //Makes a list of items the trader wish to sell
@@ -342,7 +368,7 @@ void Trader::makeSellingAsks()
 		}
 	}
 
-	registerAsks<SellingAsk>(goodsList, std::numeric_limits<float>::max());
+	registerAsks(true, goodsList, std::numeric_limits<float>::max());
 }
 
 //Returns the price belief mean
@@ -461,7 +487,7 @@ void Trader::updatePriceBelief(Ask* ask)
 	{
 		*priceBeliefs[ask->getId()][0] = std::max<float>(0.0f, *priceBeliefs[ask->getId()][0] + currentMean - priceBeliefMean);
 		*priceBeliefs[ask->getId()][1] = std::max<float>(0.03f, *priceBeliefs[ask->getId()][1] + currentMean - priceBeliefMean);
-		if(static_cast<BuyingAsk*>(ask)!=nullptr)
+		if(!ask->getIsSellingAsk())
 		{	
 			*priceBeliefs[ask->getId()][0] = std::min<float>(currentMean, *priceBeliefs[ask->getId()][0] + 0.05f * priceBeliefMean);
 			*priceBeliefs[ask->getId()][1] = std::min<float>(currentMean * 1.5f, *priceBeliefs[ask->getId()][1] + 0.05f * priceBeliefMean);
@@ -511,26 +537,31 @@ void Trader::checkAskCallback(Ask* ask)
 {
 	if (ask->getStatus() == AskStatus::Sold)
 	{
-		auto* buyingAsk = static_cast<BuyingAsk*>(ask);
-		if (buyingAsk)
+		if (!ask->getIsSellingAsk())
 		{
-			addToInventory(buyingAsk->getId(), buyingAsk->getCount());
+			addToInventory(ask->getId(), ask->getCount());
 			money -= ask->getPrice() * static_cast<float>(ask->getCount());
 		}
 		else
 		{
-			auto* sellingAsk = static_cast<SellingAsk*>(ask);
-			removeFromInventory(ask->getId(), sellingAsk->getTradedCount());
-			money += ask->getPrice() * static_cast<float>(sellingAsk->getTradedCount());
+			removeFromInventory(ask->getId(), ask->getTradedCount());
+			money += ask->getPrice() * static_cast<float>(ask->getTradedCount());
 		}
 	}
 	updatePriceBelief(ask);
+	isWaitingForAskResolution = false;
 }
 
 void Trader::craftSuccessCallback()
 {
 	addToInventory(currentCraft->getResult(), currentCraft->getCount());
+	currentCraft.release();
 	isWaitingForActivity = true;
+}
+
+void Trader::setPosition(Position inPosition)
+{
+	position = inPosition;
 }
 
 int  Trader::getItemCount(const size_t key) const
@@ -550,6 +581,11 @@ int  Trader::getItemCount(const size_t key) const
 		}
 	}
 	return count;
+}
+
+const Signal<Position>& Trader::getMoveToRequestSignal() const
+{
+	return moveToRequestSignal;
 }
 
 bool Trader::isInInventory(const size_t key)

@@ -32,6 +32,7 @@ private:
     GameManager();
 	
 	void initEconomicEngine(const char* prefabsPath);
+	void initGui();
 	void initMovableTraders(std::vector<nlohmann::json>& parsedMovableTraders);
 	void initWorkshops(std::vector<nlohmann::json>& parsedWorkshops);
 	
@@ -45,7 +46,9 @@ private:
     static const sf::Int32 maxFPS;
 	
 	std::unique_ptr<std::thread> debugGuiThread;
+	
 	bool hasEverRun;
+	bool isInitialized;
     bool isRunning;
 	bool isGuiOpened;
 

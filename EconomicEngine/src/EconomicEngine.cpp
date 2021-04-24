@@ -120,7 +120,7 @@ void EconomicEngine::update(float deltaTime)
 			++elapsedDayCount;
 		}
 		elapsedTimeSinceLastStockExchangeResolution += deltaTime;
-		if(elapsedTimeSinceDayStart >= stockExchangeResolutionTime)
+		if(elapsedTimeSinceLastStockExchangeResolution >= stockExchangeResolutionTime)
 		{
 			elapsedTimeSinceLastStockExchangeResolution = 0.f;
 			stockExchange.resolveOffers();
@@ -147,7 +147,7 @@ void EconomicEngine::pause()
 
 void EconomicEngine::resume()
 {
-	bRunning = false;
+	bRunning = true;
 }
 
 float EconomicEngine::getBaseActionTime() const

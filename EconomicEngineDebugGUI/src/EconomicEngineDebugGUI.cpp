@@ -7,7 +7,7 @@
 #include "JobManager.h"
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent), asksResolutionCount(0)
 {	
 	auto* turnManager = EconomicEngine::getInstance();
 	turnManager->getStockExchange().getAskResolvedSignal().connect(this, &EconomicEngineDebugGui::nextTurn);
@@ -26,13 +26,16 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 
 	doInit();
 
+#ifndef STANDALONE_MODE
+	ui.pBStart->setChecked(true);
+#endif
+
 	zoomXAxis = ui.horSlidZoomXAxis->value();
 	connect(ui.horSlidZoomXAxis,SIGNAL(valueChanged(int)), this,SLOT(setZoomXAxis(int)));
 
-	//Set daycycle speed
+	//TODO Set daycycle speed
 	/*turnManager->setTurnSecond(ui.horSlidSpeed->value());
 	connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));*/
-
 	ui.horSlidXNav->setMaximum(ui.horSlidZoomXAxis->value());
 	ui.horSlidXNav->setValue(ui.horSlidZoomXAxis->value());
 	connect(ui.horSlidXNav, SIGNAL(valueChanged(int)), this, SLOT(useXSlider(int)));
@@ -40,13 +43,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget* parent)
 	connect(ui.pBStart, SIGNAL(clicked()), this,SLOT(toggleStart()));
 	connect(ui.pBReset, SIGNAL(clicked()), this, SLOT(doReset()));
 
-	connect(ui.radBRealTime, SIGNAL(clicked()), this, SLOT(setMode()));
-	connect(ui.radStepByStep, SIGNAL(clicked()), this, SLOT(setMode()));
-
 	connect(ui.pBAdd, SIGNAL(clicked()), this, SLOT(doAdd()));
 	connect(ui.pBKill, SIGNAL(clicked()), this, SLOT(doKill()));
-
-	connect(ui.cBKill,SIGNAL(valueChanged()), this,SLOT(updateUiJobs()));
 
 	connect(this, SIGNAL(nextTurn()), this, SLOT(updateUiSlot()));
 }
@@ -111,14 +109,14 @@ void EconomicEngineDebugGui::setYRange()
 
 void EconomicEngineDebugGui::setXRange() const
 {
-	const auto key = EconomicEngine::getInstance()->getElapsedDayCount();
+	const auto key = asksResolutionCount;
 	ui.horSlidXNav->setMaximum(key);
 	if (key > zoomXAxis)
 	{
 		ui.horSlidXNav->setMinimum(zoomXAxis);
 	}
 
-	if (ui.horSlidXNav->value() >= key - ui.horSlidStep->value())
+	if (ui.horSlidXNav->value() >= key - 1)
 	{
 		ui.horSlidXNav->setValue(key);
 		ui.customPlot->xAxis->setRange(key, zoomXAxis, Qt::AlignRight);
@@ -158,15 +156,6 @@ void EconomicEngineDebugGui::toggleStart() const
 	}
 }
 
-void EconomicEngineDebugGui::setMode() const
-{
-	if (!ui.radBRealTime->isChecked())
-	{
-		ui.pBStart->setChecked(false);
-	}
-	toggleStart();
-}
-
 void EconomicEngineDebugGui::doKill()
 {
 	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
@@ -184,8 +173,6 @@ void EconomicEngineDebugGui::doAdd()
 void EconomicEngineDebugGui::doReset()
 {
 	ui.pBStart->setChecked(false);
-	setMode();
-
 
 	for (auto graphManager : arrayCheckBox)
 	{
@@ -326,20 +313,17 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
-	auto* turnManager = EconomicEngine::getInstance();
-	const auto key = turnManager->getElapsedDayCount();
-	const auto stockExchange = turnManager->getStockExchange();
-
+	const auto stockExchange = EconomicEngine::getInstance()->getStockExchange();
+	++asksResolutionCount;
+	
 	auto totalData = 0;
 
-	auto const step = ui.horSlidStep->value();
-
-	for (auto checkBox : this->arrayCheckBox)
+	for (auto checkBox : arrayCheckBox)
 	{
 		auto const graphIndex = checkBox->getGraphIndex();
 
-		auto i = key - step;
-		for (const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), step))
+		auto i = 0;
+		for (const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), asksResolutionCount))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;
@@ -354,8 +338,16 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 	ui.statusBar->showMessage(
 		QString("Total Data points: %1").arg(totalData), 0);
+}
 
-	setMode();
+const Signal<>& EconomicEngineDebugGui::getInitializedSignal() const
+{
+	return initializedSignal;
+}
+
+void EconomicEngineDebugGui::showEvent(QShowEvent* event)
+{
+	initializedSignal();
 }
 
 void EconomicEngineDebugGui::closeEvent(QCloseEvent* event)

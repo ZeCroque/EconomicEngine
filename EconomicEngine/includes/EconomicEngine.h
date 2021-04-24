@@ -18,7 +18,7 @@ protected:
 	mutable TradableFactory tradableFactory;
 	mutable StockExchange stockExchange;
 
-	EconomicEngine() : bRunning(false), bPaused(true), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(320.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 100),baseActionTime(dayDuration / 200.f)  {}
+	EconomicEngine() : bRunning(false), bPaused(true), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(320.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 100.f),baseActionTime(dayDuration / 200.f)  {}
 private:
 	bool bRunning;
 	bool bPaused;

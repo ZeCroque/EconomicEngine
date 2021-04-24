@@ -1,4 +1,5 @@
 #pragma once
+#include <Signal.h>
 
 class GraphManager; 
 class JobManager;
@@ -12,6 +13,9 @@ public:
 	explicit EconomicEngineDebugGui(QWidget* parent = Q_NULLPTR);
 	~EconomicEngineDebugGui() = default;
 
+	const Signal<>& getInitializedSignal() const;
+
+	void showEvent(QShowEvent* event) override;
 	void closeEvent(QCloseEvent* event) override;
 
 public Q_SLOTS:
@@ -23,7 +27,6 @@ public Q_SLOTS:
 	void setXRange() const;
 	void useXSlider(int);
 	void toggleStart() const;
-	void setMode() const;
 	void doKill();
 	void doAdd();
 	void doReset();
@@ -36,6 +39,9 @@ private:
 	std::vector<JobManager*> arrayJobs;
 	std::thread economicEngineThread;
 	int zoomXAxis;
+	int asksResolutionCount;
+	
+	Signal<> initializedSignal;
 
 signals:
 	void nextTurn();

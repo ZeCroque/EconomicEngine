@@ -1,10 +1,15 @@
 #include "StockExchange/Ask.h"
 
-Ask::Ask(const size_t id, const int count, const float price) : count(count), price(price), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
+Ask::Ask(const bool inIsSellingAsk, const size_t id, const int count, const float price) : count(count), price(price), isSellingAsk(inIsSellingAsk), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
 
 void Ask::resolve()
 {
 	askResolvedSignal(this);
+}
+
+bool Ask::getIsSellingAsk() const
+{
+	return isSellingAsk;
 }
 
 float Ask::getPrice() const
@@ -51,8 +56,3 @@ void Ask::incrementTradedCountBy(const int newCount)
 {
 	tradedCount += newCount;
 }
-
-
-BuyingAsk::BuyingAsk(const size_t id, const int newCount, const float newPrice) : Ask(id, newCount, newPrice){}
-
-SellingAsk::SellingAsk(const size_t id, const int newCount, const float newPrice) : Ask(id, newCount, newPrice){}

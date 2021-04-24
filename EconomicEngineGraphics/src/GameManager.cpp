@@ -43,13 +43,18 @@ void GameManager::init(const char *prefabsPath)
     initMovableTraders(parsedMovableTraders);
     initWorkshops(parsedWorkshops);
     initEconomicEngine(prefabsPath);
+	initGui();
     gridManager.init();
 }
 
 void GameManager::exec() 
 {
+    while(!isInitialized);
+	
     isRunning = true;
 
+    EconomicEngine::getInstance()->start(100);
+	
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
     sf::Int64 lag = 0;
@@ -88,7 +93,7 @@ bool GameManager::getHasEverRun() const
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
-GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")), hasEverRun(false), isRunning(false), isGuiOpened(false)
+GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "g_windowTitle")), hasEverRun(false), isInitialized(false), isRunning(false), isGuiOpened(false)
 {
     window->setFramerateLimit(maxFPS);
 }
@@ -98,8 +103,33 @@ void GameManager::initEconomicEngine(const char* prefabsPath)
 {
         auto* economicEngine = EconomicEngine::getInstance();
         economicEngine->init(prefabsPath);      
-        economicEngine->start(100);
         economicEngine->getTraderManager().getTraderAddedSignal().connect(this, &GameManager::traderAddedCallback);
+}
+
+void GameManager::initGui()
+{
+	debugGuiThread = std::make_unique<std::thread>([this]() -> int 
+	{
+	    int argc = 0;
+	    QApplication app(argc, nullptr);
+
+	    int result;
+	    do 
+	    {
+	        EconomicEngineDebugGui debugGui;
+	    	debugGui.getInitializedSignal().connect([this]()
+	    	{
+	    		isInitialized = true;
+	    	});
+	        debugGui.show();
+	        result = QApplication::exec();
+
+	        isGuiOpened = false;
+	        while (!isGuiOpened && isRunning);
+	    } while (isRunning);
+
+	    return result;
+	});
 }
 
 
@@ -137,38 +167,13 @@ void GameManager::processInput()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
     {
-        if (!isGuiOpened) 
-        {
-            isGuiOpened = true;
-
-            if (!debugGuiThread) 
-            {
-                debugGuiThread = std::make_unique<std::thread>([this]() -> int 
-                {
-                    int argc = 0;
-                    QApplication app(argc, nullptr);
-
-                    int result;
-                    do 
-                    {
-                        EconomicEngineDebugGui debugGui;
-                        debugGui.show();
-                        result = QApplication::exec();
-
-                        isGuiOpened = false;
-                        while (!isGuiOpened && isRunning);
-                    } while (isRunning);
-
-                    return result;
-                });
-            }
-        }
+		isGuiOpened = true;
     }
 }
 
 void GameManager::update(float deltaTime)
 {
-    EconomicEngine::getInstance()->update(deltaTime);
+    EconomicEngine::getInstance()->update(deltaTime * 4.f);
     
 	while (!pendingTraders.empty()) 
 	{
@@ -179,14 +184,14 @@ void GameManager::update(float deltaTime)
 		auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
 		if (availableWorkshop) 
 		{
-		availableWorkshop->setTrader(trader);
+			availableWorkshop->setTrader(trader);
 		} 
 		else 
 		{
-		auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
-		workshop->setTrader(trader);
-		gridManager.queueWorkshop(workshop);
-		//NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
+			auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
+			workshop->setTrader(trader);
+			gridManager.queueWorkshop(workshop);
+			//NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
         }
 	}
 }
@@ -229,8 +234,17 @@ void GameManager::quit()
 
 void GameManager::traderAddedCallback(Trader *trader) 
 {
-    auto* movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());  //TODO Connect to trader
+	auto* movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());
     pendingTraders.push(movableTrader);
+	trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
+	{
+		movableTrader->getPathfindSucceededSignal().disconnectAll();
+		movableTrader->getPathfindSucceededSignal().connect([trader, movableTrader, position]()
+		{	
+			trader->setPosition(position);
+		});
+		movableTrader->moveTo(position);
+	});
 }
 
 Workshop* GameManager::findAvailableWorkshop(size_t jobId) const 

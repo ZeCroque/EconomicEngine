@@ -10,12 +10,11 @@ class StockExchange
 {
 public:
 	void init();
-	void registerAsk(std::shared_ptr<BuyingAsk> buyingAsk);	
-	void registerAsk(std::shared_ptr<SellingAsk> sellingAsk);
+	void registerAsk(std::shared_ptr<Ask> buyingAsk);	
 	void resolveOffers();
 	void reset();
 	[[nodiscard]] float getStockExchangePrice(size_t key) const;
-	[[nodiscard]] std::list<BuyingAsk> getStockExchangePrice(size_t key, int count) const;
+	[[nodiscard]] std::list<Ask> getStockExchangePrice(size_t key, int count) const;
 	[[nodiscard]] const Signal<>& getAskResolvedSignal() const;
 	
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
@@ -37,9 +36,9 @@ public:
 	}
 
 private:
-	VectorArray<BuyingAsk> currentBuyingAsks;
-	VectorArray<SellingAsk> currentSellingAsks;
-	VectorArray<BuyingAsk> betterAsks;
+	VectorArray<Ask> currentBuyingAsks;
+	VectorArray<Ask> currentSellingAsks;
+	VectorArray<Ask> betterAsks;
 	Signal<> askResolvedSignal;
 
 };

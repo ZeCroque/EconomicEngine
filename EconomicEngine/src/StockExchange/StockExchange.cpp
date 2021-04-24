@@ -1,5 +1,7 @@
 #include "StockExchange/StockExchange.h"
 #include <algorithm>
+#include <iostream>
+
 
 #include "EconomicEngine.h"
 #include "Traders/Trader.h"
@@ -7,27 +9,29 @@
 void StockExchange::init()
 {
 	auto keys = EconomicEngine::getInstance()->getTradableFactory().getKeys();
-	currentBuyingAsks = VectorArray<BuyingAsk>(keys);
-	currentSellingAsks = VectorArray<SellingAsk>(keys);
-	betterAsks = VectorArray<BuyingAsk>(keys);
+	currentBuyingAsks = VectorArray<Ask>(keys);
+	currentSellingAsks = VectorArray<Ask>(keys);
+	betterAsks = VectorArray<Ask>(keys);
 	for (auto key : keys)
 	{
-		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(key, 0, 0.0f));
+		betterAsks[key].emplace_back(std::make_shared<Ask>(false,key, 0, 0.0f));
 	}
 }
 
-void StockExchange::registerAsk(std::shared_ptr<BuyingAsk> buyingAsk)
+void StockExchange::registerAsk(std::shared_ptr<Ask> ask)
 {
-	auto& buyingAsks = currentBuyingAsks[buyingAsk->getId()];
-	buyingAsks.emplace_back(std::move(buyingAsk));
-	insertionSort(buyingAsks);
-}
-
-void StockExchange::registerAsk(std::shared_ptr<SellingAsk> sellingAsk)
-{
-	auto& sellingAsks = currentSellingAsks[sellingAsk->getId()];
-	sellingAsks.emplace_back(std::move(sellingAsk));
-	insertionSort(sellingAsks);
+	if(ask->getIsSellingAsk())
+	{
+		auto& sellingAsks = currentSellingAsks[ask->getId()];
+		sellingAsks.emplace_back(std::move(ask));
+		insertionSort(sellingAsks);
+	}
+	else
+	{
+		auto& buyingAsks = currentBuyingAsks[ask->getId()];
+		buyingAsks.emplace_back(std::move(ask));
+		insertionSort(buyingAsks);
+	}
 }
 
 void StockExchange::resolveOffers()
@@ -36,7 +40,8 @@ void StockExchange::resolveOffers()
 	{
 		auto& buyingAsks = currentBuyingAsks[key];
 		auto& sellingAsks = currentSellingAsks[key];
-		bool doOnce = true;
+
+		bool askResolved = false;
 		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks.back()->getPrice() > sellingAsks.front()->getPrice() && buyingAsks.back()->getCount() < sellingAsks.front()->getCount())
 		{			
 			const int tradedCount = std::min<int>(buyingAsks.back()->getCount() - buyingAsks.back()->getTradedCount(), sellingAsks.front()->getCount() - sellingAsks.front()->getTradedCount());
@@ -47,27 +52,27 @@ void StockExchange::resolveOffers()
 			sellingAsks.front()->setStatus(AskStatus::Sold);
 			if (sellingAsks.front()->getCount() == sellingAsks.front()->getTradedCount())
 			{
+				sellingAsks.front()->resolve();
 				sellingAsks.erase(sellingAsks.begin());
 			}
 			
 			buyingAsks.back()->setPrice(price);
 			buyingAsks.back()->incrementTradedCountBy(tradedCount);
-			buyingAsks.back()->incrementTradedCountBy(tradedCount);
 			buyingAsks.back()->setStatus(AskStatus::Sold);
 
-			if (doOnce)
+			if (!askResolved)
 			{
-				doOnce = false;
+				askResolved = true;
 				betterAsks[key].emplace_back(buyingAsks.back());
 			}
 			
 			if(buyingAsks.back()->getCount() == buyingAsks.back()->getTradedCount())
 			{
-				buyingAsks.erase(buyingAsks.begin() + buyingAsks.size() - 1);
 				buyingAsks.back()->resolve();
+				buyingAsks.pop_back();
 			}
 		}
-		if (doOnce)
+		if (!askResolved)
 		{
 			betterAsks[key].emplace_back(betterAsks[key].back());
 		}
@@ -77,8 +82,8 @@ void StockExchange::resolveOffers()
 			if(sellingAsk->getStatus()==AskStatus::Pending)
 			{
 				sellingAsk->setStatus(AskStatus::Refused);
-				sellingAsk->resolve();
 			}
+			sellingAsk->resolve();
 		}
 
 		for (auto& buyingAsk : buyingAsks)
@@ -86,8 +91,8 @@ void StockExchange::resolveOffers()
 			if (buyingAsk->getStatus() == AskStatus::Pending)
 			{
 				buyingAsk->setStatus(AskStatus::Refused);
-				buyingAsk->resolve();
 			}
+			buyingAsk->resolve();
 		}
 
 		buyingAsks.clear();
@@ -103,7 +108,7 @@ void StockExchange::reset()
 		currentSellingAsks[key].clear();
 		currentBuyingAsks[key].clear();
 		betterAsks[key].clear();
-		betterAsks[key].emplace_back(std::make_shared<BuyingAsk>(key, 0, 0.0f));
+		betterAsks[key].emplace_back(std::make_shared<Ask>(false,key, 0, 0.0f));
 	}
 }
 
@@ -117,9 +122,9 @@ float StockExchange::getStockExchangePrice(const size_t key) const
 	return result;
 }
 
-std::list<BuyingAsk> StockExchange::getStockExchangePrice(const size_t key, const int count) const
+std::list<Ask> StockExchange::getStockExchangePrice(const size_t key, const int count) const
 {
-	std::list<BuyingAsk> result;
+	std::list<Ask> result;
 	int i = 0;
 	for (auto it = betterAsks[key].rbegin(); it != betterAsks[key].rend() && i < count; ++it, ++i)
 	{
