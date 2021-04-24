@@ -10,12 +10,12 @@ size_t Workshop::getJobId() const
     return jobId;
 }
 
-Workshop::Workshop(const std::string &newName, const std::string &jobName, const std::string &textureName): StaticActor(textureName)
+Workshop::Workshop(const std::string &inName, const std::string &inJobName, const std::string &inTextureName): StaticActor(inTextureName)
 {
-    name = newName;
-    const std::hash<std::string> hash;
+	name = inName;
+	const std::hash<std::string> hash;
     id = hash(name);
-    jobId = hash(jobName);
+    jobId = hash(inJobName);
 }
 
 bool Workshop::isAvailable() const
@@ -34,9 +34,8 @@ size_t Workshop::getId() const
 }
 
 
-void Workshop::setTrader(const std::shared_ptr<MovableTrader> &newTrader)
-{
-    trader = newTrader;
+void Workshop::setTrader(const std::shared_ptr<MovableTrader> &inTrader) {
+    trader = inTrader;
 }
 
 Workshop *Workshop::clone()

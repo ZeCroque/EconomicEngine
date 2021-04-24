@@ -7,12 +7,12 @@ CraftFactory::CraftFactory() : owner(nullptr){}
 
 CraftFactory::CraftFactory(CraftFactory& craftFactory) : CraftFactory()
 {
-	this->defaultObjects = std::map<size_t, Craft*>(craftFactory.defaultObjects);
+	defaultObjects = std::map<size_t, Craft*>(craftFactory.defaultObjects);
 }
 
-void CraftFactory::setOwner(Trader* NewOwner)
+void CraftFactory::setOwner(Trader* inOwner)
 {
-	owner = NewOwner;
+	owner = inOwner;
 }
 
 bool CraftFactory::isCraftable(const size_t key) const

@@ -5,5 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(DesignPattern)
 add_subdirectory(EconomicEngine)
-add_subdirectory(EconomicEngineDebugGUI)
 add_subdirectory(EconomicEngineGraphics)
+add_subdirectory(EconomicEngineDebugGUI)

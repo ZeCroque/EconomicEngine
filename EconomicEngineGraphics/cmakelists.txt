@@ -2,13 +2,17 @@ cmake_minimum_required(VERSION 3.2)
 
 project(EconomicEngineGraphics VERSION 1.0.0 LANGUAGES CXX)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+
 find_package(nlohmann_json CONFIG REQUIRED)
 
 find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 
 if(WIN32)
     set(QT_VERSION "5.15.2")
-    set(CMAKE_PREFIX_PATH D:/Qt/${QT_VERSION}/msvc2019_64)
+    set(CMAKE_PREFIX_PATH J:/QT/${QT_VERSION}/msvc2019_64)
 endif(WIN32)
 
 find_package(Qt5 ${QT_VERSION} COMPONENTS
@@ -54,6 +58,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
 		${HEADER_DIR}
+        
 )
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC

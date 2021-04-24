@@ -10,7 +10,7 @@
 class Craft final: public Clonable<Craft>
 {
 private:
-	float advancement;
+	float elapsedTime;
 	float rate;
 	int count;
 	size_t result;
@@ -33,8 +33,7 @@ public:
 	[[nodiscard]] const Signal<>& getCraftSuccessSignal() const;
 	void incrementRate(float i);
 
-    [[maybe_unused]] void decrementRate(float i);
-	bool advanceCraft();
+	void update(float deltaTime);
 
 };
 

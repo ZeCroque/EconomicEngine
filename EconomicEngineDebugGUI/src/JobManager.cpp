@@ -1,9 +1,9 @@
 #include "JobManager.h"
 
-JobManager::JobManager(const size_t newJobId, const QString& newJobName)
+JobManager::JobManager(const size_t inJobId, const QString& inJobName)
 {
-	jobId = newJobId;
-	jobName = newJobName;
+	jobId = inJobId;
+	jobName = inJobName;
 }
 
 QString JobManager::getJobName() const

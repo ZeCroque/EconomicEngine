@@ -4,11 +4,11 @@
 
 Job::Job() : craftFactory(new CraftFactory()), id(0){}
 
-Job::Job(std::string newName) : Job()
+Job::Job(std::string inName) : Job()
 {
-	std::hash<std::string> hash;
+	const std::hash<std::string> hash;
 	
-	name = std::move(newName);
+	name = std::move(inName);
 	id = hash(name);
 }
 
@@ -16,6 +16,7 @@ Job::Job(const Job& job) : Job()
 {
 	craftFactory = job.craftFactory->clone();
 	usableToolsList = std::list<size_t>(job.usableToolsList);
+	name = job.name;
 	id = job.id;
 }
 

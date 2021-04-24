@@ -1,7 +1,6 @@
 #ifndef VECTOR_ARRAY_H
 #define VECTOR_ARRAY_H
 
-#include <cassert>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -13,14 +12,14 @@ private:
 	std::vector<std::shared_ptr<T>>* vectors;
 public:
 	VectorArray() : vectors(nullptr){}
-	VectorArray(std::vector<size_t> keys) : keys(std::move(keys)), vectors(new std::vector<std::shared_ptr<T>>[this->keys.size()]) {}
+	VectorArray(std::vector<size_t> inKeys) : keys(std::move(inKeys)), vectors(new std::vector<std::shared_ptr<T>>[keys.size()]) {}
 	
-	std::vector<std::shared_ptr<T>>& operator[](size_t key)
+	std::vector<std::shared_ptr<T>>& operator[](const size_t key)
 	{
 		std::vector<std::shared_ptr<T>>* result = nullptr;
-		for(unsigned int i=0; i<this->keys.size(); ++i)
+		for(size_t i = 0; i < keys.size(); ++i)
 		{
-			if(this->keys[i] == key)
+			if(keys[i] == key)
 			{
 				result = &vectors[i];
 			}
@@ -28,16 +27,16 @@ public:
 		if(result == nullptr)
 		{
 			result = new std::vector<std::shared_ptr<T>>();
-		};
+		}
 		return *result;
 	}
 
-	std::vector<std::shared_ptr<T>>& operator[](size_t key) const
+	std::vector<std::shared_ptr<T>>& operator[](const size_t key) const
 	{
 		std::vector<std::shared_ptr<T>>* result = nullptr;
-		for (unsigned int i = 0; i < this->keys.size(); ++i)
+		for (size_t i = 0; i < keys.size(); ++i)
 		{
-			if (this->keys[i] == key)
+			if (keys[i] == key)
 			{
 				result = &vectors[i];
 			}
@@ -45,7 +44,7 @@ public:
 		if (result == nullptr)
 		{
 			result = new std::vector<std::shared_ptr<T>>();
-		};
+		}
 		return *result;
 	}
 };

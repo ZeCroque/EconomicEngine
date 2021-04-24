@@ -10,7 +10,7 @@ set(CMAKE_AUTOUIC ON)
 
 if(WIN32)
     set(QT_VERSION "5.15.2")
-    set(CMAKE_PREFIX_PATH D:/Qt/${QT_VERSION}/msvc2019_64)
+    set(CMAKE_PREFIX_PATH J:/QT/${QT_VERSION}/msvc2019_64)
 endif(WIN32)
 
 find_package(Qt5 ${QT_VERSION} COMPONENTS
@@ -40,13 +40,9 @@ set(SOURCES
     ${SOURCE_DIR}/qcustomplot.cpp
 )
 
-set(SOURCE_EXE
-    ${SOURCE_DIR}/main.cpp
-)
-
 #=======================================
 #Exe target (standalone mode)
-add_executable(${PROJECT_NAME} ${SOURCES} ${SOURCE_EXE} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${SOURCE_DIR}/main.cpp)
 
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
@@ -92,6 +88,13 @@ add_custom_command(
 #=======================================
 #Lib target (to be used by SFML project)
 add_library(${PROJECT_NAME}_lib ${SOURCES} ${HEADERS})
+
+get_target_property(ECONOMIC_ENGINE_BINARY_DIR EconomicEngineGraphics BINARY_DIR)
+
+set_target_properties(${PROJECT_NAME}_lib
+    PROPERTIES 
+        AUTOGEN_BUILD_DIR ${ECONOMIC_ENGINE_BINARY_DIR}/EconomicEngineGraphics_autogen
+)
 
 target_include_directories(${PROJECT_NAME}_lib
 	PUBLIC

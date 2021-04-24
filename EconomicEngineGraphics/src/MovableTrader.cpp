@@ -3,14 +3,21 @@
 //
 
 #include "MovableTrader.h"
+#include "Traders/Trader.h"
 
-MovableTrader::MovableTrader(const std::string &jobName, const std::string &textureName) : MovableActor(textureName)
+MovableTrader::MovableTrader(const std::string &inJobName, const std::string &inTextureName) : MovableActor(inTextureName)
 {
+	movementSimulationThread = nullptr;
     std::hash<std::string> hasher;
-    jobId = hasher(jobName);
+    jobId = hasher(inJobName);
 }
 
-size_t MovableTrader::getJobId() const
+void MovableTrader::moveTo(Position position)
+{
+	pathfindSucceededSignal();
+}
+
+size_t MovableTrader::getJobId() const 
 {
     return jobId;
 }

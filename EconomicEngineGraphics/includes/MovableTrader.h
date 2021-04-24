@@ -6,17 +6,24 @@
 #define ECONOMICENGINE_MOVABLETRADER_H
 
 #include <string>
+#include <thread>
 
 #include "MovableActor.h"
 
-class MovableTrader : public MovableActor {
+class MovableTrader : public MovableActor
+{
 
 public:
-	MovableTrader(const std::string& jobName, const std::string& textureName);
+	MovableTrader(const std::string& inJobName, const std::string& inTextureName);
 
+	void moveTo(enum class Position position);
+	
     size_t getJobId() const;
 
 	MovableTrader* clone() override;
+
+	//DEBUG
+	std::thread* movementSimulationThread;
 
 private:
     size_t jobId;
