@@ -9,12 +9,11 @@
 - génération bâtiments **vincent**
     - workshop creation -> calculate path
 - trader move -> check closest market and refresh path
-- remove hasEverRun bool
 
 ### Gui:
 - speed = daycycle speed **croque**
-- gui update thread
-- travel simulation threads
+- gui update thread **croque**
+- travel simulation threads (50%) **croque**
 
 
 ### Polish :
