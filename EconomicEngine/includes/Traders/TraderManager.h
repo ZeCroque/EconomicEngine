@@ -8,12 +8,14 @@
 
 class TraderManager final
 {
+friend class Trader;
+	
 private:
 	std::list<Trader> traders;
+	std::list<Trader*> pendingKillTraders;
 	mutable VectorArray< std::pair<int, int>> demographyCounts;
 	JobFactory jobFactory;
     Signal<Trader*> traderAddedSignal;
-    Signal<Trader*> traderKilledSignal;
 
 public:
 	void init() const;
@@ -21,7 +23,6 @@ public:
 	void addTrader(int count);
 	void addTrader(int count, size_t key);
     const Signal<Trader*>& getTraderAddedSignal() const;
-    const Signal<Trader*>& getTraderKilledSignal() const;
 
 	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
 	[[nodiscard]] std::list<const Trader*> getTraderByJobId(size_t key) const;
@@ -31,9 +32,11 @@ public:
 	[[nodiscard]] int getJobCount(size_t key) const;
 	[[nodiscard]] size_t getMostInterestingJob() const;
 	void killStarvedTraders();
+	void clearPendingKillTraders();
+	void makeChildren();
 	void update(float deltaTime);
 	void reset();
-	void kill(size_t key, int count);
+	void markForKill(size_t key, int count);
 };
 
 #endif

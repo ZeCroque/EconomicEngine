@@ -17,11 +17,10 @@ protected:
 
 public:
 	Tradable();
-	Tradable(std::string newName, std::pair<float, float> newDefaultPriceBelief);
+	Tradable(std::string inName, std::pair<float, float> inDefaultPriceBelief);
 	Tradable(const Tradable& tradable);
-	virtual ~Tradable() = default;
 
-	virtual void setOwner(class Trader* newOwningTrader);
+	virtual void setOwningTrader(class Trader* inOwningTrader);
 	void removeFromOwnerInventory();
 
 	[[nodiscard]] std::string getName() const;

@@ -32,14 +32,14 @@ AskStatus Ask::getStatus() const
 	return status;
 }
 
-void Ask::setPrice(const float newPrice)
+void Ask::setPrice(const float inPrice)
 {
-	price = newPrice;
+	price = inPrice;
 }
 
-void Ask::setStatus(const AskStatus newStatus)
+void Ask::setStatus(const AskStatus inStatus)
 {
-	status = newStatus;
+	status = inStatus;
 }
 
 int Ask::getTradedCount() const
@@ -52,7 +52,7 @@ const Signal<Ask*>& Ask::getAskResolvedSignal() const
 	return askResolvedSignal;
 }
 
-void Ask::incrementTradedCountBy(const int newCount)
+void Ask::incrementTradedCountBy(const int inCount)
 {
-	tradedCount += newCount;
+	tradedCount += inCount;
 }

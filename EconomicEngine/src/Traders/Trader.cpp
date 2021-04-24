@@ -11,7 +11,7 @@
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Traders/TraderManager.h"
 
-Trader::Trader() : isWaitingForActivity(true), isWaitingForAskResolution(false), currentAction(Action::None), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f), position(Position::Workshop)
+Trader::Trader() : isWaitingForActivity(true), currentAction(Action::None), currentJob(nullptr), successCount(0),money(100), foodLevel(30.f), position(Position::Workshop)
 {
 	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
 	auto keys = tradableManager.getKeys();
@@ -32,6 +32,16 @@ Trader::Trader(Job* job) : Trader()
 	currentJob = job;
 }
 
+Trader::~Trader()
+{
+	auto& stockExchange = EconomicEngine::getInstance()->getStockExchange();
+	for(const auto& currentAsk : currentAsks)
+	{
+		stockExchange.removeAsk(currentAsk);
+	}
+	++EconomicEngine::getInstance()->getTraderManager().demographyCounts[getCurrentJob()->getId()][0]->second;
+}
+
 void Trader::update(const float deltaTime)
 {
 	if(isWaitingForActivity)
@@ -45,7 +55,6 @@ void Trader::update(const float deltaTime)
 				currentAction = Action::Trading;
 				break;
 			case Action::Trading:
-				makeChild(); //TODO move it at better place (after night?)
 				currentAction = Action::Crafting;
 				break;
 			case Action::Sleeping:
@@ -73,7 +82,7 @@ void Trader::update(const float deltaTime)
 					}
 					break;				
 				}		
-				if(isWaitingForAskResolution)
+				if(!getCurrentAsks().empty())
 				{
 					break;
 				}
@@ -93,7 +102,6 @@ void Trader::update(const float deltaTime)
 			else if(position == Position::Market)
 			{
 				makeAsks();
-				isWaitingForAskResolution = true;
 				isWaitingForActivity = true;
 			}
 			break;
@@ -549,19 +557,25 @@ void Trader::checkAskCallback(Ask* ask)
 		}
 	}
 	updatePriceBelief(ask);
-	isWaitingForAskResolution = false;
+
+	currentAsks.remove_if([ask](const std::shared_ptr<Ask>& value)
+	{
+		return value.get() == ask;
+	});
 }
 
 void Trader::craftSuccessCallback()
 {
 	addToInventory(currentCraft->getResult(), currentCraft->getCount());
-	currentCraft.release();
+	currentCraft.release();  // NOLINT(bugprone-unused-return-value)
+	updateFoodLevel();
 	isWaitingForActivity = true;
 }
 
-void Trader::setPosition(Position inPosition)
+void Trader::setPosition(const Position inPosition)
 {
 	position = inPosition;
+	updateFoodLevel();
 }
 
 int  Trader::getItemCount(const size_t key) const
@@ -586,6 +600,11 @@ int  Trader::getItemCount(const size_t key) const
 const Signal<Position>& Trader::getMoveToRequestSignal() const
 {
 	return moveToRequestSignal;
+}
+
+std::list<std::shared_ptr<Ask>> Trader::getCurrentAsks() const
+{
+	return currentAsks;
 }
 
 bool Trader::isInInventory(const size_t key)
@@ -635,13 +654,13 @@ void Trader::addToInventory(Countable* countable)
 		}
 	}
 	inventory.emplace_back(countable);
-	countable->setOwner(this);
+	countable->setOwningTrader(this);
 }
 
 void Trader::addToInventory(Uncountable* uncountable)
 {
 	inventory.emplace_back(uncountable);
-	uncountable->setOwner(this);
+	uncountable->setOwningTrader(this);
 }
 
 void Trader::removeFromInventory(const size_t key, const int count = 1)

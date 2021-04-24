@@ -4,11 +4,11 @@
 
 Job::Job() : craftFactory(new CraftFactory()), id(0){}
 
-Job::Job(std::string newName) : Job()
+Job::Job(std::string inName) : Job()
 {
 	const std::hash<std::string> hash;
 	
-	name = std::move(newName);
+	name = std::move(inName);
 	id = hash(name);
 }
 

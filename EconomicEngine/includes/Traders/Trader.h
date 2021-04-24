@@ -31,13 +31,13 @@ class Trader
 private:
 
 	bool isWaitingForActivity;
-	bool isWaitingForAskResolution;
 	Action currentAction;
 	
 	VectorArray<std::pair<float, int>> priceHistory;
 	VectorArray<float> priceBeliefs;
 	std::unique_ptr<Craft> currentCraft;
 	Job* currentJob;
+	std::list<std::shared_ptr<Ask>> currentAsks;
 	std::list<std::shared_ptr<Tradable>> inventory;
 	int successCount;
 	float money;
@@ -47,7 +47,7 @@ private:
 	void makeBuyingAsks();
 	void makeSellingAsks();
 	void updatePriceBelief(Ask* ask);
-	void makeChild();
+
 	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) ;
 	[[nodiscard]] float calculateEarnings(Craft* craft) const;
 	[[nodiscard]] float calculateFoodStock() const;
@@ -62,9 +62,10 @@ private:
 			float price = evaluatePrice(item.first);
 			if (price <= maxPrice)
 			{
-				const auto ask = std::make_shared<Ask>(inIsSellingAsk, item.first, item.second, price);
+				auto ask = std::make_shared<Ask>(inIsSellingAsk, item.first, item.second, price);
+				currentAsks.push_back(ask);
 				EconomicEngine::getInstance()->getStockExchange().registerAsk(ask);
-				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);
+				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);		
 			}
 		}
 	}
@@ -72,9 +73,12 @@ private:
 public:
 	Trader();
 	explicit Trader(Job* job);
+	Trader(Trader&&) = default;
+	~Trader();
 
 	void update(float deltaTime);
 	void makeAsks();
+	void makeChild();
 	void startCrafting();
 	void updateFoodLevel();
 	void checkAskCallback(Ask* ask);
@@ -88,6 +92,7 @@ public:
 	[[nodiscard]] float getMoney() const;
 	[[nodiscard]] int getItemCount(size_t key) const;
 	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
+	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(class Countable* countable);
 	void addToInventory(class Uncountable* uncountable);

@@ -14,7 +14,7 @@ void StockExchange::init()
 	betterAsks = VectorArray<Ask>(keys);
 	for (auto key : keys)
 	{
-		betterAsks[key].emplace_back(std::make_shared<Ask>(false,key, 0, 0.0f));
+		betterAsks[key].push_back(std::make_shared<Ask>(false,key, 0, 0.0f));
 	}
 }
 
@@ -23,14 +23,32 @@ void StockExchange::registerAsk(std::shared_ptr<Ask> ask)
 	if(ask->getIsSellingAsk())
 	{
 		auto& sellingAsks = currentSellingAsks[ask->getId()];
-		sellingAsks.emplace_back(std::move(ask));
+		sellingAsks.push_back(std::move(ask));
 		insertionSort(sellingAsks);
 	}
 	else
 	{
 		auto& buyingAsks = currentBuyingAsks[ask->getId()];
-		buyingAsks.emplace_back(std::move(ask));
+		buyingAsks.push_back(std::move(ask));
 		insertionSort(buyingAsks);
+	}
+}
+
+void StockExchange::removeAsk(std::shared_ptr<Ask> ask)
+{
+	auto& registeredAsks = ask->getIsSellingAsk() ? currentSellingAsks[ask->getId()] : currentBuyingAsks[ask->getId()];
+	if(ask && !registeredAsks.empty())
+	{
+		int i = 0;
+		for(const auto& registeredAsk : registeredAsks)
+		{
+			if(registeredAsk.get() == ask.get())
+			{
+				break;
+			}
+			++i;
+		}
+		registeredAsks.erase(registeredAsks.begin() + i);
 	}
 }
 
@@ -63,7 +81,7 @@ void StockExchange::resolveOffers()
 			if (!askResolved)
 			{
 				askResolved = true;
-				betterAsks[key].emplace_back(buyingAsks.back());
+				betterAsks[key].push_back(buyingAsks.back());
 			}
 			
 			if(buyingAsks.back()->getCount() == buyingAsks.back()->getTradedCount())
@@ -74,12 +92,12 @@ void StockExchange::resolveOffers()
 		}
 		if (!askResolved)
 		{
-			betterAsks[key].emplace_back(betterAsks[key].back());
+			betterAsks[key].push_back(betterAsks[key].back());
 		}
 
 		for (auto& sellingAsk : sellingAsks)
 		{
-			if(sellingAsk->getStatus()==AskStatus::Pending)
+			if(sellingAsk->getStatus() == AskStatus::Pending)
 			{
 				sellingAsk->setStatus(AskStatus::Refused);
 			}
@@ -108,7 +126,7 @@ void StockExchange::reset()
 		currentSellingAsks[key].clear();
 		currentBuyingAsks[key].clear();
 		betterAsks[key].clear();
-		betterAsks[key].emplace_back(std::make_shared<Ask>(false,key, 0, 0.0f));
+		betterAsks[key].push_back(std::make_shared<Ask>(false,key, 0, 0.0f));
 	}
 }
 

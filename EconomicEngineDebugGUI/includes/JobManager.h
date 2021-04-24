@@ -6,7 +6,7 @@
 class JobManager final
 {
 public:
-	JobManager(size_t jobId, const QString& jobName);
+	JobManager(size_t inJobId, const QString& inJobName);
 
 	[[nodiscard]] QString getJobName() const;
 	[[nodiscard]] size_t getJobId() const;

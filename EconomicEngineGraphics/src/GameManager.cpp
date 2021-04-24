@@ -49,7 +49,8 @@ void GameManager::init(const char *prefabsPath)
 
 void GameManager::exec() 
 {
-    while(!isInitialized);
+	// ReSharper disable once CppPossiblyErroneousEmptyStatements
+	while(!isInitialized);
 	
     isRunning = true;
 
@@ -173,6 +174,7 @@ void GameManager::processInput()
 
 void GameManager::update(float deltaTime)
 {
+	//TODO remove debug factor
     EconomicEngine::getInstance()->update(deltaTime * 4.f);
     
 	while (!pendingTraders.empty()) 

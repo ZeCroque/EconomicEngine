@@ -66,46 +66,46 @@ void EconomicEngineDebugGui::setZoomXAxis(const int value)
 
 void EconomicEngineDebugGui::setYRange()
 {
-    auto haveData = false;
-    double valueHigh = 0;
-    double valueLow = 999999;
-    for (auto checkBox : this->arrayCheckBox)
-    {
-        auto const graphIndex = checkBox->getGraphIndex();
+	auto haveData = false;
+	double valueHigh = 0;
+	double valueLow = 999999;
+	for (auto* checkBox : arrayCheckBox)
+	{
+		auto const graphIndex = checkBox->getGraphIndex();
 
-        if (checkBox->isChecked())
-        {
-            const auto data = ui.customPlot->graph(graphIndex)->data().get();
-            auto start = ui.customPlot->xAxis->range().lower;
-            const auto end = ui.customPlot->xAxis->range().upper;
-            if (start < 0)
-            {
-                start = 0;
-            }
-            for (int i = start; i <= end; i++)
-            {
-                const auto value = data->at(i)->value;
-                if (value > 0)
-                {
-                    haveData = true;
-                    if (value < valueLow)
-                    {
-                        valueLow = value;
-                    }
-                    if (value > valueHigh)
-                    {
-                        valueHigh = value;
-                    }
-                }
-            }
-        }
-    }
+		if (checkBox->isChecked())
+		{	
+			const auto* data = ui.customPlot->graph(graphIndex)->data().get();
+			auto start = ui.customPlot->xAxis->range().lower;
+			const auto end = ui.customPlot->xAxis->range().upper;
+			if (start < 0)
+			{
+				start = 0;
+			}
+			for (int i = start; i <= end; i++)
+			{
+				const auto value = data->at(i)->value;
+				if (value > 0)
+				{
+					haveData = true;
+					if (value < valueLow)
+					{
+						valueLow = value;
+					}
+					if (value > valueHigh)
+					{
+						valueHigh = value;
+					}
+				}
+			}
+		}
+	}
 
-    if (haveData)
-    {
-        ui.customPlot->yAxis->setRange(valueLow - valueLow * 0.05, valueHigh + valueHigh * 0.05);
-    }
-    ui.customPlot->replot();
+	if (haveData)
+	{
+		ui.customPlot->yAxis->setRange(valueLow - valueLow * 0.05, valueHigh + valueHigh * 0.05);
+	}
+	ui.customPlot->replot();
 }
 
 void EconomicEngineDebugGui::setXRange() const
@@ -138,9 +138,9 @@ void EconomicEngineDebugGui::setSpeed(const int value) const
 
 void EconomicEngineDebugGui::useXSlider(int)
 {
-    ui.customPlot->xAxis->setRange(ui.horSlidXNav->value(), this->zoomXAxis, Qt::AlignRight);
-    setYRange();
-    ui.customPlot->replot();
+	ui.customPlot->xAxis->setRange(ui.horSlidXNav->value(), zoomXAxis, Qt::AlignRight);
+	setYRange();
+	ui.customPlot->replot();
 }
 
 void EconomicEngineDebugGui::toggleStart() const
@@ -159,9 +159,9 @@ void EconomicEngineDebugGui::toggleStart() const
 
 void EconomicEngineDebugGui::doKill()
 {
-    const auto job = arrayJobs.at(ui.cBKill->currentIndex());
-    EconomicEngine::getInstance()->getTraderManager().kill(job->getJobId(), ui.sBKill->value());
-    updateUiJobs();
+	const auto job = arrayJobs.at(ui.cBKill->currentIndex());
+	EconomicEngine::getInstance()->getTraderManager().markForKill(job->getJobId(), ui.sBKill->value());
+	updateUiJobs();
 }
 
 void EconomicEngineDebugGui::doAdd()
@@ -173,119 +173,120 @@ void EconomicEngineDebugGui::doAdd()
 
 void EconomicEngineDebugGui::doReset()
 {
-    ui.pBStart->setChecked(false);
+	asksResolutionCount = 0;
+	ui.pBStart->setChecked(false);
     ui.pBStart->setText("Start");
     EconomicEngine::getInstance()->pause();
 
-    for (auto graphManager : arrayCheckBox)
-    {
-        ui.customPlot->removeGraph(graphManager->getGraphIndex());
-    }
-    arrayCheckBox.clear();
-    arrayJobs.clear();
-    ui.cBKill->clear();
+	for (auto graphManager : arrayCheckBox)
+	{
+		ui.customPlot->removeGraph(graphManager->getGraphIndex());
+	}
+	arrayCheckBox.clear();
+	arrayJobs.clear();
+	ui.cBKill->clear();
 
-    ui.customPlot->clearGraphs();
-    ui.customPlot->xAxis->setRange(0, 5);
-    ui.customPlot->replot();
+	ui.customPlot->clearGraphs();
+	ui.customPlot->xAxis->setRange(0, 5);
+	ui.customPlot->replot();
     ui.horSlidXNav->setMaximum(5);
     ui.horSlidXNav->setSliderPosition(5);
 
 
-    arrayJobs.clear();
-    while (ui.gridLayJobs->count() > 0)
-    {
-        QLayoutItem *item = ui.gridLayJobs->takeAt(0);
-        QWidget *widget = item->widget();
-        delete widget;
-    }
-    EconomicEngine::getInstance()->reset(ui.sBTraderNumber->value());
-    doInit();
+	arrayJobs.clear();
+	while (ui.gridLayJobs->count() > 0)
+	{
+		QLayoutItem* item = ui.gridLayJobs->takeAt(0);
+		QWidget* widget = item->widget();
+		delete widget;
+	}
+	EconomicEngine::getInstance()->reset(ui.sBTraderNumber->value());
+	doInit();
 }
 
 void EconomicEngineDebugGui::doInit()
 {
-    const auto &tradableManager = EconomicEngine::getInstance()->getTradableFactory();
-    auto itemsName = tradableManager.getTradablesName();
-    auto itemsKeys = tradableManager.getKeys();
+	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
+	auto itemsName = tradableManager.getTradablesName();
+	auto itemsKeys = tradableManager.getKeys();
 
-    auto row = 0;
-    auto column = 0;
-    for (auto i = 0; i < itemsName.size(); ++i)
-    {
-        auto checkBox = new GraphManager(this);
-        checkBox->setText(QString::fromStdString(itemsName[i]));
-        checkBox->setItemId(itemsKeys[i]);
-        checkBox->setEnabled(true);
-        checkBox->setCheckable(true);
-        checkBox->setChecked(true);
+	auto row = 0;
+	auto column = 0;
+	for (auto i = 0; i < itemsName.size(); ++i)
+	{
+		auto checkBox = new GraphManager(this);
+		checkBox->setText(QString::fromStdString(itemsName[i]));
+		checkBox->setItemId(itemsKeys[i]);
+		checkBox->setEnabled(true);
+		checkBox->setCheckable(true);
+		checkBox->setChecked(true);
 
-        std::mt19937 randomEngine(i);
-        const std::uniform_int_distribution<int> uniformDist(0, 255);
+		std::mt19937 randomEngine(i);
+		const std::uniform_int_distribution<int> uniformDist(0, 255);
 
-        const auto r = uniformDist(randomEngine);
-        const auto g = uniformDist(randomEngine);
-        const auto b = uniformDist(randomEngine);
+		const auto r = uniformDist(randomEngine);
+		const auto g = uniformDist(randomEngine);
+		const auto b = uniformDist(randomEngine);
 
-        auto style = QString(
-                "color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
-                ");");
+		auto style = QString(
+			"color: rgb(" + QString::number(r) + "," + QString::number(g) + "," + QString::number(b) +
+			");");
 
-        checkBox->setStyleSheet(style);
-        checkBox->setGraphIndex(i);
-        ui.customPlot->addGraph();
-        ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
-        connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
+		checkBox->setStyleSheet(style);
+		checkBox->setGraphIndex(i);
+		ui.customPlot->addGraph();
+		ui.customPlot->graph(i)->setPen(QPen(QColor(r, g, b)));
+		connect(checkBox, SIGNAL(clicked()), this, SLOT(setGraphVisibility()));
 
-        this->arrayCheckBox.push_back(checkBox);
+		arrayCheckBox.push_back(checkBox);
 
-        ui.layChBx->addWidget(checkBox, row, column);
-        if (column == 2)
-        {
-            ++row;
-            column = 0;
-        }
-        else
-        {
-            ++column;
-        }
-    }
+		ui.layChBx->addWidget(checkBox, row, column);
+		if (column == 2)
+		{
+			++row;
+			column = 0;
+		}
+		else
+		{
+			++column;
+		}
+	}
 
 
-    ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
-    ui.gridLayJobs->addWidget(new QLabel("Numbers |"), 0, 1);
-    ui.gridLayJobs->addWidget(new QLabel("Avg. money |"), 0, 2);
-    ui.gridLayJobs->addWidget(new QLabel("Avg. food |"), 0, 3);
-    ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
-    ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
+	ui.gridLayJobs->addWidget(new QLabel("Jobs"), 0, 0);
+	ui.gridLayJobs->addWidget(new QLabel("Numbers |"), 0, 1);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. money |"), 0, 2);
+	ui.gridLayJobs->addWidget(new QLabel("Avg. food |"), 0, 3);
+	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
+	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
 
-    auto &traderManager = EconomicEngine::getInstance()->getTraderManager();
-    for (const auto &job : traderManager.getJobList())
-    {
-        auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
+	auto& traderManager = EconomicEngine::getInstance()->getTraderManager();
+	for (const auto& job : traderManager.getJobList())
+	{
+		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
 
-        jobManager->lbName = new QLabel(jobManager->getJobName());
+		jobManager->lbName = new QLabel(jobManager->getJobName());
 
-        auto number = QString::number(traderManager.getJobCount(jobManager->getJobId()));
-        jobManager->lbNumber = new QLabel(number);
+		auto number = QString::number(traderManager.getJobCount(jobManager->getJobId()));
+		jobManager->lbNumber = new QLabel(number);
 
-        jobManager->lbMoneyAverage = new QLabel(QString::number(0));
-        jobManager->lbFoodAverage = new QLabel(QString::number(0));
-        jobManager->lbBirth = new QLabel(QString::number(0));
-        jobManager->lbDead = new QLabel(QString::number(0));
+		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
+		jobManager->lbFoodAverage = new QLabel(QString::number(0));
+		jobManager->lbBirth = new QLabel(QString::number(0));
+		jobManager->lbDead = new QLabel(QString::number(0));
 
-        const auto layRow = static_cast<int>(arrayJobs.size()) + 1;
-        ui.gridLayJobs->addWidget(jobManager->lbName, layRow, 0);
-        ui.gridLayJobs->addWidget(jobManager->lbNumber, layRow, 1);
-        ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, layRow, 2);
-        ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, layRow, 3);
-        ui.gridLayJobs->addWidget(jobManager->lbBirth, layRow, 4);
-        ui.gridLayJobs->addWidget(jobManager->lbDead, layRow, 5);
+		const auto layRow = static_cast<int>(arrayJobs.size()) + 1;
+		ui.gridLayJobs->addWidget(jobManager->lbName, layRow, 0);
+		ui.gridLayJobs->addWidget(jobManager->lbNumber, layRow, 1);
+		ui.gridLayJobs->addWidget(jobManager->lbMoneyAverage, layRow, 2);
+		ui.gridLayJobs->addWidget(jobManager->lbFoodAverage, layRow, 3);
+		ui.gridLayJobs->addWidget(jobManager->lbBirth, layRow, 4);
+		ui.gridLayJobs->addWidget(jobManager->lbDead, layRow, 5);
 
-        ui.cBKill->addItem(jobManager->getJobName());
-        arrayJobs.push_back(jobManager);
-    }
-    updateUiJobs();
+		ui.cBKill->addItem(jobManager->getJobName());
+		arrayJobs.push_back(jobManager);
+	}
+	updateUiJobs();
 }
 
 void EconomicEngineDebugGui::updateUiJobs()
@@ -318,31 +319,32 @@ void EconomicEngineDebugGui::updateUiJobs()
 
 void EconomicEngineDebugGui::updateUiSlot()
 {
-    const auto stockExchange = EconomicEngine::getInstance()->getStockExchange();
-    ++asksResolutionCount;
+	const auto stockExchange = EconomicEngine::getInstance()->getStockExchange();
+	++asksResolutionCount;
+	
+	auto totalData = 0;
 
-    auto totalData = 0;
+	for (auto checkBox : arrayCheckBox)
+	{
+		auto const graphIndex = checkBox->getGraphIndex();
 
-    for (auto checkBox : arrayCheckBox)
-    {
-        auto const graphIndex = checkBox->getGraphIndex();
 
-        auto i = 0;
-        for (const auto &data : stockExchange.getStockExchangePrice(checkBox->getItemId(), asksResolutionCount))
-        {
-            ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
-            i++;
-        }
+		auto i = asksResolutionCount - 1;
+		for (const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), 1))
+		{
+			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
+			i++;
+		}
 
-        totalData += ui.customPlot->graph(graphIndex)->data()->size();
-    }
+		totalData += ui.customPlot->graph(graphIndex)->data()->size();
+	}
 
-    setYRange();
-    setXRange();
-    updateUiJobs();
+	setYRange();
+	setXRange();
+	updateUiJobs();
 
-    ui.statusBar->showMessage(
-            QString("Total Data points: %1").arg(totalData), 0);
+	ui.statusBar->showMessage(
+		QString("Total Data points: %1").arg(totalData), 0);
 }
 
 const Signal<> &EconomicEngineDebugGui::getInitializedSignal() const
@@ -358,7 +360,7 @@ void EconomicEngineDebugGui::showEvent(QShowEvent *event)
 void EconomicEngineDebugGui::closeEvent(QCloseEvent *event)
 {
 #ifdef STANDALONE_MODE
-    //TODO stop runner thread
-    //this->economicEngineThread.join();
+	//TODO stop runner thread
+	//economicEngineThread.join();
 #endif
 }

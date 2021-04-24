@@ -10,7 +10,8 @@ class StockExchange
 {
 public:
 	void init();
-	void registerAsk(std::shared_ptr<Ask> buyingAsk);	
+	void registerAsk(std::shared_ptr<Ask> ask);
+	void removeAsk(std::shared_ptr<Ask> ask);
 	void resolveOffers();
 	void reset();
 	[[nodiscard]] float getStockExchangePrice(size_t key) const;

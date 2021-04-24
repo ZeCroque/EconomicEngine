@@ -13,8 +13,8 @@ protected:
 	float durability;
 	ToolBehavior();
 public:
-	ToolBehavior(float craftRateBoost, float degradationRate);
-	void init(Uncountable* owner) override;
+	ToolBehavior(float inCraftRateBoost, float inDegradationRate);
+	void init(Uncountable* inOwningTool) override;
 
 	void updateToolDurability();
 	

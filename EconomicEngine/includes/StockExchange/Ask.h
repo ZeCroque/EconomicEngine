@@ -29,9 +29,9 @@ public:
 	[[nodiscard]] AskStatus getStatus() const;
 	[[nodiscard]] int getTradedCount() const;
 	[[nodiscard]] const Signal<Ask*>& getAskResolvedSignal() const;
-	void setPrice(float newPrice);
-	void setStatus(AskStatus newStatus);
-	void incrementTradedCountBy(int newCount);
+	void setPrice(float inPrice);
+	void setStatus(AskStatus inStatus);
+	void incrementTradedCountBy(int inCount);
 
 };
 

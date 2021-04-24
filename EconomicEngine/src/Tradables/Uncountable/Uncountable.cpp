@@ -5,9 +5,9 @@ Uncountable::Uncountable() : Tradable()
 	behavior = nullptr;
 }
 
-Uncountable::Uncountable(std::string newName, std::pair<float, float> newDefaultPriceBelief, Behavior* newBehavior) : Tradable(newName, newDefaultPriceBelief)
+Uncountable::Uncountable(const std::string inName, std::pair<float, float> inDefaultPriceBelief, Behavior* inBehavior) : Tradable(inName, inDefaultPriceBelief)
 {
-	behavior = newBehavior;
+	behavior = inBehavior;
 	behavior->init(this);
 }
 
@@ -30,8 +30,8 @@ Behavior* Uncountable::getBehavior() const
 	return behavior;
 }
 
-void Uncountable::setOwner(Trader* newOwner)
+void Uncountable::setOwningTrader(Trader* inOwningTrader)
 {
-	Tradable::setOwner(newOwner);
+	Tradable::setOwningTrader(inOwningTrader);
 	
 }

@@ -8,6 +8,8 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
 #include "Tradables/Uncountable/Uncountable.h"
 
+EconomicEngine::EconomicEngine()  : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 12.f),baseActionTime(dayDuration / 12.f)  {}
+
 void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 {
 	const std::hash<std::string> hasher;
@@ -117,6 +119,8 @@ void EconomicEngine::update(float deltaTime)
 		if(elapsedTimeSinceDayStart >= dayDuration)
 		{
 			elapsedTimeSinceDayStart = 0.f;
+			traderManager.makeChildren();
+			traderManager.killStarvedTraders();
 			++elapsedDayCount;
 		}
 		elapsedTimeSinceLastStockExchangeResolution += deltaTime;
@@ -124,7 +128,8 @@ void EconomicEngine::update(float deltaTime)
 		{
 			elapsedTimeSinceLastStockExchangeResolution = 0.f;
 			stockExchange.resolveOffers();
-			traderManager.killStarvedTraders();
+			traderManager.clearPendingKillTraders();
+
 		}
 		traderManager.update(deltaTime);
 	}

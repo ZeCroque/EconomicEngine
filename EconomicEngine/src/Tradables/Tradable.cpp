@@ -4,10 +4,10 @@
 
 Tradable::Tradable() : id(0), owningTrader(nullptr){}
 
-Tradable::Tradable(std::string newName, std::pair<float, float> newDefaultPriceBelief) : name(std::move(newName)), defaultPriceBelief(std::move(newDefaultPriceBelief)), owningTrader(nullptr)
+Tradable::Tradable(std::string inName, std::pair<float, float> inDefaultPriceBelief) : name(std::move(inName)), defaultPriceBelief(std::move(inDefaultPriceBelief)), owningTrader(nullptr)
 {
 	const std::hash<std::string> hasher;
-	id = hasher(this->name);
+	id = hasher(name);
 }
 
 Tradable::Tradable(const Tradable& tradable) : Tradable()
@@ -17,9 +17,9 @@ Tradable::Tradable(const Tradable& tradable) : Tradable()
 	defaultPriceBelief = std::pair<float, float>(tradable.defaultPriceBelief);
 }
 
-void Tradable::setOwner(Trader* newOwningTrader)
+void Tradable::setOwningTrader(Trader* inOwningTrader)
 {
-	owningTrader = newOwningTrader;
+	owningTrader = inOwningTrader;
 }
 
 void Tradable::removeFromOwnerInventory()

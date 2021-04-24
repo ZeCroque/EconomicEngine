@@ -1,5 +1,5 @@
 ### Economic:
--try updating hunger after each action
+- fix tools economy
 
 ### Graphic:
 - affichage **vincent**
@@ -15,9 +15,6 @@
 - speed = daycycle speed **croque**
 - gui update thread
 - travel simulation threads
-- make reset safe
-- fix reset toggle
-- fix kill
 
 
 ### Polish :

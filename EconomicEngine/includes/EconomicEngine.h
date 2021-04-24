@@ -3,7 +3,6 @@
 
 #include "Singleton.h"
 #include "nlohmann/json.hpp"
-#include "Signal.h"
 #include "StockExchange/StockExchange.h"
 #include "Tradables/TradableFactory.h"
 #include "Traders/TraderManager.h"
@@ -18,10 +17,9 @@ protected:
 	mutable TradableFactory tradableFactory;
 	mutable StockExchange stockExchange;
 
-	EconomicEngine() : bRunning(false), bPaused(true), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(320.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 100.f),baseActionTime(dayDuration / 200.f)  {}
+	EconomicEngine();
 private:
 	bool bRunning;
-	bool bPaused;
 
 	int elapsedDayCount;
 	float elapsedTimeSinceDayStart;

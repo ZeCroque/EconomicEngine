@@ -16,7 +16,7 @@ void MovableTrader::moveTo(Position position)
 {
 	/*movementSimulationThread = new std::thread([this]()
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(800));
+		std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(24.f/12.f * 1000.f)));
 		pathfindSucceededSignal();
 	});
 	movementSimulationThread->detach();*/
