@@ -216,7 +216,7 @@ void GameManager::processInput()
 
                 auto &grid = gridManager.grid;
                 auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-                auto margin = caseSize * 20.f;
+                auto margin = caseSize * 10.f;
 
                 if (viewOrigin.x + deltaPos.x + margin >= grid.getMinCoordinate().first * caseSize &&
                     viewOrigin.x + view.getSize().x + deltaPos.x - margin <= grid.getMaxCoordinate().first * caseSize)
@@ -240,7 +240,7 @@ void GameManager::processInput()
             {
                 auto &grid = gridManager.grid;
                 auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
-                auto margin = caseSize * 10.f;
+                auto margin = caseSize * 5.f;
 
                 bool canUnZoom = newOrigin.x + margin >= grid.getMinCoordinate().first * caseSize &&
                                  newOrigin.y + margin >= grid.getMinCoordinate().second * caseSize &&
@@ -340,40 +340,44 @@ void GameManager::render() const
 
     if (backgroundNeedsUpdate)
     {
-        float xMin = viewOrigin.x - 62;
-        float xMax = viewOrigin.x + view.getSize().x;
-        float yMin = viewOrigin.y - 62;
-        float yMax = viewOrigin.y + view.getSize().y;
-
         background.clear();
         background.create(view.getSize().x, view.getSize().y);
         background.setView(view);
 
-
         auto &grid = gridManager.grid;
 
-        sf::Sprite grassSprite;
-        grassSprite.setTexture(getTexture(grassId));
+        float viewXMin = viewOrigin.x - caseSize;
+        float viewXMax = viewOrigin.x + view.getSize().x;
+        float viewYMin = viewOrigin.y - caseSize;
+        float viewYMax = viewOrigin.y + view.getSize().y;
 
-        for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second + 2; ++y)
+        int groundYMax = int(float(grid.getMaxCoordinate().second) +
+                             std::max(0.f, viewYMax / caseSize - float(grid.getMaxCoordinate().second)) + 1.0f);
+        int groundXMax = int(float(grid.getMaxCoordinate().first) +
+                             std::max(0.f, viewXMax / caseSize - float(grid.getMaxCoordinate().first)) + 1.0f);
+        int groundYMin = int(float(grid.getMinCoordinate().second) +
+                             std::min(0.f, viewYMin / caseSize - float(grid.getMinCoordinate().second)));
+        int groundXMin = int(float(grid.getMinCoordinate().first) +
+                             std::min(0.f, viewXMin / caseSize - float(grid.getMinCoordinate().first)));
+
+
+        sf::Sprite groundSprite;
+        groundSprite.setTexture(getTexture(grassId));
+
+        for (int y = groundYMin; y < groundYMax; ++y)
         {
-            for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first + 2; ++x)
+            for (int x = groundXMin; x < groundXMax; ++x)
             {
-                auto positionX = float(x) * 62;
-                auto positionY = float(y) * 62;
-                if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
-                {
-                    grassSprite.setPosition(positionX, positionY);
-                    background.draw(grassSprite);
-                }
+                groundSprite.setPosition(float(x) * caseSize, float(y) * caseSize);
+                background.draw(groundSprite);
             }
         }
 
         for (auto &ws : workshops)
         {
-            auto positionX = float(ws->x) * 62;
-            auto positionY = float(ws->y) * 62;
-            if (positionX >= xMin && positionX <= xMax && positionY >= yMin && positionY <= yMax)
+            auto positionX = float(ws->x) * caseSize;
+            auto positionY = float(ws->y) * caseSize;
+            if (positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
             {
                 auto &workshopSprite = ws->getSprite();
                 workshopSprite.setPosition(positionX, positionY);
@@ -382,11 +386,11 @@ void GameManager::render() const
         }
 
         sf::RectangleShape rectangle;
-        rectangle.setSize(sf::Vector2f(62, 62));
+        rectangle.setSize(sf::Vector2f(caseSize, caseSize));
         rectangle.setFillColor(sf::Color::Red);
-        rectangle.setPosition(xMin + 62, yMin + 62);
+        rectangle.setPosition(viewXMin + caseSize, viewYMin + caseSize);
         background.draw(rectangle);
-        rectangle.setPosition(xMax - 62, yMax - 62);
+        rectangle.setPosition(viewXMax - caseSize, viewYMax - caseSize);
         background.draw(rectangle);
 
         background.display();
