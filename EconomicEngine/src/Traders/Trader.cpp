@@ -40,6 +40,10 @@ Trader::~Trader()
 		stockExchange.removeAsk(currentAsk);
 	}
 	++EconomicEngine::getInstance()->getTraderManager().demographyCounts[getCurrentJob()->getId()][0]->second;
+
+	while(position == Position::Street);
+	moveToRequestSignal.disconnectAll();
+	//TODO notify death
 }
 
 void Trader::update(const float deltaTime)
@@ -74,6 +78,7 @@ void Trader::update(const float deltaTime)
 				{				
 					if(position == Position::Market)
 					{
+						position = Position::Street;
 						moveToRequestSignal(Position::Workshop);
 					}
 					else if(position == Position::Workshop)
@@ -97,6 +102,7 @@ void Trader::update(const float deltaTime)
 		case Action::Trading:
 			if(position == Position::Workshop)
 			{
+				position = Position::Street;
 				moveToRequestSignal(Position::Market);
 			}
 			else if(position == Position::Market)

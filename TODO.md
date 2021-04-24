@@ -9,6 +9,7 @@
 - génération bâtiments **vincent**
     - workshop creation -> calculate path
 - trader move -> check closest market and refresh path
+- fix window close
 
 ### Gui:
 - speed = daycycle speed **croque**

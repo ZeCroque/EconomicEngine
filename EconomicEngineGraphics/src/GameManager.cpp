@@ -419,7 +419,6 @@ void GameManager::traderAddedCallback(Trader *trader)
     pendingTraders.push(movableTrader);
 	trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
 	{
-		movableTrader->getPathfindSucceededSignal().disconnectAll();
 		movableTrader->getPathfindSucceededSignal().connect([trader, movableTrader, position]()
 		{	
 			trader->setPosition(position);
