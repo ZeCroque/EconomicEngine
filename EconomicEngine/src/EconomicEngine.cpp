@@ -8,7 +8,7 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
 #include "Tradables/Uncountable/Uncountable.h"
 
-EconomicEngine::EconomicEngine()  : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 12.f),baseActionTime(dayDuration / 12.f)  {}
+EconomicEngine::EconomicEngine()  : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 12.f),baseActionTime(dayDuration / 6.f)  {}
 
 void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 {
