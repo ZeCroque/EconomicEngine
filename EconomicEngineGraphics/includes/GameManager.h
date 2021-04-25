@@ -11,10 +11,7 @@
 #include "AbstractFactory.h"
 #include "GridManager.h"
 #include "WorkshopFactory.h"
-
-class Workshop;
-
-class MovableTrader;
+#include "MovableTrader.h"
 
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 

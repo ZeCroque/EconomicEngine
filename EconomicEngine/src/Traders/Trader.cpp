@@ -71,33 +71,32 @@ void Trader::update(const float deltaTime)
 	switch(currentAction)  // NOLINT(clang-diagnostic-switch) //TODO better action decision (use goodsList to prefer trading over crafting when above threshold
 	{
 		case Action::Crafting:
-			if(!currentCraft)
-			{
-				if(!getCurrentJob()->getCraftableList().empty())
-				{				
-					if(position == Position::Market)
-					{
-						position = Position::Street;
-						moveToRequestSignal(Position::Workshop);
-					}
-					else if(position == Position::Workshop)
-					{
-						startCrafting();
-					}
-					break;				
-				}		
-				if(!getCurrentAsks().empty())
-				{
-					break;
-				}
-				//If no craft is available and no trade awaiting then trade
-				[[fallthrough]];
-			}
-			else
+			if(currentCraft)
 			{
 				currentCraft->update(deltaTime);
 				break;
+			}
+
+			if(!getCurrentJob()->getCraftableList().empty())
+			{				
+				if(position == Position::Market)
+				{
+					position = Position::Street;
+					moveToRequestSignal(Position::Workshop);
+				}
+				else if(position == Position::Workshop)
+				{
+					startCrafting();
+				}
+				break;				
 			}		
+			if(!getCurrentAsks().empty())
+			{
+				break;
+			}
+			//If no craft is available and no trade awaiting then trade
+			[[fallthrough]];
+					
 		case Action::Trading:
 			if(position == Position::Workshop)
 			{
