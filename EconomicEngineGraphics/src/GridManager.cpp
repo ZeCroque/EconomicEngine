@@ -50,8 +50,7 @@ void GridManager::placeWorkshop() {
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                GameManager::getInstance()->setBackgroundNeedsUpdate(true);
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning()) {
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() || !GameManager::getInstance()->getIsInitialized()) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::maxFPS));
                 }
                 if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized()) {
@@ -68,6 +67,7 @@ void GridManager::placeWorkshop() {
                         grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), noiseX, noiseY);
                         marketCoordinate.emplace_back(std::pair<int, int>(noiseX, noiseY));
                     }
+                    GameManager::getInstance()->setBackgroundNeedsUpdate(true);
                     grid.updateBounds(noiseX, noiseY);
                 }
 
