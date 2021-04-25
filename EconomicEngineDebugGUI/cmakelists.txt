@@ -96,9 +96,12 @@ set_target_properties(${PROJECT_NAME}_lib
         AUTOGEN_BUILD_DIR ${ECONOMIC_ENGINE_BINARY_DIR}/EconomicEngineGraphics_autogen
 )
 
+get_target_property(ECONOMIC_ENGINE_HEADER_DIR EconomicEngineGraphics INCLUDE_DIRECTORIES)
+
 target_include_directories(${PROJECT_NAME}_lib
 	PUBLIC
 		${HEADER_DIR}
+        ${ECONOMIC_ENGINE_HEADER_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}_lib

@@ -85,7 +85,7 @@ void GameManager::exec()
 
         while (lag >= deltaTimeUs)
         {
-            update(deltaTimeS);
+            update(deltaTimeS * speedFactor);
             lag -= deltaTimeUs;
         }
 
@@ -109,7 +109,7 @@ bool GameManager::getIsInitialized() const
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
-GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")), moving(false),
+GameManager::GameManager() : speedFactor(1.f), window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")), moving(false),
                              isInitialized(false), isRunning(false), isGuiOpened(false),wantsToOpenGui(false),
                              backgroundNeedsUpdate(true), grassId(0), caseSize(62.f)
 {
@@ -302,8 +302,7 @@ void GameManager::processInput()
 
 void GameManager::update(const float deltaTime)
 {
-	//TODO remove debug factor
-    EconomicEngine::getInstance()->update(deltaTime * 4.f);
+    EconomicEngine::getInstance()->update(deltaTime);
     
 	while (!pendingTraders.empty()) 
 	{
@@ -411,6 +410,16 @@ void GameManager::quit()
     
     gridManager.getGenerationThread().join();
     window->close();
+}
+
+void GameManager::setSpeedFactor(const float inSpeedFactor)
+{
+	speedFactor = inSpeedFactor;
+}
+
+float GameManager::getSpeedFactor() const
+{
+	return speedFactor;
 }
 
 void GameManager::traderAddedCallback(Trader *trader) 

@@ -6,6 +6,10 @@
 #include "GraphManager.h"
 #include "JobManager.h"
 
+#ifndef STANDALONE_MODE
+	#include "GameManager.h"
+#endif
+
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
         : QMainWindow(parent), asksResolutionCount(0)
 {
@@ -19,6 +23,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
     //TODO update economic engine at fixed rate
     /*economicEngineThread = std::thread([this]()
     {
+
     });*/
 #endif
 
@@ -34,9 +39,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
     zoomXAxis = ui.horSlidZoomXAxis->value();
     connect(ui.horSlidZoomXAxis, SIGNAL(valueChanged(int)), this, SLOT(setZoomXAxis(int)));
 
-    //TODO Set daycycle speed
-    /*turnManager->setTurnSecond(ui.horSlidSpeed->value());
-    connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));*/
+
+    connect(ui.horSlidSpeed, SIGNAL(valueChanged(int)), this, SLOT(setSpeed(int)));
+	
     ui.horSlidXNav->setMaximum(ui.horSlidZoomXAxis->value());
     ui.horSlidXNav->setValue(ui.horSlidZoomXAxis->value());
     connect(ui.horSlidXNav, SIGNAL(valueChanged(int)), this, SLOT(useXSlider(int)));
@@ -133,7 +138,11 @@ void EconomicEngineDebugGui::setXRange() const
 
 void EconomicEngineDebugGui::setSpeed(const int value) const
 {
-    //TODO daycycle speed
+#ifdef STANDALONE_MODE
+	//TODO
+#else
+	GameManager::getInstance()->setSpeedFactor(static_cast<float>(value));
+#endif
 }
 
 void EconomicEngineDebugGui::useXSlider(int)

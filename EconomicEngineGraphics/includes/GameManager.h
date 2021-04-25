@@ -30,11 +30,17 @@ public:
 
     void setBackgroundNeedsUpdate(bool value) const;
 
+	void setSpeedFactor(float inSpeedFactor);
+
+	[[nodiscard]] float getSpeedFactor() const;
+
     const sf::Texture &getTexture(size_t textureId) const;
 
 	bool getIsInitialized() const;
 
+
     static const sf::Int32 maxFPS;
+	float speedFactor;
 
 private:
     GameManager();
