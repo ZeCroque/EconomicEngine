@@ -14,7 +14,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         },
@@ -33,7 +33,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         },
@@ -52,7 +52,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         },
@@ -71,7 +71,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         },
@@ -90,7 +90,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         },
@@ -113,7 +113,7 @@
                     "count" : 1
                 }
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         }

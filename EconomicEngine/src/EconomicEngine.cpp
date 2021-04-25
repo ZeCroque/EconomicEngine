@@ -26,9 +26,9 @@ void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 			}
 
 			std::list<size_t> requiredTools;
-			for(const auto& requiredTool : parsedCraft["requiredTools"])
+			for(const auto& requiredTool : parsedCraft["requiredToolBehaviors"])
 			{
-				requiredTools.emplace_back(hasher(static_cast<std::string>(requiredTool) + "Behavior"));
+				requiredTools.emplace_back(hasher(static_cast<std::string>(requiredTool)));
 			}
 			
 			 job->getCraftFactory()->registerCraft(new Craft(parsedCraft["baseRate"], hasher(parsedCraft["result"]), parsedCraft["producedCount"], requirements, requiredTools));
@@ -56,7 +56,7 @@ void EconomicEngine::initTradables(std::vector<nlohmann::json>& parsedTradables)
 		}
 		else if(parsedTradable["type"] == "Uncountable")
 		{
-			tradable = new Uncountable(parsedTradable["name"], defaultPriceBelief, new ToolBehavior(parsedTradable["behavior"]["craftRateBoost"], parsedTradable["behavior"]["degradationRate"]));
+			tradable = new Uncountable(parsedTradable["name"], defaultPriceBelief, new ToolBehavior(parsedTradable["behavior"]["name"],parsedTradable["behavior"]["craftRateBoost"], parsedTradable["behavior"]["degradationRate"]));
 		}
 		else if(parsedTradable["type"] == "Food")
 		{

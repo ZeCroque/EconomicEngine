@@ -10,7 +10,7 @@
             "requirements" :
             [
             ],
-            "requiredTools" :
+            "requiredToolBehaviors" :
             [
             ]
         }

@@ -13,7 +13,7 @@ protected:
 	float durability;
 	ToolBehavior();
 public:
-	ToolBehavior(float inCraftRateBoost, float inDegradationRate);
+	ToolBehavior(const std::string& inName, float inCraftRateBoost, float inDegradationRate);
 	void init(Uncountable* inOwningTool) override;
 
 	void updateToolDurability();
