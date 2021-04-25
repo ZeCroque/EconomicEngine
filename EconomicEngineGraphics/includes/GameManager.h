@@ -11,10 +11,7 @@
 #include "AbstractFactory.h"
 #include "GridManager.h"
 #include "WorkshopFactory.h"
-
-class Workshop;
-
-class MovableTrader;
+#include "MovableTrader.h"
 
 using MovableTraderFactory = AbstractFactory<size_t, MovableTrader>;
 
@@ -31,7 +28,7 @@ public:
 
     bool getIsRunning() const;
 
-    void setBackgroundNeedsUpdate(bool value);
+    void setBackgroundNeedsUpdate(bool value) const;
 
     const sf::Texture &getTexture(size_t textureId) const;
 
@@ -69,7 +66,8 @@ private:
 	
 	bool isInitialized;
     bool isRunning;
-    bool isGuiOpened;
+	bool isGuiOpened;
+    bool wantsToOpenGui;
 
     mutable bool backgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;

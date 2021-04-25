@@ -75,6 +75,4 @@ private:
     mutable std::atomic<int> id;
 };
 
-#define slots Q_SLOTS;
-
 #endif //SIGNAL_H
