@@ -60,7 +60,7 @@ void GameManager::init(const char *contentPath)
 void GameManager::exec() 
 {
 	// ReSharper disable once CppPossiblyErroneousEmptyStatements
-	while(!isInitialized);
+	while(!isInitialized);  // NOLINT(clang-diagnostic-empty-body)
 	
     isRunning = true;
 
@@ -98,7 +98,7 @@ bool GameManager::getIsRunning() const
     return isRunning;
 }
 
-const sf::Texture &GameManager::getTexture(size_t textureId) const
+const sf::Texture &GameManager::getTexture(const size_t textureId) const
 {
     return texturesDictionary[textureId];
 }
@@ -109,10 +109,9 @@ bool GameManager::getIsInitialized() const
 }
 
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
-GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
-                             caseSize(62.f),
-                             background(), view(), isInitialized(false), isRunning(false), isGuiOpened(false),
-                             backgroundNeedsUpdate(true), moving(false), grassId(), oldPos()
+GameManager::GameManager() : window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")), moving(false),
+                             isInitialized(false), isRunning(false), isGuiOpened(false),wantsToOpenGui(false),
+                             backgroundNeedsUpdate(true), grassId(0), caseSize(62.f)
 {
     window->setFramerateLimit(maxFPS);
     view.setCenter(0, 0);
@@ -142,10 +141,12 @@ void GameManager::initGui()
 	    		isInitialized = true;
 	    	});
 	        debugGui.show();
+	    	isGuiOpened = true;
+	        wantsToOpenGui = false;
 	        result = QApplication::exec();
-
-	        isGuiOpened = false;
-	        while (!isGuiOpened && isRunning);
+	    	
+            isGuiOpened = false;
+	        while (!wantsToOpenGui && isRunning);
 	    } while (isRunning);
 
 	    return result;
@@ -188,7 +189,7 @@ void GameManager::processInput()
 
     while (window->pollEvent(event))
     {
-        switch (event.type)
+        switch (event.type)  // NOLINT(clang-diagnostic-switch-enum)
         {
             case sf::Event::Closed:
             {
@@ -197,8 +198,8 @@ void GameManager::processInput()
             }
             case sf::Event::Resized:
             {
-                auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-                view.reset(sf::Rect(viewOrigin.x, viewOrigin.y, static_cast<float>(event.size.width), static_cast<float>(event.size.height)));
+	            const auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+                view.reset(sf::Rect<float>(viewOrigin.x, viewOrigin.y, static_cast<float>(event.size.width), static_cast<float>(event.size.height)));
                 backgroundNeedsUpdate = true;
                 break;
             }
@@ -228,21 +229,21 @@ void GameManager::processInput()
 
                 const sf::Vector2f newPos = window->mapPixelToCoords(
                         sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
-                sf::Vector2f deltaPos = oldPos - newPos;
+                const sf::Vector2f deltaPos = oldPos - newPos;
 
                 auto &grid = gridManager.grid;
-                auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-                auto margin = caseSize * 10.f;
+                const auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+                const auto margin = caseSize * 10.f;
 
-                if (viewOrigin.x + deltaPos.x + margin >= grid.getMinCoordinate().first * caseSize &&
-                    viewOrigin.x + view.getSize().x + deltaPos.x - margin <= grid.getMaxCoordinate().first * caseSize)
+                if (viewOrigin.x + deltaPos.x + margin >= static_cast<float>(grid.getMinCoordinate().first) * caseSize &&
+                    viewOrigin.x + view.getSize().x + deltaPos.x - margin <= static_cast<float>(grid.getMaxCoordinate().first) * caseSize)
                 {
                     view.setCenter(view.getCenter().x + deltaPos.x, view.getCenter().y);
                     window->setView(view);
                 }
 
-                if (viewOrigin.y + deltaPos.y + margin >= grid.getMinCoordinate().second * caseSize &&
-                    viewOrigin.y + view.getSize().y + deltaPos.y - margin <= grid.getMaxCoordinate().second * caseSize)
+                if (viewOrigin.y + deltaPos.y + margin >= static_cast<float>(grid.getMinCoordinate().second) * caseSize &&
+                    viewOrigin.y + view.getSize().y + deltaPos.y - margin <= static_cast<float>(grid.getMaxCoordinate().second) * caseSize)
                 {
                     view.setCenter(view.getCenter().x, view.getCenter().y + deltaPos.y);
                     window->setView(view);
@@ -255,13 +256,13 @@ void GameManager::processInput()
             case sf::Event::MouseWheelScrolled:
             {
                 auto &grid = gridManager.grid;
-                auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
-                auto margin = caseSize * 5.f;
+                const auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
+                const auto margin = caseSize * 5.f;
 
-                bool canUnZoom = newOrigin.x + margin >= grid.getMinCoordinate().first * caseSize &&
-                                 newOrigin.y + margin >= grid.getMinCoordinate().second * caseSize &&
-                                 newOrigin.x + view.getSize().x - margin <= grid.getMaxCoordinate().first * caseSize &&
-                                 newOrigin.y + view.getSize().y - margin <= grid.getMaxCoordinate().second * caseSize;
+                const bool canUnZoom = newOrigin.x + margin >= static_cast<float>(grid.getMinCoordinate().first) * caseSize &&
+                                 newOrigin.y + margin >= static_cast<float>(grid.getMinCoordinate().second) * caseSize &&
+                                 newOrigin.x + view.getSize().x - margin <= static_cast<float>(grid.getMaxCoordinate().first) * caseSize &&
+                                 newOrigin.y + view.getSize().y - margin <= static_cast<float>(grid.getMaxCoordinate().second) * caseSize;
 
                 if (event.mouseWheelScroll.delta <= -1 && canUnZoom &&
                     (view.getSize().x * 1.10f < 32768.f && view.getSize().y * 1.10f < 32768.f))
@@ -285,7 +286,10 @@ void GameManager::processInput()
                 }
                 else if(event.key.code == sf::Keyboard::D)
                 {
-	                isGuiOpened = true;
+                	if(!isGuiOpened)
+                	{
+						wantsToOpenGui = true;
+                    }
                 }
                 break;
             }
@@ -296,7 +300,7 @@ void GameManager::processInput()
     window->setView(view);
 }
 
-void GameManager::update(float deltaTime)
+void GameManager::update(const float deltaTime)
 {
 	//TODO remove debug factor
     EconomicEngine::getInstance()->update(deltaTime * 4.f);
@@ -329,10 +333,10 @@ void GameManager::render() const
     if (backgroundNeedsUpdate)
     {
         background.clear();
-        background.create(view.getSize().x, view.getSize().y);
+        background.create(static_cast<unsigned int>(view.getSize().x), static_cast<unsigned int>(view.getSize().y));
         background.setView(view);
 
-        auto &grid = gridManager.grid;
+        const auto &grid = gridManager.grid;
 
         float viewXMin = viewOrigin.x - caseSize;
         float viewXMax = viewOrigin.x + view.getSize().x;
@@ -432,7 +436,7 @@ void GameManager::traderAddedCallback(Trader *trader)
 	});
 }
 
-Workshop* GameManager::findAvailableWorkshop(size_t jobId) const 
+Workshop* GameManager::findAvailableWorkshop(const size_t jobId) const 
 {
     for (const auto &ws : workshops) 
     {
@@ -444,7 +448,7 @@ Workshop* GameManager::findAvailableWorkshop(size_t jobId) const
     return nullptr;
 }
 
-std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const 
+std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t key) const 
 {
     auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(key));
     workshops.push_back(workshop);
@@ -457,7 +461,7 @@ std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string &name) cons
     return addWorkshop(hash(name));
 }
 
-std::shared_ptr<MovableTrader> GameManager::addMovableTrader(size_t key) const
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const size_t key) const
 {
     auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(key));
     traders.push_back(movableTrader);
@@ -470,7 +474,7 @@ std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string &
     return addMovableTrader(hash(name));
 }
 
-void GameManager::setBackgroundNeedsUpdate(bool value)
+void GameManager::setBackgroundNeedsUpdate(const bool value) const
 {
     backgroundNeedsUpdate = value;
 }
