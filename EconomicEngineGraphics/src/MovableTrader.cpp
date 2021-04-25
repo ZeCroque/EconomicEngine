@@ -21,7 +21,6 @@ void MovableTrader::moveTo(Position position)
 		pathfindSucceededSignal();
 		pathfindSucceededSignal.disconnectAll();
 	});
-	movementSimulationThread->detach();
 }
 
 size_t MovableTrader::getJobId() const {

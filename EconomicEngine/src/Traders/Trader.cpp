@@ -39,11 +39,10 @@ Trader::~Trader()
 	{
 		stockExchange.removeAsk(currentAsk);
 	}
-	++EconomicEngine::getInstance()->getTraderManager().demographyCounts[getCurrentJob()->getId()][0]->second;
 
 	while(position == Position::Street);
 	moveToRequestSignal.disconnectAll();
-	//TODO notify death
+	deathSignal.disconnectAll();
 }
 
 void Trader::update(const float deltaTime)
@@ -729,4 +728,9 @@ float Trader::getFoodLevel() const
 float Trader::getMoney() const
 {
 	return money;
+}
+
+const Signal<> &Trader::getDeathSignal() const
+{
+    return deathSignal;
 }

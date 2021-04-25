@@ -120,6 +120,8 @@ void TraderManager::killStarvedTraders()
 	{
 		if(trader.getFoodLevel() <= 0)
 		{
+            trader.getDeathSignal()();
+            ++demographyCounts[trader.getCurrentJob()->getId()][0]->second;
 			return true;
 		}
 		return false;
@@ -133,7 +135,9 @@ void TraderManager::clearPendingKillTraders()
 		for(const auto* pendingKillTrader : pendingKillTraders)
 		{
 			if(&trader == pendingKillTrader)
-			{			
+			{
+			    trader.getDeathSignal()();
+                ++demographyCounts[trader.getCurrentJob()->getId()][0]->second;
 				return true;
 			}
 		}

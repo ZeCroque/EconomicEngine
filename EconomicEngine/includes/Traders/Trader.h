@@ -54,8 +54,9 @@ private:
 	[[nodiscard]] float calculatePriceBeliefMean(size_t key) const;
 	[[nodiscard]] float evaluatePrice(size_t key) const;
 	Signal<Position> moveToRequestSignal;
+    Signal<> deathSignal;
 
-	void registerAsks(bool inIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
+    void registerAsks(bool inIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
 	{
 		for (const auto& item : itemList)
 		{
@@ -92,6 +93,7 @@ public:
 	[[nodiscard]] float getMoney() const;
 	[[nodiscard]] int getItemCount(size_t key) const;
 	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
+    [[nodiscard]] const Signal<>& getDeathSignal() const;
 	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
 	void addToInventory(size_t key, int count);
 	void addToInventory(class Countable* countable);

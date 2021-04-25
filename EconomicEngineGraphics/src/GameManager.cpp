@@ -421,6 +421,15 @@ void GameManager::traderAddedCallback(Trader *trader)
 		});
 		movableTrader->moveTo(position);
 	});
+
+	trader->getDeathSignal().connect([movableTrader,this]()
+	{
+	    movableTrader->movementSimulationThread->join();
+        movableTrader->getPathfindSucceededSignal().disconnectAll();
+        traders.remove_if([movableTrader](const std::shared_ptr<MovableTrader>& inMovableTrader){
+            return inMovableTrader.get() == movableTrader;
+        });
+	});
 }
 
 Workshop* GameManager::findAvailableWorkshop(size_t jobId) const 

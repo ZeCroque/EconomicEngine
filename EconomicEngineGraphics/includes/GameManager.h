@@ -99,10 +99,10 @@ private:
     GridManager gridManager;
 
     std::queue<MovableTrader *> pendingTraders;
-    mutable std::vector<std::shared_ptr<MovableTrader>> traders;
+    mutable std::list<std::shared_ptr<MovableTrader>> traders;
     MovableTraderFactory movableTraderFactory;
 
-    mutable std::vector<std::shared_ptr<Workshop>> workshops;
+    mutable std::list<std::shared_ptr<Workshop>> workshops;
     WorkshopFactory workshopFactory;
 
 };

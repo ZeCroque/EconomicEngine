@@ -8,8 +8,7 @@
 
 class TraderManager final
 {
-friend class Trader;
-	
+
 private:
 	std::list<Trader> traders;
 	std::list<Trader*> pendingKillTraders;
