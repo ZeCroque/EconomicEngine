@@ -1,5 +1,7 @@
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
+#include <string>
+
 #include "Clonable.h"
 
 class Tradable;
@@ -8,10 +10,10 @@ class Behavior : public Clonable<Behavior>
 {
 protected:
 	class Uncountable* owningTool;
-	size_t typeId;
+	size_t id;
 public:
 	Behavior();
-	virtual ~Behavior() = default;
+	explicit Behavior(const std::string& inName);
 	virtual void init(Uncountable* owner) = 0;
 	[[nodiscard]] size_t getId() const;
 

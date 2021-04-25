@@ -1,8 +1,14 @@
 #include "Tradables/Uncountable/Behavior.h"
 
-Behavior::Behavior() : owningTool(nullptr), typeId(0){}
+Behavior::Behavior() : owningTool(nullptr), id(0){}
+
+Behavior::Behavior(const std::string& inName)
+{
+	const std::hash<std::string> hasher;
+	id = hasher(inName);
+}
 
 size_t Behavior::getId() const
 {
-	return typeId;
+	return id;
 }

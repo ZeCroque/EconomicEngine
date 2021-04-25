@@ -8,6 +8,7 @@
     },
     "behavior" :
     {
+        "name" : "AxeBehavior",
         "craftRateBoost" : 0.33,
         "degradationRate" : 0.1
     }

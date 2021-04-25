@@ -8,6 +8,7 @@
     },
     "behavior" :
     {
+        "name" : "PickaxeBehavior",
         "craftRateBoost" : 0.0,
         "degradationRate" : 0.1
     }
