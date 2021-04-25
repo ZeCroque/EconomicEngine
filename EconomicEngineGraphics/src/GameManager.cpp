@@ -399,6 +399,8 @@ void GameManager::quit()
 {
     isRunning = false;
 
+    EconomicEngine::getInstance()->getStockExchange().getAskResolvedSignal().disconnectAll();
+	
     if (debugGuiThread)
     {
         if (isGuiOpened)
