@@ -432,19 +432,17 @@ void GameManager::traderAddedCallback(Trader *trader)
 	});
 }
 
-Workshop* GameManager::findAvailableWorkshop(size_t jobId) const 
+Workshop* GameManager::findAvailableWorkshop(size_t jobId) const
 {
-    for (const auto &ws : workshops) 
-    {
-        if (ws->getJobId() == jobId && ws->isAvailable()) 
-        {
-            return ws.get();
-        }
-    }
-    return nullptr;
+    auto result = std::find_if (workshops.begin(), workshops.end(),
+                  [jobId](const std::shared_ptr<Workshop> &ws){
+                      return ws->getJobId() == jobId && ws->isAvailable();
+    });
+
+    return result == workshops.end() ? nullptr : result->get();
 }
 
-std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const 
+std::shared_ptr<Workshop> GameManager::addWorkshop(size_t key) const
 {
     auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(key));
     workshops.push_back(workshop);
