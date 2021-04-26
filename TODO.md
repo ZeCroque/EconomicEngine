@@ -1,3 +1,7 @@
+### Global
+- reorder headers and cpp for lisibility and ensure code is compliant with naming standards overall
+- make word
+
 ### Economic:
 
 ### Graphic:
@@ -7,10 +11,10 @@
 - workshop creation -> calculate path to market
 - market creation -> check closest market for workshop in neighbors chunks and refresh path
 - remove red squares
+- make gui stop stop traders movements
 
 ### Gui:
 
 ### Polish :
 - cycle jour nuit et tâche dodo
-- remplacer tour par tour traders par algo meilleur choix **maxence**
-- hint au dessus workshop **maxence**
+- hint au dessus workshop
