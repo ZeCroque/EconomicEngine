@@ -4,6 +4,8 @@
 
 #include "MovableTrader.h"
 
+
+#include "GameManager.h"
 #include "Traders/Trader.h"
 
 MovableTrader::MovableTrader(const std::string& inJobName, const std::string& inTextureName) : MovableActor(inTextureName)
@@ -17,7 +19,7 @@ void MovableTrader::moveTo(Position position)
 {
 	movementSimulationThread = new std::thread([this]()
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>((24.f/6.f * 1000.f) / 4.f)));
+		std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>((24.f/6.f * 1000.f) / GameManager::getInstance()->getSpeedFactor())));
 		pathfindSucceededSignal();
 		pathfindSucceededSignal.disconnectAll();
 	});

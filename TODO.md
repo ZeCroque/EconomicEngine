@@ -1,21 +1,20 @@
+### Global
+- reorder headers and cpp for lisibility and ensure code is compliant with naming standards overall
+- make word
+
 ### Economic:
 
 ### Graphic:
 - affichage **vincent**
 - déplacements
-    - vitesse des ias corellées à timeRate journalier **croque**
-    - astar **maxence**
-- génération bâtiments **vincent**
-    - workshop creation -> calculate path
-- trader move -> check closest market and refresh path
+- astar **maxence**
+- workshop creation -> calculate path to market
+- market creation -> check closest market for workshop in neighbors chunks and refresh path
+- remove red squares
+- make gui stop stop traders movements
 
 ### Gui:
-- speed = daycycle speed **croque**
-- gui update thread **croque**
-- travel simulation threads (50%) **croque**
-
 
 ### Polish :
 - cycle jour nuit et tâche dodo
-- remplacer tour par tour traders par algo meilleur choix **maxence**
-- hint au dessus workshop **maxence**
+- hint au dessus workshop
