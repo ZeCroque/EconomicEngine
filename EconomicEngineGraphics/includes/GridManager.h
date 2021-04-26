@@ -40,7 +40,12 @@ private :
 
     void placeWorkshop();
 
-    bool haveMarketInRange(int x, int  y);
+    bool haveMarketInRange(int x, int y);
+
+    std::pair<int, int> getClosestMarket(int x, int y);
+
+    void updateClosestMarket(int x, int y);
+
     int getClosestMarketCoordinate(int x, int y);
 
     std::vector<std::pair<int, int>> marketCoordinate;

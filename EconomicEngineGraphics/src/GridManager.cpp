@@ -50,22 +50,27 @@ void GridManager::placeWorkshop() {
     while (true) {
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < s; i += parcourStep) {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() || !GameManager::getInstance()->getIsInitialized()) {
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() ||
+                       !GameManager::getInstance()->getIsInitialized()) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::maxFPS));
                 }
                 if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized()) {
                     makeDebugFile();
                     return;
                 }
+
                 int noiseX = getRandomInt(x - minRange / 5, x + minRange / 5);
                 int noiseY = getRandomInt(y - minRange / 5, y + minRange / 5);
                 if (!workshopQueue.empty() && canPlaceWorkshop(noiseX, noiseY)) {
                     if (haveMarketInRange(noiseX, noiseY)) {
-                        grid.setActorAt(workshopQueue.front(), noiseX, noiseY);
+                        auto &ws = workshopQueue.front();
                         workshopQueue.pop();
+                        ws->setClosestMarketCoordinate(getClosestMarket(x, y));
+                        grid.setActorAt(ws, noiseX, noiseY);
                     } else {
                         grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), noiseX, noiseY);
                         marketCoordinate.emplace_back(std::pair<int, int>(noiseX, noiseY));
+                        updateClosestMarket(noiseX, noiseX);
                     }
                     GameManager::getInstance()->setBackgroundNeedsUpdate(true);
                     grid.updateBounds(noiseX, noiseY);
@@ -123,7 +128,7 @@ int GridManager::getClosestMarketCoordinate(int x, int y) {
     int current;
 
     for (auto coord : marketCoordinate) {
-        current = int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2) * 1.0));
+        current = int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2)));
         if (current <= closest) {
             closest = current;
         }
@@ -134,11 +139,43 @@ int GridManager::getClosestMarketCoordinate(int x, int y) {
 bool GridManager::haveMarketInRange(int x, int y) {
 
     if (std::any_of(marketCoordinate.begin(), marketCoordinate.end(), [x, y, this](std::pair<int, int> coord) {
-        return int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2) * 1.0)) < maxDistanceToMarket;
+        return int(sqrt(pow(coord.first - x, 2) + pow(coord.second - y, 2))) < maxDistanceToMarket;
     })) {
         return true;
     } else {
         return false;
+    }
+}
+
+std::pair<int, int> GridManager::getClosestMarket(const int x, const int y) {
+    double bestDistance = INT8_MAX;
+    std::pair<int, int> result;
+
+    for (const auto market : marketCoordinate) {
+        double newDistance = sqrt(pow(market.first - x, 2) + pow(market.second - y, 2));
+        if (newDistance < bestDistance) {
+            bestDistance = newDistance;
+            result = market;
+        }
+    }
+
+    return result;
+}
+
+void GridManager::updateClosestMarket(int x, int y) {
+
+    auto const yMin = std::min(grid.getMinCoordinate().second, y - maxDistanceToMarket / 2);
+    auto const yMax = std::max(grid.getMaxCoordinate().second, y + maxDistanceToMarket / 2);
+    auto const xMin = std::min(grid.getMinCoordinate().first, x - maxDistanceToMarket / 2);
+    auto const xMax = std::max(grid.getMaxCoordinate().first, x + maxDistanceToMarket / 2);
+
+    for (int a = yMin; a <= yMax; ++a) {
+        for (int b = xMin; b <= xMax; ++b) {
+            auto cell = grid.getActorAt(b, a);
+            if (cell) {
+                cell->setClosestMarketCoordinate(getClosestMarket(x, y));
+            }
+        }
     }
 }
 
