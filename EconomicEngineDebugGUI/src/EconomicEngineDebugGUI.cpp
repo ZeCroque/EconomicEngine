@@ -11,7 +11,7 @@
 #else
 #include <thread>
 
-	constexpr int TPS = 60;
+constexpr int TPS = 60;
 #endif
 
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
@@ -22,7 +22,9 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
 {
     ui.setupUi(this);
 
-#ifndef STANDALONE_MODE
+#ifdef STANDALONE_MODE
+	ui.label_2->setVisible(false);
+#else
     ui.pBStart->setChecked(true);
     ui.pBStart->setText("Stop");
 #endif
@@ -52,7 +54,8 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
     economicEngine->init("./Content/Prefabs/");
     economicEngineThread = std::thread([this]()
     {
-		while(!hasEverRun);
+	    // ReSharper disable once CppPossiblyErroneousEmptyStatements
+	    while(!hasEverRun); //NOLINT(clang-diagnostic-empty-body)
     	
     	const float deltaTime = 1.f / TPS;
     	while(isRunning)
@@ -92,6 +95,7 @@ void EconomicEngineDebugGui::closeEvent(QCloseEvent *event)
 {
 	EconomicEngine::getInstance()->getStockExchange().getAskResolvedSignal().disconnectAll();
 #ifdef STANDALONE_MODE
+	hasEverRun = true;
 	isRunning = false;
 	economicEngineThread.join();
 #endif
