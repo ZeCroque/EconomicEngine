@@ -6,6 +6,7 @@
 
 
 #include "GameManager.h"
+#include "NavigationSystem.h"
 #include "Traders/Trader.h"
 
 MovableTrader::MovableTrader(const std::string& inJobName, const std::string& inTextureName) : MovableActor(inTextureName)
@@ -32,4 +33,9 @@ size_t MovableTrader::getJobId() const {
 MovableTrader* MovableTrader::clone()
 {
 	return new MovableTrader(*this);
+}
+
+void MovableTrader::calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end)
+{
+	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), start,end);
 }

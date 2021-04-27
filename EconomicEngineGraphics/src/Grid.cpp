@@ -25,15 +25,11 @@ void Grid::setActorAt(const std::shared_ptr<Workshop> workshop, const int x,  co
 {
     workshop->x = x;
     workshop->y = y;
-    auto trader = workshop->getTrader();
+    auto* trader = workshop->getTrader();
     if(trader)
     {
         trader->x = x;
-        trader->y = y + 1;
-        trader->path.emplace_back(std::pair<int,int>(trader->x,trader->y));
-        trader->path.emplace_back(std::pair<int,int>(trader->x - 1,trader->y));
-        trader->path.emplace_back(std::pair<int,int>(trader->x-1,trader->y - 1));
-        trader->startPathfind(false);
+        trader->y = y;
     }
     getNodeAt(x, y).actor = std::weak_ptr(workshop);
 }

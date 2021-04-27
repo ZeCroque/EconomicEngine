@@ -99,6 +99,8 @@ public:
 
     Workshop *findAvailableWorkshop(size_t jobId) const;
 
+	[[nodiscard]] const GridManager& getGridManager() const;
+
 private:
     GridManager gridManager;
 

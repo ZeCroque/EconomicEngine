@@ -12,25 +12,25 @@
 
 
 class GridManager {
-
-    friend class GameManager;	// Debug
 public:
 
     explicit GridManager();
 
     void init();
 
-    bool canPlaceWorkshop(int x, int y);
+    bool canPlaceWorkshop(int x, int y) const;
 
     void queueWorkshop(std::shared_ptr<Workshop> workshop);
 
     [[nodiscard]] std::thread &getGenerationThread();
 
-    void makeDebugFile();
+	[[nodiscard]] Grid& getGrid() const;
+
+    void makeDebugFile() const;
 
 private :
 
-    Grid grid;
+    mutable Grid grid;
     int minRange;
     int parcourStep;
     int maxDistanceToMarket;
@@ -48,7 +48,7 @@ private :
 
     int getClosestMarketCoordinate(int x, int y);
 
-    std::vector<std::pair<int, int>> marketCoordinate;
+    std::vector<std::pair<int, int>> marketsCoordinates;
 
 };
 

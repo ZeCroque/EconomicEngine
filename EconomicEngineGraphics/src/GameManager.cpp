@@ -230,7 +230,7 @@ void GameManager::processInput()
                         sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
                 const sf::Vector2f deltaPos = oldPos - newPos;
 
-                auto &grid = gridManager.grid;
+                const auto &grid = gridManager.getGrid();
                 const auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
                 const auto margin = caseSize * 10.f;
 
@@ -254,7 +254,7 @@ void GameManager::processInput()
             }
             case sf::Event::MouseWheelScrolled:
             {
-                auto &grid = gridManager.grid;
+                const auto &grid = gridManager.getGrid();
                 const auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
                 const auto margin = caseSize * 5.f;
 
@@ -319,7 +319,6 @@ void GameManager::update(const float deltaTime)
 			auto workshop = addWorkshop(workshopFactory.getIdByJobId(trader->getJobId()));
 			workshop->setTrader(trader);
 			gridManager.queueWorkshop(workshop);
-			//NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
         }
 	}
 
@@ -347,7 +346,7 @@ void GameManager::render() const
         background.create(static_cast<unsigned int>(view.getSize().x), static_cast<unsigned int>(view.getSize().y));
         background.setView(view);
 
-        const auto &grid = gridManager.grid;
+        const auto &grid = gridManager.getGrid();
 
         auto groundYMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().second), viewYMax / caseSize) + 1.0f);
         auto groundXMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().first), viewXMax / caseSize) + 1.0f);
@@ -496,6 +495,11 @@ Workshop* GameManager::findAvailableWorkshop(const size_t jobId) const
     });
 
     return result == workshops.end() ? nullptr : result->get();
+}
+
+const GridManager& GameManager::getGridManager() const
+{
+	return gridManager;
 }
 
 std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t key) const 

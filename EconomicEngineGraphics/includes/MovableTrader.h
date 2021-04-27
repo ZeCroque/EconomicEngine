@@ -21,6 +21,7 @@ public:
     size_t getJobId() const;
 
 	MovableTrader* clone() override;
+	void calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end);
 
 	//DEBUG
 	std::thread* movementSimulationThread;

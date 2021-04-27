@@ -2,13 +2,14 @@
 
 #include <iostream>
 #include <list>
-#include <stack>
 
 #include "Grid.h"
 
-std::stack<std::pair<int, int>> NavigationSystem::aStarResolution(Grid& grid, const std::pair<int, int>& startingCoordinates, const std::pair<int, int>& objectiveCoordinates)
+std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
+	Grid& grid, const std::pair<int, int>& startingCoordinates, const std::pair<int, int>& objectiveCoordinates)
 {
-	const auto* objectiveNode = &grid.getNodeAt(objectiveCoordinates.first, objectiveCoordinates.second);
+	mutex.lock();
+	auto* objectiveNode = &grid.getNodeAt(objectiveCoordinates.first, objectiveCoordinates.second);
 	auto* startingNode = &grid.getNodeAt(startingCoordinates.first, startingCoordinates.second);
 	startingNode->localGoal = 0.0f;
 	startingNode->globalGoal = getHeuristicDistance(startingNode, objectiveNode);
@@ -75,19 +76,22 @@ std::stack<std::pair<int, int>> NavigationSystem::aStarResolution(Grid& grid, co
 			}
 		}
 	}
-	std::stack<std::pair<int,int>> returnPath;
+	std::list<std::pair<int,int>> returnPath;
 	if (objectiveNode->parent) {
 		auto* parent = objectiveNode->parent;
 		while (parent != startingNode)
 		{
-			returnPath.emplace(std::pair(parent->x, parent->y));
+			returnPath.emplace_front(std::pair(parent->x, parent->y));
 			parent = parent->parent;
 		}
 	}
+	returnPath.emplace_front(startingCoordinates);
+	returnPath.emplace_back(objectiveCoordinates);
 	for (auto* modifiedNode : modifiedNodes)
 	{
 		modifiedNode->resetNode();
 	}
+	mutex.unlock();
 	return returnPath;
 }
 
@@ -107,21 +111,25 @@ void NavigationSystem::drawPath(Grid& grid, const std::pair<int, int>& startingC
 	int i = 0;
 	while (!aStarResult.empty())
 	{
-		vectorResult[i] = aStarResult.top();
-		aStarResult.pop();
+		vectorResult[i] = aStarResult.front();
+		aStarResult.pop_front();
 		++i;
 	}
 	for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second; ++y)
 	{
 		for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first; ++x)
 		{
-			bool isInPath = false;
+			int isInPath = 0;
 			for (auto& coordinate : vectorResult)
 			{
 				if (coordinate.first == x && coordinate.second == y)
 				{
-					isInPath = true;
+					isInPath = 1;
 					break;
+				}
+				if(grid.isOccupied(x,y))
+				{
+					isInPath = 2;
 				}
 			}
 			std::cout << isInPath;

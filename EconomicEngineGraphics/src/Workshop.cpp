@@ -5,6 +5,11 @@
 #include "Workshop.h"
 
 
+#include "GameManager.h"
+#include "MovableTrader.h"
+#include "NavigationSystem.h"
+
+
 size_t Workshop::getJobId() const {
     return jobId;
 }
@@ -44,7 +49,11 @@ MovableTrader *Workshop::getTrader() const {
 }
 
 void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate) {
-    //TODO: Pathfind
+	//TODO if trader is moving then connect lambda to pathFindEnded signal to update its path afterward
+	/*trader.lock()->calculatePathfind(,std::pair<int,int>(x, y + 1), std::pair<int,int>(inClosestMarketCoordinate.first, inClosestMarketCoordinate.second + 1));
+    closestMarketCoordinate = inClosestMarketCoordinate;*/
+		NavigationSystem::drawPath(GameManager::getInstance()->getGridManager().getGrid(), std::pair<int,int>(x, y + 1), std::pair<int,int>(inClosestMarketCoordinate.first, inClosestMarketCoordinate.second + 1));
     closestMarketCoordinate = inClosestMarketCoordinate;
+	        //trader.lock()->startPathfind(false);
 }
 
