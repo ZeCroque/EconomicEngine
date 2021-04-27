@@ -153,7 +153,6 @@ void GameManager::initGui()
 	});
 }
 
-
 void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders) 
 {
     const std::hash<std::string> hasher;
@@ -323,11 +322,24 @@ void GameManager::update(const float deltaTime)
 			//NavigationSystem::drawPath(gridManager.grid, std::pair(workshop->x, workshop->y), std::pair(0, 0));
         }
 	}
+
+    if(!traders.empty())
+    {
+        auto trader = traders.front();
+        if(trader->direction != Direction::None)
+        {
+            trader->coordinatesOffset += caseSize * deltaTime;
+        }
+    }
 }
 
 void GameManager::render() const
 {
     auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+    float viewXMin = viewOrigin.x - caseSize;
+    float viewXMax = viewOrigin.x + view.getSize().x;
+    float viewYMin = viewOrigin.y - caseSize;
+    float viewYMax = viewOrigin.y + view.getSize().y;
 
     if (backgroundNeedsUpdate)
     {
@@ -336,11 +348,6 @@ void GameManager::render() const
         background.setView(view);
 
         const auto &grid = gridManager.grid;
-
-        float viewXMin = viewOrigin.x - caseSize;
-        float viewXMax = viewOrigin.x + view.getSize().x;
-        float viewYMin = viewOrigin.y - caseSize;
-        float viewYMax = viewOrigin.y + view.getSize().y;
 
         auto groundYMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().second), viewYMax / caseSize) + 1.0f);
         auto groundXMax = static_cast<int>(std::max(static_cast<float>(grid.getMaxCoordinate().first), viewXMax / caseSize) + 1.0f);
@@ -392,6 +399,40 @@ void GameManager::render() const
 
     window->clear();
     window->draw(backgroundSprite);
+
+    if(!traders.empty())
+    {
+        auto trader = traders.front();
+        auto x = static_cast<float>(trader->x) * caseSize;
+        auto y = static_cast<float>(trader->y) * caseSize;
+        switch(trader->direction){
+            case Direction::Top:
+                y -= trader->coordinatesOffset;
+                break;
+            case Direction::Bottom:
+                y += trader->coordinatesOffset;
+                break;
+            case Direction::Left:
+                x -= trader->coordinatesOffset;
+                break;
+            case Direction::Right:
+                x += trader->coordinatesOffset;
+                break;
+            default:;
+        }
+        if(trader->coordinatesOffset >= caseSize){
+            trader->updatePath();
+        }
+
+        sf::RectangleShape traderSprite;
+        traderSprite.setSize(sf::Vector2f(caseSize, caseSize));
+        traderSprite.setFillColor(sf::Color::Blue);
+        traderSprite.setPosition(x,y);
+        window->draw(traderSprite);
+    }
+
+
+
     window->display();
 }
 

@@ -26,7 +26,7 @@ public:
 
     MovableTrader *getTrader() const;
 
-    void setTrader(const std::shared_ptr<MovableTrader> &inTrader);
+    void setTrader(std::shared_ptr<MovableTrader> &inTrader);
 
     void setClosestMarketCoordinate(const std::pair<int, int> &closestMarketCoordinate);
 

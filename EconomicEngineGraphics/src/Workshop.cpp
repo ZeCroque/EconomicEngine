@@ -30,7 +30,7 @@ size_t Workshop::getId() const {
 }
 
 
-void Workshop::setTrader(const std::shared_ptr<MovableTrader> &inTrader) {
+void Workshop::setTrader(std::shared_ptr<MovableTrader> &inTrader) {
     trader = inTrader;
 }
 
@@ -44,6 +44,7 @@ MovableTrader *Workshop::getTrader() const {
 }
 
 void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate) {
+    //TODO: Pathfind
     closestMarketCoordinate = inClosestMarketCoordinate;
 }
 
