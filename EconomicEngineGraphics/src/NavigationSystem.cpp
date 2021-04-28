@@ -17,6 +17,10 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	std::list<Node*> modifiedNodes;
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
+	std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
+		std::pair(std::min(startingCoordinates.first, objectiveCoordinates.first) - 1, std::min(startingCoordinates.second, objectiveCoordinates.second) - 1),
+		std::pair(std::max(startingCoordinates.first, startingCoordinates.first) + 1, std::max(startingCoordinates.second, objectiveCoordinates.second) + 1)
+	);
 	while (!nodesToTest.empty())
 	{
 		// Sort des nodes par ordre de globalGoal, celui ayant le plus petit étant le plus proche de l'objectif
@@ -40,13 +44,25 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 		if (currentNode->neighbors.empty())
 		{
 			// Upper current neighbor
-			currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y - 1));
+			if (currentNode->y-1 >= searchBounds.first.second)
+			{
+				currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y - 1));
+			}
 			// Lower current neighbor
-			currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y + 1));
+			if (currentNode->y+1 <= searchBounds.second.second)
+			{
+				currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y + 1));
+			}
 			// Left current neighbor
-			currentNode->neighbors.emplace_back(&grid.getNodeAt((currentNode->x - 1), currentNode->y));
+			if (currentNode->x-1 >= searchBounds.first.first)
+			{
+				currentNode->neighbors.emplace_back(&grid.getNodeAt((currentNode->x - 1), currentNode->y));
+			}
 			// Right current neighbor
+			if (currentNode->x+1 <= searchBounds.first.second)
+			{
 			currentNode->neighbors.emplace_back(&grid.getNodeAt((currentNode->x + 1), currentNode->y));
+			}
 		}
 
 		
@@ -68,11 +84,6 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 				nodeNeighbor->parent = currentNode;
 				nodeNeighbor->localGoal = possiblyLowerGoal;
 				nodeNeighbor->globalGoal = nodeNeighbor->localGoal + getHeuristicDistance(nodeNeighbor, objectiveNode);
-			}
-			if (nodeNeighbor == objectiveNode)
-			{
-				nodesToTest.clear();
-				break;
 			}
 		}
 	}

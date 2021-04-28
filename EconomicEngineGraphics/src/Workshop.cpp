@@ -50,10 +50,21 @@ MovableTrader *Workshop::getTrader() const {
 
 void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate) {
 	//TODO if trader is moving then connect lambda to pathFindEnded signal to update its path afterward
-	/*trader.lock()->calculatePathfind(,std::pair<int,int>(x, y + 1), std::pair<int,int>(inClosestMarketCoordinate.first, inClosestMarketCoordinate.second + 1));
-    closestMarketCoordinate = inClosestMarketCoordinate;*/
-		NavigationSystem::drawPath(GameManager::getInstance()->getGridManager().getGrid(), std::pair<int,int>(x, y + 1), std::pair<int,int>(inClosestMarketCoordinate.first, inClosestMarketCoordinate.second + 1));
-    closestMarketCoordinate = inClosestMarketCoordinate;
-	        //trader.lock()->startPathfind(false);
+	//closestMarketCoordinate = inClosestMarketCoordinate;
+	if (auto traderPtr = trader.lock(); traderPtr)
+	{
+		if (traderPtr->getDirection() != Direction::None)
+		{
+			traderPtr->getPathfindEndedSignal().connect([this, traderPtr](bool succeeded)
+			{
+				traderPtr->calculatePathfind(std::pair<int,int>(x, y + 1), std::pair<int,int>(closestMarketCoordinate.first, closestMarketCoordinate.second + 1));
+			});
+		}
+		else
+		{
+			traderPtr->calculatePathfind(std::pair<int,int>(x, y + 1), std::pair<int,int>(closestMarketCoordinate.first, closestMarketCoordinate.second + 1));
+		}
+	}
+	//NavigationSystem::drawPath(GameManager::getInstance()->getGridManager().getGrid(), std::pair<int,int>(x, y + 1), std::pair<int,int>(inClosestMarketCoordinate.first, inClosestMarketCoordinate.second + 1));
 }
 

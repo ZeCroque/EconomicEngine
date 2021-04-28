@@ -29,8 +29,10 @@ public:
 
     Actor *clone() override;
 
-    const Signal<> &getPathfindSucceededSignal() const;
+    const Signal<bool>& getPathfindEndedSignal() const;
 
+	Direction getDirection() const;
+	
     const std::pair<int, int>& getNextCoordinate();
 
     void updatePath();
@@ -43,8 +45,9 @@ public:
 
     float coordinatesOffset;
 
+
 protected:
-    Signal<> pathfindSucceededSignal;
+    Signal<bool> pathfindEndedSignal;
 
     std::list<std::pair<int, int>>::iterator pathIterator;
 

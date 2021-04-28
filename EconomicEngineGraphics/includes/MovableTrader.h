@@ -9,6 +9,7 @@
 #include <thread>
 
 #include "MovableActor.h"
+enum class Position;
 
 class MovableTrader : public MovableActor
 {
@@ -16,18 +17,19 @@ class MovableTrader : public MovableActor
 public:
 	MovableTrader(const std::string& inJobName, const std::string& inTextureName);
 
-	void moveTo(enum class Position position);
+	void moveTo(Position inPosition);
+
+	void moveToRequestCallback(class Trader* inTrader, Position inPosition);
 	
     size_t getJobId() const;
 
 	MovableTrader* clone() override;
 	void calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end);
 
-	//DEBUG
-	std::thread* movementSimulationThread;
-
 private:
     size_t jobId;
+
+	int pathFindSlotId;
 };
 
 

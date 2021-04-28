@@ -64,7 +64,7 @@ void GameManager::exec()
 	
     isRunning = true;
 
-    EconomicEngine::getInstance()->start(100);
+    EconomicEngine::getInstance()->start(1);
 	
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
@@ -483,18 +483,12 @@ void GameManager::traderAddedCallback(Trader *trader)
     pendingTraders.push(movableTrader);
     trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
                                              {
-                                                 movableTrader->getPathfindSucceededSignal().connect(
-                                                         [trader, movableTrader, position]()
-                                                         {
-                                                             trader->setPosition(position);
-                                                         });
-                                                 movableTrader->moveTo(position);
+    											movableTrader->moveToRequestCallback(trader, position);
                                              });
 
     trader->getDeathSignal().connect([movableTrader, this]()
                                      {
-                                         movableTrader->movementSimulationThread->join();
-                                         movableTrader->getPathfindSucceededSignal().disconnectAll();
+                                         movableTrader->getPathfindEndedSignal().disconnectAll();
                                          traders.remove_if(
                                                  [movableTrader](const std::shared_ptr<MovableTrader> &inMovableTrader)
                                                  {

@@ -10,9 +10,14 @@ Actor *MovableActor::clone()
     return new MovableActor(*this);
 }
 
-const Signal<> &MovableActor::getPathfindSucceededSignal() const
+const Signal<bool>& MovableActor::getPathfindEndedSignal() const
 {
-    return pathfindSucceededSignal;
+    return pathfindEndedSignal;
+}
+
+Direction MovableActor::getDirection() const
+{
+	return direction;
 }
 
 const std::pair<int, int> &MovableActor::getNextCoordinate()
@@ -55,7 +60,7 @@ void MovableActor::updatePath()
         updateDirection();
     }else{
         direction = Direction::None;
-        startPathfind(!reversePath);
+        pathfindEndedSignal(true);
     }
 }
 
@@ -86,6 +91,6 @@ void MovableActor::updateDirection()
         direction = Direction::Bottom;
     }else{
         direction = Direction::None;
-        startPathfind(!reversePath);
+    	pathfindEndedSignal(true);
     }
 }
