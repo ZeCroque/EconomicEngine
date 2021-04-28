@@ -17,7 +17,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	std::list<Node*> modifiedNodes;
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
-	std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
+	const std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
 		std::pair(std::min(startingCoordinates.first, objectiveCoordinates.first) - 1, std::min(startingCoordinates.second, objectiveCoordinates.second) - 1),
 		std::pair(std::max(startingCoordinates.first, startingCoordinates.first) + 1, std::max(startingCoordinates.second, objectiveCoordinates.second) + 1)
 	);
@@ -88,7 +88,8 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 		}
 	}
 	std::list<std::pair<int,int>> returnPath;
-	if (objectiveNode->parent) {
+	if (objectiveNode->parent) 
+	{
 		auto* parent = objectiveNode->parent;
 		while (parent != startingNode)
 		{
@@ -98,6 +99,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	}
 	returnPath.emplace_front(startingCoordinates);
 	returnPath.emplace_back(objectiveCoordinates);
+	drawPath(grid, returnPath, searchBounds); //TODO remove debug
 	for (auto* modifiedNode : modifiedNodes)
 	{
 		modifiedNode->resetNode();
@@ -106,32 +108,17 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	return returnPath;
 }
 
-
-float NavigationSystem::getHeuristicDistance(const Node* firstNode, const Node* secondNode) {
-	return sqrtf(static_cast<float>((firstNode->x - secondNode->x) * (firstNode->x - secondNode->x) + (firstNode->y - secondNode->y) * (firstNode->y - secondNode->y)));
-}
-
-void NavigationSystem::drawPath(Grid& grid, const std::pair<int, int>& startingCoordinates,
-	const std::pair<int, int>& objectiveCoordinates)
+void NavigationSystem::drawPath(Grid& grid, const std::list<std::pair<int, int>>& path, const std::pair<std::pair<int, int>, std::pair<int, int>>&
+                                bounds)
 {
-	std::cout << "Starting : [" << startingCoordinates.first << ";" << startingCoordinates.second << "]" << std::endl;
-	std::cout << "Objective : [" << objectiveCoordinates.first << ";" << objectiveCoordinates.second << "]" << std::endl;
-	auto aStarResult = aStarResolution(grid, startingCoordinates, objectiveCoordinates);
-	std::vector<std::pair<int,int>> vectorResult;
-	vectorResult.resize(aStarResult.size());
-	int i = 0;
-	while (!aStarResult.empty())
+	std::cout << "Starting : [" << bounds.first.first << ";" << bounds.first.second << "]" << std::endl;
+	std::cout << "Objective : [" << bounds.second.first << ";" << bounds.second.second << "]" << std::endl;
+	for (int y = bounds.first.second; y < bounds.second.second; ++y)
 	{
-		vectorResult[i] = aStarResult.front();
-		aStarResult.pop_front();
-		++i;
-	}
-	for (int y = grid.getMinCoordinate().second; y < grid.getMaxCoordinate().second; ++y)
-	{
-		for (int x = grid.getMinCoordinate().first; x < grid.getMaxCoordinate().first; ++x)
+		for (int x = bounds.first.first; x < bounds.second.first; ++x)
 		{
 			int isInPath = 0;
-			for (auto& coordinate : vectorResult)
+			for (const auto& coordinate : path)
 			{
 				if (coordinate.first == x && coordinate.second == y)
 				{
@@ -147,4 +134,10 @@ void NavigationSystem::drawPath(Grid& grid, const std::pair<int, int>& startingC
 		}
 		std::cout << std::endl;
 	}
+}
+
+
+float NavigationSystem::getHeuristicDistance(const Node* firstNode, const Node* secondNode)
+{
+	return sqrtf(static_cast<float>((firstNode->x - secondNode->x) * (firstNode->x - secondNode->x) + (firstNode->y - secondNode->y) * (firstNode->y - secondNode->y)));
 }

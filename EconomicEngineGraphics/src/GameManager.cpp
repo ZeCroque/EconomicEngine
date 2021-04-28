@@ -60,7 +60,7 @@ void GameManager::init(const char *contentPath)
 void GameManager::exec() 
 {
 	// ReSharper disable once CppPossiblyErroneousEmptyStatements
-	while(!isInitialized);  // NOLINT(clang-diagnostic-empty-body)
+	while(!isInitialized); // NOLINT(clang-diagnostic-empty-body)
 	
     isRunning = true;
 
@@ -85,7 +85,7 @@ void GameManager::exec()
 
         while (lag >= deltaTimeUs)
         {
-            update(deltaTimeS * speedFactor);
+            update(deltaTimeS);
             lag -= deltaTimeUs;
         }
 
@@ -412,7 +412,7 @@ void GameManager::render() const
         auto x = static_cast<float>(trader->x) * caseSize;
         auto y = static_cast<float>(trader->y) * caseSize;
 
-        switch (trader->direction)
+        switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
         {
             case Direction::Top:
                 y -= trader->coordinatesOffset;
@@ -499,11 +499,11 @@ void GameManager::traderAddedCallback(Trader *trader)
 
 Workshop *GameManager::findAvailableWorkshop(const size_t jobId) const
 {
-    auto result = std::find_if(workshops.begin(), workshops.end(),
-                               [jobId](const std::shared_ptr<Workshop> &ws)
-                               {
-                                   return ws->getJobId() == jobId && ws->isAvailable();
-                               });
+	const auto result = std::ranges::find_if(workshops.begin(), workshops.end(),
+	                                 [jobId](const std::shared_ptr<Workshop> &ws)
+	                                 {
+		                                 return ws->getJobId() == jobId && ws->isAvailable();
+	                                 });
 
     return result == workshops.end() ? nullptr : result->get();
 }

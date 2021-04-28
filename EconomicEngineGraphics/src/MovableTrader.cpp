@@ -4,9 +4,6 @@
 
 #include "MovableTrader.h"
 
-#include <iostream>
-
-
 #include "GameManager.h"
 #include "NavigationSystem.h"
 #include "Traders/Trader.h"
@@ -66,25 +63,6 @@ MovableTrader* MovableTrader::clone()
 void MovableTrader::calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end)
 {
 	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), start,end);
-	for (int y = GameManager::getInstance()->getGridManager().getGrid().getMinCoordinate().second; y < GameManager::getInstance()->getGridManager().getGrid().getMaxCoordinate().second; ++y)
-	{
-		for (int x = GameManager::getInstance()->getGridManager().getGrid().getMinCoordinate().first; x < GameManager::getInstance()->getGridManager().getGrid().getMaxCoordinate().first; ++x)
-		{
-			int isInPath = 0;
-			for (auto& coordinate : path)
-			{
-				if (coordinate.first == x && coordinate.second == y)
-				{
-					isInPath = 1;
-					break;
-				}
-				if(GameManager::getInstance()->getGridManager().getGrid().isOccupied(x,y))
-				{
-					isInPath = 2;
-				}
-			}
-			std::cout << isInPath;
-		}
-		std::cout << std::endl;
-	}
+	path.emplace_front(std::pair<int,int>(start.first, start.second - 1));
+	path.emplace_back(std::pair<int,int>(end.first, end.second - 1));
 }

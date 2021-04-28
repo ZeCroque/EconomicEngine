@@ -22,13 +22,13 @@ Direction MovableActor::getDirection() const
 
 const std::pair<int, int> &MovableActor::getNextCoordinate()
 {
-    //assert(pathIterator != path.begin() && pathIterator != path.end());
+    assert(pathIterator != path.end());
     return *pathIterator;
 }
 
 void MovableActor::updatePath()
 {
-    switch (direction)
+    switch (direction)  // NOLINT(clang-diagnostic-switch-enum)
     {
         case Direction::Top:
             --y;
@@ -46,25 +46,19 @@ void MovableActor::updatePath()
     }
 
     coordinatesOffset = 0.f;
-    if (reversePath && pathIterator != path.begin())
+	if (reversePath && pathIterator != path.begin())
     {
         --pathIterator;
     }
-    else if (!reversePath)
+	else if(!reversePath)
     {
         ++pathIterator;
     }
 
-    if (pathIterator != path.end())
-    {
-        updateDirection();
-    }else{
-        direction = Direction::None;
-        pathfindEndedSignal(true);
-    }
+	updateDirection();
 }
 
-void MovableActor::startPathfind(bool inReversePath)
+void MovableActor::startPathfind(const bool inReversePath)
 {
     reversePath = inReversePath;
     pathIterator = !reversePath ? ++path.begin() : ----path.end();
@@ -74,23 +68,27 @@ void MovableActor::startPathfind(bool inReversePath)
 
 void MovableActor::updateDirection()
 {
-    if (pathIterator->first < x)
-    {
-        direction = Direction::Left;
-    }
-    else if (pathIterator->first > x)
-    {
-        direction = Direction::Right;
-    }
-    else if (pathIterator->second < y)
-    {
-        direction = Direction::Top;
-    }
-    else if (pathIterator->second > y)
-    {
-        direction = Direction::Bottom;
-    }else{
-        direction = Direction::None;
-    	pathfindEndedSignal(true);
-    }
+	if(pathIterator == path.end() || (pathIterator == path.begin() && pathIterator->first == x && pathIterator->second == y))
+	{   	
+		direction = Direction::None;
+		pathfindEndedSignal(true);
+		startPathfind(!reversePath); //TODO remove debug
+	}
+	else if (pathIterator->first < x)
+	{
+		direction = Direction::Left;
+	}
+	else if (pathIterator->first > x)
+	{
+		direction = Direction::Right;
+	}
+	else if (pathIterator->second < y)
+	{
+		direction = Direction::Top;
+	}
+	else if (pathIterator->second > y)
+	{
+		direction = Direction::Bottom;
+	}
+    
 }
