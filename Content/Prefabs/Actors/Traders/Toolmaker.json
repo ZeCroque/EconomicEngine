@@ -1,5 +1,5 @@
 {
     "type" : "MovableTrader",
     "job" : "Toolmaker",
-    "texture" : "Content/Textures/Traders/TX_Toolmaker.jpg"
+    "texture" : "TX_Toolmaker.png"
 }

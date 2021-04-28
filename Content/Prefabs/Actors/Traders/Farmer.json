@@ -1,5 +1,5 @@
 {
     "type" : "MovableTrader",
     "job" : "Farmer",
-    "texture" : "Content/Textures/Traders/TX_Farmer.jpg"
+    "texture" : "TX_Farmer.png"
 }

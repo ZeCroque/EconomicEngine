@@ -197,8 +197,9 @@ void GameManager::processInput()
             }
             case sf::Event::Resized:
             {
-	            const auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
-                view.reset(sf::Rect<float>(viewOrigin.x, viewOrigin.y, static_cast<float>(event.size.width), static_cast<float>(event.size.height)));
+                const auto viewOrigin = (view.getCenter() - view.getSize() / 2.f);
+                view.reset(sf::Rect<float>(viewOrigin.x, viewOrigin.y, static_cast<float>(event.size.width),
+                                           static_cast<float>(event.size.height)));
                 backgroundNeedsUpdate = true;
                 break;
             }
@@ -399,38 +400,49 @@ void GameManager::render() const
     window->clear();
     window->draw(backgroundSprite);
 
-    if(!traders.empty())
+    if (!traders.empty())
     {
         auto trader = traders.front();
+
+        auto & traderSprite = trader->getSprite();
+        traderSprite.setScale(1.f, 1.f);
+
+        int rectLeft = 0;
         auto x = static_cast<float>(trader->x) * caseSize;
         auto y = static_cast<float>(trader->y) * caseSize;
-        switch(trader->direction){
+        
+        switch (trader->direction)
+        {
             case Direction::Top:
                 y -= trader->coordinatesOffset;
+                rectLeft = 64;
                 break;
             case Direction::Bottom:
                 y += trader->coordinatesOffset;
+                rectLeft = 0;
                 break;
             case Direction::Left:
                 x -= trader->coordinatesOffset;
+                rectLeft = 32;
                 break;
             case Direction::Right:
                 x += trader->coordinatesOffset;
+                traderSprite.setScale(-1.f, 1.f);
+                rectLeft = 32;
                 break;
             default:;
         }
-        if(trader->coordinatesOffset >= caseSize){
+        if (trader->coordinatesOffset >= caseSize)
+        {
             trader->updatePath();
         }
 
-        sf::RectangleShape traderSprite;
-        traderSprite.setSize(sf::Vector2f(caseSize, caseSize));
-        traderSprite.setFillColor(sf::Color::Blue);
-        traderSprite.setPosition(x,y);
+        sf::IntRect rectSourceSprite(rectLeft, 0, 32, 32);
+        traderSprite.setTextureRect(rectSourceSprite);
+        traderSprite.setPosition(x + 16,y + 32);
+
         window->draw(traderSprite);
     }
-
-
 
     window->display();
 }
@@ -440,7 +452,7 @@ void GameManager::quit()
     isRunning = false;
 
     EconomicEngine::getInstance()->getStockExchange().getAskResolvedSignal().disconnectAll();
-	
+
     if (debugGuiThread)
     {
         if (isGuiOpened)
@@ -449,60 +461,64 @@ void GameManager::quit()
         }
         debugGuiThread->join();
     }
-    
+
     gridManager.getGenerationThread().join();
     window->close();
 }
 
 void GameManager::setSpeedFactor(const float inSpeedFactor)
 {
-	speedFactor = inSpeedFactor;
+    speedFactor = inSpeedFactor;
 }
 
 float GameManager::getSpeedFactor() const
 {
-	return speedFactor;
+    return speedFactor;
 }
 
-void GameManager::traderAddedCallback(Trader *trader) 
+void GameManager::traderAddedCallback(Trader *trader)
 {
-	auto* movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());
+    auto *movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());
     pendingTraders.push(movableTrader);
-	trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
-	{
-		movableTrader->getPathfindSucceededSignal().connect([trader, movableTrader, position]()
-		{	
-			trader->setPosition(position);
-		});
-		movableTrader->moveTo(position);
-	});
+    trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
+                                             {
+                                                 movableTrader->getPathfindSucceededSignal().connect(
+                                                         [trader, movableTrader, position]()
+                                                         {
+                                                             trader->setPosition(position);
+                                                         });
+                                                 movableTrader->moveTo(position);
+                                             });
 
-	trader->getDeathSignal().connect([movableTrader,this]()
-	{
-	    movableTrader->movementSimulationThread->join();
-        movableTrader->getPathfindSucceededSignal().disconnectAll();
-        traders.remove_if([movableTrader](const std::shared_ptr<MovableTrader>& inMovableTrader){
-            return inMovableTrader.get() == movableTrader;
-        });
-	});
+    trader->getDeathSignal().connect([movableTrader, this]()
+                                     {
+                                         movableTrader->movementSimulationThread->join();
+                                         movableTrader->getPathfindSucceededSignal().disconnectAll();
+                                         traders.remove_if(
+                                                 [movableTrader](const std::shared_ptr<MovableTrader> &inMovableTrader)
+                                                 {
+                                                     return inMovableTrader.get() == movableTrader;
+                                                 });
+                                     });
 }
 
-Workshop* GameManager::findAvailableWorkshop(const size_t jobId) const 
+Workshop *GameManager::findAvailableWorkshop(const size_t jobId) const
 {
-    auto result = std::find_if (workshops.begin(), workshops.end(),
-                  [jobId](const std::shared_ptr<Workshop> &ws){
-                      return ws->getJobId() == jobId && ws->isAvailable();
-    });
+    auto result = std::find_if(workshops.begin(), workshops.end(),
+                               [jobId](const std::shared_ptr<Workshop> &ws)
+                               {
+                                   return ws->getJobId() == jobId && ws->isAvailable();
+                               });
 
     return result == workshops.end() ? nullptr : result->get();
 }
 
-const GridManager& GameManager::getGridManager() const
+const GridManager &GameManager::getGridManager() const
 {
-	return gridManager;
+    return gridManager;
 }
 
-std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t key) const 
+std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t key) const
 {
     auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(key));
     workshops.push_back(workshop);
