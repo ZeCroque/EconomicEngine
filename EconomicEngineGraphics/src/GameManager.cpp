@@ -406,11 +406,12 @@ void GameManager::render() const
 
         auto & traderSprite = trader->getSprite();
         traderSprite.setScale(1.f, 1.f);
+        traderSprite.setOrigin(16.f,16.f);
 
         int rectLeft = 0;
         auto x = static_cast<float>(trader->x) * caseSize;
         auto y = static_cast<float>(trader->y) * caseSize;
-        
+
         switch (trader->direction)
         {
             case Direction::Top:
@@ -439,7 +440,7 @@ void GameManager::render() const
 
         sf::IntRect rectSourceSprite(rectLeft, 0, 32, 32);
         traderSprite.setTextureRect(rectSourceSprite);
-        traderSprite.setPosition(x + 16,y + 32);
+        traderSprite.setPosition(x + 32.f,y + 48.f);
 
         window->draw(traderSprite);
     }
