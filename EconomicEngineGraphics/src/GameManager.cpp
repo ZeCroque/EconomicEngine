@@ -64,8 +64,8 @@ void GameManager::exec()
 	
     isRunning = true;
 
-    EconomicEngine::getInstance()->start(1);
-	
+    EconomicEngine::getInstance()->start(10);
+
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
     sf::Int64 lag = 0;
@@ -323,10 +323,9 @@ void GameManager::update(const float deltaTime)
         }
 	}
 
-    if(!traders.empty())
+    for (auto& trader : traders)
     {
-        auto trader = traders.front();
-        if(trader->direction != Direction::None)
+        if (trader->direction != Direction::None)
         {
             trader->coordinatesOffset += caseSize * deltaTime;
         }
@@ -400,10 +399,8 @@ void GameManager::render() const
     window->clear();
     window->draw(backgroundSprite);
 
-    if (!traders.empty())
+    for (auto & trader : traders)
     {
-        auto trader = traders.front();
-
         auto & traderSprite = trader->getSprite();
         traderSprite.setScale(1.f, 1.f);
         traderSprite.setOrigin(16.f,16.f);
@@ -412,37 +409,41 @@ void GameManager::render() const
         auto x = static_cast<float>(trader->x) * caseSize;
         auto y = static_cast<float>(trader->y) * caseSize;
 
-        switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
+        if (x >= viewXMin && x <= viewXMax && y >= viewYMin && y <= viewYMax)
         {
-            case Direction::Top:
-                y -= trader->coordinatesOffset;
-                rectLeft = 64;
-                break;
-            case Direction::Bottom:
-                y += trader->coordinatesOffset;
-                rectLeft = 0;
-                break;
-            case Direction::Left:
-                x -= trader->coordinatesOffset;
-                rectLeft = 32;
-                break;
-            case Direction::Right:
-                x += trader->coordinatesOffset;
-                traderSprite.setScale(-1.f, 1.f);
-                rectLeft = 32;
-                break;
-            default:;
+            switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
+            {
+                case Direction::Top:
+                    y -= trader->coordinatesOffset;
+                    rectLeft = 64;
+                    break;
+                case Direction::Bottom:
+                    y += trader->coordinatesOffset;
+                    rectLeft = 0;
+                    break;
+                case Direction::Left:
+                    x -= trader->coordinatesOffset;
+                    rectLeft = 32;
+                    break;
+                case Direction::Right:
+                    x += trader->coordinatesOffset;
+                    traderSprite.setScale(-1.f, 1.f);
+                    rectLeft = 32;
+                    break;
+                default:;
+            }
+
+            sf::IntRect rectSourceSprite(rectLeft, 0, 32, 32);
+            traderSprite.setTextureRect(rectSourceSprite);
+            traderSprite.setPosition(x + 32.f, y + 48.f);
+            window->draw(traderSprite);
         }
+
         if (trader->coordinatesOffset >= caseSize)
         {
             trader->updatePath();
         }
 
-        sf::IntRect rectSourceSprite(rectLeft, 0, 32, 32);
-        traderSprite.setTextureRect(rectSourceSprite);
-        traderSprite.setPosition(x + 32.f,y + 48.f);
-
-        window->draw(traderSprite);
     }
 
     window->display();

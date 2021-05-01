@@ -8,7 +8,7 @@
 #include <GameManager.h>
 #include "Workshop.h"
 
-GridManager::GridManager() : minRange(6), parcourStep(4), maxDistanceToMarket(30) {}
+GridManager::GridManager() : minRange(6), parcourStep(4), maxDistanceToMarket(25) {}
 
 
 void GridManager::init() {
