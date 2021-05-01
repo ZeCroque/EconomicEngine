@@ -61,12 +61,16 @@ private:
 
     void render() const;
 
+    void getClickedActor();
+
     void quit();
 
     std::unique_ptr<sf::RenderWindow> window;
     sf::View view;
     sf::Vector2f oldPos;
+    sf::Vector2f clickPos;
     bool moving;
+    bool drawPopup;
 
     std::unique_ptr<std::thread> debugGuiThread;	
 	
@@ -78,6 +82,7 @@ private:
     mutable bool backgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;
     mutable sf::RenderTexture background;
+    Workshop* clickedActor;
     size_t grassId;
     float caseSize;
 

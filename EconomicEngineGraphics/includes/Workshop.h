@@ -32,6 +32,8 @@ public:
 
 	Workshop* clone() override;
 
+	std::pair<int, int> getClosestMarketCoordinate();
+
 private:
     std::weak_ptr<MovableTrader> trader;
     std::pair<int, int> closestMarketCoordinate;

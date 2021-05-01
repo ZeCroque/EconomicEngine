@@ -99,7 +99,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	}
 	returnPath.emplace_front(startingCoordinates);
 	returnPath.emplace_back(objectiveCoordinates);
-	drawPath(grid, returnPath, searchBounds); //TODO remove debug
+	//drawPath(grid, returnPath, searchBounds); //TODO remove debug
 	for (auto* modifiedNode : modifiedNodes)
 	{
 		modifiedNode->resetNode();

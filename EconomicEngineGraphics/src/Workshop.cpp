@@ -65,3 +65,8 @@ void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMa
 	}
 }
 
+std::pair<int, int> Workshop::getClosestMarketCoordinate()
+{
+    return closestMarketCoordinate;
+}
+

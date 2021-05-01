@@ -168,10 +168,10 @@ std::pair<int, int> GridManager::getClosestMarket(const int x, const int y) {
 
 void GridManager::updateClosestMarket(int x, int y) {
 
-    auto const yMin = std::min(grid.getMinCoordinate().second, y - maxDistanceToMarket / 2); //Todo: optimize chunk
-    auto const yMax = std::max(grid.getMaxCoordinate().second, y + maxDistanceToMarket / 2);
-    auto const xMin = std::min(grid.getMinCoordinate().first, x - maxDistanceToMarket / 2);
-    auto const xMax = std::max(grid.getMaxCoordinate().first, x + maxDistanceToMarket / 2);
+    auto const yMin = std::max(grid.getMinCoordinate().second, y - maxDistanceToMarket / 2); //Todo: optimize chunk
+    auto const yMax = std::min(grid.getMaxCoordinate().second, y + maxDistanceToMarket / 2);
+    auto const xMin = std::max(grid.getMinCoordinate().first, x - maxDistanceToMarket / 2);
+    auto const xMax = std::min(grid.getMaxCoordinate().first, x + maxDistanceToMarket / 2);
 
     for (int a = yMin; a <= yMax; ++a) {
         for (int b = xMin; b <= xMax; ++b) {
