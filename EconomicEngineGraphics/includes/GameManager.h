@@ -61,7 +61,7 @@ private:
 
     void render() const;
 
-    void getClickedActor();
+    void getSelectedActor();
 
     void quit();
 
@@ -82,7 +82,7 @@ private:
     mutable bool backgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;
     mutable sf::RenderTexture background;
-    Workshop* clickedActor;
+    Workshop* selectedActor;
     size_t grassId;
     float caseSize;
 

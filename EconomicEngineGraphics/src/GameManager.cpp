@@ -3,8 +3,6 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
-
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
 #include "NavigationSystem.h"
@@ -19,8 +17,7 @@ void GameManager::init(const char *contentPath)
     std::vector<nlohmann::json> parsedMovableTraders;
     std::vector<nlohmann::json> parsedWorkshops;
 
-    std::ifstream fileStream;
-    for (const auto &entry : std::filesystem::recursive_directory_iterator(contentPath))
+    for (std::ifstream fileStream; const auto &entry : std::filesystem::recursive_directory_iterator(contentPath))
     {
         if (std::filesystem::is_regular_file(entry.status()))
         {
@@ -65,7 +62,7 @@ void GameManager::exec()
 
     isRunning = true;
 
-    EconomicEngine::getInstance()->start(10);
+    EconomicEngine::getInstance()->start(50);
 
     const sf::Clock clock;
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
@@ -112,9 +109,9 @@ bool GameManager::getIsInitialized() const
 // window(std::make_unique<sf::RenderWindow>(sf::VideoMode::getFullscreenModes()[0], "g_windowTitle", sf::Style::Fullscreen))
 GameManager::GameManager() : speedFactor(1.f),
                              window(std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "g_windowTitle")),
-                             moving(false),
+                             moving(false), drawPopup(false),
                              isInitialized(false), isRunning(false), isGuiOpened(false), wantsToOpenGui(false),
-                             backgroundNeedsUpdate(true), grassId(0), caseSize(62.f), drawPopup(false)
+                             backgroundNeedsUpdate(true), selectedActor(nullptr),grassId(0), caseSize(62.f)
 {
     window->setFramerateLimit(maxFPS);
     view.setCenter(0, 0);
@@ -158,8 +155,7 @@ void GameManager::initGui()
 
 void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders)
 {
-    const std::hash<std::string> hasher;
-    for (const auto &parsedMovableTrader : parsedMovableTraders)
+    for (const std::hash<std::string> hasher; const auto &parsedMovableTrader : parsedMovableTraders)
     {
         auto *movableTrader = new MovableTrader(parsedMovableTrader["job"], parsedMovableTrader["texture"]);
         movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
@@ -168,8 +164,7 @@ void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableT
 
 void GameManager::initWorkshops(std::vector<nlohmann::json> &parsedWorkshops)
 {
-    const std::hash<std::string> hash;
-    for (const auto &parsedWorkshop : parsedWorkshops)
+    for (const std::hash<std::string> hash; const auto &parsedWorkshop : parsedWorkshops)
     {
         auto *workshop = new Workshop(parsedWorkshop["name"], parsedWorkshop["job"], parsedWorkshop["texture"]);
         workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
@@ -225,7 +220,7 @@ void GameManager::processInput()
                 }
                 if (oldPos == clickPos)
                 {
-                    getClickedActor();
+                    getSelectedActor();
                 }
                 backgroundNeedsUpdate = true;
                 break;
@@ -271,6 +266,7 @@ void GameManager::processInput()
                 const auto newOrigin = (view.getCenter() - (view.getSize() * 1.10f) / 2.f);
                 const auto margin = caseSize * 5.f;
 
+                // ReSharper disable once CppTooWideScope
                 const bool canUnZoom =
                         newOrigin.x + margin >= static_cast<float>(grid.getMinCoordinate().first) * caseSize &&
                         newOrigin.y + margin >= static_cast<float>(grid.getMinCoordinate().second) * caseSize &&
@@ -325,8 +321,7 @@ void GameManager::update(const float deltaTime)
         pendingTraders.pop();
         traders.push_back(trader);
 
-        auto *availableWorkshop = findAvailableWorkshop(trader->getJobId());
-        if (availableWorkshop)
+        if (auto *availableWorkshop = findAvailableWorkshop(trader->getJobId()); availableWorkshop)
         {
             availableWorkshop->setTrader(trader);
         }
@@ -387,9 +382,7 @@ void GameManager::render() const
 
         for (auto &ws : workshops)
         {
-            auto positionX = static_cast<float>(ws->x) * caseSize;
-            auto positionY = static_cast<float>(ws->y) * caseSize;
-            if (positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
+            if (auto positionX = static_cast<float>(ws->x) * caseSize, positionY = static_cast<float>(ws->y) * caseSize; positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
             {
                 auto &workshopSprite = ws->getSprite();
                 workshopSprite.setPosition(positionX, positionY);
@@ -424,13 +417,10 @@ void GameManager::render() const
         traderSprite.setScale(1.f, 1.f);
         traderSprite.setOrigin(16.f, 16.f);
 
-        int rectLeft = 0;
-        auto x = static_cast<float>(trader->x) * caseSize;
-        auto y = static_cast<float>(trader->y) * caseSize;
-
-        if (x >= viewXMin && x <= viewXMax && y >= viewYMin && y <= viewYMax)
+        if (auto x = static_cast<float>(trader->x) * caseSize, y = static_cast<float>(trader->y) * caseSize; x >= viewXMin && x <= viewXMax && y >= viewYMin && y <= viewYMax)
         {
-            switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
+	        int rectLeft = 0;
+	        switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
             {
                 case Direction::Top:
                     y -= trader->coordinatesOffset;
@@ -467,7 +457,7 @@ void GameManager::render() const
 
     if (drawPopup)
     {
-        auto marketPos = clickedActor->getClosestMarketCoordinate();
+        auto marketPos = selectedActor->getClosestMarketCoordinate();
 
         sf::RectangleShape rectangle;
         rectangle.setSize(sf::Vector2f(caseSize, caseSize));
@@ -480,12 +470,12 @@ void GameManager::render() const
         window->draw(rectangle);
 
         rectangle.setOutlineColor(sf::Color::Green);
-        rectangle.setPosition(static_cast<float>(clickedActor->x) * caseSize,
-                              static_cast<float>(clickedActor->y) * caseSize);
+        rectangle.setPosition(static_cast<float>(selectedActor->x) * caseSize,
+                              static_cast<float>(selectedActor->y) * caseSize);
 
         window->draw(rectangle);
 
-        auto trader = clickedActor->getTrader();
+        auto trader = selectedActor->getTrader();
         auto x = static_cast<float>(trader->x) * caseSize;
         auto y = static_cast<float>(trader->y) * caseSize;
         switch (trader->direction) //NOLINT(clang-diagnostic-switch-enum)
@@ -612,7 +602,7 @@ void GameManager::setBackgroundNeedsUpdate(const bool value) const
     backgroundNeedsUpdate = value;
 }
 
-void GameManager::getClickedActor()
+void GameManager::getSelectedActor()
 {
     auto grid = gridManager.getGrid();
 
@@ -621,22 +611,21 @@ void GameManager::getClickedActor()
 
     if (clickPos.x < 0 && clickPos.y > 0)
     {
-        x -= 1.f;
+        --x;
     }
     else if ((clickPos.x < 0 && clickPos.y < 0))
     {
-        x -= 1.f;
-        y -= 1.f;
+        --x;
+        --y;
     }
     else if ((clickPos.x > 0 && clickPos.y < 0))
     {
-        y -= 1.f;
+        --y;
     }
 
-    auto actor = grid.getActorAt(x, y);
-    if (actor && actor->getTrader())
+    if (const auto actor = grid.getActorAt(x, y); actor && actor->getTrader())
     {
-        clickedActor = actor;
+        selectedActor = actor;
         drawPopup = true;
     }
     else

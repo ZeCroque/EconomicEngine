@@ -40,7 +40,6 @@ Trader::~Trader()
 		stockExchange.removeAsk(currentAsk);
 	}
 
-	while(position == Position::Street);
 	moveToRequestSignal.disconnectAll();
 	deathSignal.disconnectAll();
 }

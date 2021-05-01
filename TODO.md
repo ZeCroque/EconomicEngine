@@ -1,20 +1,23 @@
 ### Global
 - reorder headers and cpp for lisibility and ensure code is compliant with naming standards overall
+- add debug compile option
+- intrusive list
 - make word
+
 
 ### Economic:
 
+
+
 ### Graphic:
-- affichage **vincent**
-- déplacements
-- astar **maxence**
-- workshop creation -> calculate path to market
-- market creation -> check closest market for workshop in neighbors chunks and refresh path
+- hint au dessus workshop
 - remove red squares
-- make gui stop stop traders movements
+- cannot increment value-initialized list iterator
 
 ### Gui:
+- stop traders movements
+- speed increase trader speed
 
 ### Polish :
+- death anim (and sound) 
 - cycle jour nuit et tâche dodo
-- hint au dessus workshop
