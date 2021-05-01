@@ -18,7 +18,6 @@ struct Node {
     bool visited = false;
     float globalGoal = INFINITY;
     float localGoal = INFINITY;
-    std::vector<Node *> neighbors;
     Node *parent = nullptr;
     std::weak_ptr<Workshop> actor;
 

@@ -54,7 +54,6 @@ void MovableActor::updatePath()
     {
         ++pathIterator;
     }
-
 	updateDirection();
 }
 
@@ -72,7 +71,6 @@ void MovableActor::updateDirection()
 	{   	
 		direction = Direction::None;
 		pathfindEndedSignal(true);
-		startPathfind(!reversePath); //TODO remove debug
 	}
 	else if (pathIterator->first < x)
 	{
@@ -90,5 +88,4 @@ void MovableActor::updateDirection()
 	{
 		direction = Direction::Bottom;
 	}
-    
 }
