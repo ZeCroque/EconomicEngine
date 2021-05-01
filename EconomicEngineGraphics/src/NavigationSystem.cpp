@@ -8,7 +8,6 @@
 std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	Grid& grid, const std::pair<int, int>& startingCoordinates, const std::pair<int, int>& objectiveCoordinates)
 {
-	mutex.lock();
 	auto* objectiveNode = &grid.getNodeAt(objectiveCoordinates.first, objectiveCoordinates.second);
 	auto* startingNode = &grid.getNodeAt(startingCoordinates.first, startingCoordinates.second);
 	startingNode->localGoal = 0.0f;
@@ -18,8 +17,8 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
 	const std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
-		std::pair(std::min(startingCoordinates.first, objectiveCoordinates.first) - 1, std::min(startingCoordinates.second, objectiveCoordinates.second) - 1),
-		std::pair(std::max(startingCoordinates.first, startingCoordinates.first) + 1, std::max(startingCoordinates.second, objectiveCoordinates.second) + 1)
+		std::pair(std::min(startingCoordinates.first, objectiveCoordinates.first) - 1, std::min(startingCoordinates.second, objectiveCoordinates.second) - 2),
+		std::pair(std::max(startingCoordinates.first, objectiveCoordinates.first) + 1, std::max(startingCoordinates.second, objectiveCoordinates.second) + 1)
 	);
 	while (!nodesToTest.empty())
 	{
@@ -41,50 +40,25 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 		currentNode = nodesToTest.front();
 		currentNode->visited = true;
 		modifiedNodes.emplace_back(currentNode);
-		if (currentNode->neighbors.empty())
+		// Upper current neighbor
+		if (currentNode->y - 1 >= searchBounds.first.second)
 		{
-			// Upper current neighbor
-			if (currentNode->y-1 >= searchBounds.first.second)
-			{
-				currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y - 1));
-			}
-			// Lower current neighbor
-			if (currentNode->y+1 <= searchBounds.second.second)
-			{
-				currentNode->neighbors.emplace_back(&grid.getNodeAt(currentNode->x, currentNode->y + 1));
-			}
-			// Left current neighbor
-			if (currentNode->x-1 >= searchBounds.first.first)
-			{
-				currentNode->neighbors.emplace_back(&grid.getNodeAt((currentNode->x - 1), currentNode->y));
-			}
-			// Right current neighbor
-			if (currentNode->x+1 <= searchBounds.first.second)
-			{
-			currentNode->neighbors.emplace_back(&grid.getNodeAt((currentNode->x + 1), currentNode->y));
-			}
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt(currentNode->x, currentNode->y - 1));
 		}
-
-		
-		// On teste tous les voisins
-		for (auto* nodeNeighbor: currentNode->neighbors)
+		// Lower current neighbor
+		if (currentNode->y + 1 <= searchBounds.second.second)
 		{
-			// Si le voisin n'est pas déjà visité et qu'il est navigable on l'ajoute aux nodes à tester
-			if (!nodeNeighbor->visited && !nodeNeighbor->isOccupied())
-			{
-				nodesToTest.emplace_back(nodeNeighbor);
-			}
-
-			// Calcul du "coût" total potentiel pour naviguer à ce node voisin
-			const float possiblyLowerGoal = currentNode->localGoal + getHeuristicDistance(currentNode, nodeNeighbor);
-			// Si ce "coût" potentiel est inférieur à son "coût" actuel et donc que venir par ce node est le chemin le plus rapide pour arriver à ce node voisin
-			if (possiblyLowerGoal < nodeNeighbor->localGoal)
-			{
-				// On met à jour le node voisin
-				nodeNeighbor->parent = currentNode;
-				nodeNeighbor->localGoal = possiblyLowerGoal;
-				nodeNeighbor->globalGoal = nodeNeighbor->localGoal + getHeuristicDistance(nodeNeighbor, objectiveNode);
-			}
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt(currentNode->x, currentNode->y + 1));
+		}
+		// Left current neighbor
+		if (currentNode->x - 1 >= searchBounds.first.first)
+		{
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt((currentNode->x - 1), currentNode->y));
+		}
+		// Right current neighbor
+		if (currentNode->x + 1 <= searchBounds.second.first)
+		{
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt((currentNode->x + 1), currentNode->y));
 		}
 	}
 	std::list<std::pair<int,int>> returnPath;
@@ -99,40 +73,76 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	}
 	returnPath.emplace_front(startingCoordinates);
 	returnPath.emplace_back(objectiveCoordinates);
-	drawPath(grid, returnPath, searchBounds); //TODO remove debug
+	// drawPath(grid, returnPath, searchBounds, startingCoordinates, objectiveCoordinates); //TODO remove debug
 	for (auto* modifiedNode : modifiedNodes)
 	{
 		modifiedNode->resetNode();
 	}
-	mutex.unlock();
 	return returnPath;
 }
 
-void NavigationSystem::drawPath(Grid& grid, const std::list<std::pair<int, int>>& path, const std::pair<std::pair<int, int>, std::pair<int, int>>&
-                                bounds)
+void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const std::pair<std::pair<int, int>, std::pair<int, int>>&
+                                inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords)
 {
-	std::cout << "Starting : [" << bounds.first.first << ";" << bounds.first.second << "]" << std::endl;
-	std::cout << "Objective : [" << bounds.second.first << ";" << bounds.second.second << "]" << std::endl;
-	for (int y = bounds.first.second; y < bounds.second.second; ++y)
+	std::cout << "Starting : [" << inStartingCoords.first << ";" << inStartingCoords.second << "]" << std::endl;
+	std::cout << "Objective : [" << inObjectiveCoords.first << ";" << inObjectiveCoords.second << "]" << std::endl;
+	std::cout << "MinBound : [" << inBounds.first.first << ";" << inBounds.first.second << "]" << std::endl;
+	std::cout << "MaxBound : [" <<  inBounds.second.first << ";" << inBounds.second.second << "]" << std::endl;
+	std::cout << "PathSize : " << inPath.size() << std::endl;
+
+
+	for (int y = inBounds.first.second; y <= inBounds.second.second; ++y)
 	{
-		for (int x = bounds.first.first; x < bounds.second.first; ++x)
+		for (int x = inBounds.first.first; x <= inBounds.second.first; ++x)
 		{
-			int isInPath = 0;
-			for (const auto& coordinate : path)
+			char isInPath = '0';
+			int i = 0;
+			for (const auto& coordinate : inPath)
 			{
 				if (coordinate.first == x && coordinate.second == y)
 				{
-					isInPath = 1;
+					if (i>9)
+					{
+						isInPath = i+'A'-10;
+						break;
+					}
+					isInPath = i+'0';
 					break;
 				}
-				if(grid.isOccupied(x,y))
-				{
-					isInPath = 2;
-				}
+				++i;
 			}
+			if(inGrid.isOccupied(x,y))
+			{
+				isInPath = '#';
+			}
+			if (inStartingCoords == std::pair(x,y))
+			{
+				isInPath = '+';
+			}
+			
 			std::cout << isInPath;
 		}
 		std::cout << std::endl;
+	}
+}
+
+void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
+{
+	// Si le voisin n'est pas déjà visité et qu'il est navigable on l'ajoute aux nodes à tester
+	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
+	{
+		outNodesToTest.emplace_back(inNodeNeighbor);
+	}
+
+	// Calcul du "coût" total potentiel pour naviguer à ce node voisin
+	const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor);
+	// Si ce "coût" potentiel est inférieur à son "coût" actuel et donc que venir par ce node est le chemin le plus rapide pour arriver à ce node voisin
+	if (possiblyLowerGoal < inNodeNeighbor->localGoal)
+	{
+		// On met à jour le node voisin
+		inNodeNeighbor->parent = inCurrentNode;
+		inNodeNeighbor->localGoal = possiblyLowerGoal;
+		inNodeNeighbor->globalGoal = inNodeNeighbor->localGoal + getHeuristicDistance(inNodeNeighbor, inObjectiveNode);
 	}
 }
 

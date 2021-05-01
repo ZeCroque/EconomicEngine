@@ -12,7 +12,6 @@ void Node::resetNode()
 {
     localGoal = INFINITY;
     globalGoal = INFINITY;
-    neighbors.clear();
     visited = false;
     parent = nullptr;
 }

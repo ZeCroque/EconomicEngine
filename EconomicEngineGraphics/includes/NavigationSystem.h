@@ -12,11 +12,10 @@ class NavigationSystem {
 public:
 	static std::list<std::pair<int, int>> aStarResolution(Grid& grid, const std::pair<int, int>& startingCoordinates,
 	                                                      const std::pair<int, int>& objectiveCoordinates);
-	static void drawPath(Grid& grid, const std::list<std::pair<int, int>>& path, const std::pair<std::pair<int, int>, std::pair<int, int>>&
-	                     bounds);
-
-	//TODO fix this lint
-	inline static std::mutex mutex;
+	static void drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const std::pair<std::pair<int, int>, std::pair<int, int>>&
+	                     inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords);
+	
+	static void updateNeighborParent(std::list<Node*>& outNodesToTest, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor);
 
 private:
 	static float getHeuristicDistance(const Node* firstNode, const Node* secondNode);
