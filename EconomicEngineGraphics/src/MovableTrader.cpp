@@ -6,7 +6,6 @@
 
 #include "GameManager.h"
 #include "NavigationSystem.h"
-#include "Traders/Trader.h"
 
 MovableTrader::MovableTrader(const std::string& inJobName, const std::string& inTextureName) : MovableActor(inTextureName)
 {
@@ -65,4 +64,14 @@ void MovableTrader::calculatePathfind(const std::pair<int, int>& start, const st
 	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), start,end);
 	path.emplace_front(std::pair<int,int>(start.first, start.second - 1));
 	path.emplace_back(std::pair<int,int>(end.first, end.second - 1));
+}
+
+Trader *MovableTrader::getBoundTrader() const
+{
+    return boundTrader;
+}
+
+void MovableTrader::setBoundTrader(Trader *inBoundTrader)
+{
+    MovableTrader::boundTrader = inBoundTrader;
 }

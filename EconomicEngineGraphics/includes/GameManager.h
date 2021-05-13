@@ -67,6 +67,7 @@ private:
 
     std::unique_ptr<sf::RenderWindow> window;
     sf::View view;
+    sf::Font font;
     sf::Vector2f oldPos;
     sf::Vector2f clickPos;
     bool moving;
@@ -84,6 +85,7 @@ private:
     mutable sf::RenderTexture background;
     Workshop* selectedActor;
     size_t grassId;
+    size_t popupId;
     float caseSize;
 
 //SLOTS

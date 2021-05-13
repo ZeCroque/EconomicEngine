@@ -94,6 +94,7 @@ void Trader::update(const float deltaTime)
 				break;
 			}
 			//If no craft is available and no trade awaiting then trade
+			currentAction = Action::Trading;
 			[[fallthrough]];
 					
 		case Action::Trading:
@@ -731,4 +732,14 @@ float Trader::getMoney() const
 const Signal<> &Trader::getDeathSignal() const
 {
     return deathSignal;
+}
+
+Position Trader::getPosition() const
+{
+    return position;
+}
+
+Action Trader::getCurrentAction() const
+{
+    return currentAction;
 }

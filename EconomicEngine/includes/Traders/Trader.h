@@ -85,6 +85,8 @@ public:
 	void checkAskCallback(Ask* ask);
 	void craftSuccessCallback();
 	void setPosition(Position inPosition);
+	Position getPosition() const;
+    Action getCurrentAction() const;
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] Job* getCurrentJob() const;
 	[[nodiscard]] Craft* getCurrentCraft() const;

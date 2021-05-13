@@ -42,11 +42,16 @@ void GameManager::init(const char *contentPath)
             {
                 initTexture(entry.path());
             }
+            else if (entry.path().extension() == ".ttf")
+            {
+                font.loadFromFile(entry.path().string());
+            }
         }
     }
 
     const std::hash<std::string> hash;
     grassId = hash("TX_Grass.png");
+    popupId = hash("TX_Popup.png");
 
     initMovableTraders(parsedMovableTraders);
     initWorkshops(parsedWorkshops);
@@ -382,7 +387,8 @@ void GameManager::render() const
 
         for (auto &ws : workshops)
         {
-            if (auto positionX = static_cast<float>(ws->x) * caseSize, positionY = static_cast<float>(ws->y) * caseSize; positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
+            if (auto positionX = static_cast<float>(ws->x) * caseSize, positionY = static_cast<float>(ws->y) * caseSize;
+                    positionX >= viewXMin && positionX <= viewXMax && positionY >= viewYMin && positionY <= viewYMax)
             {
                 auto &workshopSprite = ws->getSprite();
                 workshopSprite.setPosition(positionX, positionY);
@@ -390,16 +396,7 @@ void GameManager::render() const
             }
         }
 
-        sf::RectangleShape rectangle;
-        rectangle.setSize(sf::Vector2f(caseSize, caseSize));
-        rectangle.setFillColor(sf::Color::Red);
-        rectangle.setPosition(viewXMin + caseSize, viewYMin + caseSize);
-        background.draw(rectangle);
-        rectangle.setPosition(viewXMax - caseSize, viewYMax - caseSize);
-        background.draw(rectangle);
-
         background.display();
-
         backgroundNeedsUpdate = false;
     }
 
@@ -499,9 +496,120 @@ void GameManager::render() const
         rectangle.setSize(sf::Vector2f(32, 32));
         rectangle.setOutlineThickness(2);
         rectangle.setOutlineColor(sf::Color::Blue);
-        rectangle.setPosition(x + 16,y + 32);
+        rectangle.setPosition(x + 16, y + 32);
 
         window->draw(rectangle);
+
+
+        sf::Sprite popupSprite;
+        popupSprite.setTexture(getTexture(popupId));
+        popupSprite.setPosition(10, 0);
+        window->setView(sf::View(sf::FloatRect(0, 0,
+                                               static_cast<float>(window->getSize().x),
+                                               static_cast<float>(window->getSize().y))));
+        window->draw(popupSprite);
+
+
+        sf::Text text;
+        text.setFont(font);
+        text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+        text.setFillColor(sf::Color::Black);
+        text.setCharacterSize(12);
+
+        text.setPosition(40, 32);
+        text.setString("Job:");
+        window->draw(text);
+
+        text.setPosition(40, 64);
+        text.setString("Money:");
+        window->draw(text);
+
+        text.setPosition(40, 96);
+        text.setString("Food:");
+        window->draw(text);
+
+        text.setPosition(40, 128);
+        text.setString("Action:");
+        window->draw(text);
+
+
+        sf::String jobName = trader->getBoundTrader()->getCurrentJob()->getName();
+        sf::String money = std::to_string(round(trader->getBoundTrader()->getMoney()));
+        sf::String foodLevel = std::to_string(round(trader->getBoundTrader()->getFoodLevel()));
+        sf::String action;
+        if (trader->getBoundTrader()->getCurrentCraft())
+        {
+            auto craft = trader->getBoundTrader()->getCurrentCraft();
+            action = "Crafting:\n" + EconomicEngine::getInstance()->getTradableFactory().getDefaultObject(
+                    craft->getResult())->getName() + " x" + std::to_string(craft->getCount());
+        }
+        else if (trader->getBoundTrader()->getPosition() == Position::Market &&
+                 !trader->getBoundTrader()->getCurrentAsks().empty())
+        {
+            std::vector<std::pair<std::basic_string<char>, int>> items;
+            for (const auto &ask : trader->getBoundTrader()->getCurrentAsks())
+            {
+                auto name = EconomicEngine::getInstance()->getTradableFactory().getDefaultObject(
+                        ask->getId())->getName();
+
+                auto findAny = false;
+                for (auto &item : items)
+                {
+                    if (name == item.first)
+                    {
+                        ++item.second;
+                        findAny = true;
+                        break;
+                    }
+                }
+                if (!findAny)
+                {
+                    items.emplace_back(std::pair<std::basic_string<char>, int>(name, 1));
+                }
+            }
+
+            action = "Buying:\n";
+            for (auto const &item : items)
+            {
+                action += item.first + " x" + std::to_string(item.second) + "\n";
+            }
+        }
+        else if (trader->getBoundTrader()->getPosition() == Position::Street)
+        {
+            if (trader->getBoundTrader()->getCurrentAction() == Action::Trading)
+            {
+                action = "Going to:\n market";
+            }
+            else if (trader->getBoundTrader()->getCurrentAction() == Action::Crafting)
+            {
+                action = "Going to\n workshop";
+            }
+        }
+        else
+        {
+            action = "Waiting";
+        }
+
+        text.setStyle(sf::Text::Regular);
+
+        text.setPosition(75, 32);
+        text.setString(jobName);
+        window->draw(text);
+
+        text.setPosition(90, 64);
+        text.setString(money);
+        window->draw(text);
+
+        text.setPosition(85, 96);
+        text.setString(foodLevel);
+        window->draw(text);
+
+        text.setPosition(100, 128);
+        text.setString(action);
+        window->draw(text);
+
+
+        window->setView(view);
     }
     window->display();
 }
@@ -538,6 +646,7 @@ float GameManager::getSpeedFactor() const
 void GameManager::traderAddedCallback(Trader *trader)
 {
     auto *movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());
+    movableTrader->setBoundTrader(trader);
     pendingTraders.push(movableTrader);
     trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
                                              {

@@ -11,6 +11,8 @@
 #include "MovableActor.h"
 enum class Position;
 
+class Trader;
+
 class MovableTrader : public MovableActor
 {
 
@@ -19,17 +21,20 @@ public:
 
 	void moveTo(Position inPosition);
 
-	void moveToRequestCallback(class Trader* inTrader, Position inPosition);
-	
+	void moveToRequestCallback(Trader* inTrader, Position inPosition);
+
     size_t getJobId() const;
 
 	MovableTrader* clone() override;
 	void calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end);
 
+    Trader *getBoundTrader() const;
+    void setBoundTrader(Trader *boundTrader);
+
 private:
     size_t jobId;
-
-	int pathFindSlotId;
+    Trader* boundTrader;
+    int pathFindSlotId;
 };
 
 
