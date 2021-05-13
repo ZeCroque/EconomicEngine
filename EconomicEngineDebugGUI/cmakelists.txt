@@ -114,6 +114,7 @@ get_target_property(ECONOMIC_ENGINE_BINARY_DIR EconomicEngineGraphics BINARY_DIR
 set_target_properties(${PROJECT_NAME}_lib
     PROPERTIES 
         AUTOGEN_BUILD_DIR ${ECONOMIC_ENGINE_BINARY_DIR}/EconomicEngineGraphics_autogen
+        ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_lib
 )
 
 get_target_property(ECONOMIC_ENGINE_HEADER_DIR EconomicEngineGraphics INCLUDE_DIRECTORIES)
