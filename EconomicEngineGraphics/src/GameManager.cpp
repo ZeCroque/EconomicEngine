@@ -72,19 +72,19 @@ void GameManager::exec()
     auto previousTimestamp = clock.getElapsedTime().asMicroseconds();
     sf::Int64 lag = 0;
 
-    const auto deltaTime = sf::seconds(1.f / maxFps);
+    const auto deltaTime = sf::seconds(1.f / static_cast<float>(maxFps));
     const auto deltaTimeUs = deltaTime.asMicroseconds();
     const auto deltaTimeS = deltaTime.asSeconds();
 
     while (window->isOpen())
     {
+    	processInput();
+    	
 	    if(const auto currentTimestamp = clock.getElapsedTime().asMicroseconds(); !isPaused)
 		{
         	const auto timeSinceLastFrame = currentTimestamp - previousTimestamp;
 	        previousTimestamp = currentTimestamp;
 	        lag += timeSinceLastFrame;
-
-	        processInput();
 
 	        while (lag >= deltaTimeUs)
 	        {
@@ -96,6 +96,7 @@ void GameManager::exec()
         {
 	        previousTimestamp = currentTimestamp;
         }
+    	
     	render();
     }
 }
@@ -123,6 +124,9 @@ void GameManager::reset(const int inTradersCount)
     EconomicEngine::getInstance()->reset(inTradersCount);
 
 	drawPopup = false;
+	const auto width = static_cast<float>(window->getSize().x);
+	const auto height = static_cast<float>(window->getSize().y);
+	view = sf::View(sf::FloatRect(-width / 2.f, -height / 2.f, width, height));
 	backgroundNeedsUpdate = true;
 }
 
@@ -353,7 +357,7 @@ void GameManager::processInput()
             }
             case sf::Event::KeyPressed:
             {
-                if (event.key.code == 57) //Space
+                if (event.key.code == sf::Keyboard::Space)
                 {
                     view.setCenter(0, 0);
                     backgroundNeedsUpdate = true;
@@ -378,9 +382,9 @@ void GameManager::update(const float inDeltaTime)
 {
     EconomicEngine::getInstance()->update(inDeltaTime);
 
-		updateWorkshops(inDeltaTime);
+	updateWorkshops(inDeltaTime);
 
-		updateTraders(inDeltaTime);
+	updateTraders(inDeltaTime);
 }
 
 void GameManager::render() const
