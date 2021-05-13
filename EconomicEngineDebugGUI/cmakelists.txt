@@ -89,6 +89,16 @@ if(WIN32)
             $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin>
             $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms/
     )
+
+   set_target_properties(${PROJECT_NAME} 
+                            PROPERTIES 
+                            LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
+                            COMPILE_DEFINITIONS_DEBUG "_CONSOLE"
+                            LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE"
+                            COMPILE_DEFINITIONS_RELWITHDEBINFO "_CONSOLE"
+                            LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS"
+                            LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS"
+   )
 endif(WIN32)
 
 #Move assets to build dir
