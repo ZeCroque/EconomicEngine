@@ -17,7 +17,7 @@ constexpr int TPS = 60;
 EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
         : QMainWindow(parent), asksResolutionCount(0)
 #ifdef STANDALONE_MODE
-		, isRunning(false), hasEverRun(false), speedFactor(1.f)
+		, isRunning(false), hasBeenReset(false), hasEverRun(false), speedFactor(1.f)
 #endif
 {
     ui.setupUi(this);
@@ -72,7 +72,10 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
 			auto movementSimulationThread = std::thread([this, trader, position]()
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>((EconomicEngine::getInstance()->getBaseActionTime() * 1000.f / speedFactor))));
-				trader->setPosition(position);
+				if(!hasBeenReset)
+				{
+					trader->setPosition(position);
+				}
 			});
 			movementSimulationThread.detach();
 		});
@@ -135,8 +138,7 @@ void EconomicEngineDebugGui::setYRange()
 			}
 			for (int i = static_cast<int>(start); i <= end; i++)
 			{
-				const auto value = data->at(i)->value;
-				if (value > 0)
+				if (const auto value = data->at(i)->value; value > 0)
 				{
 					haveData = true;
 					if (value < valueLow)
@@ -205,16 +207,23 @@ void EconomicEngineDebugGui::toggleStart()
     if (ui.pBStart->isChecked())
     {
         ui.pBStart->setText("Stop");
-        EconomicEngine::getInstance()->resume();
-#ifdef STANDALONE_MODE
+#ifndef STANDALONE_MODE
+    	GameManager::getInstance()->resume();
+#else
     	hasEverRun = true;
     	isRunning = true;
+    	hasBeenReset = false;
+    	EconomicEngine::getInstance()->resume();
 #endif
     }
     else
     {
         ui.pBStart->setText("Start");
-        EconomicEngine::getInstance()->pause();
+#ifndef STANDALONE_MODE
+    	GameManager::getInstance()->pause();
+#else
+    	EconomicEngine::getInstance()->pause();
+#endif
     }
 }
 
@@ -237,7 +246,14 @@ void EconomicEngineDebugGui::doReset()
 	asksResolutionCount = 0;
 	ui.pBStart->setChecked(false);
     ui.pBStart->setText("Start");
-    EconomicEngine::getInstance()->pause();
+#ifndef STANDALONE_MODE
+	GameManager::getInstance()->pause();
+#else
+	hasBeenReset = true;
+	auto* economicEngine = EconomicEngine::getInstance();
+	economicEngine->getStockExchange().getAskResolvedSignal().disconnectAll();
+	economicEngine->pause();
+#endif
 
 	for (auto graphManager : arrayCheckBox)
 	{
@@ -261,7 +277,14 @@ void EconomicEngineDebugGui::doReset()
 		QWidget* widget = item->widget();
 		delete widget;
 	}
-	EconomicEngine::getInstance()->reset(ui.sBTraderNumber->value());
+
+#ifndef STANDALONE_MODE
+	GameManager::getInstance()->reset(ui.sBTraderNumber->value());
+#else
+	economicEngine->reset(ui.sBTraderNumber->value());
+	economicEngine->getStockExchange().getAskResolvedSignal().connect(this, &EconomicEngineDebugGui::nextTurn);
+#endif
+	
 	doInit();
 }
 
@@ -322,8 +345,7 @@ void EconomicEngineDebugGui::doInit()
 	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
 	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
 
-	auto& traderManager = EconomicEngine::getInstance()->getTraderManager();
-	for (const auto& job : traderManager.getJobList())
+	for (auto & traderManager = EconomicEngine::getInstance()->getTraderManager(); const auto& job : traderManager.getJobList())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
 
@@ -391,10 +413,9 @@ void EconomicEngineDebugGui::updateUiSlot()
 		auto const graphIndex = checkBox->getGraphIndex();
 
 
-		auto i = asksResolutionCount - 1;
-		for (const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), 1))
+		for (auto i = asksResolutionCount - 1; const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), 1))
 		{
-			ui.customPlot->graph(graphIndex)->addData(i, static_cast<double>(data.getPrice()));
+			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
 			i++;
 		}
 

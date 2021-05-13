@@ -2,7 +2,7 @@
 #define NAVIGATION_SYSTEM_H
 
 #include <list>
-#include <mutex>
+#include <set>
 
 class Grid;
 struct Node;
@@ -15,7 +15,7 @@ public:
 	static void drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const std::pair<std::pair<int, int>, std::pair<int, int>>&
 	                     inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords);
 	
-	static void updateNeighborParent(std::list<Node*>& outNodesToTest, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor);
+	static void updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>&outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor);
 
 private:
 	static float getHeuristicDistance(const Node* firstNode, const Node* secondNode);

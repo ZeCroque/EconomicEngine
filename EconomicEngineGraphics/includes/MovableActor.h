@@ -39,8 +39,6 @@ public:
 
     void startPathfind(bool inReversePath);
 
-    std::list<std::pair<int, int>> path; //Todo: Make private
-
     Direction direction;
 
     float coordinatesOffset;
@@ -51,6 +49,8 @@ protected:
 
     std::list<std::pair<int, int>>::iterator pathIterator;
 
+    std::list<std::pair<int, int>> path;
+	
     bool reversePath;
 
 private:

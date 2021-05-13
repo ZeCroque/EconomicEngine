@@ -18,10 +18,14 @@ public:
 
     void init();
 
+	void reset();
+
     bool canPlaceWorkshop(int x, int y) const;
 
     void queueWorkshop(std::shared_ptr<Workshop> workshop);
 
+    [[nodiscard]] bool getIsGenerationThreadRunning() const;
+	
     [[nodiscard]] std::thread &getGenerationThread();
 
 	[[nodiscard]] Grid& getGrid() const;
@@ -32,10 +36,12 @@ private :
 
     mutable Grid grid;
     int minRange;
-    int parcourStep;
+    int pathStep;
     int maxDistanceToMarket;
 
     std::queue<std::shared_ptr<Workshop>> workshopQueue;
+
+	bool isGenerationThreadRunning;
     std::thread generationThread;
 
     void placeWorkshop();

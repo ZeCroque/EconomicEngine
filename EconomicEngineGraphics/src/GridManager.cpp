@@ -8,14 +8,29 @@
 #include <GameManager.h>
 #include "Workshop.h"
 
-GridManager::GridManager() : minRange(6), parcourStep(4), maxDistanceToMarket(25) {}
+GridManager::GridManager() : minRange(6), pathStep(4), maxDistanceToMarket(25), isGenerationThreadRunning(false) {}
 
 
 void GridManager::init() {
     grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
     marketsCoordinates.emplace_back(std::pair<int, int>(0, 0));
 
-    generationThread = std::thread([this]() { placeWorkshop(); });
+	isGenerationThreadRunning = true;
+	generationThread = std::thread([this]() { placeWorkshop(); });
+}
+
+void GridManager::reset()
+{
+    isGenerationThreadRunning = false;
+	generationThread.join();
+	
+	while(!workshopQueue.empty())
+	{
+		workshopQueue.pop();
+	}
+
+	marketsCoordinates.clear();
+	grid.reset();
 }
 
 int getRandomInt(const int min = 0, const int max = 1) {
@@ -47,12 +62,12 @@ void GridManager::placeWorkshop() {
 
     while (true) {
         for (int j = 0; j < 2; j++) {
-            for (int i = 0; i < s; i += parcourStep) {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() ||
+            for (int i = 0; i < s; i += pathStep) {
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() && isGenerationThreadRunning ||
                        !GameManager::getInstance()->getIsInitialized()) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::maxFPS));
                 }
-                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized()) {
+                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized() || !isGenerationThreadRunning) {
                     makeDebugFile();
                     return;
                 }
@@ -77,23 +92,23 @@ void GridManager::placeWorkshop() {
 
                 switch (d) {
                     case 0:
-                        y += parcourStep;
+                        y += pathStep;
                         break;
                     case 1:
-                        x += parcourStep;
+                        x += pathStep;
                         break;
                     case 2:
-                        y -= parcourStep;
+                        y -= pathStep;
                         break;
                     case 3:
-                        x -= parcourStep;
+                        x -= pathStep;
                         break;
                     default:;
                 }
             }
             d = (d + 1) % 4;
         }
-        s = s + parcourStep;
+        s = s + pathStep;
     }
 }
 
@@ -126,6 +141,11 @@ Grid& GridManager::getGrid() const
 
 void GridManager::queueWorkshop(std::shared_ptr<Workshop> workshop) { // NOLINT(performance-unnecessary-value-param)
     workshopQueue.emplace(workshop);
+}
+
+bool GridManager::getIsGenerationThreadRunning() const
+{
+	return isGenerationThreadRunning;
 }
 
 int GridManager::getClosestMarketCoordinate(int x, int y) {

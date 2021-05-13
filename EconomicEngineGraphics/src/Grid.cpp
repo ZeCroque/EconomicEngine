@@ -20,6 +20,12 @@ Grid::Grid() : minCoordinate(0, 0), maxCoordinate(0, 0)
 {
 }
 
+void Grid::reset()
+{
+	minCoordinate = std::pair(0,0);
+	maxCoordinate = std::pair(0,0);
+}
+
 void Grid::setActorAt(const std::shared_ptr<Workshop> workshop, const int x,  const int y)  // NOLINT(performance-unnecessary-value-param)
 {
     workshop->x = x;

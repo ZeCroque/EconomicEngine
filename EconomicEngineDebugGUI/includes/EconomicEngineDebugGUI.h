@@ -55,6 +55,7 @@ private:
 private:
 	std::thread economicEngineThread;
 	bool isRunning;
+	bool hasBeenReset;
 	bool hasEverRun;
 	float speedFactor;
 #else
