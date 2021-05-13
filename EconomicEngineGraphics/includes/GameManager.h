@@ -41,11 +41,13 @@ public:
 
 	void setSpeedFactor(float inSpeedFactor);
 
+	void setMaxFps(int inMaxFps);
+
 	[[nodiscard]] float getSpeedFactor() const;
 
-    const sf::Texture &getTexture(size_t inTextureId) const;
+	[[nodiscard]] int getMaxFps() const;
 
-    static const sf::Int32 maxFPS;
+    const sf::Texture &getTexture(size_t inTextureId) const;
 
 private:
     GameManager();
@@ -68,6 +70,7 @@ private:
 
     void quit();
 
+	int maxFps;
     std::unique_ptr<sf::RenderWindow> window;
     sf::View view;
     sf::Font font;
@@ -118,9 +121,9 @@ public:
 
 private:
 
-	void updateWorkshops(float deltaTime);
+	void updateWorkshops(float inDeltaTime);
 
-	void updateTraders(float deltaTime) const;
+	void updateTraders(float inDeltaTime) const;
 	
     GridManager gridManager;
 

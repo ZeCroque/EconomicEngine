@@ -65,7 +65,7 @@ void GridManager::placeWorkshop() {
             for (int i = 0; i < s; i += pathStep) {
                 while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() && isGenerationThreadRunning ||
                        !GameManager::getInstance()->getIsInitialized()) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::maxFPS));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::getInstance()->getMaxFps()));
                 }
                 if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized() || !isGenerationThreadRunning) {
                     makeDebugFile();
