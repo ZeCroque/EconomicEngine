@@ -28,7 +28,7 @@ public:
 
     void setTrader(std::shared_ptr<MovableTrader> &inTrader);
 
-    void setClosestMarketCoordinate(const std::pair<int, int> &closestMarketCoordinate);
+    void setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate);
 
 	Workshop* clone() override;
 

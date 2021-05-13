@@ -20,17 +20,17 @@ Grid::Grid() : minCoordinate(0, 0), maxCoordinate(0, 0)
 {
 }
 
-void Grid::setActorAt(const std::shared_ptr<Workshop> workshop, const int x,  const int y)  // NOLINT(performance-unnecessary-value-param)
+void Grid::setActorAt(const std::shared_ptr<Workshop> inWorkshop, const int x, const int y)  // NOLINT(performance-unnecessary-value-param)
 {
-    workshop->x = x;
-    workshop->y = y;
-    auto* trader = workshop->getTrader();
+    inWorkshop->x = x;
+    inWorkshop->y = y;
+    auto* trader = inWorkshop->getTrader();
     if(trader)
     {
         trader->x = x;
         trader->y = y;
     }
-    getNodeAt(x, y).actor = std::weak_ptr(workshop);
+    getNodeAt(x, y).actor = std::weak_ptr(inWorkshop);
 }
 
 Workshop *Grid::getActorAt(const int x, const int y)

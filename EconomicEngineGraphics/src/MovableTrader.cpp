@@ -60,9 +60,9 @@ MovableTrader* MovableTrader::clone()
 	return new MovableTrader(*this);
 }
 
-void MovableTrader::calculatePathfind(const std::pair<int, int>& start, const std::pair<int, int>& end)
+void MovableTrader::calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd)
 {
-	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), start,end);
-	path.emplace_front(std::pair<int,int>(start.first, start.second - 1));
-	path.emplace_back(std::pair<int,int>(end.first, end.second - 1));
+	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), inStart,inEnd);
+	path.emplace_front(std::pair<int,int>(inStart.first, inStart.second - 1));
+	path.emplace_back(std::pair<int,int>(inEnd.first, inEnd.second - 1));
 }

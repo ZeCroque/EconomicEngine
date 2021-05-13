@@ -124,8 +124,8 @@ Grid& GridManager::getGrid() const
 	return grid;
 }
 
-void GridManager::queueWorkshop(std::shared_ptr<Workshop> workshop) { // NOLINT(performance-unnecessary-value-param)
-    workshopQueue.emplace(workshop);
+void GridManager::queueWorkshop(std::shared_ptr<Workshop> inWorkshop) { // NOLINT(performance-unnecessary-value-param)
+    workshopQueue.emplace(inWorkshop);
 }
 
 int GridManager::getClosestMarketCoordinate(int x, int y) {
