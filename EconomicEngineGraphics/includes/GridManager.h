@@ -20,7 +20,7 @@ public:
 
     bool canPlaceWorkshop(int x, int y) const;
 
-    void queueWorkshop(std::shared_ptr<Workshop> workshop);
+    void queueWorkshop(std::shared_ptr<Workshop> inWorkshop);
 
     [[nodiscard]] std::thread &getGenerationThread();
 

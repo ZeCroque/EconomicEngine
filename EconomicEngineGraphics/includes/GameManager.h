@@ -22,19 +22,19 @@ class GameManager : public Singleton<GameManager>
 //FRAMEWORK
 //==========
 public:
-    void init(const char *contentPath);
+    void init(const char *inContentPath);
 
     void exec();
 
     bool getIsRunning() const;
 
-    void setBackgroundNeedsUpdate(bool value) const;
+    void setBackgroundNeedsUpdate(bool inValue) const;
 
 	void setSpeedFactor(float inSpeedFactor);
 
 	[[nodiscard]] float getSpeedFactor() const;
 
-    const sf::Texture &getTexture(size_t textureId) const;
+    const sf::Texture &getTexture(size_t inTextureId) const;
 
 	bool getIsInitialized() const;
 
@@ -45,19 +45,19 @@ public:
 private:
     GameManager();
 
-    void initEconomicEngine(const char *prefabsPath);
+    void initEconomicEngine(const char *inPrefabsPath);
 
 	void initGui();
 
-    void initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders);
+    void initMovableTraders(std::vector<nlohmann::json> &inParsedMovableTraders);
 
-    void initWorkshops(std::vector<nlohmann::json> &parsedWorkshops);
+    void initWorkshops(std::vector<nlohmann::json> &inParsedWorkshops);
 
-    void initTexture(const std::filesystem::path &path) const;
+    void initTexture(const std::filesystem::path &inPath) const;
 
     void processInput();
 
-    void update(float deltaTime);
+    void update(float inDeltaTime);
 
     void render() const;
 
@@ -91,20 +91,20 @@ private:
 //SLOTS
 //=======
 private:
-	void traderAddedCallback(class Trader* trader);
+	void traderAddedCallback(class Trader* inTrader);
 	
 //GAMEPLAY
 //========
 public:
-    std::shared_ptr<Workshop> addWorkshop(size_t key) const;
+    std::shared_ptr<Workshop> addWorkshop(size_t inKey) const;
 
-    std::shared_ptr<Workshop> addWorkshop(const std::string &name) const;
+    std::shared_ptr<Workshop> addWorkshop(const std::string &inName) const;
 
-    std::shared_ptr<MovableTrader> addMovableTrader(size_t key) const;
+    std::shared_ptr<MovableTrader> addMovableTrader(size_t inKey) const;
 
-    std::shared_ptr<MovableTrader> addMovableTrader(const std::string &name) const;
+    std::shared_ptr<MovableTrader> addMovableTrader(const std::string &inName) const;
 
-    Workshop *findAvailableWorkshop(size_t jobId) const;
+    Workshop *findAvailableWorkshop(size_t inJobId) const;
 
 	[[nodiscard]] const GridManager& getGridManager() const;
 

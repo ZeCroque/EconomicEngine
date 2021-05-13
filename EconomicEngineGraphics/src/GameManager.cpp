@@ -3,6 +3,9 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <nlohmann/adl_serializer.hpp>
+
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
 #include "NavigationSystem.h"
@@ -10,14 +13,15 @@
 
 const sf::Int32 GameManager::maxFPS = 60;
 
-void GameManager::init(const char *contentPath)
+void GameManager::init(const char *inContentPath)
 {
-    assert(std::filesystem::exists(contentPath) && std::filesystem::is_directory(contentPath));
+    assert(std::filesystem::exists(inContentPath) && std::filesystem::is_directory(inContentPath));
 
     std::vector<nlohmann::json> parsedMovableTraders;
     std::vector<nlohmann::json> parsedWorkshops;
 
-    for (std::ifstream fileStream; const auto &entry : std::filesystem::recursive_directory_iterator(contentPath))
+    std::ifstream fileStream;
+    for (const auto &entry : std::filesystem::recursive_directory_iterator(inContentPath))
     {
         if (std::filesystem::is_regular_file(entry.status()))
         {
@@ -55,7 +59,7 @@ void GameManager::init(const char *contentPath)
 
     initMovableTraders(parsedMovableTraders);
     initWorkshops(parsedWorkshops);
-    initEconomicEngine(contentPath);
+    initEconomicEngine(inContentPath);
     initGui();
     gridManager.init();
 }
@@ -101,9 +105,9 @@ bool GameManager::getIsRunning() const
     return isRunning;
 }
 
-const sf::Texture &GameManager::getTexture(const size_t textureId) const
+const sf::Texture &GameManager::getTexture(const size_t inTextureId) const
 {
-    return texturesDictionary[textureId];
+    return texturesDictionary[inTextureId];
 }
 
 bool GameManager::getIsInitialized() const
@@ -123,10 +127,10 @@ GameManager::GameManager() : speedFactor(1.f),
 }
 
 
-void GameManager::initEconomicEngine(const char *prefabsPath)
+void GameManager::initEconomicEngine(const char *inPrefabsPath)
 {
     auto *economicEngine = EconomicEngine::getInstance();
-    economicEngine->init(prefabsPath);
+    economicEngine->init(inPrefabsPath);
     economicEngine->getTraderManager().getTraderAddedSignal().connect(this, &GameManager::traderAddedCallback);
 }
 
@@ -158,31 +162,33 @@ void GameManager::initGui()
                                                    });
 }
 
-void GameManager::initMovableTraders(std::vector<nlohmann::json> &parsedMovableTraders)
+void GameManager::initMovableTraders(std::vector<nlohmann::json> &inParsedMovableTraders)
 {
-    for (const std::hash<std::string> hasher; const auto &parsedMovableTrader : parsedMovableTraders)
+    const std::hash<std::string> hasher;
+    for (const auto &parsedMovableTrader : inParsedMovableTraders)
     {
         auto *movableTrader = new MovableTrader(parsedMovableTrader["job"], parsedMovableTrader["texture"]);
         movableTraderFactory.registerObject(hasher(parsedMovableTrader["job"]), movableTrader);
     }
 }
 
-void GameManager::initWorkshops(std::vector<nlohmann::json> &parsedWorkshops)
+void GameManager::initWorkshops(std::vector<nlohmann::json> &inParsedWorkshops)
 {
-    for (const std::hash<std::string> hash; const auto &parsedWorkshop : parsedWorkshops)
+    const std::hash<std::string> hash;
+    for (const auto &parsedWorkshop : inParsedWorkshops)
     {
         auto *workshop = new Workshop(parsedWorkshop["name"], parsedWorkshop["job"], parsedWorkshop["texture"]);
         workshopFactory.registerObject(hash(parsedWorkshop["name"]), workshop);
     }
 }
 
-void GameManager::initTexture(const std::filesystem::path &path) const
+void GameManager::initTexture(const std::filesystem::path &inPath) const
 {
     sf::Texture texture;
-    texture.loadFromFile(path.string());
+    texture.loadFromFile(inPath.string());
 
     const std::hash<std::string> hash;
-    texturesDictionary.emplace(hash(path.filename().string()), texture);
+    texturesDictionary.emplace(hash(inPath.filename().string()), texture);
 }
 
 void GameManager::processInput()
@@ -316,9 +322,9 @@ void GameManager::processInput()
     window->setView(view);
 }
 
-void GameManager::update(const float deltaTime)
+void GameManager::update(const float inDeltaTime)
 {
-    EconomicEngine::getInstance()->update(deltaTime);
+    EconomicEngine::getInstance()->update(inDeltaTime);
 
     while (!pendingTraders.empty())
     {
@@ -342,7 +348,7 @@ void GameManager::update(const float deltaTime)
     {
         if (trader->direction != Direction::None)
         {
-            trader->coordinatesOffset += caseSize * deltaTime;
+            trader->coordinatesOffset += caseSize * inDeltaTime;
         }
     }
 }
@@ -643,17 +649,17 @@ float GameManager::getSpeedFactor() const
     return speedFactor;
 }
 
-void GameManager::traderAddedCallback(Trader *trader)
+void GameManager::traderAddedCallback(Trader *inTrader)
 {
-    auto *movableTrader = movableTraderFactory.createObject(trader->getCurrentJob()->getId());
-    movableTrader->setBoundTrader(trader);
+    auto *movableTrader = movableTraderFactory.createObject(inTrader->getCurrentJob()->getId());
+    movableTrader->setBoundTrader(inTrader);
     pendingTraders.push(movableTrader);
-    trader->getMoveToRequestSignal().connect([trader, movableTrader](Position position)
+    inTrader->getMoveToRequestSignal().connect([inTrader, movableTrader](Position position)
                                              {
-                                                 movableTrader->moveToRequestCallback(trader, position);
+                                                 movableTrader->moveToRequestCallback(inTrader, position);
                                              });
 
-    trader->getDeathSignal().connect([movableTrader, this]()
+    inTrader->getDeathSignal().connect([movableTrader, this]()
                                      {
                                          movableTrader->getPathfindEndedSignal().disconnectAll();
                                          traders.remove_if(
@@ -664,12 +670,12 @@ void GameManager::traderAddedCallback(Trader *trader)
                                      });
 }
 
-Workshop *GameManager::findAvailableWorkshop(const size_t jobId) const
+Workshop *GameManager::findAvailableWorkshop(const size_t inJobId) const
 {
     const auto result = std::ranges::find_if(workshops.begin(), workshops.end(),
-                                             [jobId](const std::shared_ptr<Workshop> &ws)
+                                             [inJobId](const std::shared_ptr<Workshop> &ws)
                                              {
-                                                 return ws->getJobId() == jobId && ws->isAvailable();
+                                                 return ws->getJobId() == inJobId && ws->isAvailable();
                                              });
 
     return result == workshops.end() ? nullptr : result->get();
@@ -680,35 +686,35 @@ const GridManager &GameManager::getGridManager() const
     return gridManager;
 }
 
-std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t key) const
+std::shared_ptr<Workshop> GameManager::addWorkshop(const size_t inKey) const
 {
-    auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(key));
+    auto workshop = std::shared_ptr<Workshop>(workshopFactory.createObject(inKey));
     workshops.push_back(workshop);
     return workshop;
 }
 
-std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string &name) const
+std::shared_ptr<Workshop> GameManager::addWorkshop(const std::string &inName) const
 {
     const std::hash<std::string> hash;
-    return addWorkshop(hash(name));
+    return addWorkshop(hash(inName));
 }
 
-std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const size_t key) const
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const size_t inKey) const
 {
-    auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(key));
+    auto movableTrader = std::shared_ptr<MovableTrader>(movableTraderFactory.createObject(inKey));
     traders.push_back(movableTrader);
     return movableTrader;
 }
 
-std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string &name) const
+std::shared_ptr<MovableTrader> GameManager::addMovableTrader(const std::string &inName) const
 {
     const std::hash<std::string> hash;
-    return addMovableTrader(hash(name));
+    return addMovableTrader(hash(inName));
 }
 
-void GameManager::setBackgroundNeedsUpdate(const bool value) const
+void GameManager::setBackgroundNeedsUpdate(const bool inValue) const
 {
-    backgroundNeedsUpdate = value;
+    backgroundNeedsUpdate = inValue;
 }
 
 void GameManager::getSelectedActor()

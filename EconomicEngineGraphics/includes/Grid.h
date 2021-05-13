@@ -33,7 +33,7 @@ class Grid {
 public:
     Grid();
 
-    void setActorAt(std::shared_ptr<Workshop> workshop, int x, int y);
+    void setActorAt(std::shared_ptr<Workshop> inWorkshop, int x, int y);
 
     Workshop *getActorAt(int x, int y);
 

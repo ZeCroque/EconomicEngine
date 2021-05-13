@@ -6,10 +6,10 @@
 #include "Grid.h"
 
 std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
-	Grid& grid, const std::pair<int, int>& startingCoordinates, const std::pair<int, int>& objectiveCoordinates)
+	Grid& inGrid, const std::pair<int, int>& inStartingCoordinates, const std::pair<int, int>& inObjectiveCoordinates)
 {
-	auto* objectiveNode = &grid.getNodeAt(objectiveCoordinates.first, objectiveCoordinates.second);
-	auto* startingNode = &grid.getNodeAt(startingCoordinates.first, startingCoordinates.second);
+	auto* objectiveNode = &inGrid.getNodeAt(inObjectiveCoordinates.first, inObjectiveCoordinates.second);
+	auto* startingNode = &inGrid.getNodeAt(inStartingCoordinates.first, inStartingCoordinates.second);
 	startingNode->localGoal = 0.0f;
 	startingNode->globalGoal = getHeuristicDistance(startingNode, objectiveNode);
 	std::list<Node*> nodesToTest;
@@ -17,8 +17,8 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
 	const std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
-		std::pair(std::min(startingCoordinates.first, objectiveCoordinates.first) - 1, std::min(startingCoordinates.second, objectiveCoordinates.second) - 2),
-		std::pair(std::max(startingCoordinates.first, objectiveCoordinates.first) + 1, std::max(startingCoordinates.second, objectiveCoordinates.second) + 1)
+		std::pair(std::min(inStartingCoordinates.first, inObjectiveCoordinates.first) - 1, std::min(inStartingCoordinates.second, inObjectiveCoordinates.second) - 2),
+		std::pair(std::max(inStartingCoordinates.first, inObjectiveCoordinates.first) + 1, std::max(inStartingCoordinates.second, inObjectiveCoordinates.second) + 1)
 	);
 	while (!nodesToTest.empty())
 	{
@@ -43,22 +43,22 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 		// Upper current neighbor
 		if (currentNode->y - 1 >= searchBounds.first.second)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt(currentNode->x, currentNode->y - 1));
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y - 1));
 		}
 		// Lower current neighbor
 		if (currentNode->y + 1 <= searchBounds.second.second)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt(currentNode->x, currentNode->y + 1));
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y + 1));
 		}
 		// Left current neighbor
 		if (currentNode->x - 1 >= searchBounds.first.first)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt((currentNode->x - 1), currentNode->y));
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x - 1), currentNode->y));
 		}
 		// Right current neighbor
 		if (currentNode->x + 1 <= searchBounds.second.first)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &grid.getNodeAt((currentNode->x + 1), currentNode->y));
+			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x + 1), currentNode->y));
 		}
 	}
 	std::list<std::pair<int,int>> returnPath;
@@ -71,8 +71,8 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 			parent = parent->parent;
 		}
 	}
-	returnPath.emplace_front(startingCoordinates);
-	returnPath.emplace_back(objectiveCoordinates);
+	returnPath.emplace_front(inStartingCoordinates);
+	returnPath.emplace_back(inObjectiveCoordinates);
 	// drawPath(grid, returnPath, searchBounds, startingCoordinates, objectiveCoordinates); //TODO remove debug
 	for (auto* modifiedNode : modifiedNodes)
 	{
@@ -147,7 +147,7 @@ void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, No
 }
 
 
-float NavigationSystem::getHeuristicDistance(const Node* firstNode, const Node* secondNode)
+float NavigationSystem::getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode)
 {
-	return sqrtf(static_cast<float>((firstNode->x - secondNode->x) * (firstNode->x - secondNode->x) + (firstNode->y - secondNode->y) * (firstNode->y - secondNode->y)));
+	return sqrtf(static_cast<float>((inFirstNode->x - inSecondNode->x) * (inFirstNode->x - inSecondNode->x) + (inFirstNode->y - inSecondNode->y) * (inFirstNode->y - inSecondNode->y)));
 }
