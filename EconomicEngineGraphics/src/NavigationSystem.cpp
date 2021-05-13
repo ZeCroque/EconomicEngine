@@ -1,6 +1,8 @@
 #include "NavigationSystem.h"
 
+#ifndef NDEBUG
 #include <iostream>
+#endif
 
 #include "Grid.h"
 
@@ -72,7 +74,9 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	}
 	returnPath.emplace_front(inStartingCoordinates);
 	returnPath.emplace_back(inObjectiveCoordinates);
-	// drawPath(grid, returnPath, searchBounds, startingCoordinates, objectiveCoordinates); //TODO remove debug
+#ifndef NDEBUG
+	drawPath(inGrid, returnPath, searchBounds, inStartingCoordinates, inObjectiveCoordinates); //TODO remove debug
+#endif
 	for (auto* modifiedNode : modifiedNodes)
 	{
 		modifiedNode->resetNode();
@@ -80,6 +84,31 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	return returnPath;
 }
 
+void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>& outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
+{
+	// If the neighbor is navigable and not yet visited then we add add it to the nodes to test list
+	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
+	{
+		outNodesToTest.emplace_back(inNodeNeighbor);
+	}
+	// If the potential cost is smaller than the actual cost (i.e. the quickest way to go to the neighbor node is to go through the currentNode) 
+	if (const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor); possiblyLowerGoal < inNodeNeighbor->localGoal)
+	{
+		// We update the neighbor node
+		inNodeNeighbor->parent = inCurrentNode;
+		inNodeNeighbor->localGoal = possiblyLowerGoal;
+		inNodeNeighbor->globalGoal = inNodeNeighbor->localGoal + getHeuristicDistance(inNodeNeighbor, inObjectiveNode);
+		outModifiedNodes.emplace(inNodeNeighbor);
+	}
+}
+
+float NavigationSystem::getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode)
+{
+	return sqrtf(static_cast<float>((inFirstNode->x - inSecondNode->x) * (inFirstNode->x - inSecondNode->x) + (inFirstNode->y - inSecondNode->y) * (inFirstNode->y - inSecondNode->y)));
+}
+
+
+#ifndef NDEBUG
 void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const Rectangle& inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords)
 {
 	std::cout << "Starting : [" << inStartingCoords.first << ";" << inStartingCoords.second << "]" << std::endl;
@@ -122,27 +151,4 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 		std::cout << std::endl;
 	}
 }
-
-void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>& outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
-{
-	// If the neighbor is navigable and not yet visited then we add add it to the nodes to test list
-	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
-	{
-		outNodesToTest.emplace_back(inNodeNeighbor);
-	}
-	// If the potential cost is smaller than the actual cost (i.e. the quickest way to go to the neighbor node is to go through the currentNode) 
-	if (const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor); possiblyLowerGoal < inNodeNeighbor->localGoal)
-	{
-		// We update the neighbor node
-		inNodeNeighbor->parent = inCurrentNode;
-		inNodeNeighbor->localGoal = possiblyLowerGoal;
-		inNodeNeighbor->globalGoal = inNodeNeighbor->localGoal + getHeuristicDistance(inNodeNeighbor, inObjectiveNode);
-		outModifiedNodes.emplace(inNodeNeighbor);
-	}
-}
-
-
-float NavigationSystem::getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode)
-{
-	return sqrtf(static_cast<float>((inFirstNode->x - inSecondNode->x) * (inFirstNode->x - inSecondNode->x) + (inFirstNode->y - inSecondNode->y) * (inFirstNode->y - inSecondNode->y)));
-}
+#endif

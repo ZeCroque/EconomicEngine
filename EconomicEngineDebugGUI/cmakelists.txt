@@ -76,13 +76,33 @@ if(WIN32)
             $<TARGET_FILE:Qt5::PrintSupport>
             $<TARGET_FILE_DIR:${PROJECT_NAME}>
     )
+
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD 
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
+    )
+
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms/
+    )
 endif(WIN32)
+
+#Move assets to build dir
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/Content ${CMAKE_CURRENT_BINARY_DIR}/Content
+)
 
 #Move assets to output dir
 add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/Content ${CMAKE_CURRENT_BINARY_DIR}/Content
+    ${CMAKE_SOURCE_DIR}/Content $<TARGET_FILE_DIR:${PROJECT_NAME}>/Content
 )
 
 #=======================================

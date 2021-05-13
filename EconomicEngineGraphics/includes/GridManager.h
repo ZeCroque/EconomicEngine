@@ -14,23 +14,27 @@
 class GridManager {
 public:
 
-    explicit GridManager();
+    GridManager();
 
     void init();
 
 	void reset();
 
-    bool canPlaceWorkshop(int x, int y) const;
+    bool canPlaceWorkshop(int inX, int inY) const;
 
     void queueWorkshop(std::shared_ptr<Workshop> inWorkshop);
 
     [[nodiscard]] bool getIsGenerationThreadRunning() const;
 	
-    [[nodiscard]] std::thread &getGenerationThread();
+    [[nodiscard]] std::thread& getGenerationThread();
 
 	[[nodiscard]] Grid& getGrid() const;
-
+	
+#ifndef NDEBUG
     void makeDebugFile() const;
+#endif
+
+	static int getRandomInt(const int min = 0, const int max = 1);
 
 private :
 
@@ -46,13 +50,13 @@ private :
 
     void placeWorkshop();
 
-    bool haveMarketInRange(int x, int y);
+    bool isAnyMarketInRange(int inX, int inY);
 
-    std::pair<int, int> getClosestMarket(int x, int y);
+    std::pair<int, int> getClosestMarket(int inX, int inY);
 
-    void updateClosestMarket(int x, int y);
+    void updateClosestMarket(int inX, int inY);
 
-    int getClosestMarketCoordinate(int x, int y);
+    int getClosestMarketCoordinate(int inX, int inY);
 
     std::vector<std::pair<int, int>> marketsCoordinates;
 
