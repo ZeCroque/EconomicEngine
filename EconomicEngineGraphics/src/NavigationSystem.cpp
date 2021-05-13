@@ -15,23 +15,23 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	std::set<Node*> modifiedNodes;
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
-	const std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
+	const Rectangle searchBounds = std::pair(
 		std::pair(std::min(inStartingCoordinates.first, inObjectiveCoordinates.first) - 1, std::min(inStartingCoordinates.second, inObjectiveCoordinates.second) - 2),
 		std::pair(std::max(inStartingCoordinates.first, inObjectiveCoordinates.first) + 1, std::max(inStartingCoordinates.second, inObjectiveCoordinates.second) + 1)
 	);
 	while (!nodesToTest.empty())
 	{
-		// Sort des nodes par ordre de globalGoal, celui ayant le plus petit étant le plus proche de l'objectif
+		// Sorts nodes by globalGoal,the smaller being the closest to objective
 		nodesToTest.sort([](const Node* lhs, const Node* rhs)
 		{
 			return lhs->globalGoal < rhs->globalGoal;
 		});
-		// On enl�ve les nodes d�j� visit�s
+		// Yet visited nodes removal
 		while (!nodesToTest.empty() && nodesToTest.front()->visited)
 		{
 			nodesToTest.pop_front();
 		}
-		// Si on a vidé la liste lors de la dernière opération, on break
+		// If we tested all the required nodes, then we end the pathfinding
 		if (nodesToTest.empty())
 		{
 			break;
@@ -80,8 +80,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	return returnPath;
 }
 
-void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const std::pair<std::pair<int, int>, std::pair<int, int>>&
-                                inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords)
+void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const Rectangle& inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords)
 {
 	std::cout << "Starting : [" << inStartingCoords.first << ";" << inStartingCoords.second << "]" << std::endl;
 	std::cout << "Objective : [" << inObjectiveCoords.first << ";" << inObjectiveCoords.second << "]" << std::endl;
@@ -101,10 +100,10 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 				{
 					if (i>9)
 					{
-						isInPath = i + 'A' - 10;
+						isInPath = static_cast<char>(i + 'A' - 10);
 						break;
 					}
-					isInPath = i + '0';
+					isInPath = static_cast<char>(i + '0');
 					break;
 				}
 				++i;
@@ -126,21 +125,20 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 
 void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>& outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
 {
-	// Si le voisin n'est pas déjà visité et qu'il est navigable on l'ajoute aux nodes à tester
+	// If the neighbor is navigable and not yet visited then we add add it to the nodes to test list
 	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
 	{
 		outNodesToTest.emplace_back(inNodeNeighbor);
 	}
-
-	// Si ce "coût" potentiel est inférieur à son "coût" actuel et donc que venir par ce node est le chemin le plus rapide pour arriver à ce node voisin
+	// If the potential cost is smaller than the actual cost (i.e. the quickest way to go to the neighbor node is to go through the currentNode) 
 	if (const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor); possiblyLowerGoal < inNodeNeighbor->localGoal)
 	{
-		// On met à jour le node voisin
+		// We update the neighbor node
 		inNodeNeighbor->parent = inCurrentNode;
 		inNodeNeighbor->localGoal = possiblyLowerGoal;
 		inNodeNeighbor->globalGoal = inNodeNeighbor->localGoal + getHeuristicDistance(inNodeNeighbor, inObjectiveNode);
+		outModifiedNodes.emplace(inNodeNeighbor);
 	}
-	outModifiedNodes.emplace(inNodeNeighbor);
 }
 
 

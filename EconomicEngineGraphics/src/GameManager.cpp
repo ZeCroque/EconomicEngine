@@ -151,7 +151,7 @@ void GameManager::setSpeedFactor(const float inSpeedFactor)
     speedFactor = inSpeedFactor;
 }
 
-void GameManager::setMaxFps(int inMaxFps)
+void GameManager::setMaxFps(const int inMaxFps)
 {
 	maxFps = inMaxFps;
 }

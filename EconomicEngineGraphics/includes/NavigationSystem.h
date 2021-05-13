@@ -9,11 +9,12 @@ struct Node;
 
 class NavigationSystem {
 
+	using Rectangle = const std::pair<std::pair<int, int>, std::pair<int, int>>;
 public:
 	static std::list<std::pair<int, int>> aStarResolution(Grid& inGrid, const std::pair<int, int>& inStartingCoordinates,
 	                                                      const std::pair<int, int>& inObjectiveCoordinates);
-	static void drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const std::pair<std::pair<int, int>, std::pair<int, int>>&
-	                     inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords);
+	
+	static void drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const Rectangle& inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords);
 	
 	static void updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>&outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor);
 
