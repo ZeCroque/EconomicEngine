@@ -3,6 +3,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <QApplication>
 
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
@@ -61,8 +62,11 @@ void GameManager::init(const char *inContentPath)
 
 void GameManager::exec()
 {
-    // ReSharper disable once CppPossiblyErroneousEmptyStatements
-    while (!isInitialized); // NOLINT(clang-diagnostic-empty-body)
+	volatile bool keepWaiting = !isInitialized;
+    while (keepWaiting)
+    {
+	    keepWaiting = !isInitialized;
+    }
 
     isRunning = true;
 
@@ -195,29 +199,33 @@ void GameManager::initEconomicEngine(const char *inPrefabsPath)
 void GameManager::initGui()
 {
     debugGuiThread = std::make_unique<std::thread>([this]() -> int
-                                                   {
-                                                       int argc = 0;
-                                                       QApplication app(argc, nullptr);
+	{
+		int argc = 0;
+		QApplication app(argc, nullptr);
 
-                                                       int result;
-                                                       do
-                                                       {
-                                                           EconomicEngineDebugGui debugGui;
-                                                           debugGui.getInitializedSignal().connect([this]()
-                                                                                                   {
-                                                                                                       isInitialized = true;
-                                                                                                   });
-                                                           debugGui.show();
-                                                           isGuiOpened = true;
-                                                           wantsToOpenGui = false;
-                                                           result = QApplication::exec();
+		int result;
+		do
+		{
+			EconomicEngineDebugGui debugGui;
+			debugGui.getInitializedSignal().connect([this]()
+			{
+				isInitialized = true;
+			});
+			debugGui.show();
+			isGuiOpened = true;
+			wantsToOpenGui = false;
+			result = QApplication::exec();
 
-                                                           isGuiOpened = false;
-                                                           while (!wantsToOpenGui && isRunning);
-                                                       } while (isRunning);
+			isGuiOpened = false;
+			volatile bool keepWaiting = !wantsToOpenGui && isRunning;
+			while (keepWaiting)
+			{
+				keepWaiting = !wantsToOpenGui && isRunning;
+			}
+		} while (isRunning);
 
-                                                       return result;
-                                                   });
+		return result;
+	});
 }
 
 void GameManager::initMovableTraders(std::vector<nlohmann::json> &inParsedMovableTraders)

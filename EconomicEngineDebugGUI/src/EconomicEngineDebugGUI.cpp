@@ -54,8 +54,11 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
     economicEngine->init("./Content/Prefabs/");
     economicEngineThread = std::thread([this]()
     {
-	    // ReSharper disable once CppPossiblyErroneousEmptyStatements
-	    while(!hasEverRun); //NOLINT(clang-diagnostic-empty-body)
+    	volatile bool keepWaiting = !hasEverRun;
+	    while(keepWaiting)
+	    {
+		    keepWaiting = !hasEverRun;
+	    }
     	
     	const float deltaTime = 1.f / TPS;
     	while(isRunning)
