@@ -26,7 +26,16 @@ public:
 
     void exec();
 
+    void pause();
+	
+	void resume();
+
+	void reset(int inTradersCount);
+
     bool getIsRunning() const;
+
+
+	bool getIsInitialized() const;
 
     void setBackgroundNeedsUpdate(bool inValue) const;
 
@@ -36,11 +45,7 @@ public:
 
     const sf::Texture &getTexture(size_t inTextureId) const;
 
-	bool getIsInitialized() const;
-
-
     static const sf::Int32 maxFPS;
-	float speedFactor;
 
 private:
     GameManager();
@@ -61,8 +66,6 @@ private:
 
     void render() const;
 
-    void getSelectedActor();
-
     void quit();
 
     std::unique_ptr<sf::RenderWindow> window;
@@ -77,8 +80,10 @@ private:
 	
 	bool isInitialized;
     bool isRunning;
+	bool isPaused;
 	bool isGuiOpened;
     bool wantsToOpenGui;
+	float speedFactor;
 
     mutable bool backgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;
@@ -104,11 +109,19 @@ public:
 
     std::shared_ptr<MovableTrader> addMovableTrader(const std::string &inName) const;
 
+
     Workshop *findAvailableWorkshop(size_t inJobId) const;
+	
+    void getSelectedActor();
 
 	[[nodiscard]] const GridManager& getGridManager() const;
 
 private:
+
+	void updateWorkshops(float deltaTime);
+
+	void updateTraders(float deltaTime) const;
+	
     GridManager gridManager;
 
     std::queue<MovableTrader *> pendingTraders;

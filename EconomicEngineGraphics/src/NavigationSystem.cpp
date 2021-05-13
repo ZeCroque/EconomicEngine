@@ -1,7 +1,6 @@
 #include "NavigationSystem.h"
 
 #include <iostream>
-#include <list>
 
 #include "Grid.h"
 
@@ -13,7 +12,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	startingNode->localGoal = 0.0f;
 	startingNode->globalGoal = getHeuristicDistance(startingNode, objectiveNode);
 	std::list<Node*> nodesToTest;
-	std::list<Node*> modifiedNodes;
+	std::set<Node*> modifiedNodes;
 	Node* currentNode = startingNode;
 	nodesToTest.emplace_back(currentNode);
 	const std::pair<std::pair<int, int>, std::pair<int,int>> searchBounds = std::pair(
@@ -22,43 +21,43 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	);
 	while (!nodesToTest.empty())
 	{
-		// Sort des nodes par ordre de globalGoal, celui ayant le plus petit étant le plus proche de l'objectif
+		// Sort des nodes par ordre de globalGoal, celui ayant le plus petit Ã©tant le plus proche de l'objectif
 		nodesToTest.sort([](const Node* lhs, const Node* rhs)
 		{
 			return lhs->globalGoal < rhs->globalGoal;
 		});
-		// On enlève les nodes déjà visités
+		// On enlï¿½ve les nodes dï¿½jï¿½ visitï¿½s
 		while (!nodesToTest.empty() && nodesToTest.front()->visited)
 		{
 			nodesToTest.pop_front();
 		}
-		// Si on a vidé la liste lors de la dernière opération, on break
+		// Si on a vidÃ© la liste lors de la derniÃ¨re opÃ©ration, on break
 		if (nodesToTest.empty())
 		{
 			break;
 		}
 		currentNode = nodesToTest.front();
 		currentNode->visited = true;
-		modifiedNodes.emplace_back(currentNode);
+		modifiedNodes.emplace(currentNode);
 		// Upper current neighbor
 		if (currentNode->y - 1 >= searchBounds.first.second)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y - 1));
+			updateNeighborParent(nodesToTest, modifiedNodes, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y - 1));
 		}
 		// Lower current neighbor
 		if (currentNode->y + 1 <= searchBounds.second.second)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y + 1));
+			updateNeighborParent(nodesToTest, modifiedNodes, currentNode, objectiveNode, &inGrid.getNodeAt(currentNode->x, currentNode->y + 1));
 		}
 		// Left current neighbor
 		if (currentNode->x - 1 >= searchBounds.first.first)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x - 1), currentNode->y));
+			updateNeighborParent(nodesToTest, modifiedNodes, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x - 1), currentNode->y));
 		}
 		// Right current neighbor
 		if (currentNode->x + 1 <= searchBounds.second.first)
 		{
-			updateNeighborParent(nodesToTest, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x + 1), currentNode->y));
+			updateNeighborParent(nodesToTest, modifiedNodes, currentNode, objectiveNode, &inGrid.getNodeAt((currentNode->x + 1), currentNode->y));
 		}
 	}
 	std::list<std::pair<int,int>> returnPath;
@@ -96,17 +95,16 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 		for (int x = inBounds.first.first; x <= inBounds.second.first; ++x)
 		{
 			char isInPath = '0';
-			int i = 0;
-			for (const auto& coordinate : inPath)
+			for (char i = 0; const auto& coordinate : inPath)
 			{
 				if (coordinate.first == x && coordinate.second == y)
 				{
 					if (i>9)
 					{
-						isInPath = i+'A'-10;
+						isInPath = i + 'A' - 10;
 						break;
 					}
-					isInPath = i+'0';
+					isInPath = i + '0';
 					break;
 				}
 				++i;
@@ -126,24 +124,23 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 	}
 }
 
-void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
+void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>& outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
 {
-	// Si le voisin n'est pas déjà visité et qu'il est navigable on l'ajoute aux nodes à tester
+	// Si le voisin n'est pas dÃ©jÃ  visitÃ© et qu'il est navigable on l'ajoute aux nodes Ã  tester
 	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
 	{
 		outNodesToTest.emplace_back(inNodeNeighbor);
 	}
 
-	// Calcul du "coût" total potentiel pour naviguer à ce node voisin
-	const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor);
-	// Si ce "coût" potentiel est inférieur à son "coût" actuel et donc que venir par ce node est le chemin le plus rapide pour arriver à ce node voisin
-	if (possiblyLowerGoal < inNodeNeighbor->localGoal)
+	// Si ce "coÃ»t" potentiel est infÃ©rieur Ã  son "coÃ»t" actuel et donc que venir par ce node est le chemin le plus rapide pour arriver Ã  ce node voisin
+	if (const float possiblyLowerGoal = inCurrentNode->localGoal + getHeuristicDistance(inCurrentNode, inNodeNeighbor); possiblyLowerGoal < inNodeNeighbor->localGoal)
 	{
-		// On met à jour le node voisin
+		// On met Ã  jour le node voisin
 		inNodeNeighbor->parent = inCurrentNode;
 		inNodeNeighbor->localGoal = possiblyLowerGoal;
 		inNodeNeighbor->globalGoal = inNodeNeighbor->localGoal + getHeuristicDistance(inNodeNeighbor, inObjectiveNode);
 	}
+	outModifiedNodes.emplace(inNodeNeighbor);
 }
 
 

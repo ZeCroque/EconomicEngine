@@ -5,7 +5,6 @@
 #include <array>
 #include <memory>
 #include <Workshop.h>
-#include <vector>
 
 
 constexpr size_t REGION_SIZE = 16;
@@ -33,6 +32,8 @@ class Grid {
 public:
     Grid();
 
+    void reset();
+	
     void setActorAt(std::shared_ptr<Workshop> inWorkshop, int x, int y);
 
     Workshop *getActorAt(int x, int y);
