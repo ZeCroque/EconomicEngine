@@ -8,4 +8,4 @@ public:
 	virtual T* clone() = 0;
 };
 
-#endif
+#endif //CLONABLE_H

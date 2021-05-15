@@ -1,8 +1,9 @@
-#ifndef TURN_MANAGER_H
-#define TURN_MANAGER_H
+#ifndef ECONOMIC_ENGINE_H
+#define ECONOMIC_ENGINE_H
+
+#include <nlohmann/json.hpp>
 
 #include "Singleton.h"
-#include "nlohmann/json.hpp"
 #include "StockExchange/StockExchange.h"
 #include "Tradables/TradableFactory.h"
 #include "Traders/TraderManager.h"
@@ -58,4 +59,4 @@ public:
 };
 
 
-#endif
+#endif //ECONOMIC_ENGINE

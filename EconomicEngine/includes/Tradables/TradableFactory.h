@@ -23,4 +23,4 @@ public:
 	}
 };
 
-#endif
+#endif //TRADABLE_FACTORY_H

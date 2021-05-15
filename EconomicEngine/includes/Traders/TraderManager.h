@@ -37,5 +37,5 @@ public:
 	void markForKill(size_t inKey, int inCount);
 };
 
-#endif
+#endif //TRADER_MANAGER_H
 

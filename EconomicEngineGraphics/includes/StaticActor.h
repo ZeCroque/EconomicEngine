@@ -1,5 +1,5 @@
-#ifndef STATIC_ACTOR
-#define STATIC_ACTOR
+#ifndef STATIC_ACTOR_H
+#define STATIC_ACTOR_H
 
 #include "Actor.h"
 
@@ -11,4 +11,4 @@ public:
     Actor *clone() override;
 };
 
-#endif //STATIC_ACTOR
+#endif //STATIC_ACTOR_H

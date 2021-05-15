@@ -49,4 +49,4 @@ public:
 	}
 };
 
-#endif
+#endif //VECTOR_ARRAY_H

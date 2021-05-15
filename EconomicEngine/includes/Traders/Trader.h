@@ -14,7 +14,7 @@ enum class Action
 	None = 0,
 	Crafting = 1,
 	Trading = 2,
-	Sleeping = 3
+	Sleeping = 3 //TODO trader sleeping
 };
 
 enum class Position
@@ -101,5 +101,5 @@ public:
 	void removeFromInventory(Tradable* inTradable);
 };
 
-#endif
+#endif //TRADER_H
 

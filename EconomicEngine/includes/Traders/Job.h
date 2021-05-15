@@ -35,4 +35,4 @@ public:
 	Job* clone() override { return new Job(*this); }
 };
 
-#endif
+#endif //JOB_H

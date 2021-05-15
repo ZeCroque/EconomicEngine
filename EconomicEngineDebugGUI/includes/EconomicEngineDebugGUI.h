@@ -1,5 +1,5 @@
-#ifndef ECONOMIC_ENGINE_DEBUG_GUI
-#define ECONOMIC_ENGINE_DEBUG_GUI
+#ifndef ECONOMIC_ENGINE_DEBUG_GUI_H
+#define ECONOMIC_ENGINE_DEBUG_GUI_H
 #include "ui_EconomicEngineDebugGUI.h"
 
 #ifndef STANDALONE_MODE
@@ -66,4 +66,4 @@ private:
 #endif
 };
 
-#endif
+#endif //ECONOMIC_ENGINE_DEBUG_GUI_H

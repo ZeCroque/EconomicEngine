@@ -19,4 +19,4 @@ public:
 	[[nodiscard]] size_t getId() const;
 
 };
-#endif
+#endif //BEHAVIOR_H

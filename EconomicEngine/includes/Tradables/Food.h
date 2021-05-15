@@ -15,4 +15,4 @@ public:
 	Food* clone() override { return new Food(*this); }
 };
 
-#endif
+#endif //FOOD_H

@@ -1,10 +1,9 @@
 #include "NavigationSystem.h"
+#include "Grid.h"
 
 #ifndef NDEBUG
 #include <iostream>
 #endif
-
-#include "Grid.h"
 
 std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	Grid& inGrid, const std::pair<int, int>& inStartingCoordinates, const std::pair<int, int>& inObjectiveCoordinates)

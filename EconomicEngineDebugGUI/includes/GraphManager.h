@@ -24,4 +24,4 @@ private:
 	size_t itemId;
 };
 
-#endif
+#endif //GRAPH_MANAGER_H

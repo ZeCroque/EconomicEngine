@@ -32,4 +32,4 @@ private:
 template <class T> T* Singleton<T>::instance = nullptr;
 template<class T> std::once_flag Singleton<T>::onceFlag;
 
-#endif
+#endif //SINGLETON_H

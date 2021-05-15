@@ -22,4 +22,4 @@ public:
 };
 
 
-#endif
+#endif //CRAFT_FACTORY_H

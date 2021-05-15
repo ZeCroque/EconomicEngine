@@ -1,5 +1,5 @@
-#ifndef	TOOL_BEHAVIOR
-#define TOOL_BEHAVIOR
+#ifndef	TOOL_BEHAVIOR_H
+#define TOOL_BEHAVIOR_H
 
 #include "Behavior.h"
 
@@ -23,4 +23,4 @@ public:
 	ToolBehavior* clone() override { return new ToolBehavior(*this); }
 };
 
-#endif
+#endif //TOOL_BEHAVIOR_H

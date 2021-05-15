@@ -10,5 +10,5 @@ public:
 	[[nodiscard]] std::list<Job*> getJobs() const;
 };
 
-#endif
+#endif //JOB_FACTORY_H
 

@@ -20,5 +20,5 @@ public:
 	Countable* clone() override { return new Countable(*this); }
 };
 
-#endif
+#endif //COUNTABLE_H
 

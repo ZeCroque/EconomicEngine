@@ -46,4 +46,4 @@ private:
 
 
 
-#endif
+#endif //STOCK_EXCHANGE_H

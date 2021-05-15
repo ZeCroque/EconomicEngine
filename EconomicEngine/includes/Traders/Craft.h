@@ -36,7 +36,4 @@ public:
 
 };
 
-
-
-
-#endif
+#endif //CRAFT_H

@@ -1,10 +1,9 @@
-#include "GameManager.h"
-
 #include <memory>
 #include <filesystem>
 #include <fstream>
 #include <QApplication>
 
+#include "GameManager.h"
 #include "EconomicEngineDebugGUI.h"
 #include "MovableTrader.h"
 #include "NavigationSystem.h"

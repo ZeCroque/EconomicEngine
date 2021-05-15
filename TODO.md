@@ -1,6 +1,4 @@
 ### Global
-- reorder headers and cpp for lisibility and ensure code is compliant with naming standards overall
-- intrusive list
 - make word
 
 ### Economic:
@@ -12,4 +10,5 @@
 
 ### Polish :
 - death anim (and sound) + bw workshop
+- intrusive list
 - cycle jour nuit et tâche dodo

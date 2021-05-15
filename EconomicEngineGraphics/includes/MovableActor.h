@@ -1,5 +1,5 @@
-#ifndef MOVABLE_ACTOR
-#define MOVABLE_ACTOR
+#ifndef MOVABLE_ACTOR_H
+#define MOVABLE_ACTOR_H
 
 #include "Signal.h"
 #include "Actor.h"
@@ -25,7 +25,7 @@ public:
         coordinatesOffset = 0.f;
     }
 
-    Actor *clone() override;
+    Actor* clone() override;
 
     const Signal<bool>& getPathfindEndedSignal() const;
 
@@ -55,4 +55,4 @@ private:
 };
 
 
-#endif //MOVABLE_ACTOR
+#endif //MOVABLE_ACTOR_H

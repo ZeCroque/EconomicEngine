@@ -58,4 +58,4 @@ public:
 	}
 };
 
-#endif
+#endif //ABSTRACT_FACTORY_H

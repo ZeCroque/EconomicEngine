@@ -1,5 +1,4 @@
 #include "MovableTrader.h"
-
 #include "GameManager.h"
 #include "NavigationSystem.h"
 

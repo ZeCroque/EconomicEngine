@@ -21,4 +21,4 @@ public:
 	Uncountable* clone() override { return new Uncountable(*this); }
 };
 
-#endif
+#endif //UNCOUNTABLE_H

@@ -1,5 +1,5 @@
-#ifndef WORKSHOP_FACTORY
-#define WORKSHOP_FACTORY
+#ifndef WORKSHOP_FACTORY_H
+#define WORKSHOP_FACTORY_H
 
 #include "AbstractFactory.h"
 #include "Workshop.h"
@@ -12,4 +12,4 @@ public:
     [[nodiscard]] size_t getIdByJobId(size_t inJobId) const;
 };
 
-#endif //WORKSHOP_FACTORY
+#endif //WORKSHOP_FACTORY_H

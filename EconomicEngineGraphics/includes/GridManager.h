@@ -1,15 +1,10 @@
-//
-// Created by relin on 12/04/2021.
-//
-
 #ifndef GRID_MANAGER_H
 #define GRID_MANAGER_H
 
-
 #include <vector>
-#include "Grid.h"
 #include <queue>
 
+#include "Grid.h"
 
 class GridManager
 {

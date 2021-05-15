@@ -28,4 +28,4 @@ public:
 	[[nodiscard]] size_t getId() const;
 	[[nodiscard]] const std::pair<float, float>& getDefaultPriceBelief() const;
 };
-#endif
+#endif //TRADABLE_H
