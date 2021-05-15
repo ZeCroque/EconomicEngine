@@ -1,5 +1,4 @@
 #include "Tradables/Tradable.h"
-
 #include "Traders/Trader.h"
 
 Tradable::Tradable() : id(0), owningTrader(nullptr){}
@@ -10,11 +9,11 @@ Tradable::Tradable(std::string inName, std::pair<float, float> inDefaultPriceBel
 	id = hasher(name);
 }
 
-Tradable::Tradable(const Tradable& tradable) : Tradable()
+Tradable::Tradable(const Tradable& inTradable) : Tradable()
 {
-	id = tradable.id;
-	name = std::string(tradable.name);
-	defaultPriceBelief = std::pair<float, float>(tradable.defaultPriceBelief);
+	id = inTradable.id;
+	name = std::string(inTradable.name);
+	defaultPriceBelief = std::pair<float, float>(inTradable.defaultPriceBelief);
 }
 
 void Tradable::setOwningTrader(Trader* inOwningTrader)

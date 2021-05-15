@@ -1,7 +1,7 @@
 #ifndef UNCOUNTABLE_H
 #define UNCOUNTABLE_H
-#include "Tradables/Tradable.h"
 
+#include "Tradables/Tradable.h"
 #include "ToolBehavior.h"
 
 class Uncountable : public Tradable
@@ -11,8 +11,8 @@ protected:
 
 public:
 	Uncountable();
-	Uncountable(std::string inName, std::pair<float, float> inDefaultPriceBelief, Behavior* inBehavior);
-	Uncountable(const Uncountable& uncountable);
+	Uncountable(const std::string& inName, std::pair<float, float> inDefaultPriceBelief, Behavior* inBehavior);
+	Uncountable(const Uncountable& inUncountable);
 	~Uncountable() override;
 	[[nodiscard]] Behavior* getBehavior() const;
 

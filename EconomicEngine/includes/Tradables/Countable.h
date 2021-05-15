@@ -10,7 +10,7 @@ protected:
 
 public:
 	Countable();
-	Countable(const Countable& countable);
+	Countable(const Countable& inCountable);
 	Countable(const std::string& inName, std::pair<float, float> inDefaultPriceBelief, int inCount = 1);
 	void setCount(int inCount);
 	void incrementCountBy(int inCount);

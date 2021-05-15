@@ -5,9 +5,9 @@
 
 CraftFactory::CraftFactory() : owner(nullptr){}
 
-CraftFactory::CraftFactory(CraftFactory& craftFactory) : CraftFactory()
+CraftFactory::CraftFactory(CraftFactory& inCraftFactory) : CraftFactory()
 {
-	defaultObjects = std::map<size_t, Craft*>(craftFactory.defaultObjects);
+	defaultObjects = std::map<size_t, Craft*>(inCraftFactory.defaultObjects);
 }
 
 void CraftFactory::setOwner(Trader* inOwner)
@@ -15,44 +15,42 @@ void CraftFactory::setOwner(Trader* inOwner)
 	owner = inOwner;
 }
 
-bool CraftFactory::isCraftable(const size_t key) const
+bool CraftFactory::isCraftable(const size_t inKey) const
 {
 	//Items required
-	for (const auto& requirement : getDefaultObject(key)->getRequirement())
+	for (const auto& requirement : getDefaultObject(inKey)->getRequirement())
 	{
-		bool requirementsOwned = false;
+		bool bRequirementsOwned = false;
 		for(const auto& item : owner->getInventory())
 		{
 			if(item->getId() == requirement.first)
 			{
-				auto* countableItem = dynamic_cast<Countable*>(item.get());
-				if (countableItem != nullptr && countableItem->getCount() >= requirement.second)
+				if (auto * countableItem = dynamic_cast<Countable*>(item.get()); countableItem && countableItem->getCount() >= requirement.second)
 				{
-					requirementsOwned = true;
+					bRequirementsOwned = true;
 				}
 				break;
 			}
 		}
-		if(!requirementsOwned)
+		if(!bRequirementsOwned)
 		{
 			return false;
 		}
 	}
 
 	//Tools
-	for (const auto& requiredTool : getDefaultObject(key)->getToolsRequired())
+	for (const auto& requiredTool : getDefaultObject(inKey)->getToolsRequired())
 	{
-		bool hasBehavior = false;
+		bool bHasBehavior = false;
 		for (const auto& item : owner->getInventory())
 		{
-			auto* tool = dynamic_cast<Uncountable*>(item.get());
-			if (tool != nullptr && tool->getBehavior() != nullptr && tool->getBehavior()->getId() == requiredTool)
+			if (auto * tool = dynamic_cast<Uncountable*>(item.get()); tool && tool->getBehavior() && tool->getBehavior()->getId() == requiredTool)
 			{
-				hasBehavior = true;
+				bHasBehavior = true;
 				break;
 			}
 		}
-		if (!hasBehavior)
+		if (!bHasBehavior)
 		{
 			return false;
 		}
@@ -61,9 +59,9 @@ bool CraftFactory::isCraftable(const size_t key) const
 	return true;
 }
 
-void CraftFactory::registerCraft(Craft* craft)
+void CraftFactory::registerCraft(Craft* inCraft)
 {
-	registerObject(craft->getResult(), craft);
+	registerObject(inCraft->getResult(), inCraft);
 }
 
 CraftFactory* CraftFactory::clone()

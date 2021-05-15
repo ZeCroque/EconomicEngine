@@ -10,29 +10,29 @@ class StockExchange
 {
 public:
 	void init();
-	void registerAsk(std::shared_ptr<Ask> ask);
-	void removeAsk(std::shared_ptr<Ask> ask);
+	void registerAsk(std::shared_ptr<Ask> inAsk);
+	void removeAsk(std::shared_ptr<Ask> inAsk);
 	void resolveOffers();
 	void reset();
-	[[nodiscard]] float getStockExchangePrice(size_t key) const;
-	[[nodiscard]] std::list<Ask> getStockExchangePrice(size_t key, int count) const;
+	[[nodiscard]] float getStockExchangePrice(size_t inKey) const;
+	[[nodiscard]] std::list<Ask> getStockExchangePrice(size_t inKey, int inCount) const;
 	[[nodiscard]] const Signal<>& getAskResolvedSignal() const;
 	
-	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& vector)
+	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& outVector)
 	{
-		for (size_t i = 1; i < vector.size(); ++i)
+		for (size_t i = 1; i < outVector.size(); ++i)
 		{
-			auto temp = vector[i];
-			vector[i].reset();
+			auto temp = outVector[i];
+			outVector[i].reset();
 			int j = static_cast<int>(i)-1;
-			while (j >= 0 && vector[j]->getPrice() > temp->getPrice())
+			while (j >= 0 && outVector[j]->getPrice() > temp->getPrice())
 			{
-				auto temp2 = vector[j];
-				vector[j].reset();
-				vector[j + 1] = temp2;
+				auto temp2 = outVector[j];
+				outVector[j].reset();
+				outVector[j + 1] = temp2;
 				--j;
 			}
-			vector[j + 1] = temp;
+			outVector[j + 1] = temp;
 		}
 	}
 

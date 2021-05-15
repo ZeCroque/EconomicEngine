@@ -1,13 +1,11 @@
 #ifndef TRADER_H
 #define TRADER_H
 
+#include <list>
+
 #include "Craft.h"
 #include "Job.h"
 #include "VectorArray.h"
-
-#include <list>
-
-
 #include "EconomicEngine.h"
 #include "StockExchange/StockExchange.h"
 
@@ -30,7 +28,7 @@ class Trader
 {
 private:
 
-	bool isWaitingForActivity;
+	bool bIsWaitingForActivity;
 	Action currentAction;
 	
 	VectorArray<std::pair<float, int>> priceHistory;
@@ -48,22 +46,21 @@ private:
 	void makeSellingAsks();
 	void updatePriceBelief(Ask* ask);
 
-	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& foodInfos, float foodGoal) ;
-	[[nodiscard]] float calculateEarnings(Craft* craft) const;
+	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& inFoodInfos, float inFoodGoal) ;
+	[[nodiscard]] float calculateEarnings(Craft* inCraft) const;
 	[[nodiscard]] float calculateFoodStock() const;
-	[[nodiscard]] float calculatePriceBeliefMean(size_t key) const;
+	[[nodiscard]] float calculatePriceBeliefMean(size_t inKey) const;
 	[[nodiscard]] float evaluatePrice(size_t key) const;
 	Signal<Position> moveToRequestSignal;
     Signal<> deathSignal;
 
-    void registerAsks(bool inIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
+    void registerAsks(bool bInIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
 	{
 		for (const auto& item : itemList)
 		{
-			float price = evaluatePrice(item.first);
-			if (price <= maxPrice)
+			if (float price = evaluatePrice(item.first); price <= maxPrice)
 			{
-				auto ask = std::make_shared<Ask>(inIsSellingAsk, item.first, item.second, price);
+				auto ask = std::make_shared<Ask>(bInIsSellingAsk, item.first, item.second, price);
 				currentAsks.push_back(ask);
 				EconomicEngine::getInstance()->getStockExchange().registerAsk(ask);
 				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);		
@@ -73,16 +70,16 @@ private:
 	
 public:
 	Trader();
-	explicit Trader(Job* job);
+	explicit Trader(Job* inJob);
 	Trader(Trader&&) = default;
 	~Trader();
 
-	void update(float deltaTime);
+	void update(float inDeltaTime);
 	void makeAsks();
 	void makeChild();
 	void startCrafting();
 	void updateFoodLevel();
-	void checkAskCallback(Ask* ask);
+	void checkAskCallback(Ask* inAsk);
 	void craftSuccessCallback();
 	void setPosition(Position inPosition);
 	Position getPosition() const;
@@ -90,18 +87,18 @@ public:
 	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
 	[[nodiscard]] Job* getCurrentJob() const;
 	[[nodiscard]] Craft* getCurrentCraft() const;
-	[[nodiscard]] bool isInInventory(size_t key);
+	[[nodiscard]] bool isInInventory(size_t inKey);
 	[[nodiscard]] float getFoodLevel() const;
 	[[nodiscard]] float getMoney() const;
-	[[nodiscard]] int getItemCount(size_t key) const;
+	[[nodiscard]] int getItemCount(size_t inKey) const;
 	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
     [[nodiscard]] const Signal<>& getDeathSignal() const;
 	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
-	void addToInventory(size_t key, int count);
-	void addToInventory(class Countable* countable);
-	void addToInventory(class Uncountable* uncountable);
-	void removeFromInventory(size_t key, int count);
-	void removeFromInventory(Tradable* tradable);
+	void addToInventory(size_t inKey, int inCount);
+	void addToInventory(class Countable* inCountable);
+	void addToInventory(class Uncountable* inUncountable);
+	void removeFromInventory(size_t inKey, int inCount);
+	void removeFromInventory(Tradable* inTradable);
 };
 
 #endif

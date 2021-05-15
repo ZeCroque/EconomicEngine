@@ -1,6 +1,6 @@
-#include "Traders/Job.h"
-
 #include <utility>
+
+#include "Traders/Job.h"
 
 Job::Job() : craftFactory(new CraftFactory()), id(0){}
 
@@ -25,21 +25,21 @@ Job::~Job()
 	delete craftFactory;
 }
 
-void Job::setOwner(Trader* owner) const
+void Job::setOwner(Trader* inOwner) const
 {
-	craftFactory->setOwner(owner);
+	craftFactory->setOwner(inOwner);
 }
 
-Craft* Job::createCraft(const size_t typeId) const
+Craft* Job::createCraft(const size_t inId) const
 {
-	return craftFactory->createObject(typeId);
+	return craftFactory->createObject(inId);
 }
 
 std::vector<size_t> Job::getCraftList() const
 {
 	std::vector<size_t> craftableList;
 
-	if (craftFactory->owner != nullptr)
+	if (craftFactory->owner)
 	{
 		for (auto key : craftFactory->getKeys())
 		{
@@ -70,7 +70,7 @@ std::vector<size_t> Job::getUncraftableList() const
 {
 	std::vector<size_t> uncraftableList;
 
-	if (craftFactory->owner != nullptr)
+	if (craftFactory->owner)
 	{
 		for (auto key : craftFactory->getKeys())
 		{
@@ -93,9 +93,9 @@ std::list<size_t>& Job::getUsableTools()
 	return usableToolsList;
 }
 
-Craft* Job::getCraft(const size_t key) const
+Craft* Job::getCraft(const size_t inKey) const
 {
-	return craftFactory->getDefaultObject(key);
+	return craftFactory->getDefaultObject(inKey);
 }
 
 size_t Job::getId() const

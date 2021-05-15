@@ -1,5 +1,6 @@
 #ifndef ASK_H
 #define ASK_H
+
 #include <Signal.h>
 
 enum class AskStatus { Pending, Sold, Refused };
@@ -10,19 +11,19 @@ protected:
 	
 	int count;
 	float price;
-	bool isSellingAsk;
+	bool bIsSellingAsk;
 	AskStatus status;
-	size_t typeId;
+	size_t id;
 	int tradedCount;
 
 	Signal<Ask*> askResolvedSignal;
 	
 public:	
 	Ask() = delete;
-	Ask(bool inIsSellingAsk, size_t id, int count, float price);
+	Ask(bool bInIsSellingAsk, size_t inId, int inCount, float inPrice);
 	void resolve();
 
-	[[nodiscard]] bool getIsSellingAsk() const;
+	[[nodiscard]] bool isSellingAsk() const;
 	[[nodiscard]] float getPrice() const;
 	[[nodiscard]] int getCount() const;
 	[[nodiscard]] size_t getId() const;

@@ -14,10 +14,10 @@ private:
 	Trader* owner;
 public:
 	CraftFactory();
-	CraftFactory(CraftFactory& craftFactory);
+	CraftFactory(CraftFactory& inCraftFactory);
 	void setOwner(Trader* inOwner);
-	[[nodiscard]] bool isCraftable(size_t key) const;
-	void registerCraft(Craft* craft);
+	[[nodiscard]] bool isCraftable(size_t inKey) const;
+	void registerCraft(Craft* inCraft);
 	CraftFactory* clone() override;
 };
 

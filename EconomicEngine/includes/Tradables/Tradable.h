@@ -1,9 +1,9 @@
 #ifndef TRADABLE_H
 #define TRADABLE_H
+
 #include <string>
 
 #include "Clonable.h"
-#include "Signal.h"
 
 class Trader;
 
@@ -18,7 +18,7 @@ protected:
 public:
 	Tradable();
 	Tradable(std::string inName, std::pair<float, float> inDefaultPriceBelief);
-	Tradable(const Tradable& tradable);
+	Tradable(const Tradable& inTradable);
 
 	virtual void setOwningTrader(class Trader* inOwningTrader);
 	void removeFromOwnerInventory();

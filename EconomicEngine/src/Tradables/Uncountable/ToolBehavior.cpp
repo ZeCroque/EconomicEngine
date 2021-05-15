@@ -1,5 +1,4 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
-
 #include "Tradables/Uncountable/Uncountable.h"
 
 ToolBehavior::ToolBehavior() : Behavior(), craftRateBoost(0.0f), degradationRate(0.0f), durability(1.0f){}

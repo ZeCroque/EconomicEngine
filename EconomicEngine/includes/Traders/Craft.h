@@ -1,10 +1,9 @@
 #ifndef CRAFT_H
 #define CRAFT_H
 
-#include "Clonable.h"
-
 #include <list>
 
+#include "Clonable.h"
 #include "Signal.h"
 
 class Craft final: public Clonable<Craft>
@@ -21,7 +20,7 @@ private:
 
 public:
 	Craft();
-	Craft(float baseRate, size_t craftResult, int count = 1, std::list<std::pair<size_t, int>> requirements = std::list<std::pair<size_t, int>>(), std::list<size_t> toolsRequired = std::list<size_t>());
+	Craft(float inBaseRate, size_t inCraftResult, int inCount = 1, std::list<std::pair<size_t, int>> inRequirements = std::list<std::pair<size_t, int>>(), std::list<size_t> inToolsRequired = std::list<size_t>());
 	Craft(Craft& craft);
 	Craft* clone() override;
 
@@ -31,9 +30,9 @@ public:
 	[[nodiscard]] int getCount() const;
 	[[nodiscard]] float getRate() const;
 	[[nodiscard]] const Signal<>& getCraftSuccessSignal() const;
-	void incrementRate(float i);
+	void incrementRate(float inAmount);
 
-	void update(float deltaTime);
+	void update(float inDeltaTime);
 
 };
 

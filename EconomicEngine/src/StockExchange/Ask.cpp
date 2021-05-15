@@ -1,15 +1,15 @@
 #include "StockExchange/Ask.h"
 
-Ask::Ask(const bool inIsSellingAsk, const size_t id, const int count, const float price) : count(count), price(price), isSellingAsk(inIsSellingAsk), status(AskStatus::Pending), typeId(id), tradedCount(0) {}
+Ask::Ask(const bool bInIsSellingAsk, const size_t inId, const int inCount, const float inPrice) : count(inCount), price(inPrice), bIsSellingAsk(bInIsSellingAsk), status(AskStatus::Pending), id(inId), tradedCount(0) {}
 
 void Ask::resolve()
 {
 	askResolvedSignal(this);
 }
 
-bool Ask::getIsSellingAsk() const
+bool Ask::isSellingAsk() const
 {
-	return isSellingAsk;
+	return bIsSellingAsk;
 }
 
 float Ask::getPrice() const
@@ -24,7 +24,7 @@ int Ask::getCount() const
 
 size_t Ask::getId() const
 {
-	return typeId;
+	return id;
 }
 
 AskStatus Ask::getStatus() const

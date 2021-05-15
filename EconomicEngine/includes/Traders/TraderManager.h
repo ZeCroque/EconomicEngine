@@ -5,7 +5,6 @@
 #include "Signal.h"
 #include "VectorArray.h"
 
-
 class TraderManager final
 {
 
@@ -18,24 +17,24 @@ private:
 
 public:
 	void init() const;
-	void registerJob(Job* job);
-	void addTrader(int count);
-	void addTrader(int count, size_t key);
+	void registerJob(Job* inJob);
+	void addTrader(int inCount);
+	void addTrader(int inCount, size_t inKey);
     const Signal<Trader*>& getTraderAddedSignal() const;
 
 	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
-	[[nodiscard]] std::list<const Trader*> getTraderByJobId(size_t key) const;
-	[[nodiscard]] std::pair<int, int> getDemographyByJob(size_t key) const;
-	[[nodiscard]] float getMoneyMeanByJob(size_t key) const;
-	[[nodiscard]] float getFoodLevelMeanByJob(size_t key) const;
-	[[nodiscard]] int getJobCount(size_t key) const;
+	[[nodiscard]] std::list<const Trader*> getTraderByJobId(size_t inKey) const;
+	[[nodiscard]] std::pair<int, int> getDemographyByJob(size_t inKey) const;
+	[[nodiscard]] float getMoneyMeanByJob(size_t inKey) const;
+	[[nodiscard]] float getFoodLevelMeanByJob(size_t inKey) const;
+	[[nodiscard]] int getJobCount(size_t inKey) const;
 	[[nodiscard]] size_t getMostInterestingJob() const;
 	void killStarvedTraders();
 	void clearPendingKillTraders();
 	void makeChildren();
-	void update(float deltaTime);
+	void update(float inDeltaTime);
 	void reset();
-	void markForKill(size_t key, int count);
+	void markForKill(size_t inKey, int inCount);
 };
 
 #endif

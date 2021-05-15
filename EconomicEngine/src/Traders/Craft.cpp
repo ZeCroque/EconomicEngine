@@ -1,10 +1,9 @@
 #include "Traders/Craft.h"
-
 #include "Traders/Trader.h"
 
 Craft::Craft() : elapsedTime(0.0f), rate(0.0f), count(), result(0){}
 
-Craft::Craft(const float baseRate, const size_t craftResult, const int count, std::list<std::pair<size_t, int>> requirements, std::list<size_t> toolsRequired) : elapsedTime(0.0f), rate(baseRate), count(count), result(craftResult), requirements(std::move(requirements)), toolsRequired(std::move(toolsRequired)){}
+Craft::Craft(const float inBaseRate, const size_t inCraftResult, const int inCount, std::list<std::pair<size_t, int>> inRequirements, std::list<size_t> inToolsRequired) : elapsedTime(0.0f), rate(inBaseRate), count(inCount), result(inCraftResult), requirements(std::move(inRequirements)), toolsRequired(std::move(inToolsRequired)){}
 	                                                                                                                           
 Craft::Craft(Craft& craft) : elapsedTime(craft.elapsedTime), rate(craft.rate), count(craft.count), result(craft.result), requirements(craft.requirements), toolsRequired(craft.toolsRequired) {}
 
@@ -43,14 +42,14 @@ const Signal<>& Craft::getCraftSuccessSignal() const
 	return craftSuccessSignal;
 }
 
-void Craft::incrementRate(const float i)
+void Craft::incrementRate(const float inAmount)
 {
-	rate += i;
+	rate += inAmount;
 }
 
-void Craft::update(float deltaTime)
+void Craft::update(const float inDeltaTime)
 {
-	elapsedTime += deltaTime;
+	elapsedTime += inDeltaTime;
 	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() * rate)
 	{
 		elapsedTime = 0.f;

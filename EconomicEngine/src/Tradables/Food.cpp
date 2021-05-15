@@ -2,7 +2,7 @@
 
 Food::Food() : Countable(), foodValue(0.0f){}
 
-Food::Food(std::string name, std::pair<float, float> defaultPriceBelief, const float foodValue, const int count) : Countable(name, defaultPriceBelief, count), foodValue(foodValue){}
+Food::Food(const std::string& inName, const std::pair<float, float> inDefaultPriceBelief, const float inFoodValue, const int inCount) : Countable(inName, inDefaultPriceBelief, inCount), foodValue(inFoodValue){}
 
 float Food::getFoodValue() const
 {

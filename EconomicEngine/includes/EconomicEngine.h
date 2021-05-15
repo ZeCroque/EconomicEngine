@@ -7,7 +7,6 @@
 #include "Tradables/TradableFactory.h"
 #include "Traders/TraderManager.h"
 
-
 class EconomicEngine : public Singleton<EconomicEngine>
 {
 friend class Singleton<EconomicEngine>;
@@ -30,17 +29,17 @@ private:
 
 public:
 	
-	void initJobs(std::vector<nlohmann::json>& parsedJobs) const;
+	void initJobs(std::vector<nlohmann::json>& inParsedJobs) const;
 	
-	void initTradables(std::vector<nlohmann::json>& parsedTradables) const;
+	void initTradables(std::vector<nlohmann::json>& inParsedTradables) const;
 	
 	void init(const char* prefabsPath) const;
 
-	void start(int count);
+	void start(int inCount);
 	
-	void update(float deltaTime);
+	void update(float inDeltaTime);
 	
-	void reset(int count);
+	void reset(int inCount);
 
 	void pause();
 

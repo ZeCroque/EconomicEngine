@@ -12,7 +12,7 @@ private:
 	std::vector<std::shared_ptr<T>>* vectors;
 public:
 	VectorArray() : vectors(nullptr){}
-	VectorArray(std::vector<size_t> inKeys) : keys(std::move(inKeys)), vectors(new std::vector<std::shared_ptr<T>>[keys.size()]) {}
+	explicit VectorArray(std::vector<size_t> inKeys) : keys(std::move(inKeys)), vectors(new std::vector<std::shared_ptr<T>>[keys.size()]) {}
 	
 	std::vector<std::shared_ptr<T>>& operator[](const size_t key)
 	{
@@ -24,7 +24,7 @@ public:
 				result = &vectors[i];
 			}
 		}
-		if(result == nullptr)
+		if(!result)
 		{
 			result = new std::vector<std::shared_ptr<T>>();
 		}
@@ -41,7 +41,7 @@ public:
 				result = &vectors[i];
 			}
 		}
-		if (result == nullptr)
+		if (!result)
 		{
 			result = new std::vector<std::shared_ptr<T>>();
 		}

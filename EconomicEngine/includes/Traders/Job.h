@@ -1,10 +1,10 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <string>
+
 #include "CraftFactory.h"
 #include "Craft.h"
-
-#include <string>
 
 class Trader;
 
@@ -17,18 +17,18 @@ protected:
 	std::string name;
 public:
 	Job();
-	Job(std::string name);
+	explicit Job(std::string inName);
 	Job(const Job& job);
-	virtual ~Job();
-	void setOwner(Trader* owner) const;
-	[[nodiscard]] Craft* createCraft(size_t typeId) const;
+	~Job() override;
+	void setOwner(Trader* inOwner) const;
+	[[nodiscard]] Craft* createCraft(size_t inId) const;
 	[[nodiscard]] std::vector<size_t> getCraftList() const;
 	[[nodiscard]] std::vector<size_t> getCraftableList() const;
 	[[nodiscard]] std::vector<size_t> getUncraftableList() const;
 
 	[[maybe_unused]] [[nodiscard]] const std::list<size_t>& getUsableTools() const;
 	[[nodiscard]] std::list<size_t>& getUsableTools();
-	[[nodiscard]] Craft* getCraft(size_t key) const;
+	[[nodiscard]] Craft* getCraft(size_t inKey) const;
 	[[nodiscard]] size_t getId() const;
 	[[nodiscard]] std::string getName() const;
 	[[nodiscard]] CraftFactory* getCraftFactory() const;

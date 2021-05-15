@@ -1,5 +1,6 @@
 #ifndef JOB_FACTORY_H
 #define JOB_FACTORY_H
+
 #include "AbstractFactory.h"
 #include "Job.h"
 

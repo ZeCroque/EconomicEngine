@@ -1,8 +1,7 @@
-#include "EconomicEngine.h"
-
 #include <filesystem>
 #include <fstream>
 
+#include "EconomicEngine.h"
 #include "Traders/Trader.h"
 #include "Tradables/Food.h"
 #include "Tradables/Uncountable/ToolBehavior.h"
@@ -10,10 +9,9 @@
 
 EconomicEngine::EconomicEngine()  : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 12.f),baseActionTime(dayDuration / 6.f)  {}
 
-void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
+void EconomicEngine::initJobs(std::vector<nlohmann::json>& inParsedJobs) const
 {
-	const std::hash<std::string> hasher;
-	for(const auto& parsedJob : parsedJobs)
+	for(const std::hash<std::string> hasher; const auto& parsedJob : inParsedJobs)
 	{
 		auto* job = new Job(parsedJob["name"]);
 		
@@ -28,7 +26,7 @@ void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 			std::list<size_t> requiredTools;
 			for(const auto& requiredTool : parsedCraft["requiredToolBehaviors"])
 			{
-				requiredTools.emplace_back(hasher(static_cast<std::string>(requiredTool)));
+				requiredTools.emplace_back(hasher(requiredTool));
 			}
 			
 			 job->getCraftFactory()->registerCraft(new Craft(parsedCraft["baseRate"], hasher(parsedCraft["result"]), parsedCraft["producedCount"], requirements, requiredTools));
@@ -43,14 +41,13 @@ void EconomicEngine::initJobs(std::vector<nlohmann::json>& parsedJobs) const
 	}
 }
 
-void EconomicEngine::initTradables(std::vector<nlohmann::json>& parsedTradables) const
+void EconomicEngine::initTradables(std::vector<nlohmann::json>& inParsedTradables) const
 {
-	for(const auto& parsedTradable : parsedTradables)
+	for(const auto& parsedTradable : inParsedTradables)
 	{
 		Tradable* tradable = nullptr;
-		const std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]);
-		
-		if(parsedTradable["type"] == "Countable")
+
+		if(const std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]); parsedTradable["type"] == "Countable")
 		{
 			tradable = new Countable(parsedTradable["name"], defaultPriceBelief);
 		}
@@ -73,9 +70,8 @@ void EconomicEngine::init(const char* prefabsPath) const
 
 	std::vector<nlohmann::json> jobs;
 	std::vector<nlohmann::json> tradables;
-	
-	std::ifstream fileStream;
-	for (const auto& entry : std::filesystem::recursive_directory_iterator(prefabsPath))
+
+	for (std::ifstream fileStream; const auto& entry : std::filesystem::recursive_directory_iterator(prefabsPath))
 	{
 		if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ".json")
 		{
@@ -102,20 +98,20 @@ void EconomicEngine::init(const char* prefabsPath) const
 	stockExchange.init();
 }
 
-void EconomicEngine::start(const int count)
+void EconomicEngine::start(const int inCount)
 {
 	bRunning = true;
 
 	//Create traders
-	traderManager.addTrader(count);
+	traderManager.addTrader(inCount);
 	
 }
 
-void EconomicEngine::update(float deltaTime)
+void EconomicEngine::update(const float inDeltaTime)
 {
 	if(bRunning)
 	{
-		elapsedTimeSinceDayStart += deltaTime;
+		elapsedTimeSinceDayStart += inDeltaTime;
 		if(elapsedTimeSinceDayStart >= dayDuration)
 		{
 			elapsedTimeSinceDayStart = 0.f;
@@ -123,7 +119,7 @@ void EconomicEngine::update(float deltaTime)
 			traderManager.killStarvedTraders();
 			++elapsedDayCount;
 		}
-		elapsedTimeSinceLastStockExchangeResolution += deltaTime;
+		elapsedTimeSinceLastStockExchangeResolution += inDeltaTime;
 		if(elapsedTimeSinceLastStockExchangeResolution >= stockExchangeResolutionTime)
 		{
 			elapsedTimeSinceLastStockExchangeResolution = 0.f;
@@ -131,18 +127,18 @@ void EconomicEngine::update(float deltaTime)
 			traderManager.clearPendingKillTraders();
 
 		}
-		traderManager.update(deltaTime);
+		traderManager.update(inDeltaTime);
 	}
 }
 
-void EconomicEngine::reset(const int count)
+void EconomicEngine::reset(const int inCount)
 {
 	elapsedTimeSinceDayStart = 0.f;
 	elapsedTimeSinceLastStockExchangeResolution = 0.f;
 	elapsedDayCount = 0;
 	traderManager.reset();
 	stockExchange.reset();
-	traderManager.addTrader(count);
+	traderManager.addTrader(inCount);
 }
 
 void EconomicEngine::pause()

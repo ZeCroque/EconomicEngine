@@ -1,5 +1,6 @@
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
+
 #include <string>
 
 #include "Clonable.h"
@@ -14,7 +15,7 @@ protected:
 public:
 	Behavior();
 	explicit Behavior(const std::string& inName);
-	virtual void init(Uncountable* owner) = 0;
+	virtual void init(Uncountable* inOwningTool) = 0;
 	[[nodiscard]] size_t getId() const;
 
 };

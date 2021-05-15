@@ -1,5 +1,6 @@
 #ifndef TRADABLE_FACTORY_H
 #define TRADABLE_FACTORY_H
+
 #include <string>
 
 #include "AbstractFactory.h"
