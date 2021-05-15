@@ -68,6 +68,13 @@ private:
 
     void render() const;
 
+    void renderBackground(sf::Vector2<float> viewOrigin, float viewXMin, float viewXMax, float viewYMin,
+                          float viewYMax) const;
+
+    void renderTrader(float viewXMin, float viewXMax, float viewYMin, float viewYMax) const;
+
+    void renderPopup() const;
+
     void quit();
 
 	int maxFps;
