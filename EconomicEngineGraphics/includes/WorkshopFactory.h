@@ -1,8 +1,8 @@
 #ifndef WORKSHOP_FACTORY
 #define WORKSHOP_FACTORY
+
 #include "AbstractFactory.h"
 #include "Workshop.h"
-
 
 class WorkshopFactory : public AbstractFactory<size_t, Workshop>
 {

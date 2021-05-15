@@ -75,7 +75,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	returnPath.emplace_front(inStartingCoordinates);
 	returnPath.emplace_back(inObjectiveCoordinates);
 #ifndef NDEBUG
-	drawPath(inGrid, returnPath, searchBounds, inStartingCoordinates, inObjectiveCoordinates); //TODO remove debug
+	drawPath(inGrid, returnPath, searchBounds, inStartingCoordinates, inObjectiveCoordinates);
 #endif
 	for (auto* modifiedNode : modifiedNodes)
 	{

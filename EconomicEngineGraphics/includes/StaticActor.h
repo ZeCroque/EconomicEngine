@@ -6,8 +6,7 @@
 class StaticActor : public Actor
 {
 public:
-    explicit StaticActor(const std::string &textureName) : Actor(textureName)
-    {}
+    explicit StaticActor(const std::string& inTextureName);
 
     Actor *clone() override;
 };

@@ -1,59 +1,60 @@
-//
-// Created by relin on 14/04/2021.
-//
-
 #include "Workshop.h"
-
-
 #include "GameManager.h"
 #include "MovableTrader.h"
 
-
-size_t Workshop::getJobId() const {
+size_t Workshop::getJobId() const
+{
     return jobId;
 }
 
-Workshop::Workshop(const std::string &inName, const std::string &inJobName, const std::string &inTextureName)
-        : StaticActor(inTextureName), closestMarketCoordinate(0, 0) {
+Workshop::Workshop(const std::string &inName, const std::string &inJobName, const std::string &inTextureName) : StaticActor(inTextureName), closestMarketCoordinate(0, 0)
+{
     name = inName;
     const std::hash<std::string> hash;
     id = hash(name);
     jobId = hash(inJobName);
 }
 
-bool Workshop::isAvailable() const {
+bool Workshop::isAvailable() const
+{
     return id && !getTrader();
 }
 
-const std::string &Workshop::getName() const {
+const std::string &Workshop::getName() const
+{
     return name;
 }
 
-size_t Workshop::getId() const {
+size_t Workshop::getId() const
+{
     return id;
 }
 
 
-void Workshop::setTrader(std::shared_ptr<MovableTrader> &inTrader) {
+void Workshop::setTrader(std::shared_ptr<MovableTrader> &inTrader)
+{
     trader = inTrader;
 }
 
-Workshop *Workshop::clone() {
+Workshop* Workshop::clone()
+{
     return new Workshop(*this);
 }
 
-MovableTrader *Workshop::getTrader() const {
+MovableTrader* Workshop::getTrader() const
+{
     const auto referencedTrader = trader.lock();
     return referencedTrader.get();
 }
 
-void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate) {
+void Workshop::setClosestMarketCoordinate(const std::pair<int, int>& inClosestMarketCoordinate)
+{
 	closestMarketCoordinate = inClosestMarketCoordinate;
 	if (auto traderPtr = trader.lock(); traderPtr)
 	{
 		if (traderPtr->getDirection() != Direction::None)
 		{
-			traderPtr->getPathfindEndedSignal().connect([this, traderPtr](bool succeeded)
+			traderPtr->getPathfindEndedSignal().connect([this, traderPtr](bool bSucceeded)
 			{
 				traderPtr->calculatePathfind(std::pair<int,int>(x, y + 1), std::pair<int,int>(closestMarketCoordinate.first, closestMarketCoordinate.second + 1));
 			});
@@ -65,8 +66,7 @@ void Workshop::setClosestMarketCoordinate(const std::pair<int, int> &inClosestMa
 	}
 }
 
-std::pair<int, int> Workshop::getClosestMarketCoordinate()
+std::pair<int, int> Workshop::getClosestMarketCoordinate() const
 {
     return closestMarketCoordinate;
 }
-

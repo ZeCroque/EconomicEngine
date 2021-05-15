@@ -2,8 +2,8 @@
 // Created by relin on 12/04/2021.
 //
 
-#ifndef ECONOMICENGINE_GRIDMANAGER_H
-#define ECONOMICENGINE_GRIDMANAGER_H
+#ifndef GRID_MANAGER_H
+#define GRID_MANAGER_H
 
 
 #include <vector>
@@ -11,7 +11,8 @@
 #include <queue>
 
 
-class GridManager {
+class GridManager
+{
 public:
 
     GridManager();
@@ -24,7 +25,7 @@ public:
 
     void queueWorkshop(std::shared_ptr<Workshop> inWorkshop);
 
-    [[nodiscard]] bool getIsGenerationThreadRunning() const;
+    [[nodiscard]] bool isGenerationThreadRunning() const;
 	
     [[nodiscard]] std::thread& getGenerationThread();
 
@@ -34,7 +35,7 @@ public:
     void makeDebugFile() const;
 #endif
 
-	static int getRandomInt(const int min = 0, const int max = 1);
+	static int getRandomInt(int min = 0, int max = 1);
 
 private :
 
@@ -45,7 +46,7 @@ private :
 
     std::queue<std::shared_ptr<Workshop>> workshopQueue;
 
-	bool isGenerationThreadRunning;
+	bool bIsGenerationThreadRunning;
     std::thread generationThread;
 
     void placeWorkshop();
@@ -63,4 +64,4 @@ private :
 };
 
 
-#endif //ECONOMICENGINE_GRIDMANAGER_H
+#endif //GRID_MANAGER_H

@@ -1,11 +1,8 @@
-//
-// Created by relin on 14/04/2021.
-//
-
-#include <MovableActor.h>
 #include <cassert>
 
-Actor *MovableActor::clone()
+#include "MovableActor.h"
+
+Actor* MovableActor::clone()
 {
     return new MovableActor(*this);
 }
@@ -20,7 +17,7 @@ Direction MovableActor::getDirection() const
 	return direction;
 }
 
-const std::pair<int, int> &MovableActor::getNextCoordinate()
+const std::pair<int, int>& MovableActor::getNextCoordinate() const
 {
     assert(pathIterator != path.end());
     return *pathIterator;
@@ -46,11 +43,11 @@ void MovableActor::updatePath()
     }
 
     coordinatesOffset = 0.f;
-	if (reversePath && pathIterator != path.begin())
+	if (bReversePath && pathIterator != path.begin())
     {
         --pathIterator;
     }
-	else if(!reversePath)
+	else if(!bReversePath)
     {
         ++pathIterator;
     }
@@ -59,8 +56,8 @@ void MovableActor::updatePath()
 
 void MovableActor::startPathfind(const bool inReversePath)
 {
-    reversePath = inReversePath;
-    pathIterator = !reversePath ? ++path.begin() : ----path.end();
+    bReversePath = inReversePath;
+    pathIterator = !bReversePath ? ++path.begin() : ----path.end();
     coordinatesOffset = 0.f;
     updateDirection();
 }

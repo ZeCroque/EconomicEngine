@@ -2,16 +2,17 @@
 #define ACTOR_H
 
 #include <SFML/Graphics/Sprite.hpp>
-#include "Clonable.h"
 #include <string>
+
+#include "Clonable.h"
 
 class Actor : public Clonable<Actor>
 {
 
 public:
-    explicit Actor(const std::string &textureName);
+    explicit Actor(const std::string& inTextureName);
 
-    sf::Sprite &getSprite();
+    sf::Sprite& getSprite();
 
     int x;
     int y;

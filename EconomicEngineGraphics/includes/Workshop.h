@@ -1,17 +1,13 @@
-//
-// Created by relin on 14/04/2021.
-//
+#ifndef WORKSHOP_H
+#define WORKSHOP_H
 
-#ifndef ECONOMICENGINE_WORKSHOP_H
-#define ECONOMICENGINE_WORKSHOP_H
-
-#include <any>
-#include <Traders/Trader.h>
+#include "Traders/Trader.h"
 #include "StaticActor.h"
 
 class MovableTrader;
 
-class Workshop : public StaticActor {
+class Workshop : public StaticActor
+{
 
 public:
     Workshop(const std::string& inName,const std::string& inJobName, const std::string& inTextureName);
@@ -24,24 +20,22 @@ public:
 
     size_t getJobId() const;
 
-    MovableTrader *getTrader() const;
+    MovableTrader* getTrader() const;
 
-    void setTrader(std::shared_ptr<MovableTrader> &inTrader);
+    void setTrader(std::shared_ptr<MovableTrader>& inTrader);
 
-    void setClosestMarketCoordinate(const std::pair<int, int> &inClosestMarketCoordinate);
+    void setClosestMarketCoordinate(const std::pair<int, int>& inClosestMarketCoordinate);
 
 	Workshop* clone() override;
 
-	std::pair<int, int> getClosestMarketCoordinate();
+	std::pair<int, int> getClosestMarketCoordinate() const;
 
 private:
     std::weak_ptr<MovableTrader> trader;
     std::pair<int, int> closestMarketCoordinate;
-
-private:
     std::string name;
     size_t id;
     size_t jobId;
 };
 
-#endif //ECONOMICENGINE_WORKSHOP_H
+#endif //WORKSHOP_H

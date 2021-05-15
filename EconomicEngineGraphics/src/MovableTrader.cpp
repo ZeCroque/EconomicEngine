@@ -1,7 +1,3 @@
-//
-// Created by relin on 14/04/2021.
-//
-
 #include "MovableTrader.h"
 
 #include "GameManager.h"
@@ -12,19 +8,22 @@ MovableTrader::MovableTrader(const std::string& inJobName, const std::string& in
 	const std::hash<std::string> hasher;
 	jobId = hasher(inJobName);
 	pathFindSlotId = -1;
+	boundTrader = nullptr;
 }
 
-void MovableTrader::moveTo(Position inPosition)
+void MovableTrader::moveTo(const Position inPosition)
 {
 	if (path.empty())
 	{
 		pathfindEndedSignal(false);
-	} else
+	}
+	else
 	{
 		if (inPosition == Position::Workshop)
 		{
 			startPathfind(true);
-		} else
+		}
+		else
 		{
 			startPathfind(false);
 		}
@@ -37,20 +36,22 @@ void MovableTrader::moveToRequestCallback(Trader* inTrader, Position inPosition)
 	{
 		pathfindEndedSignal.disconnect(pathFindSlotId);
 	}
-	pathFindSlotId = pathfindEndedSignal.connect([inTrader, this, inPosition](bool succeeded)
-	 {
-	     if (succeeded)
-	     {
+	pathFindSlotId = pathfindEndedSignal.connect([inTrader, this, inPosition](const bool bSucceeded)
+	{
+		if (bSucceeded)
+		{
 			inTrader->setPosition(inPosition);
-	     } else
-	     {
+		}
+		else
+		{
 			inTrader->setPosition(inPosition == Position::Workshop ? Position::Market : Position::Workshop);
-	     }
-	 });
+		}
+	});
 	moveTo(inPosition);
 }
 
-size_t MovableTrader::getJobId() const {
+size_t MovableTrader::getJobId() const
+{
     return jobId;
 }
 
@@ -66,12 +67,12 @@ void MovableTrader::calculatePathfind(const std::pair<int, int>& inStart, const 
 	path.emplace_back(std::pair<int,int>(inEnd.first, inEnd.second - 1));
 }
 
-Trader *MovableTrader::getBoundTrader() const
+Trader* MovableTrader::getBoundTrader() const
 {
     return boundTrader;
 }
 
-void MovableTrader::setBoundTrader(Trader *inBoundTrader)
+void MovableTrader::setBoundTrader(Trader* inBoundTrader)
 {
-    MovableTrader::boundTrader = inBoundTrader;
+    boundTrader = inBoundTrader;
 }
