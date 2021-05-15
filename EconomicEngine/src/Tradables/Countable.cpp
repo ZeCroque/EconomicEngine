@@ -1,30 +1,39 @@
 #include "Tradables/Countable.h"
 
-Countable::Countable() : Tradable(), count(1){}
+Countable::Countable() : Tradable(), count(1)
+{
+}
 
 Countable::Countable(const Countable& inCountable) : Tradable(inCountable)
 {
 	count = inCountable.count;
 }
 
-Countable::Countable(const std::string& inName, const std::pair<float, float> inDefaultPriceBelief, const int inCount) : Tradable(inName, inDefaultPriceBelief), count(inCount){}
+Countable::Countable(const std::string& inName, const std::pair<float, float> inDefaultPriceBelief, const int inCount) : Tradable(inName, inDefaultPriceBelief), count(inCount)
+{
+}
+
+int Countable::getCount() const
+{
+	return count;
+}
 
 void Countable::setCount(const int inCount)
 {
 	count = inCount;
 }
 
-void Countable::incrementCountBy(const int inCount)
+void Countable::incrementCountBy(const int inAmount)
 {
-	count += inCount;
+	count += inAmount;
 }
 
-void Countable::decrementCountBy(const int inCount)
+void Countable::decrementCountBy(const int inAmount)
 {
-	count -= inCount;
+	count -= inAmount;
 }
 
-int Countable::getCount() const
+Countable* Countable::clone()
 {
-	return count;
+	return new Countable(*this);
 }

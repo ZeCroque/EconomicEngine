@@ -2,25 +2,20 @@
 
 #include "MovableActor.h"
 
-Actor* MovableActor::clone()
+MovableActor::MovableActor(const std::string& inTextureName) : Actor(inTextureName)
 {
-    return new MovableActor(*this);
+    bReversePath = false;
+    pathIterator = path.begin();
+    direction = Direction::None;
+    coordinatesOffset = 0.f;
 }
 
-const Signal<bool>& MovableActor::getPathfindEndedSignal() const
+void MovableActor::startPathfind(const bool inReversePath)
 {
-    return pathfindEndedSignal;
-}
-
-Direction MovableActor::getDirection() const
-{
-	return direction;
-}
-
-const std::pair<int, int>& MovableActor::getNextCoordinate() const
-{
-    assert(pathIterator != path.end());
-    return *pathIterator;
+    bReversePath = inReversePath;
+    pathIterator = !bReversePath ? ++path.begin() : ----path.end();
+    coordinatesOffset = 0.f;
+    updateDirection();
 }
 
 void MovableActor::updatePath()
@@ -54,12 +49,25 @@ void MovableActor::updatePath()
 	updateDirection();
 }
 
-void MovableActor::startPathfind(const bool inReversePath)
+const Signal<bool>& MovableActor::getPathfindEndedSignal() const
 {
-    bReversePath = inReversePath;
-    pathIterator = !bReversePath ? ++path.begin() : ----path.end();
-    coordinatesOffset = 0.f;
-    updateDirection();
+    return pathfindEndedSignal;
+}
+
+Direction MovableActor::getDirection() const
+{
+	return direction;
+}
+
+const std::pair<int, int>& MovableActor::getNextCoordinate() const
+{
+    assert(pathIterator != path.end());
+    return *pathIterator;
+}
+
+Actor* MovableActor::clone()
+{
+    return new MovableActor(*this);
 }
 
 void MovableActor::updateDirection()

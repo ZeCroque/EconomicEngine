@@ -10,12 +10,19 @@ class StockExchange
 {
 public:
 	void init();
+	
 	void registerAsk(std::shared_ptr<Ask> inAsk);
+	
 	void removeAsk(std::shared_ptr<Ask> inAsk);
+	
 	void resolveOffers();
+	
 	void reset();
-	[[nodiscard]] float getStockExchangePrice(size_t inKey) const;
-	[[nodiscard]] std::list<Ask> getStockExchangePrice(size_t inKey, int inCount) const;
+	
+	[[nodiscard]] float getCurrentMarketPrice(size_t inItemId) const;
+	
+	[[nodiscard]] std::list<Ask> getHistoricMarketPrices(size_t inItemId, int inDeepness) const;
+	
 	[[nodiscard]] const Signal<>& getAskResolvedSignal() const;
 	
 	template <class T> static void insertionSort(std::vector<std::shared_ptr<T>>& outVector)

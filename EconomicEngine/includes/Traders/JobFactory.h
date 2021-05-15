@@ -7,7 +7,7 @@
 class JobFactory : public AbstractFactory<size_t, Job>
 {
 public:
-	[[nodiscard]] std::list<Job*> getJobs() const;
+	[[nodiscard]] std::list<Job*> getJobsDefaultObjects() const;
 };
 
 #endif //JOB_FACTORY_H

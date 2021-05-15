@@ -3,22 +3,24 @@
 #include "Tradables/Uncountable/Uncountable.h"
 #include "Traders/Trader.h"
 
-CraftFactory::CraftFactory() : owner(nullptr){}
+CraftFactory::CraftFactory() : owner(nullptr)
+{
+}
 
 CraftFactory::CraftFactory(CraftFactory& inCraftFactory) : CraftFactory()
 {
 	defaultObjects = std::map<size_t, Craft*>(inCraftFactory.defaultObjects);
 }
 
-void CraftFactory::setOwner(Trader* inOwner)
+void CraftFactory::registerCraft(Craft* inCraft)
 {
-	owner = inOwner;
+	registerObject(inCraft->getResultId(), inCraft);
 }
 
-bool CraftFactory::isCraftable(const size_t inKey) const
+bool CraftFactory::isCraftable(const size_t itemId) const
 {
 	//Items required
-	for (const auto& requirement : getDefaultObject(inKey)->getRequirement())
+	for (const auto& requirement : getDefaultObject(itemId)->getRequirements())
 	{
 		bool bRequirementsOwned = false;
 		for(const auto& item : owner->getInventory())
@@ -39,7 +41,7 @@ bool CraftFactory::isCraftable(const size_t inKey) const
 	}
 
 	//Tools
-	for (const auto& requiredTool : getDefaultObject(inKey)->getToolsRequired())
+	for (const auto& requiredTool : getDefaultObject(itemId)->getRequiredTools())
 	{
 		bool bHasBehavior = false;
 		for (const auto& item : owner->getInventory())
@@ -59,9 +61,9 @@ bool CraftFactory::isCraftable(const size_t inKey) const
 	return true;
 }
 
-void CraftFactory::registerCraft(Craft* inCraft)
+void CraftFactory::setOwner(Trader* inOwner)
 {
-	registerObject(inCraft->getResult(), inCraft);
+	owner = inOwner;
 }
 
 CraftFactory* CraftFactory::clone()

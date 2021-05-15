@@ -2,11 +2,6 @@
 #include "GameManager.h"
 #include "MovableTrader.h"
 
-size_t Workshop::getJobId() const
-{
-    return jobId;
-}
-
 Workshop::Workshop(const std::string &inName, const std::string &inJobName, const std::string &inTextureName) : StaticActor(inTextureName), closestMarketCoordinate(0, 0)
 {
     name = inName;
@@ -30,21 +25,25 @@ size_t Workshop::getId() const
     return id;
 }
 
-
-void Workshop::setTrader(std::shared_ptr<MovableTrader> &inTrader)
+size_t Workshop::getJobId() const
 {
-    trader = inTrader;
-}
-
-Workshop* Workshop::clone()
-{
-    return new Workshop(*this);
+    return jobId;
 }
 
 MovableTrader* Workshop::getTrader() const
 {
     const auto referencedTrader = trader.lock();
     return referencedTrader.get();
+}
+
+std::pair<int, int> Workshop::getClosestMarketCoordinate() const
+{
+    return closestMarketCoordinate;
+}
+
+void Workshop::setTrader(std::shared_ptr<MovableTrader> &inTrader)
+{
+    trader = inTrader;
 }
 
 void Workshop::setClosestMarketCoordinate(const std::pair<int, int>& inClosestMarketCoordinate)
@@ -66,7 +65,7 @@ void Workshop::setClosestMarketCoordinate(const std::pair<int, int>& inClosestMa
 	}
 }
 
-std::pair<int, int> Workshop::getClosestMarketCoordinate() const
+Workshop* Workshop::clone()
 {
-    return closestMarketCoordinate;
+    return new Workshop(*this);
 }

@@ -9,17 +9,17 @@
 class TradableFactory : public AbstractFactory<size_t, Tradable>
 {
 public:
-	[[nodiscard]] std::vector<std::string> getTradablesName() const
+	[[nodiscard]] std::vector<std::string> getTradablesNames() const
 	{
-		auto keys = getKeys();
-		std::vector<std::string> names;
-		names.reserve(keys.size());
+		auto tradablesIds = getKeys();
+		std::vector<std::string> tradableNames;
+		tradableNames.reserve(tradablesIds.size());
 	
-		for(auto key : keys)
+		for(auto tradableId : tradablesIds)
 		{
-			names.emplace_back(getDefaultObject(key)->getName());
+			tradableNames.emplace_back(getDefaultObject(tradableId)->getName());
 		}
-		return names;
+		return tradableNames;
 	}
 };
 

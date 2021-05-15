@@ -1,7 +1,9 @@
 #include "Tradables/Tradable.h"
 #include "Traders/Trader.h"
 
-Tradable::Tradable() : id(0), owningTrader(nullptr){}
+Tradable::Tradable() : id(0), owningTrader(nullptr)
+{
+}
 
 Tradable::Tradable(std::string inName, std::pair<float, float> inDefaultPriceBelief) : name(std::move(inName)), defaultPriceBelief(std::move(inDefaultPriceBelief)), owningTrader(nullptr)
 {
@@ -14,11 +16,6 @@ Tradable::Tradable(const Tradable& inTradable) : Tradable()
 	id = inTradable.id;
 	name = std::string(inTradable.name);
 	defaultPriceBelief = std::pair<float, float>(inTradable.defaultPriceBelief);
-}
-
-void Tradable::setOwningTrader(Trader* inOwningTrader)
-{
-	owningTrader = inOwningTrader;
 }
 
 void Tradable::removeFromOwnerInventory()
@@ -41,8 +38,12 @@ size_t Tradable::getId() const
 	return id;
 }
 
-
 const std::pair<float, float>& Tradable::getDefaultPriceBelief() const
 {
 	return defaultPriceBelief;
+}
+
+void Tradable::setOwningTrader(Trader* inOwningTrader)
+{
+	owningTrader = inOwningTrader;
 }

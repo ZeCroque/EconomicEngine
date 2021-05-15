@@ -7,6 +7,42 @@
 
 class TraderManager final
 {
+public:
+	void init() const;
+
+	void reset();
+
+	void update(float inDeltaTime);
+	
+	void registerJob(Job* inJob);
+	
+	void addTraders(int inAmount);
+	
+	void addTraders(int inAmount, size_t jobId);
+	
+	void killStarvedTraders();
+
+	void markForKill(size_t inJobId, int inAmount);
+	
+	void clearPendingKillTraders();
+	
+	void makeChildren();
+	
+	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobsIds() const;
+
+	[[nodiscard]] std::pair<int, int> getDemographyByJob(size_t inJobId) const;
+	
+	[[nodiscard]] std::list<const Trader*> getTraderByJob(size_t inJobId) const;
+	
+	[[nodiscard]] float getMoneyMeanByJob(size_t inJobId) const;
+	
+	[[nodiscard]] float getFoodLevelMeanByJob(size_t inJobId) const;
+	
+	[[nodiscard]] int getTraderCountByJob(size_t inJobId) const;
+	
+	[[nodiscard]] size_t getMostInterestingJobId() const;
+
+    const Signal<Trader*>& getTraderAddedSignal() const;
 
 private:
 	std::list<Trader> traders;
@@ -15,26 +51,6 @@ private:
 	JobFactory jobFactory;
     Signal<Trader*> traderAddedSignal;
 
-public:
-	void init() const;
-	void registerJob(Job* inJob);
-	void addTrader(int inCount);
-	void addTrader(int inCount, size_t inKey);
-    const Signal<Trader*>& getTraderAddedSignal() const;
-
-	[[nodiscard]] std::list<std::pair<size_t, std::string>> getJobList() const;
-	[[nodiscard]] std::list<const Trader*> getTraderByJobId(size_t inKey) const;
-	[[nodiscard]] std::pair<int, int> getDemographyByJob(size_t inKey) const;
-	[[nodiscard]] float getMoneyMeanByJob(size_t inKey) const;
-	[[nodiscard]] float getFoodLevelMeanByJob(size_t inKey) const;
-	[[nodiscard]] int getJobCount(size_t inKey) const;
-	[[nodiscard]] size_t getMostInterestingJob() const;
-	void killStarvedTraders();
-	void clearPendingKillTraders();
-	void makeChildren();
-	void update(float inDeltaTime);
-	void reset();
-	void markForKill(size_t inKey, int inCount);
 };
 
 #endif //TRADER_MANAGER_H

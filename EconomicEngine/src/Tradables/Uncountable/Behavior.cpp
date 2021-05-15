@@ -1,6 +1,8 @@
 #include "Tradables/Uncountable/Behavior.h"
 
-Behavior::Behavior() : owningTool(nullptr), id(0){}
+Behavior::Behavior() : owningTool(nullptr), id(0)
+{
+}
 
 Behavior::Behavior(const std::string& inName) : Behavior()
 {

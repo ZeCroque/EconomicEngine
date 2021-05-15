@@ -3,11 +3,11 @@
 
 size_t WorkshopFactory::getIdByJobId(const size_t inJobId) const
 {
-	for(const auto & keys = getKeys(); const auto& key : keys)
+	for(const auto& workshopId : getKeys())
 	{
-		if(const auto & foundId = getDefaultObject(key)->getJobId(); foundId == inJobId)
+		if(const auto & foundId = getDefaultObject(workshopId)->getJobId(); foundId == inJobId)
 		{
-			return key;
+			return workshopId;
 		}
 	}
 	return 0;

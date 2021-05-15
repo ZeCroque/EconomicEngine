@@ -7,12 +7,14 @@
 
 template <class T> class VectorArray
 {
-private:
-	std::vector<size_t> keys;
-	std::vector<std::shared_ptr<T>>* vectors;
 public:
-	VectorArray() : vectors(nullptr){}
-	explicit VectorArray(std::vector<size_t> inKeys) : keys(std::move(inKeys)), vectors(new std::vector<std::shared_ptr<T>>[keys.size()]) {}
+	VectorArray() : vectors(nullptr)
+	{
+	}
+	
+	explicit VectorArray(std::vector<size_t> inKeys) : keys(std::move(inKeys)), vectors(new std::vector<std::shared_ptr<T>>[keys.size()])
+	{
+	}
 	
 	std::vector<std::shared_ptr<T>>& operator[](const size_t key)
 	{
@@ -47,6 +49,10 @@ public:
 		}
 		return *result;
 	}
+
+private:
+	std::vector<size_t> keys;
+	std::vector<std::shared_ptr<T>>* vectors;
 };
 
 #endif //VECTOR_ARRAY_H

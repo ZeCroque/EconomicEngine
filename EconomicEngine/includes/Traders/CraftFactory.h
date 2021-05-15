@@ -10,15 +10,22 @@ class CraftFactory : public AbstractFactory<size_t, Craft>, public Clonable<Craf
 {
 	friend class Job;
 	
-private:
-	Trader* owner;
+
 public:
 	CraftFactory();
+	
 	CraftFactory(CraftFactory& inCraftFactory);
-	void setOwner(Trader* inOwner);
-	[[nodiscard]] bool isCraftable(size_t inKey) const;
+
 	void registerCraft(Craft* inCraft);
+	
+	[[nodiscard]] bool isCraftable(size_t itemId) const;
+
+	void setOwner(Trader* inOwner);
+	
 	CraftFactory* clone() override;
+
+private:
+	Trader* owner;
 };
 
 

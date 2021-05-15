@@ -10,14 +10,20 @@ protected:
 
 public:
 	Countable();
+	
 	Countable(const Countable& inCountable);
+	
 	Countable(const std::string& inName, std::pair<float, float> inDefaultPriceBelief, int inCount = 1);
-	void setCount(int inCount);
-	void incrementCountBy(int inCount);
-	void decrementCountBy(int inCount);
-	[[nodiscard]] int getCount() const;
 
-	Countable* clone() override { return new Countable(*this); }
+	[[nodiscard]] int getCount() const;
+	
+	void setCount(int inCount);
+	
+	void incrementCountBy(int inAmount);
+	
+	void decrementCountBy(int inAmount);
+
+	Countable* clone() override;
 };
 
 #endif //COUNTABLE_H

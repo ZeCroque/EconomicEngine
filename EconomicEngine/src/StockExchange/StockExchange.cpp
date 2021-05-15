@@ -7,13 +7,13 @@
 
 void StockExchange::init()
 {
-	auto keys = EconomicEngine::getInstance()->getTradableFactory().getKeys();
-	currentBuyingAsks = VectorArray<Ask>(keys);
-	currentSellingAsks = VectorArray<Ask>(keys);
-	betterAsks = VectorArray<Ask>(keys);
-	for (auto key : keys)
+	auto itemsIds = EconomicEngine::getInstance()->getTradableFactory().getKeys();
+	currentBuyingAsks = VectorArray<Ask>(itemsIds);
+	currentSellingAsks = VectorArray<Ask>(itemsIds);
+	betterAsks = VectorArray<Ask>(itemsIds);
+	for (auto itemId : itemsIds)
 	{
-		betterAsks[key].push_back(std::make_shared<Ask>(false,key, 0, 0.0f));
+		betterAsks[itemId].push_back(std::make_shared<Ask>(false,itemId, 0, 0.0f));
 	}
 }
 
@@ -21,13 +21,13 @@ void StockExchange::registerAsk(std::shared_ptr<Ask> inAsk)
 {
 	if(inAsk->isSellingAsk())
 	{
-		auto& sellingAsks = currentSellingAsks[inAsk->getId()];
+		auto& sellingAsks = currentSellingAsks[inAsk->getItemId()];
 		sellingAsks.push_back(std::move(inAsk));
 		insertionSort(sellingAsks);
 	}
 	else
 	{
-		auto& buyingAsks = currentBuyingAsks[inAsk->getId()];
+		auto& buyingAsks = currentBuyingAsks[inAsk->getItemId()];
 		buyingAsks.push_back(std::move(inAsk));
 		insertionSort(buyingAsks);
 	}
@@ -35,7 +35,7 @@ void StockExchange::registerAsk(std::shared_ptr<Ask> inAsk)
 
 void StockExchange::removeAsk(const std::shared_ptr<Ask> inAsk)  // NOLINT(performance-unnecessary-value-param)
 {
-	if(auto & registeredAsks = inAsk->isSellingAsk() ? currentSellingAsks[inAsk->getId()] : currentBuyingAsks[inAsk->getId()]; inAsk && !registeredAsks.empty())
+	if(auto & registeredAsks = inAsk->isSellingAsk() ? currentSellingAsks[inAsk->getItemId()] : currentBuyingAsks[inAsk->getItemId()]; inAsk && !registeredAsks.empty())
 	{
 		int i = 0;
 		for(const auto& registeredAsk : registeredAsks)
@@ -52,10 +52,10 @@ void StockExchange::removeAsk(const std::shared_ptr<Ask> inAsk)  // NOLINT(perfo
 
 void StockExchange::resolveOffers()
 {
-	for (auto key : EconomicEngine::getInstance()->getTradableFactory().getKeys())
+	for (auto itemId : EconomicEngine::getInstance()->getTradableFactory().getKeys())
 	{
-		auto& buyingAsks = currentBuyingAsks[key];
-		auto& sellingAsks = currentSellingAsks[key];
+		auto& buyingAsks = currentBuyingAsks[itemId];
+		auto& sellingAsks = currentSellingAsks[itemId];
 
 		bool bAskResolved = false;
 		while (!buyingAsks.empty() && !sellingAsks.empty() && buyingAsks.back()->getPrice() > sellingAsks.front()->getPrice() && buyingAsks.back()->getCount() < sellingAsks.front()->getCount())
@@ -79,7 +79,7 @@ void StockExchange::resolveOffers()
 			if (!bAskResolved)
 			{
 				bAskResolved = true;
-				betterAsks[key].push_back(buyingAsks.back());
+				betterAsks[itemId].push_back(buyingAsks.back());
 			}
 			
 			if(buyingAsks.back()->getCount() == buyingAsks.back()->getTradedCount())
@@ -90,7 +90,7 @@ void StockExchange::resolveOffers()
 		}
 		if (!bAskResolved)
 		{
-			betterAsks[key].push_back(betterAsks[key].back());
+			betterAsks[itemId].push_back(betterAsks[itemId].back());
 		}
 
 		for (auto& sellingAsk : sellingAsks)
@@ -119,30 +119,30 @@ void StockExchange::resolveOffers()
 
 void StockExchange::reset()
 {
-	for (auto key : EconomicEngine::getInstance()->getTradableFactory().getKeys())
+	for (auto itemId : EconomicEngine::getInstance()->getTradableFactory().getKeys())
 	{
-		currentSellingAsks[key].clear();
-		currentBuyingAsks[key].clear();
-		betterAsks[key].clear();
-		betterAsks[key].push_back(std::make_shared<Ask>(false,key, 0, 0.0f));
+		currentSellingAsks[itemId].clear();
+		currentBuyingAsks[itemId].clear();
+		betterAsks[itemId].clear();
+		betterAsks[itemId].push_back(std::make_shared<Ask>(false,itemId, 0, 0.0f));
 	}
 }
 
-float StockExchange::getStockExchangePrice(const size_t inKey) const
+float StockExchange::getCurrentMarketPrice(const size_t inItemId) const
 {
 	float result = 0.0f;
-	if (!betterAsks[inKey].empty())
+	if (!betterAsks[inItemId].empty())
 	{
-		result = betterAsks[inKey].back()->getPrice();
+		result = betterAsks[inItemId].back()->getPrice();
 	}
 	return result;
 }
 
-std::list<Ask> StockExchange::getStockExchangePrice(const size_t inKey, const int inCount) const
+std::list<Ask> StockExchange::getHistoricMarketPrices(const size_t inItemId, const int inDeepness) const
 {
 	std::list<Ask> result;
 	int i = 0;
-	for (auto it = betterAsks[inKey].rbegin(); it != betterAsks[inKey].rend() && i < inCount; ++it, ++i)
+	for (auto it = betterAsks[inItemId].rbegin(); it != betterAsks[inItemId].rend() && i < inDeepness; ++it, ++i)
 	{
 		result.emplace_front(*it->get());
 	}

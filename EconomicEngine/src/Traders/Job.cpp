@@ -2,7 +2,9 @@
 
 #include "Traders/Job.h"
 
-Job::Job() : craftFactory(new CraftFactory()), id(0){}
+Job::Job() : craftFactory(new CraftFactory()), id(0)
+{
+}
 
 Job::Job(std::string inName) : Job()
 {
@@ -15,7 +17,7 @@ Job::Job(std::string inName) : Job()
 Job::Job(const Job& job) : Job()
 {
 	craftFactory = job.craftFactory->clone();
-	usableToolsList = std::list<size_t>(job.usableToolsList);
+	usableTools = std::list<size_t>(job.usableTools);
 	name = job.name;
 	id = job.id;
 }
@@ -25,77 +27,72 @@ Job::~Job()
 	delete craftFactory;
 }
 
-void Job::setOwner(Trader* inOwner) const
+void Job::addUsableTool(size_t toolId)
 {
-	craftFactory->setOwner(inOwner);
+	usableTools.emplace_back(toolId);
 }
 
-Craft* Job::createCraft(const size_t inId) const
+Craft* Job::createCraft(const size_t inCraftId) const
 {
-	return craftFactory->createObject(inId);
+	return craftFactory->createObject(inCraftId);
 }
 
-std::vector<size_t> Job::getCraftList() const
+std::vector<size_t> Job::getCraftsIds() const
 {
-	std::vector<size_t> craftableList;
+	std::vector<size_t> craftsIds;
 
 	if (craftFactory->owner)
 	{
-		for (auto key : craftFactory->getKeys())
+		for (auto craftId : craftFactory->getKeys())
 		{
-			craftableList.emplace_back(key);
+			craftsIds.emplace_back(craftId);
 		}
 	}
-	return craftableList;
+	return craftsIds;
 }
 
-std::vector<size_t> Job::getCraftableList() const
+std::vector<size_t> Job::getCraftablesIds() const
 {
-	std::vector<size_t> craftableList;
+	std::vector<size_t> craftablesIds;
 
 	if(craftFactory->owner!=nullptr)
 	{
-		for (auto key : craftFactory->getKeys())
+		for (auto craftableId : craftFactory->getKeys())
 		{
-			if (craftFactory->isCraftable(key))
+			if (craftFactory->isCraftable(craftableId))
 			{
-				craftableList.emplace_back(key);
+				craftablesIds.emplace_back(craftableId);
 			}
 		}
 	}
-	return craftableList;
+	return craftablesIds;
 }
 
-std::vector<size_t> Job::getUncraftableList() const
+std::vector<size_t> Job::getUncraftablesIds() const
 {
-	std::vector<size_t> uncraftableList;
+	std::vector<size_t> uncraftablesIds;
 
 	if (craftFactory->owner)
 	{
-		for (auto key : craftFactory->getKeys())
+		for (auto uncraftableId : craftFactory->getKeys())
 		{
-			if (!craftFactory->isCraftable(key))
+			if (!craftFactory->isCraftable(uncraftableId))
 			{
-				uncraftableList.emplace_back(key);
+				uncraftablesIds.emplace_back(uncraftableId);
 			}
 		}
 	}
-	return uncraftableList;
+	return uncraftablesIds;
 }
 
-[[maybe_unused]] const std::list<size_t>& Job::getUsableTools() const
+const std::list<size_t>& Job::getUsableTools() const
 {
-	return usableToolsList;
+	return usableTools;
 }
 
-std::list<size_t>& Job::getUsableTools()
+Craft* Job::getCraft(const size_t inCraftId) const
 {
-	return usableToolsList;
-}
-
-Craft* Job::getCraft(const size_t inKey) const
-{
-	return craftFactory->getDefaultObject(inKey);
+	return craftFactory->getDefaultObject(inCraftId);
 }
 
 size_t Job::getId() const
@@ -111,4 +108,14 @@ std::string Job::getName() const
 CraftFactory* Job::getCraftFactory() const
 {
 	return craftFactory;
+}
+
+void Job::setOwner(Trader* inOwner) const
+{
+	craftFactory->setOwner(inOwner);
+}
+
+Job* Job::clone()
+{
+	return new Job(*this);
 }

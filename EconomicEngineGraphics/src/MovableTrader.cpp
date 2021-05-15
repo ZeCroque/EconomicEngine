@@ -10,6 +10,13 @@ MovableTrader::MovableTrader(const std::string& inJobName, const std::string& in
 	boundTrader = nullptr;
 }
 
+void MovableTrader::calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd)
+{
+	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), inStart,inEnd);
+	path.emplace_front(std::pair<int,int>(inStart.first, inStart.second - 1));
+	path.emplace_back(std::pair<int,int>(inEnd.first, inEnd.second - 1));
+}
+
 void MovableTrader::moveTo(const Position inPosition)
 {
 	if (path.empty())
@@ -54,18 +61,6 @@ size_t MovableTrader::getJobId() const
     return jobId;
 }
 
-MovableTrader* MovableTrader::clone()
-{
-	return new MovableTrader(*this);
-}
-
-void MovableTrader::calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd)
-{
-	path = NavigationSystem::aStarResolution(GameManager::getInstance()->getGridManager().getGrid(), inStart,inEnd);
-	path.emplace_front(std::pair<int,int>(inStart.first, inStart.second - 1));
-	path.emplace_back(std::pair<int,int>(inEnd.first, inEnd.second - 1));
-}
-
 Trader* MovableTrader::getBoundTrader() const
 {
     return boundTrader;
@@ -74,4 +69,9 @@ Trader* MovableTrader::getBoundTrader() const
 void MovableTrader::setBoundTrader(Trader* inBoundTrader)
 {
     boundTrader = inBoundTrader;
+}
+
+MovableTrader* MovableTrader::clone()
+{
+	return new MovableTrader(*this);
 }

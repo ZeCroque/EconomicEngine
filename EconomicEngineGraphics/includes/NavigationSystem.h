@@ -17,10 +17,10 @@ public:
 	static void updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>&outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor);
 
 private:
-	static float getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode);
-
 #ifndef NDEBUG
 	static void drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const Rectangle& inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords);
 #endif
+	
+	static float getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode);
 };
 #endif // NAVIGATION_SYSTEM_H

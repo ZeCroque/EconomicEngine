@@ -26,79 +26,121 @@ enum class Position
 
 class Trader
 {
-private:
-
-	bool bIsWaitingForActivity;
-	Action currentAction;
-	
-	VectorArray<std::pair<float, int>> priceHistory;
-	VectorArray<float> priceBeliefs;
-	std::unique_ptr<Craft> currentCraft;
-	Job* currentJob;
-	std::list<std::shared_ptr<Ask>> currentAsks;
-	std::list<std::shared_ptr<Tradable>> inventory;
-	int successCount;
-	float money;
-	float foodLevel;
-	Position position;
-	
-	void makeBuyingAsks();
-	void makeSellingAsks();
-	void updatePriceBelief(Ask* ask);
-
-	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& inFoodInfos, float inFoodGoal) ;
-	[[nodiscard]] float calculateEarnings(Craft* inCraft) const;
-	[[nodiscard]] float calculateFoodStock() const;
-	[[nodiscard]] float calculatePriceBeliefMean(size_t inKey) const;
-	[[nodiscard]] float evaluatePrice(size_t key) const;
-	Signal<Position> moveToRequestSignal;
-    Signal<> deathSignal;
-
-    void registerAsks(bool bInIsSellingAsk, const std::list<std::pair<size_t, int>>& itemList, const float maxPrice)
-	{
-		for (const auto& item : itemList)
-		{
-			if (float price = evaluatePrice(item.first); price <= maxPrice)
-			{
-				auto ask = std::make_shared<Ask>(bInIsSellingAsk, item.first, item.second, price);
-				currentAsks.push_back(ask);
-				EconomicEngine::getInstance()->getStockExchange().registerAsk(ask);
-				ask->getAskResolvedSignal().connect(this, &Trader::checkAskCallback);		
-			}
-		}
-	}
-	
 public:
 	Trader();
+	
 	explicit Trader(Job* inJob);
+	
 	Trader(Trader&&) = default;
+	
 	~Trader();
 
 	void update(float inDeltaTime);
-	void makeAsks();
-	void makeChild();
-	void startCrafting();
-	void updateFoodLevel();
-	void checkAskCallback(Ask* inAsk);
-	void craftSuccessCallback();
-	void setPosition(Position inPosition);
-	Position getPosition() const;
-    Action getCurrentAction() const;
-	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
-	[[nodiscard]] Job* getCurrentJob() const;
-	[[nodiscard]] Craft* getCurrentCraft() const;
-	[[nodiscard]] bool isInInventory(size_t inKey);
-	[[nodiscard]] float getFoodLevel() const;
-	[[nodiscard]] float getMoney() const;
-	[[nodiscard]] int getItemCount(size_t inKey) const;
-	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
-    [[nodiscard]] const Signal<>& getDeathSignal() const;
-	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
-	void addToInventory(size_t inKey, int inCount);
+	
+	void makeChild() const;
+
+	void addToInventory(size_t inItemId, int inAmount);
+	
 	void addToInventory(class Countable* inCountable);
+	
 	void addToInventory(class Uncountable* inUncountable);
-	void removeFromInventory(size_t inKey, int inCount);
+	
+	void removeFromInventory(size_t itemId, int inAmount);
+	
 	void removeFromInventory(Tradable* inTradable);
+
+	[[nodiscard]] bool isInInventory(size_t inItemId);
+	
+	Position getPosition() const;
+	
+    Action getCurrentAction() const;
+	
+	[[nodiscard]] Job* getCurrentJob() const;
+	
+	[[nodiscard]] Craft* getCurrentCraft() const;
+
+	[[nodiscard]] std::list<std::shared_ptr<Ask>> getCurrentAsks() const;
+
+	[[nodiscard]] const std::list<std::shared_ptr<Tradable>>& getInventory() const;
+
+	[[nodiscard]] int getItemCount(size_t inItemId) const;
+	
+	[[nodiscard]] float getFoodLevel() const;
+	
+	[[nodiscard]] float getMoneyCount() const;
+
+	[[nodiscard]] const Signal<Position>& getMoveToRequestSignal() const;
+	
+    [[nodiscard]] const Signal<>& getDeathSignal() const;
+
+	void setPosition(Position inPosition);
+	
+private:
+
+	void updateFoodLevel();
+	
+	void updatePriceBelief(Ask* ask);
+	
+	void startCrafting();
+
+	void makeAsks();
+
+	void makeBuyingAsks();
+	
+	void makeSellingAsks();
+
+	void registerAsks(bool bInIsSellingAsk, const std::list<std::pair<size_t, int>>& inItems, const float inMaxPrice);
+
+	void checkAskCallback(Ask* inAsk);
+	
+	void craftSuccessCallback();
+
+	//Return a random combination of food to satisfy the provided foodGoal, according to the limits specified in provided foodInfos
+	static std::list<std::pair<size_t, int>> getRandomFoodCombination(std::vector<std::pair<size_t, std::pair<float, int>>>& inFoodInfos, float inFoodGoal);
+	
+	//Scans through inventory to return the accumulated foodLevel of each food items
+	[[nodiscard]] float getFoodStock() const;
+
+	[[nodiscard]] float getPotentialEarnings(Craft* inCraft) const;
+	
+	[[nodiscard]] float getPriceBeliefMean(size_t inTradableId) const;
+	
+	[[nodiscard]] float getPriceEvaluation(size_t inTradableId) const;
+	
+	bool bIsWaitingForActivity;
+	Action currentAction;
+	Position position;
+	std::unique_ptr<Craft> currentCraft;
+	Job* currentJob;
+	std::list<std::shared_ptr<Ask>> currentAsks;
+	
+	VectorArray<std::pair<float, int>> priceHistory;
+	VectorArray<float> priceBeliefs;
+	int successfulTradesCount;
+
+	std::list<std::shared_ptr<Tradable>> inventory;
+	float moneyCount;
+	float foodLevel;
+
+	Signal<Position> moveToRequestSignal;
+    Signal<> deathSignal;
+
+	//Threshold under which traders will be worried about starvation
+	inline static float foodConcernThreshold = 10.f;
+
+	//Threshold above which traders will consider themselves safe from hunger
+	inline static float foodQuietudeThreshold = 15.f;
+
+	//Threshold under which traders will be hungry
+	inline static float hungerThreshold = 10.f;
+	
+	inline static float foodCostPerAction = 0.34f;
+
+	//Threshold above which traders will consider their working situation as stable
+	inline static int enterprisingQuietudeThreshold = 10;
+
+	//Factor used to determine if a tradable is overstocked relatively to the trader money amount
+	inline static float overstockFactor = 2.f;
 };
 
 #endif //TRADER_H

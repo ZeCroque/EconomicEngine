@@ -1,40 +1,56 @@
 #include "Traders/Craft.h"
 #include "Traders/Trader.h"
 
-Craft::Craft() : elapsedTime(0.0f), rate(0.0f), count(), result(0){}
-
-Craft::Craft(const float inBaseRate, const size_t inCraftResult, const int inCount, std::list<std::pair<size_t, int>> inRequirements, std::list<size_t> inToolsRequired) : elapsedTime(0.0f), rate(inBaseRate), count(inCount), result(inCraftResult), requirements(std::move(inRequirements)), toolsRequired(std::move(inToolsRequired)){}
-	                                                                                                                           
-Craft::Craft(Craft& craft) : elapsedTime(craft.elapsedTime), rate(craft.rate), count(craft.count), result(craft.result), requirements(craft.requirements), toolsRequired(craft.toolsRequired) {}
-
-Craft* Craft::clone()
+Craft::Craft() : elapsedTime(0.0f), craftingRate(0.0f), producedAmount(), resultId(0)
 {
-	return new Craft(*this);
 }
 
-std::list<std::pair<size_t, int>> Craft::getRequirement() const
+Craft::Craft(const float inBaseRate, const size_t inCraftResult, const int inProducedAmount,
+std::list<std::pair<size_t, int>> inRequirements, std::list<size_t> inToolsRequired) : elapsedTime(0.0f),
+																						craftingRate(inBaseRate), producedAmount(inProducedAmount), resultId(inCraftResult),
+																						requirements(std::move(inRequirements)), toolsRequired(std::move(inToolsRequired))
+{
+}
+	                                                                                                                           
+Craft::Craft(Craft& craft) : elapsedTime(craft.elapsedTime), craftingRate(craft.craftingRate),
+                             producedAmount(craft.producedAmount), resultId(craft.resultId),
+                             requirements(craft.requirements), toolsRequired(craft.toolsRequired)
+{
+}
+
+void Craft::update(const float inDeltaTime)
+{
+	elapsedTime += inDeltaTime;
+	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() * craftingRate)
+	{
+		elapsedTime = 0.f;
+		craftSuccessSignal();
+	}
+}
+
+std::list<std::pair<size_t, int>> Craft::getRequirements() const
 {
 	return requirements;
 }
 
-std::list<size_t> Craft::getToolsRequired() const
+std::list<size_t> Craft::getRequiredTools() const
 {
 	return toolsRequired;
 }
 
-size_t Craft::getResult() const
+size_t Craft::getResultId() const
 {
-	return result;
+	return resultId;
 }
 
 int Craft::getCount() const
 {
-	return count;
+	return producedAmount;
 }
 
-float Craft::getRate() const
+float Craft::getCraftingRate() const
 {
-	return rate;
+	return craftingRate;
 }
 
 const Signal<>& Craft::getCraftSuccessSignal() const
@@ -42,19 +58,14 @@ const Signal<>& Craft::getCraftSuccessSignal() const
 	return craftSuccessSignal;
 }
 
-void Craft::incrementRate(const float inAmount)
+void Craft::incrementCraftingRate(const float inAmount)
 {
-	rate += inAmount;
+	craftingRate += inAmount;
 }
 
-void Craft::update(const float inDeltaTime)
+Craft* Craft::clone()
 {
-	elapsedTime += inDeltaTime;
-	if(elapsedTime >= EconomicEngine::getInstance()->getBaseActionTime() * rate)
-	{
-		elapsedTime = 0.f;
-		craftSuccessSignal();
-	}
+	return new Craft(*this);
 }
 
 			

@@ -12,7 +12,9 @@ template<class... Args> using Slot = std::function<void(Args...)>;
 template<class... Args> class Signal final
 {
 public:
-    Signal() : id(0){}
+    Signal() : id(0)
+    {
+    }
 
     ~Signal()
     {

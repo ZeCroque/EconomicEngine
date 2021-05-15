@@ -6,34 +6,44 @@
 enum class AskStatus { Pending, Sold, Refused };
 
 class Ask
-{
-protected:
+{	
+public:	
+	Ask() = delete;
+	
+	Ask(bool bInIsSellingAsk, size_t inItemId, int inCount, float inPrice);
+	
+	void resolve();
+
+	[[nodiscard]] bool isSellingAsk() const;
+	
+	[[nodiscard]] float getPrice() const;
+	
+	[[nodiscard]] int getCount() const;
+	
+	[[nodiscard]] size_t getItemId() const;
+	
+	[[nodiscard]] AskStatus getStatus() const;
+	
+	[[nodiscard]] int getTradedCount() const;
+	
+	[[nodiscard]] const Signal<Ask*>& getAskResolvedSignal() const;
+	
+	void setPrice(float inPrice);
+	
+	void setStatus(AskStatus inStatus);
+	
+	void incrementTradedCountBy(int inAmount);
+
+private:
 	
 	int count;
 	float price;
 	bool bIsSellingAsk;
 	AskStatus status;
-	size_t id;
+	size_t tradableId;
 	int tradedCount;
 
 	Signal<Ask*> askResolvedSignal;
-	
-public:	
-	Ask() = delete;
-	Ask(bool bInIsSellingAsk, size_t inId, int inCount, float inPrice);
-	void resolve();
-
-	[[nodiscard]] bool isSellingAsk() const;
-	[[nodiscard]] float getPrice() const;
-	[[nodiscard]] int getCount() const;
-	[[nodiscard]] size_t getId() const;
-	[[nodiscard]] AskStatus getStatus() const;
-	[[nodiscard]] int getTradedCount() const;
-	[[nodiscard]] const Signal<Ask*>& getAskResolvedSignal() const;
-	void setPrice(float inPrice);
-	void setStatus(AskStatus inStatus);
-	void incrementTradedCountBy(int inCount);
-
 };
 
 #endif //ASK_H

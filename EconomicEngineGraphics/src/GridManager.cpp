@@ -8,8 +8,9 @@
 #endif
 #include "Workshop.h"
 
-GridManager::GridManager() : minRange(6), pathStep(4), maxDistanceToMarket(25), bIsGenerationThreadRunning(false) {}
-
+GridManager::GridManager() : pathStep(4), minRangeBetweenWorkshops(6), maxDistanceToMarket(25), bIsGenerationThreadRunning(false)
+{	
+}
 
 void GridManager::init()
 {
@@ -17,7 +18,7 @@ void GridManager::init()
     marketsCoordinates.emplace_back(std::pair<int, int>(0, 0));
 
 	bIsGenerationThreadRunning = true;
-	generationThread = std::thread([this]() { placeWorkshop(); });
+	generationThread = std::thread([this]() { placeWorkshops(); });
 }
 
 void GridManager::reset()
@@ -36,7 +37,7 @@ void GridManager::reset()
 
 bool GridManager::canPlaceWorkshop(const int inX, const int inY) const
 {
-	const int range = minRange;
+	const int range = minRangeBetweenWorkshops;
     for (int i = inX - range / 2; i < inX + range / 2; i++) 
     {
         for (int j = inY - range / 2; j < inY + range / 2; j++) 
@@ -50,7 +51,27 @@ bool GridManager::canPlaceWorkshop(const int inX, const int inY) const
     return true;
 }
 
-void GridManager::placeWorkshop()
+void GridManager::queueWorkshop(std::shared_ptr<Workshop> inWorkshop) // NOLINT(performance-unnecessary-value-param)
+{
+    workshopQueue.emplace(inWorkshop);
+}
+
+bool GridManager::isGenerationThreadRunning() const
+{
+	return bIsGenerationThreadRunning;
+}
+
+std::thread& GridManager::getGenerationThread()
+{
+    return generationThread;
+}
+
+Grid& GridManager::getGrid() const
+{
+	return grid;
+}
+
+void GridManager::placeWorkshops()
 {
     int d = getRandomInt(0, 4); // current direction; 0=RIGHT, 1=DOWN, 2=LEFT, 3=UP
     int s = 1; // chain size
@@ -76,7 +97,7 @@ void GridManager::placeWorkshop()
                     return;
                 }
 
-                if (auto noiseX = getRandomInt(x - minRange / 5, x + minRange / 5), noiseY = getRandomInt(y - minRange / 5, y + minRange / 5); !workshopQueue.empty() && canPlaceWorkshop(noiseX, noiseY)) 
+                if (auto noiseX = getRandomInt(x - minRangeBetweenWorkshops / 5, x + minRangeBetweenWorkshops / 5), noiseY = getRandomInt(y - minRangeBetweenWorkshops / 5, y + minRangeBetweenWorkshops / 5); !workshopQueue.empty() && canPlaceWorkshop(noiseX, noiseY)) 
                 {
                 	grid.updateBounds(noiseX, noiseY);
                     if (isAnyMarketInRange(noiseX, noiseY)) 
@@ -119,24 +140,50 @@ void GridManager::placeWorkshop()
     }
 }
 
-void GridManager::queueWorkshop(std::shared_ptr<Workshop> inWorkshop) // NOLINT(performance-unnecessary-value-param)
+void GridManager::updateClosestMarket(const int inX, const int inY)
 {
-    workshopQueue.emplace(inWorkshop);
-}
 
-int GridManager::getClosestMarketCoordinate(const int inX, const int inY)
-{
-    int closest = maxDistanceToMarket + 1;
+    auto const yMin = std::max(grid.getMinCoordinate().second, inY - maxDistanceToMarket / 2);
+    auto const yMax = std::min(grid.getMaxCoordinate().second, inY + maxDistanceToMarket / 2);
+    auto const xMin = std::max(grid.getMinCoordinate().first, inX - maxDistanceToMarket / 2);
+    auto const xMax = std::min(grid.getMaxCoordinate().first, inX + maxDistanceToMarket / 2);
 
-    for (const auto& marketCoordinates : marketsCoordinates) 
+    for (int y = yMin; y <= yMax; ++y) 
     {
-	    if (const auto current = static_cast<int>(sqrt(pow(marketCoordinates.first - inX, 2) + pow(marketCoordinates.second - inY, 2))); current <= closest) 
+        for (int x = xMin; x <= xMax; ++x) 
         {
-            closest = current;
+	        if (auto * cell = grid.getActorAt(x, y); cell) 
+            {
+                cell->setClosestMarketCoordinate(getClosestMarket(inX, inY));
+            }
         }
     }
-    return closest;
 }
+
+#ifndef NDEBUG
+void GridManager::makeDebugFile() const
+{
+    std::ofstream file;
+    file.open("../result.txt");
+
+    for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second; ++y) 
+    {
+        for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first; ++x) 
+        {
+            if (grid.isOccupied(x, y)) 
+            {
+                file << grid.getActorAt(x, y)->getId() << "\t";
+            }
+        	else 
+            {
+                file << 0 << "\t";
+            }
+        }
+        file << std::endl;
+    }
+    file.close();
+}
+#endif
 
 bool GridManager::isAnyMarketInRange(const int inX, const int inY)
 {
@@ -168,65 +215,19 @@ std::pair<int, int> GridManager::getClosestMarket(const int inX, const int inY)
     return result;
 }
 
-void GridManager::updateClosestMarket(const int inX, const int inY)
+int GridManager::getClosestMarketCoordinate(const int inX, const int inY)
 {
+    int closest = maxDistanceToMarket + 1;
 
-    auto const yMin = std::max(grid.getMinCoordinate().second, inY - maxDistanceToMarket / 2); //Todo: optimize chunk
-    auto const yMax = std::min(grid.getMaxCoordinate().second, inY + maxDistanceToMarket / 2);
-    auto const xMin = std::max(grid.getMinCoordinate().first, inX - maxDistanceToMarket / 2);
-    auto const xMax = std::min(grid.getMaxCoordinate().first, inX + maxDistanceToMarket / 2);
-
-    for (int y = yMin; y <= yMax; ++y) 
+    for (const auto& marketCoordinates : marketsCoordinates) 
     {
-        for (int x = xMin; x <= xMax; ++x) 
+	    if (const auto current = static_cast<int>(sqrt(pow(marketCoordinates.first - inX, 2) + pow(marketCoordinates.second - inY, 2))); current <= closest) 
         {
-	        if (auto * cell = grid.getActorAt(x, y); cell) 
-            {
-                cell->setClosestMarketCoordinate(getClosestMarket(inX, inY));
-            }
+            closest = current;
         }
     }
+    return closest;
 }
-
-bool GridManager::isGenerationThreadRunning() const
-{
-	return bIsGenerationThreadRunning;
-}
-
-std::thread& GridManager::getGenerationThread()
-{
-    return generationThread;
-}
-
-Grid& GridManager::getGrid() const
-{
-	return grid;
-}
-
-#ifndef NDEBUG
-void GridManager::makeDebugFile() const
-{
-    std::ofstream file;
-    file.open("../result.txt");
-
-    for (int y = grid.getMinCoordinate().second - 1; y < grid.getMaxCoordinate().second; ++y) 
-    {
-        for (int x = grid.getMinCoordinate().first - 1; x < grid.getMaxCoordinate().first; ++x) 
-        {
-            if (grid.isOccupied(x, y)) 
-            {
-                file << grid.getActorAt(x, y)->getId() << "\t";
-            }
-        	else 
-            {
-                file << 0 << "\t";
-            }
-        }
-        file << std::endl;
-    }
-    file.close();
-}
-#endif
 
 int GridManager::getRandomInt(const int min, const int max)
 {

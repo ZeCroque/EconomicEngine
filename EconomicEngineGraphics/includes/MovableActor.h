@@ -17,37 +17,28 @@ class MovableActor : public Actor
 {
 
 public:
-    explicit MovableActor(const std::string &inTextureName) : Actor(inTextureName)
-    {
-        bReversePath = false;
-        pathIterator = path.begin();
-        direction = Direction::None;
-        coordinatesOffset = 0.f;
-    }
+    explicit MovableActor(const std::string &inTextureName);
 
-    Actor* clone() override;
-
+    void startPathfind(bool inReversePath);
+	
+    void updatePath();
+	
     const Signal<bool>& getPathfindEndedSignal() const;
 
 	Direction getDirection() const;
 	
     const std::pair<int, int>& getNextCoordinate() const;
 
-    void updatePath();
-
-    void startPathfind(bool inReversePath);
+	Actor* clone() override;
 
     Direction direction;
-
     float coordinatesOffset;
 
 protected:
     Signal<bool> pathfindEndedSignal;
 
     std::list<std::pair<int, int>>::iterator pathIterator;
-
-    std::list<std::pair<int, int>> path;
-	
+    std::list<std::pair<int, int>> path;	
     bool bReversePath;
 
 private:

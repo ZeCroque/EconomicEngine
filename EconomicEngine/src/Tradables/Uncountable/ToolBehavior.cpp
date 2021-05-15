@@ -1,7 +1,9 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
 #include "Tradables/Uncountable/Uncountable.h"
 
-ToolBehavior::ToolBehavior() : Behavior(), craftRateBoost(0.0f), degradationRate(0.0f), durability(1.0f){}
+ToolBehavior::ToolBehavior() : Behavior(), craftRateBoost(0.0f), degradationRate(0.0f), durability(1.0f)
+{
+}
 
 ToolBehavior::ToolBehavior(const std::string& inName, const float inCraftRateBoost, const float inDegradationRate) : Behavior(inName)
 {
@@ -15,7 +17,7 @@ void ToolBehavior::init(Uncountable* inOwningTool)
 	owningTool = inOwningTool;
 }
 
-void ToolBehavior::updateToolDurability()
+void ToolBehavior::updateDurability()
 {
 	durability -= degradationRate;
 	if(durability<=0)
@@ -27,4 +29,9 @@ void ToolBehavior::updateToolDurability()
 float ToolBehavior::getCraftRateBoost() const
 {
 	return craftRateBoost;
+}
+
+ToolBehavior* ToolBehavior::clone()
+{
+	return new ToolBehavior(*this);
 }

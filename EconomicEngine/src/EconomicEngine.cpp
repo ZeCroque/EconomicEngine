@@ -7,63 +7,6 @@
 #include "Tradables/Uncountable/ToolBehavior.h"
 #include "Tradables/Uncountable/Uncountable.h"
 
-EconomicEngine::EconomicEngine()  : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f), elapsedTimeSinceLastStockExchangeResolution(0.f),stockExchangeResolutionTime(dayDuration / 12.f),baseActionTime(dayDuration / 6.f)  {}
-
-void EconomicEngine::initJobs(std::vector<nlohmann::json>& inParsedJobs) const
-{
-	for(const std::hash<std::string> hasher; const auto& parsedJob : inParsedJobs)
-	{
-		auto* job = new Job(parsedJob["name"]);
-		
-		for(const auto& parsedCraft : parsedJob["crafts"])
-		{	
-			std::list<std::pair<size_t, int>> requirements;
-			for(const auto& requirement : parsedCraft["requirements"])
-			{
-				requirements.emplace_back(std::pair<size_t, int>(hasher(requirement["name"]), requirement["count"]));
-			}
-
-			std::list<size_t> requiredTools;
-			for(const auto& requiredTool : parsedCraft["requiredToolBehaviors"])
-			{
-				requiredTools.emplace_back(hasher(requiredTool));
-			}
-			
-			 job->getCraftFactory()->registerCraft(new Craft(parsedCraft["baseRate"], hasher(parsedCraft["result"]), parsedCraft["producedCount"], requirements, requiredTools));
-		}
-
-		for(const auto& parsedTool : parsedJob["usableTools"])
-		{
-			job->getUsableTools().emplace_back(hasher(parsedTool));
-		}
-
-		traderManager.registerJob(job);
-	}
-}
-
-void EconomicEngine::initTradables(std::vector<nlohmann::json>& inParsedTradables) const
-{
-	for(const auto& parsedTradable : inParsedTradables)
-	{
-		Tradable* tradable = nullptr;
-
-		if(const std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]); parsedTradable["type"] == "Countable")
-		{
-			tradable = new Countable(parsedTradable["name"], defaultPriceBelief);
-		}
-		else if(parsedTradable["type"] == "Uncountable")
-		{
-			tradable = new Uncountable(parsedTradable["name"], defaultPriceBelief, new ToolBehavior(parsedTradable["behavior"]["name"],parsedTradable["behavior"]["craftRateBoost"], parsedTradable["behavior"]["degradationRate"]));
-		}
-		else if(parsedTradable["type"] == "Food")
-		{
-			tradable = new Food(parsedTradable["name"], defaultPriceBelief, parsedTradable["foodValue"]);
-		}
-		const std::hash<std::string> hasher;
-		tradableFactory.registerObject(hasher(parsedTradable["name"]),tradable);
-	}	
-}
-
 void EconomicEngine::init(const char* prefabsPath) const
 {
 	assert(std::filesystem::exists(prefabsPath) && std::filesystem::is_directory(prefabsPath));
@@ -98,13 +41,33 @@ void EconomicEngine::init(const char* prefabsPath) const
 	stockExchange.init();
 }
 
-void EconomicEngine::start(const int inCount)
+void EconomicEngine::start(const int inTradersAmount)
 {
 	bRunning = true;
 
 	//Create traders
-	traderManager.addTrader(inCount);
+	traderManager.addTraders(inTradersAmount);
 	
+}
+
+void EconomicEngine::pause()
+{
+	bRunning = false;
+}
+
+void EconomicEngine::resume()
+{
+	bRunning = true;
+}
+
+void EconomicEngine::reset(const int inTradersAmount)
+{
+	elapsedTimeSinceDayStart = 0.f;
+	elapsedTimeSinceLastStockExchangeResolution = 0.f;
+	elapsedDayCount = 0;
+	traderManager.reset();
+	stockExchange.reset();
+	traderManager.addTraders(inTradersAmount);
 }
 
 void EconomicEngine::update(const float inDeltaTime)
@@ -131,24 +94,66 @@ void EconomicEngine::update(const float inDeltaTime)
 	}
 }
 
-void EconomicEngine::reset(const int inCount)
+EconomicEngine::EconomicEngine() : bRunning(false), elapsedDayCount(0), elapsedTimeSinceDayStart(0), dayDuration(24.f),
+                                   elapsedTimeSinceLastStockExchangeResolution(0.f),
+                                   stockExchangeResolutionTime(dayDuration / 12.f), baseActionTime(dayDuration / 6.f)
 {
-	elapsedTimeSinceDayStart = 0.f;
-	elapsedTimeSinceLastStockExchangeResolution = 0.f;
-	elapsedDayCount = 0;
-	traderManager.reset();
-	stockExchange.reset();
-	traderManager.addTrader(inCount);
+	
 }
 
-void EconomicEngine::pause()
+void EconomicEngine::initJobs(std::vector<nlohmann::json>& inParsedJobs) const
 {
-	bRunning = false;
+	for(const std::hash<std::string> hasher; const auto& parsedJob : inParsedJobs)
+	{
+		auto* job = new Job(parsedJob["name"]);
+		
+		for(const auto& parsedCraft : parsedJob["crafts"])
+		{	
+			std::list<std::pair<size_t, int>> requirements;
+			for(const auto& requirement : parsedCraft["requirements"])
+			{
+				requirements.emplace_back(std::pair<size_t, int>(hasher(requirement["name"]), requirement["count"]));
+			}
+
+			std::list<size_t> requiredTools;
+			for(const auto& requiredTool : parsedCraft["requiredToolBehaviors"])
+			{
+				requiredTools.emplace_back(hasher(requiredTool));
+			}
+			
+			 job->getCraftFactory()->registerCraft(new Craft(parsedCraft["baseRate"], hasher(parsedCraft["result"]), parsedCraft["producedCount"], requirements, requiredTools));
+		}
+
+		for(const auto& parsedTool : parsedJob["usableTools"])
+		{
+			job->addUsableTool(hasher(parsedTool));
+		}
+
+		traderManager.registerJob(job);
+	}
 }
 
-void EconomicEngine::resume()
+void EconomicEngine::initTradables(std::vector<nlohmann::json>& inParsedTradables) const
 {
-	bRunning = true;
+	for(const auto& parsedTradable : inParsedTradables)
+	{
+		Tradable* tradable = nullptr;
+
+		if(const std::pair<float, float> defaultPriceBelief(parsedTradable["defaultPriceBelief"]["min"], parsedTradable["defaultPriceBelief"]["max"]); parsedTradable["type"] == "Countable")
+		{
+			tradable = new Countable(parsedTradable["name"], defaultPriceBelief);
+		}
+		else if(parsedTradable["type"] == "Uncountable")
+		{
+			tradable = new Uncountable(parsedTradable["name"], defaultPriceBelief, new ToolBehavior(parsedTradable["behavior"]["name"],parsedTradable["behavior"]["craftRateBoost"], parsedTradable["behavior"]["degradationRate"]));
+		}
+		else if(parsedTradable["type"] == "Food")
+		{
+			tradable = new Food(parsedTradable["name"], defaultPriceBelief, parsedTradable["foodValue"]);
+		}
+		const std::hash<std::string> hasher;
+		tradableFactory.registerObject(hasher(parsedTradable["name"]),tradable);
+	}	
 }
 
 float EconomicEngine::getBaseActionTime() const

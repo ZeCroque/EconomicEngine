@@ -1,11 +1,11 @@
 #include "Traders/JobFactory.h"
 
-std::list<Job*> JobFactory::getJobs() const
+std::list<Job*> JobFactory::getJobsDefaultObjects() const
 {
-	std::list<Job*> result;
-	for(const auto& key : getKeys())
+	std::list<Job*> jobs;
+	for(const auto& jobId : getKeys())
 	{
-		result.emplace_back(getDefaultObject(key));
+		jobs.emplace_back(getDefaultObject(jobId));
 	}	
-	return result;
+	return jobs;
 }

@@ -7,20 +7,23 @@ class Craft;
 
 class ToolBehavior : public Behavior
 {
-protected:
-	float craftRateBoost;
-	float degradationRate;
-	float durability;
-	ToolBehavior();
 public:
+	ToolBehavior();
+	
 	ToolBehavior(const std::string& inName, float inCraftRateBoost, float inDegradationRate);
+	
 	void init(Uncountable* inOwningTool) override;
 
-	void updateToolDurability();
+	void updateDurability();
 	
 	[[nodiscard]] float getCraftRateBoost() const;
 
-	ToolBehavior* clone() override { return new ToolBehavior(*this); }
+	ToolBehavior* clone() override;
+
+private:
+	float craftRateBoost;
+	float degradationRate;
+	float durability;
 };
 
 #endif //TOOL_BEHAVIOR_H

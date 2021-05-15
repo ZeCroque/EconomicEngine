@@ -22,13 +22,13 @@ public:
 
     MovableTrader* getTrader() const;
 
+	std::pair<int, int> getClosestMarketCoordinate() const;
+
     void setTrader(std::shared_ptr<MovableTrader>& inTrader);
 
     void setClosestMarketCoordinate(const std::pair<int, int>& inClosestMarketCoordinate);
 
 	Workshop* clone() override;
-
-	std::pair<int, int> getClosestMarketCoordinate() const;
 
 private:
     std::weak_ptr<MovableTrader> trader;

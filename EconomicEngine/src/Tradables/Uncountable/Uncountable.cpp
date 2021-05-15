@@ -30,8 +30,7 @@ Behavior* Uncountable::getBehavior() const
 	return behavior;
 }
 
-void Uncountable::setOwningTrader(Trader* inOwningTrader)
+Uncountable* Uncountable::clone()
 {
-	Tradable::setOwningTrader(inOwningTrader);
-	
+	return new Uncountable(*this);
 }

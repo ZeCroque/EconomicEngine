@@ -1,6 +1,8 @@
 #include "StaticActor.h"
 
-StaticActor::StaticActor(const std::string& inTextureName) : Actor(inTextureName) {}
+StaticActor::StaticActor(const std::string& inTextureName) : Actor(inTextureName)
+{
+}
 
 Actor* StaticActor::clone()
 {

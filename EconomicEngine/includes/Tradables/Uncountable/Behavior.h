@@ -6,17 +6,22 @@
 #include "Clonable.h"
 
 class Tradable;
+class Uncountable;
 
 class Behavior : public Clonable<Behavior>
 {
-protected:
-	class Uncountable* owningTool;
-	size_t id;
 public:
 	Behavior();
+	
 	explicit Behavior(const std::string& inName);
+	
 	virtual void init(Uncountable* inOwningTool) = 0;
+	
 	[[nodiscard]] size_t getId() const;
+
+protected:
+	Uncountable* owningTool;
+	size_t id;
 
 };
 #endif //BEHAVIOR_H

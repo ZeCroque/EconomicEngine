@@ -25,36 +25,35 @@ public:
     [[nodiscard]] std::thread& getGenerationThread();
 
 	[[nodiscard]] Grid& getGrid() const;
-	
-#ifndef NDEBUG
-    void makeDebugFile() const;
-#endif
-
-	static int getRandomInt(int min = 0, int max = 1);
 
 private :
+    void placeWorkshops();
 
-    mutable Grid grid;
-    int minRange;
-    int pathStep;
-    int maxDistanceToMarket;
+	void updateClosestMarket(int inX, int inY);
 
-    std::queue<std::shared_ptr<Workshop>> workshopQueue;
-
-	bool bIsGenerationThreadRunning;
-    std::thread generationThread;
-
-    void placeWorkshop();
+	#ifndef NDEBUG
+    void makeDebugFile() const;
+#endif
 
     bool isAnyMarketInRange(int inX, int inY);
 
     std::pair<int, int> getClosestMarket(int inX, int inY);
 
-    void updateClosestMarket(int inX, int inY);
-
     int getClosestMarketCoordinate(int inX, int inY);
 
-    std::vector<std::pair<int, int>> marketsCoordinates;
+	static int getRandomInt(int min = 0, int max = 1);
+	
+	mutable Grid grid;
+
+	std::queue<std::shared_ptr<Workshop>> workshopQueue;
+    int pathStep;
+	int minRangeBetweenWorkshops;
+
+	std::vector<std::pair<int, int>> marketsCoordinates;
+    int maxDistanceToMarket;
+
+	bool bIsGenerationThreadRunning;
+    std::thread generationThread;
 
 };
 

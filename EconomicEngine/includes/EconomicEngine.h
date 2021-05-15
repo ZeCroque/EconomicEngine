@@ -11,41 +11,35 @@
 class EconomicEngine : public Singleton<EconomicEngine>
 {
 friend class Singleton<EconomicEngine>;
-	
-protected:
-	mutable TraderManager traderManager;
-	mutable TradableFactory tradableFactory;
-	mutable StockExchange stockExchange;
 
-	EconomicEngine();
-private:
-	bool bRunning;
-
-	int elapsedDayCount;
-	float elapsedTimeSinceDayStart;
-	float dayDuration;
-	float elapsedTimeSinceLastStockExchangeResolution;
-	float stockExchangeResolutionTime;
-	float baseActionTime;
+//FRAMEWORK
+//===========
 
 public:
-	
-	void initJobs(std::vector<nlohmann::json>& inParsedJobs) const;
-	
-	void initTradables(std::vector<nlohmann::json>& inParsedTradables) const;
-	
 	void init(const char* prefabsPath) const;
 
-	void start(int inCount);
-	
-	void update(float inDeltaTime);
-	
-	void reset(int inCount);
+	void start(int inTradersAmount);
 
 	void pause();
 
 	void resume();
+	
+	void reset(int inTradersAmount);
 
+	void update(float inDeltaTime);
+
+private:
+	EconomicEngine();
+
+	void initJobs(std::vector<nlohmann::json>& inParsedJobs) const;
+	
+	void initTradables(std::vector<nlohmann::json>& inParsedTradables) const;
+
+	bool bRunning;
+
+//GAMEPLAY
+//===========
+public:
 	[[nodiscard]] float getBaseActionTime() const;
 
 	[[nodiscard]] int getElapsedDayCount() const;
@@ -56,6 +50,18 @@ public:
 
 	[[nodiscard]] StockExchange& getStockExchange() const;
 
+private:
+	
+	mutable TraderManager traderManager;
+	mutable TradableFactory tradableFactory;
+	mutable StockExchange stockExchange;
+	
+	int elapsedDayCount;
+	float elapsedTimeSinceDayStart;
+	float dayDuration;
+	float elapsedTimeSinceLastStockExchangeResolution;
+	float stockExchangeResolutionTime;
+	float baseActionTime;
 };
 
 

@@ -8,32 +8,42 @@
 
 class Craft final: public Clonable<Craft>
 {
+public:
+	Craft();
+	
+	Craft(float inBaseRate, size_t inCraftResult, int inProducedAmount = 1,
+	      std::list<std::pair<size_t, int>> inRequirements = std::list<std::pair<size_t, int>>(),
+	      std::list<size_t> inToolsRequired = std::list<size_t>());
+
+	Craft(Craft& craft);
+
+	void update(float inDeltaTime);
+	
+    [[nodiscard]] std::list<std::pair<size_t, int>> getRequirements() const;
+	
+	[[nodiscard]] std::list<size_t> getRequiredTools() const;
+	
+	[[nodiscard]] size_t getResultId() const;
+	
+	[[nodiscard]] int getCount() const;
+	
+	[[nodiscard]] float getCraftingRate() const;
+	
+	[[nodiscard]] const Signal<>& getCraftSuccessSignal() const;
+	
+	void incrementCraftingRate(float inAmount);
+
+	Craft* clone() override;
+
 private:
 	float elapsedTime;
-	float rate;
-	int count;
-	size_t result;
+	float craftingRate;
+	int producedAmount;
+	size_t resultId;
 	std::list<std::pair<size_t, int>> requirements;
 	std::list<size_t> toolsRequired;
 
 	Signal<> craftSuccessSignal;
-
-public:
-	Craft();
-	Craft(float inBaseRate, size_t inCraftResult, int inCount = 1, std::list<std::pair<size_t, int>> inRequirements = std::list<std::pair<size_t, int>>(), std::list<size_t> inToolsRequired = std::list<size_t>());
-	Craft(Craft& craft);
-	Craft* clone() override;
-
-    [[nodiscard]] std::list<std::pair<size_t, int>> getRequirement() const;
-	[[nodiscard]] std::list<size_t> getToolsRequired() const;
-	[[nodiscard]] size_t getResult() const;
-	[[nodiscard]] int getCount() const;
-	[[nodiscard]] float getRate() const;
-	[[nodiscard]] const Signal<>& getCraftSuccessSignal() const;
-	void incrementRate(float inAmount);
-
-	void update(float inDeltaTime);
-
 };
 
 #endif //CRAFT_H

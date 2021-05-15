@@ -15,17 +15,19 @@ class MovableTrader : public MovableActor
 public:
 	MovableTrader(const std::string& inJobName, const std::string& inTextureName);
 
+	void calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd);
+	
 	void moveTo(Position inPosition);
 
 	void moveToRequestCallback(Trader* inTrader, Position inPosition);
 
     size_t getJobId() const;
 
-	MovableTrader* clone() override;
-	void calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd);
+	Trader* getBoundTrader() const;
 
-    Trader* getBoundTrader() const;
     void setBoundTrader(Trader* inBoundTrader);
+
+	MovableTrader* clone() override;
 
 private:
     size_t jobId;

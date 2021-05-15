@@ -101,12 +101,6 @@ void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, st
 	}
 }
 
-float NavigationSystem::getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode)
-{
-	return sqrtf(static_cast<float>((inFirstNode->x - inSecondNode->x) * (inFirstNode->x - inSecondNode->x) + (inFirstNode->y - inSecondNode->y) * (inFirstNode->y - inSecondNode->y)));
-}
-
-
 #ifndef NDEBUG
 void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int>>& inPath, const Rectangle& inBounds, const std::pair<int, int>& inStartingCoords, const std::pair<int, int>& inObjectiveCoords)
 {
@@ -151,3 +145,8 @@ void NavigationSystem::drawPath(Grid& inGrid, const std::list<std::pair<int, int
 	}
 }
 #endif
+
+float NavigationSystem::getHeuristicDistance(const Node* inFirstNode, const Node* inSecondNode)
+{
+	return sqrtf(static_cast<float>((inFirstNode->x - inSecondNode->x) * (inFirstNode->x - inSecondNode->x) + (inFirstNode->y - inSecondNode->y) * (inFirstNode->y - inSecondNode->y)));
+}

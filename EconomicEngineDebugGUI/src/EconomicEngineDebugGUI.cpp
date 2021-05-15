@@ -239,7 +239,7 @@ void EconomicEngineDebugGui::doKill()
 void EconomicEngineDebugGui::doAdd()
 {
     const auto job = arrayJobs.at(ui.cBKill->currentIndex());
-    EconomicEngine::getInstance()->getTraderManager().addTrader(ui.sBAdd->value(), job->getJobId());
+    EconomicEngine::getInstance()->getTraderManager().addTraders(ui.sBAdd->value(), job->getJobId());
     updateUiJobs();
 }
 
@@ -292,9 +292,9 @@ void EconomicEngineDebugGui::doReset()
 
 void EconomicEngineDebugGui::doInit()
 {
-	const auto& tradableManager = EconomicEngine::getInstance()->getTradableFactory();
-	auto itemsName = tradableManager.getTradablesName();
-	auto itemsKeys = tradableManager.getKeys();
+	const auto& tradableFactory = EconomicEngine::getInstance()->getTradableFactory();
+	auto itemsName = tradableFactory.getTradablesNames();
+	auto itemsKeys = tradableFactory.getKeys();
 
 	auto row = 0;
 	auto column = 0;
@@ -347,13 +347,13 @@ void EconomicEngineDebugGui::doInit()
 	ui.gridLayJobs->addWidget(new QLabel("Birth |"), 0, 4);
 	ui.gridLayJobs->addWidget(new QLabel("Dead"), 0, 5);
 
-	for (auto & traderManager = EconomicEngine::getInstance()->getTraderManager(); const auto& job : traderManager.getJobList())
+	for (auto & traderManager = EconomicEngine::getInstance()->getTraderManager(); const auto& job : traderManager.getJobsIds())
 	{
 		auto jobManager = new JobManager(job.first, QString::fromStdString(job.second));
 
 		jobManager->lbName = new QLabel(jobManager->getJobName());
 
-		auto number = QString::number(traderManager.getJobCount(jobManager->getJobId()));
+		auto number = QString::number(traderManager.getTraderCountByJob(jobManager->getJobId()));
 		jobManager->lbNumber = new QLabel(number);
 
 		jobManager->lbMoneyAverage = new QLabel(QString::number(0));
@@ -380,14 +380,14 @@ void EconomicEngineDebugGui::updateUiJobs()
     const auto cbJob = arrayJobs.at(ui.cBKill->currentIndex());
     auto &traderManager = EconomicEngine::getInstance()->getTraderManager();
 
-    const auto traderCount = traderManager.getJobCount(cbJob->getJobId());
+    const auto traderCount = traderManager.getTraderCountByJob(cbJob->getJobId());
     ui.sBKill->setMaximum(traderCount);
 
     for (auto job : arrayJobs)
     {
         const auto jobId = job->getJobId();
 
-        auto number = QString::number(traderManager.getJobCount(jobId));
+        auto number = QString::number(traderManager.getTraderCountByJob(jobId));
         auto money = QString::number(static_cast<double>(traderManager.getMoneyMeanByJob(jobId)));
         auto food = QString::number(static_cast<double>(traderManager.getFoodLevelMeanByJob(jobId)));
 
@@ -415,7 +415,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 		auto const graphIndex = checkBox->getGraphIndex();
 
 
-		for (auto i = asksResolutionCount - 1; const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), 1))
+		for (auto i = asksResolutionCount - 1; const auto& data : stockExchange.getHistoricMarketPrices(checkBox->getItemId(), 1))
 		{
 			ui.customPlot->graph(graphIndex)->addData(i, static_cast<double>(data.getPrice()));
 			i++;

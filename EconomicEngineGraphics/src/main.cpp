@@ -8,7 +8,7 @@ void start()
 {
 	auto* gameManager = GameManager::getInstance();
     gameManager->init("./Content/");
-	gameManager->exec();
+	gameManager->start();
 }
 
 #if defined(WIN32) && defined(NDEBUG)
