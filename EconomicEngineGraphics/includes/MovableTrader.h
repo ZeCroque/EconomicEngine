@@ -1,14 +1,10 @@
-//
-// Created by relin on 14/04/2021.
-//
-
-#ifndef ECONOMICENGINE_MOVABLETRADER_H
-#define ECONOMICENGINE_MOVABLETRADER_H
+#ifndef MOVABLE_TRADER_H
+#define MOVABLE_TRADER_H
 
 #include <string>
-#include <thread>
 
 #include "MovableActor.h"
+
 enum class Position;
 
 class Trader;
@@ -28,8 +24,8 @@ public:
 	MovableTrader* clone() override;
 	void calculatePathfind(const std::pair<int, int>& inStart, const std::pair<int, int>& inEnd);
 
-    Trader *getBoundTrader() const;
-    void setBoundTrader(Trader *boundTrader);
+    Trader* getBoundTrader() const;
+    void setBoundTrader(Trader* inBoundTrader);
 
 private:
     size_t jobId;
@@ -38,4 +34,4 @@ private:
 };
 
 
-#endif //ECONOMICENGINE_MOVABLETRADER_H
+#endif //MOVABLE_TRADER_H

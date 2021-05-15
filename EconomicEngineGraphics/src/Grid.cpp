@@ -1,7 +1,5 @@
 #include "Grid.h"
-
-#include <MovableTrader.h>
-
+#include "MovableTrader.h"
 
 bool Node::isOccupied() const
 {
@@ -16,9 +14,7 @@ void Node::resetNode()
     parent = nullptr;
 }
 
-Grid::Grid() : minCoordinate(0, 0), maxCoordinate(0, 0)
-{
-}
+Grid::Grid() : minCoordinate(0, 0), maxCoordinate(0, 0) {}
 
 void Grid::reset()
 {
@@ -26,58 +22,69 @@ void Grid::reset()
 	maxCoordinate = std::pair(0,0);
 }
 
-void Grid::setActorAt(const std::shared_ptr<Workshop> inWorkshop, const int x,  const int y)  // NOLINT(performance-unnecessary-value-param)
+void Grid::setActorAt(const std::shared_ptr<Workshop> inWorkshop, const int inX,  const int inY)  // NOLINT(performance-unnecessary-value-param)
 {
-    inWorkshop->x = x;
-    inWorkshop->y = y;
-    auto* trader = inWorkshop->getTrader();
-    if(trader)
+    inWorkshop->x = inX;
+    inWorkshop->y = inY;
+    if(auto* trader = inWorkshop->getTrader(); trader)
     {
-        trader->x = x;
-        trader->y = y;
+        trader->x = inX;
+        trader->y = inY;
     }
-    getNodeAt(x, y).actor = std::weak_ptr(inWorkshop);
+    getNodeAt(inX, inY).actor = std::weak_ptr(inWorkshop);
 }
 
-Workshop *Grid::getActorAt(const int x, const int y)
+Workshop* Grid::getActorAt(const int inX, const int inY)
 {
-    return getNodeAt(x, y).actor.lock().get();
+    return getNodeAt(inX, inY).actor.lock().get();
 }
 
-bool Grid::isOccupied(const int x, const int y)
+bool Grid::isOccupied(const int inX, const int inY)
 {
-    if (world.contains(std::pair(static_cast<int>(x & REGION_MAJOR), static_cast<int>(y & REGION_MAJOR))))
+    if (world.contains(std::pair(static_cast<int>(inX & REGION_MAJOR), static_cast<int>(inY & REGION_MAJOR))))
     {
-        return getNodeAt(x, y).isOccupied();
+        return getNodeAt(inX, inY).isOccupied();
     }
     return false;
 }
 
 
-Node &Grid::getNodeAt(const int x, const int y)
+Node& Grid::getNodeAt(const int inX, const int inY)
 {
     //Note: operator[] auto instantiate if nothing is found
-    auto &chunk = world[std::pair<int, int>(static_cast<int>(x & REGION_MAJOR), static_cast<int>(y & REGION_MAJOR))];
-    auto &node = chunk[x & REGION_MINOR][y & REGION_MINOR];
-    node.x = x;
-    node.y = y;
+    auto &chunk = world[std::pair<int, int>(static_cast<int>(inX & REGION_MAJOR), static_cast<int>(inY & REGION_MAJOR))];
+    auto &node = chunk[inX & REGION_MINOR][inY & REGION_MINOR];
+    node.x = inX;
+    node.y = inY;
     return node;
 }
 
-void Grid::updateBounds(const int x, const int y)
+void Grid::updateBounds(const int inX, const int inY)
 {
-    if (x < minCoordinate.first) minCoordinate.first = x;
-    if (y < minCoordinate.second) minCoordinate.second = y;
-    if (x > maxCoordinate.first) maxCoordinate.first = x;
-    if (y > maxCoordinate.second) maxCoordinate.second = y;
+    if (inX < minCoordinate.first)
+    {
+    	minCoordinate.first = inX;
+    }
+    if (inY < minCoordinate.second)
+    {
+    	minCoordinate.second = inY;
+    }
+    if (inX > maxCoordinate.first)
+    {
+    	maxCoordinate.first = inX;
+    }
+    if (inY > maxCoordinate.second)
+    {
+    	maxCoordinate.second = inY;
+    }
 }
 
-const std::pair<int, int> &Grid::getMinCoordinate() const
+const std::pair<int, int>& Grid::getMinCoordinate() const
 {
     return minCoordinate;
 }
 
-const std::pair<int, int> &Grid::getMaxCoordinate() const
+const std::pair<int, int>& Grid::getMaxCoordinate() const
 {
     return maxCoordinate;
 }

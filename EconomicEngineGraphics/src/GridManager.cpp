@@ -1,16 +1,14 @@
-//
-// Created by relin on 12/04/2021.
-//
+#include <random>
 
 #include "GridManager.h"
-#include <random>
-#include <GameManager.h>
+#include "GameManager.h"
+
 #ifndef NDEBUG
-	#include <fstream>
+#include <fstream>
 #endif
 #include "Workshop.h"
 
-GridManager::GridManager() : minRange(6), pathStep(4), maxDistanceToMarket(25), isGenerationThreadRunning(false) {}
+GridManager::GridManager() : minRange(6), pathStep(4), maxDistanceToMarket(25), bIsGenerationThreadRunning(false) {}
 
 
 void GridManager::init()
@@ -18,13 +16,13 @@ void GridManager::init()
     grid.setActorAt(GameManager::getInstance()->addWorkshop("Market"), 0, 0);
     marketsCoordinates.emplace_back(std::pair<int, int>(0, 0));
 
-	isGenerationThreadRunning = true;
+	bIsGenerationThreadRunning = true;
 	generationThread = std::thread([this]() { placeWorkshop(); });
 }
 
 void GridManager::reset()
 {
-    isGenerationThreadRunning = false;
+    bIsGenerationThreadRunning = false;
 	generationThread.join();
 	
 	while(!workshopQueue.empty())
@@ -65,12 +63,12 @@ void GridManager::placeWorkshop()
         {
             for (int i = 0; i < s; i += pathStep) 
             {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() && isGenerationThreadRunning ||
+                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() && bIsGenerationThreadRunning ||
                        !GameManager::getInstance()->getIsInitialized()) 
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::getInstance()->getMaxFps()));
                 }
-                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized() || !isGenerationThreadRunning) 
+                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized() || !bIsGenerationThreadRunning) 
                 {
 #ifndef NDEBUG
                     makeDebugFile();
@@ -158,7 +156,8 @@ std::pair<int, int> GridManager::getClosestMarket(const int inX, const int inY)
 {
 	std::pair<int, int> result;
 
-    for (double bestDistance = INT8_MAX; const auto& market : marketsCoordinates) {
+    for (double bestDistance = INT8_MAX; const auto& market : marketsCoordinates)
+    {
 	    if (const double distance = sqrt(pow(market.first - inX, 2) + pow(market.second - inY, 2)); distance < bestDistance)
         {
             bestDistance = distance;
@@ -189,9 +188,9 @@ void GridManager::updateClosestMarket(const int inX, const int inY)
     }
 }
 
-bool GridManager::getIsGenerationThreadRunning() const
+bool GridManager::isGenerationThreadRunning() const
 {
-	return isGenerationThreadRunning;
+	return bIsGenerationThreadRunning;
 }
 
 std::thread& GridManager::getGenerationThread()

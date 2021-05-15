@@ -4,7 +4,6 @@
 #include "Signal.h"
 #include "Actor.h"
 
-
 enum class Direction
 {
     None,
@@ -20,7 +19,7 @@ class MovableActor : public Actor
 public:
     explicit MovableActor(const std::string &inTextureName) : Actor(inTextureName)
     {
-        reversePath = false;
+        bReversePath = false;
         pathIterator = path.begin();
         direction = Direction::None;
         coordinatesOffset = 0.f;
@@ -32,7 +31,7 @@ public:
 
 	Direction getDirection() const;
 	
-    const std::pair<int, int>& getNextCoordinate();
+    const std::pair<int, int>& getNextCoordinate() const;
 
     void updatePath();
 
@@ -42,7 +41,6 @@ public:
 
     float coordinatesOffset;
 
-
 protected:
     Signal<bool> pathfindEndedSignal;
 
@@ -50,11 +48,11 @@ protected:
 
     std::list<std::pair<int, int>> path;
 	
-    bool reversePath;
+    bool bReversePath;
 
 private:
     void updateDirection();
 };
 
 
-#endif //STATIC_ACTOR
+#endif //MOVABLE_ACTOR
