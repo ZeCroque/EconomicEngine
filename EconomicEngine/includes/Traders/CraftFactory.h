@@ -10,7 +10,6 @@ class CraftFactory : public AbstractFactory<size_t, Craft>, public Clonable<Craf
 {
 	friend class Job;
 	
-
 public:
 	CraftFactory();
 	

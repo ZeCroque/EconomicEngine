@@ -10,6 +10,7 @@ public:
         delete instance;
         instance = nullptr;
     }
+	
     static T* getInstance()
     {
         std::call_once(onceFlag, []()
@@ -18,12 +19,18 @@ public:
         });
         return instance;
     }
+	
     Singleton(const Singleton&) = delete;
+	
     Singleton(Singleton&&) = delete;
+	
     Singleton& operator=(const Singleton&) = delete;
+	
     Singleton& operator=(Singleton&&) = delete;
+
 protected:
     Singleton() = default;
+
 private:
     static T* instance;
     static std::once_flag onceFlag; 

@@ -5,6 +5,7 @@ template <class T> class Clonable
 {
 public:
 	virtual ~Clonable() = default;
+	
 	virtual T* clone() = 0;
 };
 

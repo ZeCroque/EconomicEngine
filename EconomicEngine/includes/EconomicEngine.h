@@ -10,7 +10,7 @@
 
 class EconomicEngine : public Singleton<EconomicEngine>
 {
-friend class Singleton<EconomicEngine>;
+	friend class Singleton<EconomicEngine>;
 
 //FRAMEWORK
 //===========
@@ -51,7 +51,6 @@ public:
 	[[nodiscard]] StockExchange& getStockExchange() const;
 
 private:
-	
 	mutable TraderManager traderManager;
 	mutable TradableFactory tradableFactory;
 	mutable StockExchange stockExchange;

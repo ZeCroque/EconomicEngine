@@ -3,7 +3,12 @@
 
 #include "Signal.h"
 
-enum class AskStatus { Pending, Sold, Refused };
+enum class AskStatus
+{
+	Pending,
+	Sold,
+	Refused
+};
 
 class Ask
 {	

@@ -76,7 +76,6 @@ public:
 	void setPosition(Position inPosition);
 	
 private:
-
 	void updateFoodLevel();
 	
 	void updatePriceBelief(Ask* ask);
