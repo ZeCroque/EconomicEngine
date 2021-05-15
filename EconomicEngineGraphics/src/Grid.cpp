@@ -10,7 +10,7 @@ void Node::resetNode()
 {
     localGoal = INFINITY;
     globalGoal = INFINITY;
-    visited = false;
+    bVisited = false;
     parent = nullptr;
 }
 

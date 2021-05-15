@@ -1,13 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Singleton.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <queue>
 #include <nlohmann/json_fwd.hpp>
 #include <filesystem>
 
+#include "Singleton.h"
 #include "AbstractFactory.h"
 #include "GridManager.h"
 #include "WorkshopFactory.h"
@@ -22,7 +22,7 @@ class GameManager : public Singleton<GameManager>
 //FRAMEWORK
 //==========
 public:
-    void init(const char *inContentPath);
+    void init(const char* inContentPath);
 
     void exec();
 
@@ -32,10 +32,9 @@ public:
 
 	void reset(int inTradersCount);
 
-    bool getIsRunning() const;
+    bool isRunning() const;
 
-
-	bool getIsInitialized() const;
+	bool isInitialized() const;
 
     void setBackgroundNeedsUpdate(bool inValue) const;
 
@@ -47,20 +46,20 @@ public:
 
 	[[nodiscard]] int getMaxFps() const;
 
-    const sf::Texture &getTexture(size_t inTextureId) const;
+    const sf::Texture& getTexture(size_t inTextureId) const;
 
 private:
     GameManager();
 
-    void initEconomicEngine(const char *inPrefabsPath);
+    void initEconomicEngine(const char* inPrefabsPath);
 
 	void initGui();
 
-    void initMovableTraders(std::vector<nlohmann::json> &inParsedMovableTraders);
+    void initMovableTraders(std::vector<nlohmann::json>& inParsedMovableTraders);
 
-    void initWorkshops(std::vector<nlohmann::json> &inParsedWorkshops);
+    void initWorkshops(std::vector<nlohmann::json>& inParsedWorkshops);
 
-    void initTexture(const std::filesystem::path &inPath) const;
+    void initTexture(const std::filesystem::path& inPath) const;
 
     void processInput();
 
@@ -83,19 +82,19 @@ private:
     sf::Font font;
     sf::Vector2f oldPos;
     sf::Vector2f clickPos;
-    bool moving;
-    bool drawPopup;
+    bool bMoving;
+    bool bDrawPopup;
 
     std::unique_ptr<std::thread> debugGuiThread;	
 	
-	bool isInitialized;
-    bool isRunning;
-	bool isPaused;
-	bool isGuiOpened;
-    bool wantsToOpenGui;
+	bool bIsInitialized;
+    bool bIsRunning;
+	bool bIsPaused;
+	bool bIsGuiOpened;
+    bool bWantsToOpenGui;
 	float speedFactor;
 
-    mutable bool backgroundNeedsUpdate;
+    mutable bool bBackgroundNeedsUpdate;
     mutable std::map<size_t, sf::Texture> texturesDictionary;
     mutable sf::RenderTexture background;
     Workshop* selectedActor;
@@ -113,14 +112,14 @@ private:
 public:
     std::shared_ptr<Workshop> addWorkshop(size_t inKey) const;
 
-    std::shared_ptr<Workshop> addWorkshop(const std::string &inName) const;
+    std::shared_ptr<Workshop> addWorkshop(const std::string& inName) const;
 
     std::shared_ptr<MovableTrader> addMovableTrader(size_t inKey) const;
 
-    std::shared_ptr<MovableTrader> addMovableTrader(const std::string &inName) const;
+    std::shared_ptr<MovableTrader> addMovableTrader(const std::string& inName) const;
 
 
-    Workshop *findAvailableWorkshop(size_t inJobId) const;
+    Workshop* findAvailableWorkshop(size_t inJobId) const;
 	
     void getSelectedActor();
 
@@ -134,7 +133,7 @@ private:
 	
     GridManager gridManager;
 
-    std::queue<MovableTrader *> pendingTraders;
+    std::queue<MovableTrader*> pendingTraders;
     mutable std::list<std::shared_ptr<MovableTrader>> traders;
     MovableTraderFactory movableTraderFactory;
 

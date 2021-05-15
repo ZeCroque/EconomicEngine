@@ -9,7 +9,6 @@ set(HEADERS
 	${HEADER_DIR}/Clonable.h
 	${HEADER_DIR}/Singleton.h
 	${HEADER_DIR}/Signal.h
-	${HEADER_DIR}/Trigger.h
 )
 
 add_library(${PROJECT_NAME} INTERFACE) 
@@ -17,3 +16,5 @@ target_include_directories(${PROJECT_NAME}
 	INTERFACE
 		${HEADER_DIR}		
 )
+
+add_custom_target(${PROJECT_NAME}_ SOURCES ${HEADERS})

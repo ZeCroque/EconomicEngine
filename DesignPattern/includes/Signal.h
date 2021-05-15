@@ -19,19 +19,19 @@ public:
         disconnectAll();
     }
 
-    Signal(const Signal& signal)
+    Signal(const Signal& inSignal)
     {
-    	id = signal.id.load();
-    	for(auto&& [id, slot] : signal.slots)
+    	id = inSignal.id.load();
+    	for(auto&& [id, slot] : inSignal.slots)
     	{
     		slots[id] = slot;
     	}
     }
 
 
-	void disconnect(const int& id) const
+	void disconnect(const int& inId) const
     {
-	    slots.erase(id);
+	    slots.erase(inId);
     }
 
 	void disconnectAll() const
@@ -40,25 +40,25 @@ public:
     	id = 0;
     }
 
-    int connect(const std::function<void(Args...)>& slot) const
+    int connect(const std::function<void(Args...)>& inSlot) const
     {
-	    slots.insert({++id, slot});
+	    slots.insert({++id, inSlot});
     	return id;
     }
 
-	template<class T> int connect(T* instance, void(T::*func)(Args...)) const
+	template<class T> int connect(T* inInstance, void(T::*func)(Args...)) const
     {
     	return connect([=](Args... args)
     	{
-    		(instance->*func)(args...);
+    		(inInstance->*func)(args...);
     	});
     }
 
-	template<class T> int connect(T* instance, void(T::*func)(Args...) const) const
+	template<class T> int connect(T* inInstance, void(T::*func)(Args...) const) const
     {
     	return connect([=](Args... args)
     	{
-    		(instance->*func)(args...);
+    		(inInstance->*func)(args...);
     	});
     }
 

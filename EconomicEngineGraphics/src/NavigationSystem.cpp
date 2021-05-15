@@ -23,13 +23,13 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 	);
 	while (!nodesToTest.empty())
 	{
-		// Sorts nodes by globalGoal,the smaller being the closest to objective
+		// Sorts nodes by globalGoal, the smaller being the closest to objective
 		nodesToTest.sort([](const Node* lhs, const Node* rhs)
 		{
 			return lhs->globalGoal < rhs->globalGoal;
 		});
 		// Yet visited nodes removal
-		while (!nodesToTest.empty() && nodesToTest.front()->visited)
+		while (!nodesToTest.empty() && nodesToTest.front()->bVisited)
 		{
 			nodesToTest.pop_front();
 		}
@@ -39,7 +39,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 			break;
 		}
 		currentNode = nodesToTest.front();
-		currentNode->visited = true;
+		currentNode->bVisited = true;
 		modifiedNodes.emplace(currentNode);
 		// Upper current neighbor
 		if (currentNode->y - 1 >= searchBounds.first.second)
@@ -87,7 +87,7 @@ std::list<std::pair<int, int>> NavigationSystem::aStarResolution(
 void NavigationSystem::updateNeighborParent(std::list<Node*>& outNodesToTest, std::set<Node*>& outModifiedNodes, Node* inCurrentNode, Node* inObjectiveNode, Node* inNodeNeighbor)
 {
 	// If the neighbor is navigable and not yet visited then we add add it to the nodes to test list
-	if (!inNodeNeighbor->visited && !inNodeNeighbor->isOccupied())
+	if (!inNodeNeighbor->bVisited && !inNodeNeighbor->isOccupied())
 	{
 		outNodesToTest.emplace_back(inNodeNeighbor);
 	}

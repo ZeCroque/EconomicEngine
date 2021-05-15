@@ -19,19 +19,18 @@ public:
 		}
 	}
 	
-	void registerObject(Key key, T* obj)
+	void registerObject(Key inKey, T* inObject)
 	{
-		if (defaultObjects.find(key) == defaultObjects.end())
+		if (defaultObjects.find(inKey) == defaultObjects.end())
 		{
-			defaultObjects[key] = obj;
+			defaultObjects[inKey] = inObject;
 		}
 	}
 
-	[[nodiscard]] T* createObject(const Key& key) const
+	[[nodiscard]] T* createObject(const Key& inKey) const
 	{
 		T* result = nullptr;
-		auto it = defaultObjects.find(key);
-		if (it != defaultObjects.end())
+		if (auto it = defaultObjects.find(inKey); it != defaultObjects.end())
 		{
 			result = ((*it).second)->clone();
 		}
@@ -48,11 +47,10 @@ public:
 		return keys;
 	}
 	
-	[[nodiscard]] T* getDefaultObject(Key key) const
+	[[nodiscard]] T* getDefaultObject(Key inKey) const
 	{
 		T* defaultObject = nullptr;
-		auto it = defaultObjects.find(key);
-		if(it!=defaultObjects.end())
+		if(auto it = defaultObjects.find(inKey); it != defaultObjects.end())
 		{	
 			defaultObject = it->second;
 		}

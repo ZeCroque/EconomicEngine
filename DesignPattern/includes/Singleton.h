@@ -13,9 +13,9 @@ public:
     static T* getInstance()
     {
         std::call_once(onceFlag, []()
-            {
-                instance = new T;
-            });
+        {
+            instance = new T;
+        });
         return instance;
     }
     Singleton(const Singleton&) = delete;
@@ -29,7 +29,7 @@ private:
     static std::once_flag onceFlag; 
 };
 
-template <class T>T* Singleton<T>::instance = nullptr;
-template<class T>std::once_flag Singleton<T>::onceFlag;
+template <class T> T* Singleton<T>::instance = nullptr;
+template<class T> std::once_flag Singleton<T>::onceFlag;
 
 #endif

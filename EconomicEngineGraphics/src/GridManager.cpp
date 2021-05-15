@@ -63,12 +63,12 @@ void GridManager::placeWorkshop()
         {
             for (int i = 0; i < s; i += pathStep) 
             {
-                while (workshopQueue.empty() && GameManager::getInstance()->getIsRunning() && bIsGenerationThreadRunning ||
-                       !GameManager::getInstance()->getIsInitialized()) 
+                while (workshopQueue.empty() && GameManager::getInstance()->isRunning() && bIsGenerationThreadRunning ||
+                       !GameManager::getInstance()->isInitialized()) 
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(GameManager::getInstance()->getMaxFps()));
                 }
-                if (!GameManager::getInstance()->getIsRunning() && GameManager::getInstance()->getIsInitialized() || !bIsGenerationThreadRunning) 
+                if (!GameManager::getInstance()->isRunning() && GameManager::getInstance()->isInitialized() || !bIsGenerationThreadRunning) 
                 {
 #ifndef NDEBUG
                     makeDebugFile();
