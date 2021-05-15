@@ -1,6 +1,5 @@
 #include "EconomicEngineDebugGUI.h"
 #include "qcustomplot.h"
-
 #include "EconomicEngine.h"
 #include "Traders/Trader.h"
 #include "GraphManager.h"
@@ -14,10 +13,10 @@
 constexpr int TPS = 60;
 #endif
 
-EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
-        : QMainWindow(parent), asksResolutionCount(0)
+EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *inParent)
+        : QMainWindow(inParent), asksResolutionCount(0)
 #ifdef STANDALONE_MODE
-		, isRunning(false), hasBeenReset(false), hasEverRun(false), speedFactor(1.f)
+		, bIsRunning(false), bHasBeenReset(false), bHasEverRun(false), speedFactor(1.f)
 #endif
 {
     ui.setupUi(this);
@@ -54,14 +53,14 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
     economicEngine->init("./Content/Prefabs/");
     economicEngineThread = std::thread([this]()
     {
-    	volatile bool keepWaiting = !hasEverRun;
-	    while(keepWaiting)
+    	volatile bool bKeepWaiting = !bHasEverRun;
+	    while(bKeepWaiting)
 	    {
-		    keepWaiting = !hasEverRun;
+		    bKeepWaiting = !bHasEverRun;
 	    }
     	
     	const float deltaTime = 1.f / TPS;
-    	while(isRunning)
+    	while(bIsRunning)
     	{		
     		EconomicEngine::getInstance()->update(deltaTime * speedFactor);
     		std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(deltaTime * 1000.f)));
@@ -75,7 +74,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
 			auto movementSimulationThread = std::thread([this, trader, position]()
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>((EconomicEngine::getInstance()->getBaseActionTime() * 1000.f / speedFactor))));
-				if(!hasBeenReset)
+				if(!bHasBeenReset)
 				{
 					trader->setPosition(position);
 				}
@@ -89,7 +88,7 @@ EconomicEngineDebugGui::EconomicEngineDebugGui(QWidget *parent)
 	doInit();
 }
 
-void EconomicEngineDebugGui::showEvent(QShowEvent *event)
+void EconomicEngineDebugGui::showEvent(QShowEvent *inEvent)
 {
 #ifndef STANDALONE_MODE
     initializedSignal();
@@ -97,12 +96,12 @@ void EconomicEngineDebugGui::showEvent(QShowEvent *event)
 }
 
 
-void EconomicEngineDebugGui::closeEvent(QCloseEvent *event)
+void EconomicEngineDebugGui::closeEvent(QCloseEvent *inEvent)
 {
 	EconomicEngine::getInstance()->getStockExchange().getAskResolvedSignal().disconnectAll();
 #ifdef STANDALONE_MODE
-	hasEverRun = true;
-	isRunning = false;
+	bHasEverRun = true;
+	bIsRunning = false;
 	economicEngineThread.join();
 #endif
 }
@@ -114,9 +113,9 @@ void EconomicEngineDebugGui::setGraphVisibility()
     setYRange();
 }
 
-void EconomicEngineDebugGui::setZoomXAxis(const int value)
+void EconomicEngineDebugGui::setZoomXAxis(const int inValue)
 {
-    zoomXAxis = value;
+    zoomXAxis = inValue;
     setXRange();
     setYRange();
 }
@@ -188,12 +187,12 @@ void EconomicEngineDebugGui::setXRange() const
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-void EconomicEngineDebugGui::setSpeed(const int value)
+void EconomicEngineDebugGui::setSpeed(const int inValue)
 {
 #ifdef STANDALONE_MODE
-	speedFactor = static_cast<float>(value);
+	speedFactor = static_cast<float>(inValue);
 #else
-	GameManager::getInstance()->setSpeedFactor(static_cast<float>(value));
+	GameManager::getInstance()->setSpeedFactor(static_cast<float>(inValue));
 #endif
 }
 
@@ -213,9 +212,9 @@ void EconomicEngineDebugGui::toggleStart()
 #ifndef STANDALONE_MODE
     	GameManager::getInstance()->resume();
 #else
-    	hasEverRun = true;
-    	isRunning = true;
-    	hasBeenReset = false;
+    	bHasEverRun = true;
+    	bIsRunning = true;
+    	bHasBeenReset = false;
     	EconomicEngine::getInstance()->resume();
 #endif
     }
@@ -252,7 +251,7 @@ void EconomicEngineDebugGui::doReset()
 #ifndef STANDALONE_MODE
 	GameManager::getInstance()->pause();
 #else
-	hasBeenReset = true;
+	bHasBeenReset = true;
 	auto* economicEngine = EconomicEngine::getInstance();
 	economicEngine->getStockExchange().getAskResolvedSignal().disconnectAll();
 	economicEngine->pause();
@@ -418,7 +417,7 @@ void EconomicEngineDebugGui::updateUiSlot()
 
 		for (auto i = asksResolutionCount - 1; const auto& data : stockExchange.getStockExchangePrice(checkBox->getItemId(), 1))
 		{
-			ui.customPlot->graph(graphIndex)->addData(i, data.getPrice());
+			ui.customPlot->graph(graphIndex)->addData(i, static_cast<double>(data.getPrice()));
 			i++;
 		}
 

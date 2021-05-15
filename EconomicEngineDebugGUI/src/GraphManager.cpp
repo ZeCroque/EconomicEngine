@@ -1,13 +1,17 @@
 #include "GraphManager.h"
 
+GraphManager::GraphManager(QWidget* inParent) : QCheckBox(inParent), graphIndex(0), itemId(0){}
+
+GraphManager::GraphManager(QWidget *inParent, const size_t inItemId) : QCheckBox(inParent), graphIndex(0), itemId(inItemId){}
+
 int GraphManager::getGraphIndex() const
 {
 	return graphIndex;
 }
 
-void GraphManager::setGraphIndex(const int newGraphIndex)
+void GraphManager::setGraphIndex(const int inGraphIndex)
 {
-	graphIndex = newGraphIndex;
+	graphIndex = inGraphIndex;
 }
 
 size_t GraphManager::getItemId() const
@@ -15,9 +19,7 @@ size_t GraphManager::getItemId() const
 	return itemId;
 }
 
-void GraphManager::setItemId(const size_t newItemId)
+void GraphManager::setItemId(const size_t inItemId)
 {
-	itemId = newItemId;
+	itemId = inItemId;
 }
-
-GraphManager::GraphManager(QWidget *parent, size_t itemId) : QCheckBox(parent), itemId(itemId) {}

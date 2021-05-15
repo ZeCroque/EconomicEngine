@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOB_MANAGER_H
+#define JOB_MANAGER_H
 
 #include "QtWidgets/QLabel"
 #include "QtCore/QString"
@@ -22,3 +23,5 @@ private:
 	QString jobName;
 	size_t jobId{};
 };
+
+#endif

@@ -1,7 +1,7 @@
 #ifndef ASK_H
 #define ASK_H
 
-#include <Signal.h>
+#include "Signal.h"
 
 enum class AskStatus { Pending, Sold, Refused };
 
