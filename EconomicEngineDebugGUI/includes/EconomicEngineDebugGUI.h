@@ -3,7 +3,7 @@
 #include "ui_EconomicEngineDebugGUI.h"
 
 #ifndef STANDALONE_MODE
-#include <Signal.h>
+#include "Signal.h"
 #endif
 
 class GraphManager; 
@@ -17,19 +17,19 @@ Q_OBJECT
 //QT
 //==========
 public:
-	explicit EconomicEngineDebugGui(QWidget* parent = nullptr);
+	explicit EconomicEngineDebugGui(QWidget* inParent = nullptr);
 
-	void showEvent(QShowEvent* event) override;
-	void closeEvent(QCloseEvent* event) override;
+	void showEvent(QShowEvent* inEvent) override;
+	void closeEvent(QCloseEvent* inEvent) override;
 
 public Q_SLOTS:
 	void updateUiSlot();
 	void setGraphVisibility();
-	void setZoomXAxis(int value);
-	void setSpeed(int value);
+	void setZoomXAxis(int inValue);
+	void setSpeed(int inValue);
 	void setYRange();
 	void setXRange() const;
-	void useXSlider(int);
+	void useXSlider(int inValue);
 	void toggleStart();
 	void doKill();
 	void doAdd();
@@ -54,9 +54,9 @@ private:
 #ifdef STANDALONE_MODE
 private:
 	std::thread economicEngineThread;
-	bool isRunning;
-	bool hasBeenReset;
-	bool hasEverRun;
+	bool bIsRunning;
+	bool bHasBeenReset;
+	bool bHasEverRun;
 	float speedFactor;
 #else
 public:

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPH_MANAGER_H
+#define GRAPH_MANAGER_H
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QMainWindow>
@@ -7,20 +8,20 @@ class GraphManager final : public QCheckBox
 {
 Q_OBJECT
 public:
-	explicit GraphManager(QWidget* parent): QCheckBox(parent), graphIndex(0), itemId(0)
-	{
-	}
+	explicit GraphManager(QWidget* inParent);
 
-    GraphManager(QWidget *parent, size_t itemId);
+    GraphManager(QWidget* inParent, size_t inItemId);
 
     [[nodiscard]] int getGraphIndex() const;
-	void setGraphIndex(int graphIndex);
+	void setGraphIndex(int inGraphIndex);
 	[[nodiscard]] size_t getItemId() const;
-	void setItemId(size_t itemId);
+	void setItemId(size_t inItemId);
 
 	Q_PROPERTY(int gIndex MEMBER graphIndex READ getGraphIndex WRITE setGraphIndex)
 
 private:
-	int graphIndex{};
+	int graphIndex;
 	size_t itemId;
 };
+
+#endif
