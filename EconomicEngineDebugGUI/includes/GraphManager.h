@@ -13,8 +13,11 @@ public:
     GraphManager(QWidget* inParent, size_t inItemId);
 
     [[nodiscard]] int getGraphIndex() const;
-	void setGraphIndex(int inGraphIndex);
+	
 	[[nodiscard]] size_t getItemId() const;
+
+	void setGraphIndex(int inGraphIndex);
+	
 	void setItemId(size_t inItemId);
 
 	Q_PROPERTY(int gIndex MEMBER graphIndex READ getGraphIndex WRITE setGraphIndex)

@@ -20,21 +20,34 @@ public:
 	explicit EconomicEngineDebugGui(QWidget* inParent = nullptr);
 
 	void showEvent(QShowEvent* inEvent) override;
+	
 	void closeEvent(QCloseEvent* inEvent) override;
 
 public Q_SLOTS:
 	void updateUiSlot();
+	
 	void setGraphVisibility();
+	
 	void setZoomXAxis(int inValue);
+	
 	void setSpeed(int inValue);
+	
 	void setYRange();
+	
 	void setXRange() const;
+	
 	void useXSlider(int inValue);
+	
 	void toggleStart();
+	
 	void doKill();
+	
 	void doAdd();
+	
 	void doReset();
+	
 	void doInit();
+	
 	void updateUiJobs();
 
 signals:

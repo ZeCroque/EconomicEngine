@@ -10,6 +10,7 @@ public:
 	JobManager(size_t inJobId, const QString& inJobName);
 
 	[[nodiscard]] QString getJobName() const;
+	
 	[[nodiscard]] size_t getJobId() const;
 
 	QLabel* lbName{};

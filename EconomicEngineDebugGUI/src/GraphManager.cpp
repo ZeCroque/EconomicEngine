@@ -13,14 +13,14 @@ int GraphManager::getGraphIndex() const
 	return graphIndex;
 }
 
-void GraphManager::setGraphIndex(const int inGraphIndex)
-{
-	graphIndex = inGraphIndex;
-}
-
 size_t GraphManager::getItemId() const
 {
 	return itemId;
+}
+
+void GraphManager::setGraphIndex(const int inGraphIndex)
+{
+	graphIndex = inGraphIndex;
 }
 
 void GraphManager::setItemId(const size_t inItemId)
